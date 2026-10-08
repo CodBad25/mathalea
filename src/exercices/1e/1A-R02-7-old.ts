@@ -1,23 +1,25 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid 40c12 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
+// Version publiée jusqu'au 06/10/2026 (commit 3ca3967a1).
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
-import ExerciceSimple from '../ExerciceSimple'
+import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '07/01/2026'
-export const dateDeModifImportante = '06/10/2026'
-
-export const uuid = '7c52f'
+export const uuid = '40c12'
 // @Author Gilles Mora
 export const refs = {
-  'fr-fr': ['1A-R02-7', '2A-R2-7'],
-  'fr-ch': [],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
 export const interactifReady = true
 
-export const amcReady = true
-export const amcType = 'AMCNum'
+export const amcReady = 'true'
+export const amcType = 'qcmMono'
 export const titre = 'Utiliser une proportion pour trouver le tout'
-export default class ProblemesPourcentages extends ExerciceSimple {
+export default class ProblemesPourcentagesOld extends ExerciceQcmA {
   private appliquerLesValeurs(
     typeQuestion: string,
     valeurDonnee: number,
@@ -34,11 +36,7 @@ export default class ProblemesPourcentages extends ExerciceSimple {
       case 'iceberg1':
         // Énoncé : "90% sous l'eau" + on donne la partie VISIBLE (10%)
         situation = `$90 \\,\\%$ du volume d'un iceberg est situé sous la surface de l'eau.<br>
-${
-  this.versionQcm
-    ? `La hauteur totale d'un iceberg dont la partie visible est $${valeurDonnee}$ ${unite} est d'environ :`
-    : `Quelle est, environ, la hauteur totale d'un iceberg dont la partie visible mesure $${valeurDonnee}$ ${unite} ?`
-}`
+La hauteur totale d'un iceberg dont la partie visible est $${valeurDonnee}$ ${unite} est d'environ :`
         explication = `La partie visible représente $${pourcentageDonne} \\,\\%$ du total.<br>
 Comme celle-ci est $${valeurDonnee}$ ${unite}, on retrouve la hauteur totale en la multipliant par $10$.<br>
 $${valeurDonnee} \\text{ ${unite}} \\times 10 = ${miseEnEvidence(texNombre(total))}$ $${miseEnEvidence(`\\text{${unite}}`)}$`
@@ -47,11 +45,7 @@ $${valeurDonnee} \\text{ ${unite}} \\times 10 = ${miseEnEvidence(texNombre(total
       case 'iceberg2':
         // Énoncé : "10% au-dessus" + on donne la partie SOUS L'EAU (90%)
         situation = `$10 \\,\\%$ du volume d'un iceberg est situé au-dessus de la surface de l'eau.<br>
-${
-  this.versionQcm
-    ? `La hauteur totale d'un iceberg dont la partie sous l'eau est $${texNombre(valeurDonnee)}$ ${unite} est d'environ :`
-    : `Quelle est, environ, la hauteur totale d'un iceberg dont la partie sous l'eau mesure $${texNombre(valeurDonnee)}$ ${unite} ?`
-}`
+La hauteur totale d'un iceberg dont la partie sous l'eau est $${texNombre(valeurDonnee)}$ ${unite} est d'environ :`
         explication = `La partie sous l'eau représente $${pourcentageDonne} \\,\\%$ du total.<br>
 Pour trouver la hauteur totale, on divise la hauteur sous l'eau par $${pourcentageDonne / 10}$ (pour avoir $10\\,\\%$), puis on multiplie par $10$ (pour avoir $100\\,\\%$) :<br>
 $(${texNombre(valeurDonnee)} \\div ${pourcentageDonne / 10}) \\times 10 = ${miseEnEvidence(texNombre(total))}$ $${miseEnEvidence(`\\text{${unite}}`)}$`
@@ -60,11 +54,7 @@ $(${texNombre(valeurDonnee)} \\div ${pourcentageDonne / 10}) \\times 10 = ${mise
       case 'recyclage1':
         // Énoncé : "recycle 30%" + on donne les déchets NON RECYCLÉS (70%)
         situation = `Une ville recycle $30 \\,\\%$ de ses déchets.<br>
-${
-  this.versionQcm
-    ? `Si elle ne recycle pas $${texNombre(valeurDonnee)}$ ${unite} de déchets, la masse totale de déchets produits est  :`
-    : `Si elle ne recycle pas $${texNombre(valeurDonnee)}$ ${unite} de déchets, quelle est la masse totale de déchets produits ?`
-}`
+Si elle ne recycle pas $${texNombre(valeurDonnee)}$ ${unite} de déchets, la masse totale de déchets produits est  :`
         explication = `Les déchets non recyclés représentent $${pourcentageDonne} \\,\\%$ du total.<br>
 Pour trouver la masse totale, on divise par $${pourcentageDonne / 10}$ (pour avoir $10\\,\\%$), puis on multiplie par $10$ (pour avoir $100\\,\\%$) :<br>
 $(${texNombre(valeurDonnee)} \\div ${pourcentageDonne / 10}) \\times 10 = ${miseEnEvidence(texNombre(total))}$ $${miseEnEvidence(`\\text{${unite}}`)}$`
@@ -73,11 +63,7 @@ $(${texNombre(valeurDonnee)} \\div ${pourcentageDonne / 10}) \\times 10 = ${mise
       case 'recyclage2':
         // Énoncé : "ne recycle pas 70%" + on donne les déchets RECYCLÉS (30%)
         situation = `Une ville ne recycle pas $70 \\,\\%$ de ses déchets.<br>
-${
-  this.versionQcm
-    ? `Si elle recycle $${texNombre(valeurDonnee)}$ ${unite}, la masse totale de déchets produits est  :`
-    : `Si elle recycle $${texNombre(valeurDonnee)}$ ${unite}, quelle est la masse totale de déchets produits ?`
-}`
+Si elle recycle $${texNombre(valeurDonnee)}$ ${unite}, la masse totale de déchets produits est  :`
         explication = `Les déchets recyclés représentent $${pourcentageDonne} \\,\\%$ du total.<br>
 Pour trouver la masse totale, on divise par $${pourcentageDonne / 10}$ (pour avoir $10\\,\\%$), puis on multiplie par $10$ (pour avoir $100\\,\\%$) :<br>
 $(${texNombre(valeurDonnee)} \\div ${pourcentageDonne / 10}) \\times 10 = ${miseEnEvidence(texNombre(total))}$ $${miseEnEvidence(`\\text{${unite}}`)}$`
@@ -86,11 +72,7 @@ $(${texNombre(valeurDonnee)} \\div ${pourcentageDonne / 10}) \\times 10 = ${mise
       case 'budget1':
         // Énoncé : "25% loisirs" + on donne les AUTRES dépenses (75%)
         situation = `Une famille consacre $25 \\,\\%$ de son budget aux loisirs.<br>
-${
-  this.versionQcm
-    ? `Si elle dépense $${texNombre(valeurDonnee)}$ ${unite} pour les autres dépenses, son budget total est  :`
-    : `Si elle dépense $${texNombre(valeurDonnee)}$ ${unite} pour les autres dépenses, quel est son budget total ?`
-}`
+Si elle dépense $${texNombre(valeurDonnee)}$ ${unite} pour les autres dépenses, son budget total est  :`
         explication = `Les autres dépenses représentent $${pourcentageDonne} \\,\\%$ du total.<br>
 On cherche d'abord ce que représentent $${pourcentageCache} \\,\\%$ en divisant par $3$ :<br>
 $${texNombre(valeurDonnee)} \\div 3 = ${texNombre(valeurDonnee / 3)}$ ${unite}<br>
@@ -101,11 +83,7 @@ $${texNombre(valeurDonnee / 3)} \\times 4 = ${miseEnEvidence(texNombre(total))}$
       case 'budget2':
         // Énoncé : "75% autres dépenses" + on donne les dépenses de LOISIRS (25%)
         situation = `Une famille consacre $75 \\,\\%$ de son budget aux dépenses autres que les loisirs.<br>
-${
-  this.versionQcm
-    ? `Si elle dépense $${texNombre(valeurDonnee)}$ ${unite} pour les loisirs, son budget total est  :`
-    : `Si elle dépense $${texNombre(valeurDonnee)}$ ${unite} pour les loisirs, quel est son budget total ?`
-}`
+Si elle dépense $${texNombre(valeurDonnee)}$ ${unite} pour les loisirs, son budget total est  :`
         explication = `Les loisirs représentent $${pourcentageDonne} \\,\\%$ du total.<br>
 Pour trouver le budget total, on multiplie par $4$ (car $25\\,\\% \\times 4 = 100\\,\\%$) :<br>
 $${texNombre(valeurDonnee)} \\times 4 = ${miseEnEvidence(texNombre(total))}$ $${miseEnEvidence(`\\text{${unite}}`)}$`
@@ -114,11 +92,7 @@ $${texNombre(valeurDonnee)} \\times 4 = ${miseEnEvidence(texNombre(total))}$ $${
       case 'deplacements1':
         // Énoncé : "20% vélo" + on donne les déplacements SANS vélo (80%)
         situation = `Dans une ville, $20 \\,\\%$ des déplacements se font à vélo.<br>
-${
-  this.versionQcm
-    ? `Si $${texNombre(valeurDonnee)}$ ${unite} se font autrement qu'à vélo, le nombre total de déplacements est  :`
-    : `Si $${texNombre(valeurDonnee)}$ ${unite} se font autrement qu'à vélo, quel est le nombre total de déplacements ?`
-}`
+Si $${texNombre(valeurDonnee)}$ ${unite} se font autrement qu'à vélo, le nombre total de déplacements est  :`
         explication = `Les déplacements sans vélo représentent $${pourcentageDonne} \\,\\%$ du total.<br>
 Pour trouver le nombre total, on divise par $${pourcentageDonne / 10}$ (pour avoir $10\\,\\%$), puis on multiplie par $10$ (pour avoir $100\\,\\%$) :<br>
 $(${texNombre(valeurDonnee)} \\div ${pourcentageDonne / 10}) \\times 10 = ${miseEnEvidence(texNombre(total))}$ $${miseEnEvidence(`\\text{${unite}}`)}$`
@@ -127,11 +101,7 @@ $(${texNombre(valeurDonnee)} \\div ${pourcentageDonne / 10}) \\times 10 = ${mise
       case 'deplacements2':
         // Énoncé : "80% autres modes" + on donne les déplacements À vélo (20%)
         situation = `Dans une ville, $80 \\,\\%$ des déplacements se font autrement qu'à vélo.<br>
-${
-  this.versionQcm
-    ? `Si $${texNombre(valeurDonnee)}$ ${unite} se font à vélo, le nombre total de déplacements est  :`
-    : `Si $${texNombre(valeurDonnee)}$ ${unite} se font à vélo, quel est le nombre total de déplacements ?`
-}`
+Si $${texNombre(valeurDonnee)}$ ${unite} se font à vélo, le nombre total de déplacements est  :`
         explication = `Les déplacements à vélo représentent $${pourcentageDonne} \\,\\%$ du total.<br>
 Pour trouver le nombre total, on divise par $${pourcentageDonne / 10}$ (pour avoir $10\\,\\%$), puis on multiplie par $10$ (pour avoir $100\\,\\%$) :<br>
 $(${texNombre(valeurDonnee)} \\div ${pourcentageDonne / 10}) \\times 10 = ${miseEnEvidence(texNombre(total))}$ $${miseEnEvidence(`\\text{${unite}}`)}$`
@@ -140,11 +110,7 @@ $(${texNombre(valeurDonnee)} \\div ${pourcentageDonne / 10}) \\times 10 = ${mise
       case 'lecture1':
         // Énoncé : "40% lu" + on donne les pages RESTANTES (60%)
         situation = `Marie a lu $40 \\,\\%$ de son livre.<br>
-${
-  this.versionQcm
-    ? `S'il lui reste $${valeurDonnee}$ ${unite} à lire, le nombre total de pages du livre est  :`
-    : `S'il lui reste $${valeurDonnee}$ ${unite} à lire, quel est le nombre total de pages du livre ?`
-}`
+S'il lui reste $${valeurDonnee}$ ${unite} à lire, le nombre total de pages du livre est  :`
         explication = `Les pages restantes représentent $${pourcentageDonne} \\,\\%$ du total.<br>
 Pour trouver le nombre total de pages, on divise le nombre de pages restantes par $${pourcentageDonne / 10}$ (pour avoir $10\\,\\%$), puis on multiplie par $10$ (pour avoir $100\\,\\%$) :<br>
 $(${valeurDonnee} \\div ${pourcentageDonne / 10}) \\times 10 = ${miseEnEvidence(texNombre(total))}$ $${miseEnEvidence(`\\text{${unite}}`)}$`
@@ -153,18 +119,14 @@ $(${valeurDonnee} \\div ${pourcentageDonne / 10}) \\times 10 = ${miseEnEvidence(
       case 'lecture2':
         // Énoncé : "60% reste à lire" + on donne les pages DÉJÀ LUES (40%)
         situation = `Il reste à Marie $60 \\,\\%$ de son livre à lire.<br>
-${
-  this.versionQcm
-    ? `Si elle a déjà lu $${valeurDonnee}$ ${unite}, le nombre total de pages du livre est  :`
-    : `Si elle a déjà lu $${valeurDonnee}$ ${unite}, quel est le nombre total de pages du livre ?`
-}`
+Si elle a déjà lu $${valeurDonnee}$ ${unite}, le nombre total de pages du livre est  :`
         explication = `Les pages lues représentent $${pourcentageDonne} \\,\\%$ du total.<br>
-Pour trouver le nombre total de pages, on divise le nombre de pages déjà lues par $${pourcentageDonne / 10}$ (pour avoir $10\\,\\%$), puis on multiplie par $10$ (pour avoir $100\\,\\%$) :<br>
+Pour trouver le nombre total de pages, on divise le nombre de pages déjà luespar $${pourcentageDonne / 10}$ (pour avoir $10\\,\\%$), puis on multiplie par $10$ (pour avoir $100\\,\\%$) :<br>
 $(${valeurDonnee} \\div ${pourcentageDonne / 10}) \\times 10 = ${miseEnEvidence(texNombre(total))}$ $${miseEnEvidence(`\\text{${unite}}`)}$`
         break
     }
 
-    this.question = situation
+    this.enonce = situation
     this.correction = explication
 
     // Génération des distracteurs garantissant 4 réponses distinctes
@@ -193,15 +155,12 @@ $(${valeurDonnee} \\div ${pourcentageDonne / 10}) \\times 10 = ${miseEnEvidence(
     const distracteurs = Array.from(reponsesSet)
     distracteurs.shift() // Enlever la bonne réponse
 
-    this.reponse = this.versionQcm ? `$${texNombre(total)}$ ${unite}` : total
-    this.distracteurs = [
+    this.reponses = [
+      `$${texNombre(total)}$ ${unite}`, // Bonne réponse
       `$${texNombre(distracteurs[0])}$ ${unite}`,
       `$${texNombre(distracteurs[1])}$ ${unite}`,
       `$${texNombre(distracteurs[2])}$ ${unite}`,
     ]
-    this.optionsChampTexte = { texteAvant: '<br>', texteApres: ` ${unite}` }
-    this.canEnonce = this.question
-    this.canReponseACompleter = `$\\ldots$ ${unite}`
   }
 
   versionOriginale: () => void = () => {
@@ -302,17 +261,6 @@ $(${valeurDonnee} \\div ${pourcentageDonne / 10}) \\times 10 = ${miseEnEvidence(
 
   constructor() {
     super()
-    this.typeExercice = 'simple'
-    this.nbQuestions = 1
-    this.besoinFormulaireCaseACocher = ['Sujet original', false]
-    this.sup = false
-    this.versionQcmDisponible = true
-    this.versionQcm = false
-    this.versionQcmOptions = { radio: true, compact: true }
-  }
-
-  nouvelleVersion(): void {
-    if (this.sup) this.versionOriginale()
-    else this.versionAleatoire()
+    this.versionAleatoire()
   }
 }

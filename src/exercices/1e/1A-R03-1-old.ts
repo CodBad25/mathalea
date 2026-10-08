@@ -1,3 +1,7 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid cc63e continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
+// Version publiée jusqu'au 06/10/2026 (commit 720424992).
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -5,20 +9,19 @@ import { prenomM } from '../../lib/outils/Personne'
 import { texNombre } from '../../lib/outils/texNombre'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { randint } from '../../modules/outils'
-import ExerciceSimple from '../ExerciceSimple'
+// import ExerciceQcmA from '../../ExerciceQcmA'
+import ExerciceQcmA from '../ExerciceQcmA'
 
-export const dateDeModifImportante = '06/10/2026'
-
-export const uuid = '3da51'
+export const uuid = 'cc63e'
 export const refs = {
-  'fr-fr': ['1A-R03-1'],
-  'fr-ch': [],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
 export const interactifReady = true
 
-export const amcReady = true
-export const amcType = 'AMCNum'
-export const titre = 'Calculer un pourcentage de pourcentage'
+export const amcReady = 'true'
+export const amcType = 'qcmMono'
+export const titre = 'Calculer une proportion de proportion (1)'
 export const dateDePublication = '16/07/2025'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
@@ -26,10 +29,7 @@ export const dateDePublication = '16/07/2025'
  * @author Gilles Mora
  *
  */
-export default class ProportionDeProportion extends ExerciceSimple {
-  // Propositions de la version QCM, utilisées aussi pour le contrôle des doublons
-  private propositions: string[] = []
-
+export default class ProportionDeProportionOld extends ExerciceQcmA {
   // S'occupe de passser les données originales à la fonction appliquerLesValeurs
 
   appliquerLesValeurs: (
@@ -45,23 +45,11 @@ export default class ProportionDeProportion extends ExerciceSimple {
     prenom: string,
     reponses: string[],
   ) => {
-    const pourcentage = (prop1 * prop2) / 100
-    this.question = `${prenom} consacre $${prop1}\\,\\%$ de sa journée de ${jour} à faire ses devoirs. <br>
+    this.enonce = `${prenom} consacre $${prop1}\\,\\%$ de sa journée de ${jour} à faire ses devoirs. <br>
      $${prop2}\\,\\%$ du temps consacré aux devoirs est consacré à faire un exposé.  <br>
-    `
-    this.question += this.versionQcm
-      ? `Le pourcentage du temps consacré à l’exposé par rapport à la journée de ${jour} est égal à :`
-      : `Quel pourcentage de sa journée de ${jour} ${prenom} consacre-t-il à l’exposé ?`
-    this.correction = this.versionQcm
-      ? `Le pourcentage du temps consacré à l’exposé par rapport à la journée de ${jour} est égal à $${prop1}\\,\\%$ de $${prop2}\\,\\%$, soit $${miseEnEvidence(reponses[0].slice(1, -1))}$.`
-      : `Le pourcentage du temps consacré à l’exposé par rapport à la journée de ${jour} est égal à $${prop1}\\,\\%$ de $${prop2}\\,\\%$, soit :<br>
-    $${texNombre(prop1 / 100, 2)}\\times ${prop2}\\,\\% = ${miseEnEvidence(texNombre(pourcentage, 2))}\\,\\%$.`
-    this.propositions = reponses
-    this.reponse = this.versionQcm ? reponses[0] : pourcentage
-    this.distracteurs = reponses.slice(1)
-    this.optionsChampTexte = { texteAvant: '<br>', texteApres: '$\\,\\%$' }
-    this.canEnonce = this.question
-    this.canReponseACompleter = '$\\ldots\\,\\%$'
+    Le pourcentage du temps consacré à l’exposé par rapport à la journée de ${jour} est égal à :`
+    this.correction = `Le pourcentage du temps consacré à l’exposé par rapport à la journée de ${jour} est égal à $${prop1}\\,\\%$ de $${prop2}\\,\\%$, soit $${miseEnEvidence(reponses[0].slice(1, -1))}$.`
+    this.reponses = reponses
   }
 
   versionOriginale: () => void = () => {
@@ -145,32 +133,13 @@ export default class ProportionDeProportion extends ExerciceSimple {
       const P = prenomM()
       this.appliquerLesValeurs(table[jour], prop1, prop2, String(P), reponses)
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(
-        {
-          reponse: this.propositions[0],
-          distracteurs: this.propositions.slice(1),
-        },
-        4,
-        true,
-      )
-    ) // On s'assure d'avoir 4 propositions différentes, sinon on régénère
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true)) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 
+  // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)
   constructor() {
     super()
-    this.typeExercice = 'simple'
-    this.nbQuestions = 1
-    this.besoinFormulaireCaseACocher = ['Sujet original', false]
-    this.sup = false
-    this.versionQcmDisponible = true
-    this.versionQcm = false
-    this.versionQcmOptions = { radio: true, compact: true }
-  }
 
-  nouvelleVersion(): void {
-    if (this.sup) this.versionOriginale()
-    else this.versionAleatoire()
+    this.versionAleatoire()
   }
 }

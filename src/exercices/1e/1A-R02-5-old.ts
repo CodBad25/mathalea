@@ -1,3 +1,7 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid bd0c9 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
+// Version publiée jusqu'au 06/10/2026 (commit 3ca3967a1).
 /**
  * Exercice 1A-R7 : Déterminer une valeur manquante dans un tableau de proportionnalité
  *
@@ -18,22 +22,20 @@ import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence, texteItalique } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
-import ExerciceSimple from '../ExerciceSimple'
+import ExerciceQcmA from '../ExerciceQcmA'
 
 // ============================================================================
 // MÉTADONNÉES
 // ============================================================================
-export const dateDeModifImportante = '06/10/2026'
-
-export const uuid = '091ac'
+export const uuid = 'bd0c9'
 export const refs = {
-  'fr-fr': ['1A-R02-5', '2A-R2-5'],
-  'fr-ch': ['9FA2A-4', '10FA2-5'],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
 export const interactifReady = true
 
-export const amcReady = true
-export const amcType = 'AMCNum'
+export const amcReady = 'true'
+export const amcType = 'qcmMono'
 export const titre =
   'Déterminer une valeur manquante dans un tableau de proportionnalité'
 export const dateDePublication = '17/09/2025'
@@ -60,7 +62,7 @@ interface DonneesExercice {
 // ============================================================================
 // CLASSE PRINCIPALE
 // ============================================================================
-export default class Auto1AR7 extends ExerciceSimple {
+export default class Auto1AR7Old extends ExerciceQcmA {
   // ==========================================================================
   // 1. DONNÉES STATIQUES
   // ==========================================================================
@@ -215,11 +217,6 @@ export default class Auto1AR7 extends ExerciceSimple {
     const vY2 = pos === 4 ? bonne : y2
     const verification = `$${texNombre(vX1, 1)}\\times ${texNombre(vY2, 1)} = ${texNombre(vX1 * vY2, 1)} \\text{ et } ${texNombre(vX2, 1)}\\times ${texNombre(vY1, 1)} = ${texNombre(vX2 * vY1, 1)}$`
 
-    const astuce = this.versionQcm
-      ? '<br>' +
-        texteItalique('Astuce : sans calculatrice') +
-        ", un ordre de grandeur du produit en croix à obtenir permet souvent de déterminer la seule proposition qui permet de l'approcher."
-      : ''
     return (
       'On a $y = k\\times x$.<br>' +
       texteItalique('Méthode 1 – avec le coefficient de proportionnalité') +
@@ -229,8 +226,9 @@ export default class Auto1AR7 extends ExerciceSimple {
       texteItalique('Méthode 2 – les produits en croix sont égaux') +
       ' :<br>' +
       `${methode2}.<br>` +
-      `Vérification : ${verification}` +
-      astuce
+      `Vérification : ${verification}<br>` +
+      texteItalique('Astuce : sans calculatrice') +
+      ", un ordre de grandeur du produit en croix à obtenir permet souvent de déterminer la seule proposition qui permet de l'approcher."
     )
   }
 
@@ -239,19 +237,9 @@ export default class Auto1AR7 extends ExerciceSimple {
   // ==========================================================================
   constructor() {
     super()
-    this.typeExercice = 'simple'
-    this.nbQuestions = 1
-    this.besoinFormulaireCaseACocher = ['Sujet original', false]
-    this.sup = false
-    this.versionQcmDisponible = true
-    this.versionQcm = false
-    this.spacing = 1
+    this.versionAleatoire()
+    this.spacing = 1.5
     this.spacingCorr = 1.5
-  }
-
-  nouvelleVersion(): void {
-    if (this.sup) this.versionOriginale()
-    else this.versionAleatoire()
   }
 
   // ==========================================================================
@@ -271,9 +259,9 @@ export default class Auto1AR7 extends ExerciceSimple {
 
   versionAleatoire: () => void = () => {
     // Génération avec plusieurs tentatives pour garantir des propositions uniques
-    for (let tentative = 0; tentative < Auto1AR7.MAX_TENTATIVES; tentative++) {
+    for (let tentative = 0; tentative < Auto1AR7Old.MAX_TENTATIVES; tentative++) {
       // Choix du coefficient k
-      const { p, q } = choice(Auto1AR7.COEFFS_PQ)
+      const { p, q } = choice(Auto1AR7Old.COEFFS_PQ)
       const k = p / q
 
       // Position de la case manquante
@@ -341,7 +329,7 @@ export default class Auto1AR7 extends ExerciceSimple {
     // ========================================================================
     const tableau = this.construireTableau(x1, x2, y1, y2, pos)
 
-    this.question =
+    this.enonce =
       'Les valeurs de $y$ sont proportionnelles à celles de $x$.<br>' +
       'Déterminer la valeur manquante (?) dans le tableau ci-dessous.<br>' +
       tableau
@@ -367,15 +355,12 @@ export default class Auto1AR7 extends ExerciceSimple {
 
     const [d1, d2, d3] = this.calcDistracteurs(pos, x1, x2, y1, y2, k)
 
-    this.reponse = this.versionQcm ? this.formatRep(bonne, 1) : bonne
-    this.distracteurs = [
+    this.reponses = [
+      this.formatRep(bonne, 1),
       this.formatRep(d1, 1),
       this.formatRep(d2, 1),
       this.formatRep(d3, 1),
     ]
-    this.optionsChampTexte = { texteAvant: 'Valeur manquante : ' }
-    this.canEnonce = this.question
-    this.canReponseACompleter = '$? = \\ldots$'
 
     // ========================================================================
     // CONSTRUCTION CORRECTION

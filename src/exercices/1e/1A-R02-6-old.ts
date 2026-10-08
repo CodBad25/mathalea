@@ -1,3 +1,7 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid a4b8f continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
+// Version publiée jusqu'au 06/10/2026 (commit 3ca3967a1).
 /**
  * Exercice 1A-R02-6 : Calculer un prix dans une situation de proportionnalité
  *
@@ -31,19 +35,17 @@ import { miseEnEvidence, texteItalique } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
-import ExerciceSimple from '../ExerciceSimple'
+import ExerciceQcmA from '../ExerciceQcmA'
 
 // ============================================================================
 // MÉTADONNÉES
 // ============================================================================
-export const dateDeModifImportante = '06/10/2026'
-
-export const uuid = 'c564e'
-export const refs = { 'fr-fr': ['1A-R02-6', '2A-R2-6'], 'fr-ch': ['9FA2B-24'] }
+export const uuid = 'a4b8f'
+export const refs = { 'fr-fr': [], 'fr-ch': ['NR'] }
 export const interactifReady = true
 
-export const amcReady = true
-export const amcType = 'AMCNum'
+export const amcReady = 'true'
+export const amcType = 'qcmMono'
 export const titre = 'Calculer un prix dans une situation de proportionnalité'
 export const dateDePublication = '22/09/2025'
 
@@ -64,8 +66,7 @@ interface LieuContexte {
 }
 
 interface ModelePhrase {
-  phrase: string // version QCM
-  phraseNonQcm: string // version non QCM : se termine par une question
+  phrase: string
   utilise_lieu_debut: boolean
   utilise_lieu_milieu: boolean
   utilise_prenom: boolean
@@ -88,7 +89,6 @@ interface DonneesExercice {
   bonneReponse: number
   distracteurs: [number, number, number]
   enoncePersonnalise?: string
-  enoncePersonnaliseNonQcm?: string
   modele?: ModelePhrase
   prenom?: { nom: string; pronom: string } | null
 }
@@ -96,7 +96,7 @@ interface DonneesExercice {
 // ============================================================================
 // CLASSE PRINCIPALE
 // ============================================================================
-export default class Auto1AR71 extends ExerciceSimple {
+export default class Auto1AR71Old extends ExerciceQcmA {
   // ==========================================================================
   // 1. DONNÉES STATIQUES
   // ==========================================================================
@@ -350,16 +350,12 @@ export default class Auto1AR71 extends ExerciceSimple {
     {
       phrase:
         '#LIEU_DEBUT, le prix de #Q1 #OBJET est #PRIX1 €.<br>Le prix de #Q2 #OBJET est donc :',
-      phraseNonQcm:
-        '#LIEU_DEBUT, le prix de #Q1 #OBJET est #PRIX1 €.<br>Quel est le prix de #Q2 #OBJET ?',
       utilise_lieu_debut: true,
       utilise_lieu_milieu: false,
       utilise_prenom: false,
     },
     {
       phrase:
-        "#LIEU_DEBUT, l'offre du jour annonce : #Q1 #OBJET pour #PRIX1 €.<br>Combien coûteront #Q2 #OBJET ?",
-      phraseNonQcm:
         "#LIEU_DEBUT, l'offre du jour annonce : #Q1 #OBJET pour #PRIX1 €.<br>Combien coûteront #Q2 #OBJET ?",
       utilise_lieu_debut: true,
       utilise_lieu_milieu: false,
@@ -368,8 +364,6 @@ export default class Auto1AR71 extends ExerciceSimple {
     {
       phrase:
         "#PRENOM a acheté #Q1 #OBJET #LIEU_MILIEU au prix de #PRIX1 €.<br>Le prix qu'#PRONOM_SUJET aurait payé pour #Q2 #OBJET est :",
-      phraseNonQcm:
-        '#PRENOM a acheté #Q1 #OBJET #LIEU_MILIEU au prix de #PRIX1 €.<br>Quel prix aurait-#PRONOM_SUJET payé pour #Q2 #OBJET ?',
       utilise_lieu_debut: false,
       utilise_lieu_milieu: true,
       utilise_prenom: true,
@@ -377,8 +371,6 @@ export default class Auto1AR71 extends ExerciceSimple {
     {
       phrase:
         '#PRENOM remarque #LIEU_MILIEU que #Q1 #OBJET coûtent #PRIX1 €.<br>Pour acheter #Q2 #OBJET, #PRONOM_SUJET devra payer :',
-      phraseNonQcm:
-        '#PRENOM remarque #LIEU_MILIEU que #Q1 #OBJET coûtent #PRIX1 €.<br>Combien devra-t-#PRONOM_SUJET payer pour acheter #Q2 #OBJET ?',
       utilise_lieu_debut: false,
       utilise_lieu_milieu: true,
       utilise_prenom: true,
@@ -386,16 +378,12 @@ export default class Auto1AR71 extends ExerciceSimple {
     {
       phrase:
         '#LIEU_DEBUT, #PRENOM calcule :<br> si #Q1 #OBJET coûtent #PRIX1 €, alors #Q2 #OBJET coûteront :',
-      phraseNonQcm:
-        '#LIEU_DEBUT, #PRENOM constate que #Q1 #OBJET coûtent #PRIX1 €.<br>Combien coûteront #Q2 #OBJET ?',
       utilise_lieu_debut: true,
       utilise_lieu_milieu: false,
       utilise_prenom: true,
     },
     {
       phrase:
-        '#LIEU_DEBUT, pour #PRIX1 €, on peut acheter #Q1 #OBJET.<br>Combien coûteront #Q2 #OBJET ?',
-      phraseNonQcm:
         '#LIEU_DEBUT, pour #PRIX1 €, on peut acheter #Q1 #OBJET.<br>Combien coûteront #Q2 #OBJET ?',
       utilise_lieu_debut: true,
       utilise_lieu_milieu: false,
@@ -404,8 +392,6 @@ export default class Auto1AR71 extends ExerciceSimple {
     {
       phrase:
         "#LIEU_DEBUT, l'étiquette indique : #PRIX1 € les #Q1 #OBJET.<br>Le prix de #Q2 #OBJET sera donc :",
-      phraseNonQcm:
-        "#LIEU_DEBUT, l'étiquette indique : #PRIX1 € les #Q1 #OBJET.<br>Quel sera le prix de #Q2 #OBJET ?",
       utilise_lieu_debut: true,
       utilise_lieu_milieu: false,
       utilise_prenom: false,
@@ -413,8 +399,6 @@ export default class Auto1AR71 extends ExerciceSimple {
     {
       phrase:
         'Avec un budget de #PRIX1 €, #PRENOM peut acheter #Q1 #OBJET.<br>Pour #Q2 #OBJET, #PRONOM_SUJET devra payer :',
-      phraseNonQcm:
-        'Avec un budget de #PRIX1 €, #PRENOM peut acheter #Q1 #OBJET.<br>Combien devra-t-#PRONOM_SUJET payer pour #Q2 #OBJET ?',
       utilise_lieu_debut: false,
       utilise_lieu_milieu: false,
       utilise_prenom: true,
@@ -422,8 +406,6 @@ export default class Auto1AR71 extends ExerciceSimple {
     {
       phrase:
         '#LIEU_DEBUT, la promotion annonce : #PRIX1 € pour #Q1 #OBJET !<br>À ce prix, #Q2 #OBJET coûteront :',
-      phraseNonQcm:
-        '#LIEU_DEBUT, la promotion annonce : #PRIX1 € pour #Q1 #OBJET !<br>À ce prix, combien coûteront #Q2 #OBJET ?',
       utilise_lieu_debut: true,
       utilise_lieu_milieu: false,
       utilise_prenom: false,
@@ -520,14 +502,14 @@ export default class Auto1AR71 extends ExerciceSimple {
    */
   private genererConfiguration(): DonneesExercice | null {
     // Étape 1 : Sélection d'un contexte cohérent
-    const contexte = choice(Auto1AR71.CONTEXTES)
+    const contexte = choice(Auto1AR71Old.CONTEXTES)
     const nomObjet = choice(contexte.objets)
-    const objet = Auto1AR71.OBJETS.find((o) => o.nom === nomObjet)
+    const objet = Auto1AR71Old.OBJETS.find((o) => o.nom === nomObjet)
 
     if (!objet) return null
 
     // Étape 2 : Filtrer les configurations pour cet objet
-    const configurationsDisponibles = Auto1AR71.CONFIGURATIONS_PRIX.filter(
+    const configurationsDisponibles = Auto1AR71Old.CONFIGURATIONS_PRIX.filter(
       (config) => config.objet === nomObjet,
     )
 
@@ -585,20 +567,9 @@ export default class Auto1AR71 extends ExerciceSimple {
   // ==========================================================================
   constructor() {
     super()
-    this.typeExercice = 'simple'
-    this.nbQuestions = 1
-    this.besoinFormulaireCaseACocher = ['Sujet original', false]
-    this.sup = false
-    this.versionQcmDisponible = true
-    this.versionQcm = false
-    this.versionQcmOptions = { radio: true, compact: true }
+    this.versionAleatoire()
     this.spacing = 1.5
     this.spacingCorr = 1.5
-  }
-
-  nouvelleVersion(): void {
-    if (this.sup) this.versionOriginale()
-    else this.versionAleatoire()
   }
 
   // ==========================================================================
@@ -606,8 +577,8 @@ export default class Auto1AR71 extends ExerciceSimple {
   // ==========================================================================
 
   versionOriginale: () => void = () => {
-    const objet = Auto1AR71.OBJETS.find((o) => o.nom === 'croissant')!
-    const lieu = Auto1AR71.CONTEXTES[0]
+    const objet = Auto1AR71Old.OBJETS.find((o) => o.nom === 'croissant')!
+    const lieu = Auto1AR71Old.CONTEXTES[0]
 
     this.appliquerLesValeurs({
       objet,
@@ -620,20 +591,18 @@ export default class Auto1AR71 extends ExerciceSimple {
       distracteurs: [60, 8, 8.5],
       enoncePersonnalise:
         'Quatre croissants coûtent $6$ euros.<br>Dix croissants coûtent :',
-      enoncePersonnaliseNonQcm:
-        'Quatre croissants coûtent $6$ euros.<br>Combien coûtent dix croissants ?',
     })
   }
 
   versionAleatoire: () => void = () => {
-    for (let tentative = 0; tentative < Auto1AR71.MAX_TENTATIVES; tentative++) {
+    for (let tentative = 0; tentative < Auto1AR71Old.MAX_TENTATIVES; tentative++) {
       // Choix aléatoires des données mathématiques (objet, lieu, quantités, prix, distracteurs)
       const config = this.genererConfiguration()
       if (!config) continue
 
       // Choix aléatoires de la formulation (modèle de phrase, prénom éventuel)
-      const modele = choice(Auto1AR71.MODELES)
-      const prenom = modele.utilise_prenom ? choice(Auto1AR71.PRENOMS) : null
+      const modele = choice(Auto1AR71Old.MODELES)
+      const prenom = modele.utilise_prenom ? choice(Auto1AR71Old.PRENOMS) : null
 
       this.appliquerLesValeurs({
         ...config,
@@ -664,7 +633,6 @@ export default class Auto1AR71 extends ExerciceSimple {
       bonneReponse,
       distracteurs,
       enoncePersonnalise,
-      enoncePersonnaliseNonQcm,
       modele,
     } = donnees
 
@@ -672,14 +640,9 @@ export default class Auto1AR71 extends ExerciceSimple {
     // CONSTRUCTION ÉNONCÉ
     // ========================================================================
     if (enoncePersonnalise) {
-      this.question = this.versionQcm
-        ? enoncePersonnalise
-        : (enoncePersonnaliseNonQcm ?? enoncePersonnalise)
+      this.enonce = enoncePersonnalise
     } else {
-      this.question = this.remplacerChamps(
-        this.versionQcm ? modele!.phrase : modele!.phraseNonQcm,
-        donnees,
-      )
+      this.enonce = this.remplacerChamps(modele!.phrase, donnees)
     }
 
     // ========================================================================
@@ -722,16 +685,11 @@ export default class Auto1AR71 extends ExerciceSimple {
     // ========================================================================
     // CONSTRUCTION RÉPONSES
     // ========================================================================
-    this.reponse = this.versionQcm
-      ? `$${texNombre(bonneReponse, 2)}$ €`
-      : bonneReponse
-    this.distracteurs = [
+    this.reponses = [
+      `$${texNombre(bonneReponse, 2)}$ €`,
       `$${texNombre(distracteurs[0], 2)}$ €`,
       `$${texNombre(distracteurs[1], 2)}$ €`,
       `$${texNombre(distracteurs[2], 2)}$ €`,
     ]
-    this.optionsChampTexte = { texteAvant: '<br>', texteApres: ' €' }
-    this.canEnonce = this.question
-    this.canReponseACompleter = '$\\ldots$ €'
   }
 }
