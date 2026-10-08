@@ -55,6 +55,7 @@ export const listOfCustomElements = [
   'intervalle-droite',
   'ensemble-intervalles-droite',
   'mathalea-solveur',
+  'possible-multi-lines-answer',
 ]
 
 /**

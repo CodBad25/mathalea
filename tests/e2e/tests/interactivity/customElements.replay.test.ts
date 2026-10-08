@@ -44,6 +44,7 @@ const customElementModules = [
   'MySpreadSheet',
   'ObjetsCliquablesElement',
   'PointsCliquablesElement',
+  'PossibleMultiLinesAnswerElement',
   'PyramideNombresElement',
   'RelierEtiquettesElement',
   'SchemaEnBarreElement',
@@ -325,6 +326,59 @@ async function testCustomElementsSerializedReplay(page: Page) {
 
   expect(scoreAfterReplay).toEqual(scoreBeforeReplay)
   expect(scoreAfterReplay.every((state) => state === '😎')).toBe(true)
+
+  // 4C11 : A = 30×(-5)÷(-6) = 25 et B = -63÷(5+2) = -9 avec cette graine.
+  const multiLinesUrl = `${origin}/alea/?uuid=62f66&n=2&d=10&s=3&alea=abc&i=1&cd=1`
+  const multiLinesResults = async () =>
+    page.evaluate(async () => {
+      document.querySelector<HTMLButtonElement>('#verif0')?.click()
+      await new Promise((resolve) => setTimeout(resolve, 300))
+      return Array.from(
+        document.querySelectorAll(
+          'possible-multi-lines-answer [data-pmla-result], possible-multi-lines-answer span[id^="resultatCheck"]',
+        ),
+      ).map((span) => span.textContent)
+    })
+  await page.goto(multiLinesUrl)
+  await page.waitForSelector('possible-multi-lines-answer math-field')
+  const multiLinesBefore = await page.evaluate(() => {
+    const steps = [
+      ['-150\\div(-6)', '25'],
+      ['-63\\div8', '-9'],
+    ]
+    return steps.map((lines, q) => {
+      const element = document.querySelector(
+        `#possible-multi-lines-answerEx0Q${q}`,
+      ) as HTMLElement & { value: string[] }
+      lines.forEach((line, k) => {
+        const field = document.querySelector(`#champTexteEx0Q${q}`) as
+          (HTMLElement & { value: string }) | null
+        if (field != null) field.value = line
+        if (k < lines.length - 1) {
+          element.querySelector<HTMLButtonElement>('[data-pmla-add]')?.click()
+        }
+      })
+      return JSON.stringify(element.value)
+    })
+  })
+  const multiLinesScoreBefore = await multiLinesResults()
+
+  await page.goto(multiLinesUrl)
+  await page.waitForSelector('possible-multi-lines-answer math-field')
+  const multiLinesAfter = await page.evaluate((storedAnswers) => {
+    return storedAnswers.map((storedAnswer, q) => {
+      const element = document.querySelector(
+        `#possible-multi-lines-answerEx0Q${q}`,
+      ) as HTMLElement & { value: string[] | string }
+      element.value = storedAnswer
+      return JSON.stringify(element.value)
+    })
+  }, multiLinesBefore)
+  const multiLinesScoreAfter = await multiLinesResults()
+
+  expect(multiLinesAfter).toEqual(multiLinesBefore)
+  expect(multiLinesScoreBefore).toEqual(['✓', '😎', '✗', '✓'])
+  expect(multiLinesScoreAfter).toEqual(multiLinesScoreBefore)
   return true
 }
 
