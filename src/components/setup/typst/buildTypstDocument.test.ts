@@ -824,6 +824,17 @@ describe('buildTypstDocument', () => {
       expect(code).toContain('#tasks(columns: ex1-colonnes')
     })
 
+    it('numérote lui-même les listes purement en ligne (numéro de largeur nulle)', () => {
+      const code = buildTypstDocument([
+        exercise({ questions: ['$1+1$', '$2+2$'], numbered: true }),
+      ])
+      // une formule en ligne est enrobée dans une boîte insécable : le numéro
+      // ne doit pas occuper de place dans la ligne, sinon une formule large
+      // passe sous un numéro resté seul
+      expect(code).not.toContain('items.all(is-inline-content) {')
+      expect(code).toContain('let en-ligne = items.all(is-inline-content)')
+    })
+
     it('ne déclare pas l’enrobage sans liste de questions ni QCM', () => {
       const code = buildTypstDocument([exercise({ questions: ['$1+1$'] })])
       expect(code).not.toContain('mathalea-question-numerotee')
