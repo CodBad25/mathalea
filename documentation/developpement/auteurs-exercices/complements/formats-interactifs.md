@@ -113,6 +113,49 @@ Les raccourcis disponibles et cette mécanique vivent dans
 touches dans l'attribut `data-keys` du champ au moment où il prend le focus :
 elles changent donc d'une question à l'autre.
 
+## Calcul en plusieurs étapes
+
+À utiliser quand l'élève doit pouvoir détailler un calcul ligne par ligne
+(`A = …`, `A = …`, `A = …`), comme dans
+[4C11](../../../../src/exercices/4e/4C11.ts).
+
+```ts
+import { addPossibleMultiLinesAnswer } from '../../lib/customElements/PossibleMultiLinesAnswerElement'
+
+handleAnswers(this, i, { reponse: { value: a + b * c } })
+texte += addPossibleMultiLinesAnswer(this, i, {
+  prefix: 'A =',
+  style: KeyboardType.clavierDeBase,
+  bareme: 'toutOuRien', // ou 'etapes'
+})
+```
+
+Le helper injecte un custom element `possible-multi-lines-answer` et pose le
+`formatInteractif` de la question. Il doit être appelé **après**
+`handleAnswers()`. L'élève voit une ligne `A = [champ]` suivie d'un bouton
+discret ⊕ (un plus dans un cercle) : un clic recopie la saisie sur une nouvelle
+ligne au-dessus et vide la ligne finale.
+
+Chaque ligne intermédiaire non vide doit être égale à la réponse attendue, sous
+n'importe quelle forme (comparaison par défaut avec `value` convertie en
+LaTeX). Elle est marquée d'une coche verte ou d'une croix rouge discrètes ; une
+ligne fausse est barrée en diagonale en restant lisible. La dernière ligne est vérifiée
+exactement comme un champ MathLive simple (options de comparaison, `compare`,
+`callback`, feedback) et reçoit le smiley habituel quand tout est réussi. Si une
+étape est fausse, un résultat final juste reçoit seulement une coche verte. Une
+étape fausse ajoute le message « La ligne n n'est pas égale à l'expression de départ. ».
+
+Deux barèmes sont proposés, chacun avec un nombre de points fixe par question :
+
+| `bareme`              | Points | Notation                                                                                           | Saisie                                                                                                                         |
+| --------------------- | ------ | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `toutOuRien` (défaut) | 1      | Le point (ou le `bareme` de la réponse) seulement si le résultat et toutes les étapes sont justes. | Les étapes sont corrigées à la vérification. Chaque ligne intermédiaire peut être supprimée avec `×`.                          |
+| `etapes`              | 2      | 2 points si tout est juste, 1 point si le résultat est juste malgré une étape fausse.              | Chaque ligne est corrigée dès son ajout puis verrouillée, sans suppression : l'élève corrige son erreur sur la ligne suivante. |
+
+En mode `etapes`, le helper remplace le `bareme` de la réponse pour annoncer
+2 points avant toute saisie. Hors HTML ou sans interactivité, le helper ne
+retourne rien.
+
 ## Bouton de réponse prédéfinie
 
 À utiliser quand une réponse revient telle quelle et serait pénible à saisir au

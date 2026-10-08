@@ -158,10 +158,12 @@ export function verifySingleMathLiveField(
     const noFeedback = options.noFeedback ?? false
     if (saisie == null || saisie === '') {
       champTexte.readOnly = true
+      // Une question vide vaut autant de points qu'une question remplie.
+      const [, nbReponsesVide] = bareme([0])
       return {
         isOk: false,
         feedback: noFeedback ? '' : 'Vous devez saisir une réponse.',
-        score: { nbBonnesReponses: 0, nbReponses: 1 },
+        score: { nbBonnesReponses: 0, nbReponses: nbReponsesVide ?? 1 },
       }
     }
 
