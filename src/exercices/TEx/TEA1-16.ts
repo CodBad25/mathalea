@@ -1,69 +1,82 @@
-import { bleuMathalea } from '../../lib/colors'
 import { choice } from '../../lib/outils/arrayOutils'
+import { reduireAxPlusB } from '../../lib/outils/ecritures'
 import {
   miseEnEvidence,
-  texteEnCouleur,
+  texteEnCouleurEtGras,
 } from '../../lib/outils/embellissements'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Démontrer une divisibilité par récurrence'
-export const dateDePublication = '30/09/2026'
-export const uuid = 'd2921'
-
+export const titre = "Démontrer la non-divisibilité d'une expression affine"
+export const uuid = 'eb781'
 export const refs = {
   'fr-fr': ['TEA1-16'],
   'fr-ch': [],
 }
 
-/**
- * Démontrer par récurrence que a^(pn) - 1 est divisible par a^p - 1,
- * avec p égal à 1 ou 2.
- *
- * @author Stéphane Guyon
- */
-export default class DivisibilitePuissanceRecurrence extends Exercice {
+export default class NonDivisibiliteAffine extends Exercice {
   constructor() {
     super()
+    this.titre = titre
+    this.consigne = ''
     this.nbQuestions = 1
-    this.nbQuestionsModifiable = false
+    this.nbQuestionsModifiable = true
+    this.spacing = 2
+    this.spacingCorr = 2
+    this.sup = 2
+    this.besoinFormulaireNumerique = [
+      'Méthode utilisée dans la correction',
+      2,
+      '1 : Raisonnement par l’absurde avec la divisibilité\n2 : Division euclidienne',
+    ]
   }
 
-  nouvelleVersion(): void {
-    const exposant = choice([1, 2])
-    const base = exposant === 1 ? randint(4, 10) : choice([2, 3, 4, 5, 6, 7])
-    const puissanceBase = base ** exposant
-    const diviseur = puissanceBase - 1
-    const terme = exposant === 1 ? `${base}^n` : `${base}^{2n}`
-    const termeSuivant = exposant === 1 ? `${base}^{n+1}` : `${base}^{2(n+1)}`
-    const decompositionExposant =
-      exposant === 1
-        ? `${base}\\times ${base}^n`
-        : `${base}^2\\times ${base}^{2n}`
-    const facteur = exposant === 1 ? `${base}` : `${base}^2`
+  nouvelleVersion() {
+    this.listeQuestions = []
+    this.listeCorrections = []
 
-    this.listeQuestions[0] = `Démontrer par récurrence que, pour tout entier naturel $n$, $${terme}-1$ est divisible par $${diviseur}$.`
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
+      // Choix aléatoire d'un nombre premier ou diviseur p
+      const p = choice([7, 11, 13, 17, 19])
+      // Choix d'un facteur m pour que a = p * m
+      const m = randint(2, 5)
+      const a = p * m
+      // Choix d'un reste b non divisible par p (1 <= b < p)
+      const b = randint(1, p - 1)
+      const expression = reduireAxPlusB(a, b, 'n')
 
-    this.listeCorrections[0] = `Pour tout entier naturel $n$, notons $\\mathcal P(n)$ la propriété : « $${terme}-1$ est divisible par $${diviseur}$ ».<br><br>
-    ${texteEnCouleur('Initialisation.', bleuMathalea)}<br>
-    Pour $n=0$, on a $${base}^{${exposant}\\times 0}-1=1-1=0$. Or $0$ est divisible par $${diviseur}$. La propriété $\\mathcal P(0)$ est donc vraie.<br><br>
-    ${texteEnCouleur('Hérédité.', bleuMathalea)}<br>
-    Soit $n\\in\\mathbb N$. Supposons que $\\mathcal P(n)$ est vraie, c’est-à-dire que $${terme}-1$ est divisible par $${diviseur}$. Il existe donc un entier $k\\in\\mathbb Z$ tel que
-    $${terme}-1=${diviseur}k$.<br>
-    La propriété $\\mathcal P(n+1)$ s’énonce : « $${termeSuivant}-1$ est divisible par $${diviseur}$ ».<br>
-    Montrons que $\\mathcal P(n+1)$ est vraie. On a :<br>
-    $\\begin{aligned}
-    ${termeSuivant}-1
-      &= ${decompositionExposant}-1\\\\
-      &= ${facteur}\\times${terme}-${puissanceBase}+${puissanceBase}-1&\\text{On ajoute et on soustrait } ${puissanceBase}.\\\\
-       &= ${facteur}\\left(${terme}-1\\right)+${puissanceBase}-1&\\text{On factorise par } ${puissanceBase}\\text{ les deux premiers termes. }\\\\
-      &= ${facteur}\\times ${diviseur}k+${diviseur}&\\text{On utilise l'hypothèse de récurrence. }\\\\
-      &= ${diviseur}\\left(${facteur}k+1\\right)&\\text{On factorise par } ${diviseur}.\\\\
-    \\end{aligned}$<br>
-    Comme $${facteur}k+1$ est un entier, $${termeSuivant}-1$ est divisible par $${diviseur}$. Ainsi, $\\mathcal P(n+1)$ est vraie.<br><br>
-    ${texteEnCouleur('Conclusion.', bleuMathalea)}<br>
-    La propriété est initialisée au rang $0$ et elle est héréditaire. <br>D’après le principe de récurrence, pour tout entier naturel $n$, $${miseEnEvidence(`${terme}-1`)}$ est divisible par $${miseEnEvidence(String(diviseur))}$.`
+      // Énoncé de la question
+      const texte = `Soit $n \\in \\mathbb{N}$. Montrer que l'expression $${expression}$ n'est pas divisible par $${p}$.`
 
+      let texteCorr: string
+      if (this.sup === 2) {
+        texteCorr = `Soit $n$ un entier naturel. On écrit $${expression}$ sous la forme d’une division euclidienne par $${p}$ :<br>`
+        texteCorr += `$${expression}=${p}\\times${m}n+${b}$<br>`
+        texteCorr += `Comme $n\\in\\mathbb{N}$, le quotient $${m}n$ est un entier naturel.<br>`
+        texteCorr += `De plus, $0\\leqslant ${b}<${p}$. Ainsi, le reste de la division euclidienne de $${expression}$ par $${p}$ est $${b}$.<br>`
+        texteCorr += `Ce reste n’est pas nul, donc $${p}$ ne divise pas $${expression}$.<br>`
+      } else {
+        texteCorr = `Démontrons par l'absurde que $${expression}$ n'est jamais divisible par $${p}$ pour tout entier naturel $n$.<br>`
+        texteCorr += `Supposons qu'il existe un entier $n$ tel que $${expression}$ soit divisible par $${p}$.<br>`
+        texteCorr += `Il existe alors un entier $k$ tel que :<br>`
+        texteCorr += `$${expression}=${p}k$.<br>`
+        texteCorr += `En réorganisant cette égalité pour isoler la constante, on obtient :<br>`
+        texteCorr += `$${p}k-${a}n=${b}$.<br>`
+        texteCorr += `Puisque $${a}=${p}\\times ${m}$, on peut factoriser par $${p}$ dans le membre de gauche :<br>`
+        texteCorr += `$${p}\\left(k-${m}n\\right)=${b}$.<br>`
+        texteCorr += `Le membre de gauche, $${p}\\left(k-${m}n\\right)$, est un multiple de $${p}$, car $k-${m}n$ est un entier.<br>`
+        texteCorr += `Or, $${b}$ n'est pas un multiple de $${p}$.<br>`
+        texteCorr += `C'est une contradiction.<br>`
+      }
+      texteCorr += `${texteEnCouleurEtGras('Pour tout entier naturel')} $${miseEnEvidence('n')}$${texteEnCouleurEtGras(',')} $${miseEnEvidence(expression)}$ ${texteEnCouleurEtGras("n'est pas divisible par")} $${miseEnEvidence(String(p))}$${texteEnCouleurEtGras('.')}`
+
+      if (this.questionJamaisPosee(i, a, b, p)) {
+        this.listeQuestions[i] = texte
+        this.listeCorrections[i] = texteCorr
+        i++
+      }
+      cpt++
+    }
     listeQuestionsToContenu(this)
   }
 }

@@ -1,146 +1,86 @@
 import { tableauColonneLigne } from '../../lib/2d/tableau'
-import { bleuMathalea } from '../../lib/colors'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { reduireAxPlusB } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-export const titre =
-  'Résoudre une équation de congruence du type $ax \\equiv b \\,[k]$'
-export const interactifReady = true
 
-export const dateDePublication = '26/11/2025'
-export const uuid = '87538'
+export const titre =
+  'Déterminer le quotient et le reste d’une division euclidienne selon un entier naturel'
+export const dateDePublication = '07/10/2026'
+export const uuid = 'ed53c'
 
 export const refs = {
   'fr-fr': ['TEA1-23'],
   'fr-ch': [],
 }
-/**
- *
- * @author Stéphane Guyon
 
-*/
-// modulo positif
-function mod(n: number, k: number): number {
-  return ((n % k) + k) % k
-}
-
-// pgcd
-function pgcd(a: number, b: number): number {
-  a = Math.abs(a)
-  b = Math.abs(b)
-  while (b !== 0) {
-    const t = b
-    b = a % b
-    a = t
-  }
-  return a
-}
-
-export default class ExerciceEquationAxCongruence extends Exercice {
+/** @author Stéphane Guyon */
+export default class DivisionEuclidienneSelonEntier extends Exercice {
   constructor() {
     super()
-    this.consigne = ''
     this.nbQuestions = 1
+    this.nbQuestionsModifiable = false
   }
 
-  nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
-      // k entre 3 et 8
-      const k = randint(3, 8)
+  nouvelleVersion(): void {
+    const divisorCoefficient = randint(3, 6)
+    const divisorConstant = randint(1, 3)
+    const quotient = randint(2, 3)
+    const remainderCoefficient = randint(1, divisorCoefficient - 1)
+    const difference = divisorCoefficient - remainderCoefficient
+    // Cette constante garantit que le reste convient exactement pour n > 1.
+    const remainderConstant = divisorConstant + difference
+    const dividendCoefficient =
+      quotient * divisorCoefficient + remainderCoefficient
+    const dividendConstant = quotient * divisorConstant + remainderConstant
+    const divisor = reduireAxPlusB(divisorCoefficient, divisorConstant, 'n')
+    const dividend = reduireAxPlusB(dividendCoefficient, dividendConstant, 'n')
+    const remainder = reduireAxPlusB(
+      remainderCoefficient,
+      remainderConstant,
+      'n',
+    )
+    const quotientAtZero = Math.floor(dividendConstant / divisorConstant)
+    const remainderAtZero = dividendConstant % divisorConstant
+    const dividendAtOne = dividendCoefficient + dividendConstant
+    const divisorAtOne = divisorCoefficient + divisorConstant
+    const quotientAtOne = quotient + 1
+    const tableauCasParticuliers = tableauColonneLigne(
+      [
+        'n',
+        `\\text{Dividende }${dividend}`,
+        `\\text{Diviseur }${divisor}`,
+        '\\text{Reste}',
+      ],
+      ['0', '1'],
+      [
+        `${dividendConstant}`,
+        `${divisorConstant}`,
+        miseEnEvidence(remainderAtZero),
+        `${dividendAtOne}`,
+        `${divisorAtOne}`,
+        miseEnEvidence('0'),
+      ],
+      1.5,
+      true,
+    )
 
-      // a dans [-5,5] sans -1,0,1 et pgcd(a,k)=1 pour équation du type ax - b[k]
-      const possibles = [-5, -4, -3, -2, 2, 3, 4, 5]
-      let a: number
-      do a = possibles[randint(0, possibles.length - 1)]
-      while (pgcd(a, k) !== 1)
+    this.listeQuestions[0] = `Soit $n$ un entier naturel. Déterminer, selon les valeurs de $n$, le quotient et le reste de la division euclidienne de $${dividend}$ par $${divisor}$.`
 
-      // b entre 0 et k−1
-      const b = randint(0, k - 1)
-
-      // inverse de a modulo k
-      const aMod = mod(a, k)
-      let invA = 1
-      for (let t = 1; t < k; t++) {
-        if (mod(aMod * t, k) === 1) {
-          invA = t
-          break
-        }
-      }
-
-      const r = mod(invA * b, k)
-
-      // Construction du tableau (compatible HTML / LaTeX)
-      const entetesColonnes = [
-        `x \\equiv \\ldots [${k}]`,
-        ...Array.from({ length: k }, (_, n) =>
-          n === r ? miseEnEvidence(n) : `${n}`,
-        ),
-      ]
-      const entetesLignes = [`${a}x \\equiv \\ldots [${k}]`]
-      const cellules = [
-        ...Array.from({ length: k }, (_, n) => {
-          const valeur = mod(a * n, k)
-          return valeur === b
-            ? miseEnEvidence(valeur, bleuMathalea)
-            : `${valeur}`
-        }),
-      ]
-      const style: { [key: string]: string } = {
-        L0C0: '#f4f4f4',
-        LC0: '#f5f5f5',
-      }
-      for (let col = 0; col < k; col++) {
-        style[`L0C${col + 1}`] = '#f4f4f4'
-      }
-      style[`L1C${r + 1}`] = '#fde7dd'
-      const table = tableauColonneLigne(
-        entetesColonnes,
-        entetesLignes,
-        cellules,
-        1.2,
-        true,
-        this.numeroExercice ?? 0,
-        i,
-        this.interactif,
-        style,
-      )
-
-      // Énoncé
-      const texte = `
-Résoudre dans $\\mathbb{Z}$ l'équation  :  
-$${a}x \\equiv ${b} \\,[${k}]$.<br> `
-
-      // Correction
-      let texteCorr = ''
-      texteCorr += `On cherche les entiers $x$ tels que $${a}x \\equiv ${b} \\,[${k}]$.<br>`
-      texteCorr += `On procède à une disjonction des cas en dressant une table de congruence modulo $${k}$ :<br>`
-      texteCorr += table
-      texteCorr += `<br>On en déduit que $x \\equiv ${miseEnEvidence(r)} \\,[${k}]$.`
-      texteCorr += `<br>On vérifie réciproquement que si $x \\equiv ${r} \\,[${k}]$ alors $${a}x \\equiv ${b} \\,[${k}]$.`
-      texteCorr += `<br>L'ensemble des solutions est donc : $${miseEnEvidence(`S=\\{  ${r} + ${k}n, n \\in \\mathbb{Z} \\}`, bleuMathalea)}$. `
-
-      if (this.questionJamaisPosee(i, texte)) {
-        // Question affichée + champ interactif
-        this.listeQuestions[i] =
-          texte +
-          ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, {
-            texteAvant: `<br>$x \\equiv ~~$`,
-            texteApres: `$~[${k}]$.`,
-          })
-
-        this.listeCorrections[i] = texteCorr
-
-        handleAnswers(this, i, {
-          reponse: { value: `${r}` },
-        })
-
-        i++
-      }
-      cpt++
-    }
+    this.listeCorrections[0] = `Soit $n\\in \\mathbb{N}$. <br>
+    L'écriture de la division euclidienne est unique : Il existe un unique couple d'entiers naturels $(q,r)$ vérifiant $${dividend}=q(${divisor})+r$ et $0\\leqslant r<${divisor}$.<br>
+    Si $q=${quotient}$, $${quotient}(${divisor})=${reduireAxPlusB(quotient * divisorCoefficient, quotient * divisorConstant, 'n')}$.<br>
+    Si $q=${quotient + 1}$, $${quotient + 1}(${divisor})=${reduireAxPlusB((quotient + 1) * divisorCoefficient, (quotient + 1) * divisorConstant, 'n')}$.<br>
+    On prend $q=${quotient}$. <br>
+    $${dividend}=${quotient}(${divisor})+(${remainder})$.<br>
+    Cette égalité traduit la division euclidienne de $${dividend}$ par $${divisor}$ si et seulement si $0\\leqslant ${remainder}<${divisor}$.<br>
+    Comme $n$ est un entier naturel, $${remainder}$ est toujours positif. La condition équivaut donc à :<br>
+    $${remainder}\\lt ${divisor}\\iff ${difference}\\lt ${reduireAxPlusB(difference, 0, 'n')}\\iff n>1$.<br>
+    Ainsi, pour $n\\geqslant2$, on obtient bien la division euclidienne, avec $${miseEnEvidence(`q=${quotient}`)}$ et $${miseEnEvidence(`r=${remainder}`)}$.<br>
+    Il reste à examiner séparément les cas $n=0$ et $n=1$, pour lesquels cette condition n'est pas vérifiée.<br><br>
+    ${tableauCasParticuliers}<br>
+    Pour $n=0$, $${dividendConstant}=${quotientAtZero}\\times${divisorConstant}+${remainderAtZero}$, donc $${miseEnEvidence(`q=${quotientAtZero}`)}$.<br>
+    Pour $n=1$, $${dividendAtOne}=${quotientAtOne}\\times${divisorAtOne}+0$, donc $${miseEnEvidence(`q=${quotientAtOne}`)}$.`
 
     listeQuestionsToContenu(this)
   }
