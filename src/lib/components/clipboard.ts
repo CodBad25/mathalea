@@ -8,9 +8,16 @@
  * cas, repli sur la technique historique (textarea temporaire sélectionné +
  * `document.execCommand('copy')`), qui fonctionne sans contexte sécurisé.
  *
+ * Le textarea de repli est ajouté à `container` (par défaut `document.body`).
+ * Dans une `<dialog>` ouverte avec `showModal()`, le reste de la page est
+ * inerte et sa sélection est ignorée : passer alors la `<dialog>`.
+ *
  * Renvoie true si le texte a été copié, false sinon (aucun throw).
  */
-export async function copyTextToClipboard(text: string): Promise<boolean> {
+export async function copyTextToClipboard(
+  text: string,
+  container?: HTMLElement,
+): Promise<boolean> {
   if (
     typeof navigator !== 'undefined' &&
     typeof navigator.clipboard?.writeText === 'function'
@@ -22,21 +29,22 @@ export async function copyTextToClipboard(text: string): Promise<boolean> {
       // Permission refusée ou autre échec : on tente le repli historique.
     }
   }
+  const textarea = document.createElement('textarea')
   try {
-    const textarea = document.createElement('textarea')
     textarea.value = text
     textarea.setAttribute('readonly', '')
     // Hors champ visuel mais sélectionnable (display:none empêcherait la copie).
     textarea.style.position = 'fixed'
     textarea.style.top = '-9999px'
     textarea.style.opacity = '0'
-    document.body.appendChild(textarea)
+    const parent = container ?? document.body
+    parent.appendChild(textarea)
     textarea.select()
     textarea.setSelectionRange(0, text.length) // nécessaire sur iOS
-    const succeeded = document.execCommand('copy')
-    textarea.remove()
-    return succeeded
+    return document.execCommand('copy')
   } catch {
     return false
+  } finally {
+    textarea.remove()
   }
 }

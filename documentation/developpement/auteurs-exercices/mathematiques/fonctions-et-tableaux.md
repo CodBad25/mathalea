@@ -4,6 +4,13 @@ Ce guide sert a coder un exercice qui etudie une fonction, trace une courbe defi
 
 ## Choisir le bon helper
 
+Pour les calculs algébriques sur des polynômes, utiliser `Polynome` dans
+`src/lib/mathFonctions/Polynome.ts`. Les méthodes `multiplyExact()` et
+`evaluateExact()` conservent les coefficients et les valeurs rationnels ;
+`fromRationalCoefficients()` et `toRational()` normalisent les coefficients.
+Voir [Polynome et calcul rationnel exact](../../maintenance-moteur/mathematiques/nombres-et-calculs.md#polynome-et-calcul-rationnel-exact)
+avant de réécrire ces opérations dans un exercice.
+
 | Besoin                                                                | Helper a utiliser                                                                                      | Quand l'eviter                                                             |
 | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------- |
 | Courbe definie par des points de controle                             | `spline()` ou `new Spline()`                                                                           | Si la fonction a une expression simple et une derivee connue.              |

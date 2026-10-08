@@ -1180,6 +1180,15 @@ describe('htmlToTypst', () => {
       expect(result).toContain('[$b$]')
     })
 
+    it('un tabularx dont les `>` de la spécification sont ré-échappés garde ses traits verticaux', () => {
+      const result = htmlToTypst(
+        '<br>$\\begin{tabularx}{0.9\\linewidth}{|&gt;{\\cellcolor{lightgray}}c|&gt;{\\centering \\arraybackslash}X|}\\hline a &amp; b \\\\ \\hline\\end{tabularx}$',
+      )
+      expect(result).toContain('stroke: 0.5pt')
+      expect(result).toContain('align: center + horizon')
+      expect(result).not.toContain('gt;')
+    })
+
     it('un span KaTeX suivi d’un tableau LaTeX brut ne corrompt pas les `&` du tableau', () => {
       const result = htmlToTypst(
         '<span class="katex"><span class="katex-mathml"><math><semantics><mrow></mrow><annotation encoding="application/x-tex">78^\\circ</annotation></semantics></math></span><span class="katex-html">78∘</span></span>' +

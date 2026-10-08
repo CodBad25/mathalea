@@ -163,7 +163,7 @@ export default class ConvertirM2EnDm2 extends Exercice {
                 ? remplisLesBlancs(
                     this,
                     i,
-                    `\\dfrac{1}{%{champ1}} ${pairesMetriques[listeConversions[cpt] - 1][1].replaceAll(/\\text\{([^}]*)\}/g, '$1')}^2`,
+                    `\\dfrac{1}{%{champ1}} ${pairesMetriques[listeConversions[cpt] - 1][1]}^2`,
                     KeyboardType.clavierNumbers,
                     '\\ldots',
                   )

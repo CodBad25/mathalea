@@ -3,7 +3,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 import { texNombre } from '../../lib/outils/texNombre'
 
-import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceQcmACourt from '../ExerciceQcmACourt'
 
 export const uuid = 'f9d32'
 export const refs = {
@@ -13,11 +13,13 @@ export const refs = {
 export const interactifReady = true
 
 export const amcReady = 'true'
-export const amcType = 'qcmMono'
 export const titre = "Calculer un taux d'évolution particulier"
 export const dateDePublication = '19/01/2026'
 
-export default class TauxEvolution extends ExerciceQcmA {
+export default class TauxEvolution extends ExerciceQcmACourt {
+  // Pourcentage attendu au dernier tirage, utilisé par la saisie courte
+  private pourcentage = 100
+
   private appliquerLesValeurs(
     typeEvolution: string,
     pourcentageBonneReponse: number,
@@ -74,6 +76,7 @@ export default class TauxEvolution extends ExerciceQcmA {
     }
 
     const params = parametres[typeEvolution]
+    this.pourcentage = pourcentageBonneReponse
 
     this.enonce = `${params.phraseEnonce}. Cela signifie que le prix a ${params.typeAction} de :`
 
@@ -135,9 +138,11 @@ export default class TauxEvolution extends ExerciceQcmA {
   }
 
   versionOriginale: () => void = () => {
+    this.pourcentage = 100
     this.enonce = `Un prix a doublé. Cela signifie que le prix a augmenté de :`
 
-    this.reponses = ['$50\\,\\%$', '$100\\,\\%$', '$150\\,\\%$', '$200\\,\\%$']
+    // La bonne réponse doit être la première proposition
+    this.reponses = ['$100\\,\\%$', '$50\\,\\%$', '$150\\,\\%$', '$200\\,\\%$']
 
     this.correction = `Si un prix a doublé, cela signifie que le coefficient multiplicateur est $CM = 2$.<br>
     Le taux d'évolution $T$  vérifie : $T = CM - 1 = 2 - 1 = 1 = 100\\,\\%$.<br>
@@ -160,5 +165,14 @@ export default class TauxEvolution extends ExerciceQcmA {
 
   constructor() {
     super()
+    this.options.compact = true // moins d'espace avant les propositions du QCM
+    // Version sans QCM : l'élève donne le pourcentage d'augmentation ou de diminution
+    this.enonceCourt = () =>
+      this.enonce.replace(
+        /Cela signifie que le prix a (augmenté|diminué) de :/,
+        'De quel pourcentage le prix a-t-il $1 ?',
+      )
+    this.reponseCourte = () => String(this.pourcentage)
+    this.optionsChampReponseCourte = { texteApres: '$\\,\\%$' }
   }
 }

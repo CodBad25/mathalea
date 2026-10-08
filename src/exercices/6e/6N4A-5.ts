@@ -85,10 +85,13 @@ export default class ModeliserParUnSchemaEnBarre extends Exercice {
     const indices = Object.fromEntries(
       TYPES_SCHEMA_EN_BARRE.map((type) => [type, 0]),
     ) as Record<SchemaEnBarreType, number>
+    if (this.interactif) {
     this.consigne = this.sup2
-      ? 'Compléter le schéma avec les données du problème, en écrivant « ? » pour la valeur cherchée, puis répondre à la question.'
+      ? 'Compléter le schéma en barres avec les données du problème puis répondre à la question.'
       : 'Choisir le schéma qui modélise le problème et le compléter avec ses données, en écrivant « ? » pour la valeur cherchée, puis répondre à la question.'
-
+    } else {
+      this.consigne = `${this.sup2 ? 'Compléter' : 'Réaliser'} un schéma en barres avec les données du problème puis répondre à la question.`
+    }
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; cpt++) {
       const type = types[i]
       const probleme = tirages[type][indices[type]++ % tirages[type].length]()
@@ -123,7 +126,7 @@ export default class ModeliserParUnSchemaEnBarre extends Exercice {
             KeyboardType.clavierDeBase,
             { texteAvant: conclusion.avant, texteApres: uniteEtSuite },
           )
-        : `${conclusion.avant} $\\ldots\\ldots$ ${uniteEtSuite}`
+        : ''
       // Le <br> avant le schéma : une ligne terminée par un saut forcé n'est
       // pas justifiée, la dernière ligne de l'énoncé reste alignée à gauche.
       const contenu = `${probleme.enonce}${context.isHtml ? '<br>' : ''}${schema}<br>${phrase}`

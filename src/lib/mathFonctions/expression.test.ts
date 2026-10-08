@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import {
   arithmeticAstToLatex,
+  arithmeticMismatchFeedback,
+  describeArithmeticAstCorrection,
   generateArithmeticAst,
   type ArithmeticAst,
 } from './expression'
@@ -144,5 +146,57 @@ describe('generateArithmeticAst', () => {
 
     expect(hasDivision).toBe(true)
     expect(hasMixedExpression).toBe(true)
+  })
+})
+
+describe('correction et feedback détaillés', () => {
+  const num = (value: number): ArithmeticAst => ({ type: 'number', value })
+  const op = (
+    o: 'plus' | 'moins' | 'multi' | 'divise',
+    left: ArithmeticAst,
+    right: ArithmeticAst,
+  ): ArithmeticAst => ({ type: 'operation', op: o, left, right })
+
+  it('décrit la multiplication prioritaire de 9 × 10 + 7', () => {
+    const ast = op('plus', op('multi', num(9), num(10)), num(7))
+    const lines = describeArithmeticAstCorrection(ast, true)
+    expect(lines[0]).toContain('En premier')
+    expect(lines[0]).toContain('$9 \\times 10$')
+    expect(lines[0]).toContain("prioritaire sur l'addition")
+    expect(lines[1]).toContain('En dernier')
+    expect(lines.join(' ')).toContain('contient à gauche le bloc de la multiplication')
+  })
+
+  it('décrit le calcul entre parenthèses de 9 × (10 + 7)', () => {
+    const ast = op('multi', num(9), op('plus', num(10), num(7)))
+    const lines = describeArithmeticAstCorrection(ast, true)
+    expect(lines[0]).toContain('$10 + 7$')
+    expect(lines[0]).toContain('calcul entre parenthèses')
+    expect(lines[1]).toContain('En dernier')
+    expect(lines[1]).toContain('la multiplication')
+  })
+
+  it("décrit une seule opération et ne dit rien d'un nombre seul", () => {
+    expect(describeArithmeticAstCorrection(num(3), true)).toEqual([])
+    const lines = describeArithmeticAstCorrection(op('moins', num(8), num(3)), true)
+    expect(lines[0]).toBe("Il n'y a qu'une seule opération : la soustraction.")
+  })
+
+  it('montre le calcul réellement codé par l’élève', () => {
+    const expected = op('plus', op('multi', num(9), num(10)), num(7))
+    const student = op('multi', num(9), op('plus', num(10), num(7)))
+    const feedback = arithmeticMismatchFeedback(student, expected, true)
+    expect(feedback).toContain('$9 \\times (10 + 7)$')
+    expect(feedback).toContain('$9 \\times 10 + 7$')
+    expect(feedback).toContain("l'addition")
+  })
+
+  it('signale des nombres différents', () => {
+    const feedback = arithmeticMismatchFeedback(
+      op('plus', num(1), num(2)),
+      op('plus', num(1), num(3)),
+      true,
+    )
+    expect(feedback).toContain('Vérifie les nombres utilisés.')
   })
 })

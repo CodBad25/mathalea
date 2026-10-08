@@ -281,6 +281,7 @@ La valeur `longueur` désigne la longueur totale du nouveau tracé.
 | `loadSaveButtons`                | Affiche les boutons de sauvegarde et chargement JSON.                                                                                                                              |
 | `allowFullscreen`                | Ajoute un bouton qui ouvre le lecteur dans une modale plein écran. La fermeture replace le même lecteur dans l'éditeur, sans perdre son état. Cette option est désactivée par défaut et peut aussi être activée dans un exercice élève. |
 | `interactivityOn`                | Désactive l'édition quand la valeur vaut `false` : la zone d'ajout et les boutons de modification des lignes sont masqués, mais le bouton « Tester l'animation » reste disponible. |
+| `masquerProgramme` | Masque la liste du programme de construction (HTML) : seule l'animation reste visible (bouton « Voir l'animation »), par exemple pour une correction animée sans le détail des instructions. |
 | `verifyCallbackName`             | Nom d'une callback de vérification enregistrée avec `ElementIepEditeur.registerVerificationCallback()`.                                                                            |
 
 ## Rendu imprimable

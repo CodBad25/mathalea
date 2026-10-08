@@ -14,7 +14,7 @@ import Exercice from '../Exercice'
 export const titre = 'Déterminer les limites de suites'
 export const dateDePublication = '28/09/2026'
 export const uuid = '356e4'
-export const refs = { 'fr-fr': ['TSA2-50'], 'fr-ch': [] }
+export const refs = { 'fr-fr': ['TSA1-28'], 'fr-ch': [] }
 
 type QuestionGeneree = { expression: string; correction: string }
 type GenerateurQuestion = (nom: string) => QuestionGeneree

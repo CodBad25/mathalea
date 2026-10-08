@@ -8,8 +8,6 @@ import { defineConfig /*, splitVendorChunkPlugin */ } from 'vite'
 // le 2023-03-09 on a toujours un build qui passe avec 4Go de RAM (--max-old-space-size=4000), mais plus si on active ce plugin
 // import legacy from '@vitejs/plugin-legacy' // il faut aussi installer terser
 
-import dynamicImport from 'vite-plugin-dynamic-import'
-
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
@@ -105,7 +103,6 @@ export default defineConfig({
   // },
   plugins: [
     svelte(),
-    dynamicImport(),
     // splitVendorChunkPlugin ne semble pas servir à grand chose, on a toujours tous les node_modules dans le même chunk, même sans rollupOptions.manualChunks
     // avec on passe de 1486 fichiers à 1513, mais les gros restent énormes
     // splitVendorChunkPlugin() // https://vitejs.dev/guide/build.html#chunking-strategy

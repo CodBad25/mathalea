@@ -138,12 +138,12 @@ export default class VocabulaireSur4Operations extends Exercice {
           break
         case 8:
           texte += `Dans l'égalité «${sp()}$${a} \\times ${b} = ${a * b}$${sp()}», comment s'appelle le nombre $${a * b}$ ?`
-          texteCorr += `Dans l'égalité «${sp()}$${a} \\times ${b} = ${a * b}$${sp()}», $${a * b}$ s'appelle le ${texteEnCouleurEtGras('produit')} de $${a}$ et $${b}$.`
+          texteCorr += `Dans l'égalité «${sp()}$${a} \\times ${b} = ${a * b}$${sp()}», $${a * b}$ s'appelle le ${texteEnCouleurEtGras('produit')} de $${a}$ par $${b}$.`
           reponse.textes = listeVoc
           reponse.statuts = listeVoc.map((el) => el === 'le produit')
           break
         case 9:
-          texte += `Quel est le produit de $${a}$ et $${b}$ ?`
+          texte += `Quel est le produit de $${a}$ par $${b}$ ?`
           texteCorr += `Le produit de $${a}$ et $${b}$ est $${miseEnEvidence(texNombre(a * b))}$ car $${a}\\times${b}=${a * b}$.`
           reponse.textes = [a, b, a + b, a * b, a - b].map(String)
           reponse.statuts = [false, false, false, true, false]

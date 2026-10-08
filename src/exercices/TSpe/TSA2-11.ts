@@ -12,6 +12,8 @@ export const interactifReady = true
 
 export const amcReady = true
 export const amcType = 'qcmMono'
+export const dateDeModifImportante = '06/10/2026'
+
 export const uuid = '6de80'
 export const refs = {
   'fr-fr': ['TSA2-11', 'TCA2-11'],
@@ -25,6 +27,8 @@ type TypeQuestion = 1 | 2 | 3
  * @author Stéphane Guyon
  */
 export default class AsymptotesEtTableauDeVariations extends ExerciceQcmA {
+  private typeAsymptotes?: number
+
   private tableauHorizontal(ordonnée: number): string {
     const limiteGauchePositive = choice([true, false])
     const abscisseIntermediaire = randint(-4, 4)
@@ -251,9 +255,23 @@ export default class AsymptotesEtTableauDeVariations extends ExerciceQcmA {
   }
 
   versionAleatoire = () => {
+    const selection = this.typeAsymptotes ?? this.sup
     const typeQuestion: TypeQuestion =
-      this.sup === 1 || this.sup === 2 ? this.sup : choice([1, 2, 3])
+      selection === 1 || selection === 2 ? selection : choice([1, 2, 3])
     this.appliqueLesValeurs(typeQuestion)
+  }
+
+  nouvelleVersion(): void {
+    const selection = this.sup
+    this.typeAsymptotes = selection
+    // Le parent réserve sup au sujet original et limite alors le QCM à une question.
+    this.sup = false
+    try {
+      super.nouvelleVersion()
+    } finally {
+      this.sup = selection
+      this.typeAsymptotes = undefined
+    }
   }
 
   constructor() {

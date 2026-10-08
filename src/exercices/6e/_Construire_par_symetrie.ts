@@ -9,7 +9,7 @@ import {
   droiteVerticaleParPoint,
 } from '../../lib/2d/droites'
 import { grille, seyes } from '../../lib/2d/Grille'
-import { pointAbstrait } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait, type PointAbstrait } from '../../lib/2d/PointAbstrait'
 import { nommePolygone, Polygone, polygone } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint, texteParPoint } from '../../lib/2d/textes'
@@ -48,6 +48,13 @@ export const dateDeModifImportante = '14/11/2021'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const titre = 'Construire par symétrie...'
+
+export type CentralSymmetryQuestion = {
+  i: number
+  points: PointAbstrait[]
+  center: PointAbstrait
+  bounds: { xmin: number; ymin: number; xmax: number; ymax: number }
+}
 
 function choisiPointDuBonCote(d: Droite, lieu = 'dessus') {
   if (d.b === 0) {
@@ -191,6 +198,9 @@ function choisi3Points(d: Droite, lieu = ['dessus', 'dessous', 'sur']) {
 export default class ConstruireParSymetrie extends Exercice {
   figure: boolean
   version: number
+  protected centralSymmetryInteractive?: (
+    question: CentralSymmetryQuestion,
+  ) => string
   constructor() {
     super()
     this.nbQuestions = 1
@@ -330,7 +340,7 @@ export default class ConstruireParSymetrie extends Exercice {
     let p1
     let p2
     let p1nom
-    for (let i = 0, cpt = 0, numQuestion; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0, numQuestion; i < this.nbQuestions && cpt < 50;) {
       const choixLieux = [
         choice([
           ['dessus', 'dessus', 'dessus'],
@@ -1371,6 +1381,21 @@ export default class ConstruireParSymetrie extends Exercice {
 
       if (this.questionJamaisPosee(i, Xmin, Xmax, Ymin, Ymax)) {
         // Si la question n'a jamais été posée, on en créé une autre
+        if (
+          listeTypeDeQuestions[i] === 6 &&
+          context.isHtml &&
+          !context.isTypst &&
+          !context.isAmc &&
+          this.interactif &&
+          this.centralSymmetryInteractive
+        ) {
+          enonce = this.centralSymmetryInteractive({
+            i,
+            points: [C, D, A],
+            center: B,
+            bounds: params,
+          })
+        }
         this.listeQuestions[i] = enonce
         this.listeCorrections[i] = correction
         i++

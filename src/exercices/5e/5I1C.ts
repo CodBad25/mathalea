@@ -8,6 +8,8 @@ import {
 } from '../../lib/customElements/BlocklyEditor'
 import {
   addScratchEditor,
+  ScratchEditorElement,
+  scratchWorkspaceXmlToArithmeticAst,
   type ScratchEditorOptions,
 } from '../../lib/customElements/ScratchEditor'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -15,9 +17,12 @@ import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
 import {
   areArithmeticAstsEquivalent,
   arithmeticAstToLatex,
+  arithmeticMismatchFeedback,
   blocklyWorkspaceToArithmeticAst,
   buildBlocklySaySolutionBlocks,
+  describeArithmeticAstCorrection,
   generateArithmeticAst,
+  type ArithmeticAst,
 } from '../../lib/mathFonctions/expression'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
@@ -68,42 +73,82 @@ const toolbox: Blockly.utils.toolbox.ToolboxDefinition = {
 }
 
 const VERIFY_CALLBACK_NAME = '5I1C_AST_EQUIVALENCE'
+const SCRATCH_VERIFY_CALLBACK_NAME = '5I1C_SCRATCH_AST_EQUIVALENCE'
+
+/**
+ * Compare le calcul codé par l'élève au calcul attendu et rédige le feedback.
+ * `expectedRaw` contient `preferDivToFrac` pour afficher le calcul de l'élève
+ * avec la même écriture des divisions que la question.
+ */
+function verifyArithmeticAst(
+  studentAst: ArithmeticAst | null,
+  expectedAst: ArithmeticAst | null,
+  expectedRaw: unknown,
+): { isOk: boolean; feedback: string } {
+  if (studentAst == null) {
+    return {
+      isOk: false,
+      feedback:
+        "Impossible d'interpréter ta réponse par blocs en expression arithmétique, il semble que tu aies oublié de coder ta réponse.",
+    }
+  }
+  if (expectedAst == null) {
+    return {
+      isOk: false,
+      feedback: "Impossible d'interpréter la correction attendue par blocs.", // message à destination du concepteur de l'exo (pas de l'élève)
+    }
+  }
+  if (areArithmeticAstsEquivalent(studentAst, expectedAst)) {
+    return { isOk: true, feedback: 'Bravo !' }
+  }
+  let preferDivToFrac = true
+  try {
+    const parsed = JSON.parse(String(expectedRaw)) as {
+      preferDivToFrac?: boolean
+    }
+    preferDivToFrac = parsed.preferDivToFrac ?? true
+  } catch {
+    // On garde l'écriture avec ÷
+  }
+  return {
+    isOk: false,
+    feedback: arithmeticMismatchFeedback(
+      studentAst,
+      expectedAst,
+      preferDivToFrac,
+    ),
+  }
+}
 
 BlocklyEditor.registerVerificationCallback(
   VERIFY_CALLBACK_NAME,
-  ({ studentJson, expectedSolution }) => {
-    if (expectedSolution == null) {
-      return {
-        isOk: false,
-        feedback: 'Réponse attendue invalide.',
-      }
-    }
+  ({ studentJson, expectedSolution, expectedRaw }) =>
+    verifyArithmeticAst(
+      blocklyWorkspaceToArithmeticAst(studentJson),
+      expectedSolution == null
+        ? null
+        : blocklyWorkspaceToArithmeticAst(expectedSolution),
+      expectedRaw,
+    ),
+)
 
-    const studentAst = blocklyWorkspaceToArithmeticAst(studentJson)
-    if (studentAst == null) {
-      return {
-        isOk: false,
-        feedback:
-          "Impossible d'interpréter ta réponse par blocs en expression arithmétique, il semble que tu aies oublié de coder ta réponse.",
+ScratchEditorElement.registerVerificationCallback(
+  SCRATCH_VERIFY_CALLBACK_NAME,
+  ({ studentValue, expectedRaw }) => {
+    let expectedAst: ArithmeticAst | null = null
+    try {
+      const parsed = JSON.parse(String(expectedRaw)) as {
+        solutionBlocks?: unknown
       }
+      expectedAst = blocklyWorkspaceToArithmeticAst(parsed.solutionBlocks)
+    } catch {
+      expectedAst = null
     }
-
-    const expectedAst = blocklyWorkspaceToArithmeticAst(expectedSolution)
-    if (expectedAst == null) {
-      return {
-        isOk: false,
-        feedback:
-          "Impossible d'interpréter la correction attendue par blocs en AST.", // message à destination du concepteur de l'exo (pas de l'élève)
-      }
-    }
-
-    const isOk = areArithmeticAstsEquivalent(studentAst, expectedAst)
-    return {
-      isOk,
-      feedback: isOk
-        ? 'Bravo !'
-        : 'Le code ne correspond pas au calcul attendu.',
-    }
+    return verifyArithmeticAst(
+      scratchWorkspaceXmlToArithmeticAst(studentValue.workspaceXml ?? ''),
+      expectedAst,
+      expectedRaw,
+    )
   },
 )
 
@@ -132,8 +177,12 @@ export default class CalculerFormuleParBlockly extends Exercice {
       true,
     ]
     this.sup4 = true
-    this.besoinFormulaire5CaseACocher = ["Utiliser l'éditeur scratch", true]
-    this.sup5 = true
+    this.besoinFormulaire5Numerique = [
+      'Éditeur de programmes',
+      2,
+      '1 : Scratch\n2 : Blockly',
+    ]
+    this.sup5 = 1
   }
 
   nouvelleVersion(_numeroExercice: number) {
@@ -146,9 +195,11 @@ export default class CalculerFormuleParBlockly extends Exercice {
       shuffle: false,
       defaut: 0,
     }).map(Number)
-    this.consigne = this.sup5
-      ? 'Traduire chaque calcul avec les blocs (Quand drapeau vert cliqué => dire (le calcul) pendant $2$ s).'
-      : 'Traduire chaque calcul avec les blocs (Démarrer => dire (le calcul) pendant $2$ s).'
+    // Les anciens liens contiennent une case à cocher : false correspondait à Blockly
+    const estScratch = ![2, '2', false, 'false'].includes(this.sup5)
+    this.consigne = estScratch
+      ? "Chaque programme devra dire le résultat du calcul lorsque l'utilisateur clique sur le drapeau."
+      : 'Chaque programme devra dire le résultat du calcul au démarrage.'
 
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const requestedType = listeTypesDeQuestion[i]
@@ -164,13 +215,17 @@ export default class CalculerFormuleParBlockly extends Exercice {
       const texteOperation = arithmeticAstToLatex(expressionAst, !this.sup2)
       const expressionJson = JSON.stringify(expressionAst)
 
-      let texte = `Traduire ce calcul : $${miseEnEvidence(texteOperation, 'black')}$ par un programme.<br><br>`
+      let texte = `$${miseEnEvidence(texteOperation, 'black')}$<br><br>`
       const solutionBlocks = buildBlocklySaySolutionBlocks(expressionAst)
-      const correctionEditorId = `${this.sup5 ? 'scratch-editor' : 'blockly-editor'}CorrEx${this.numeroExercice}Q${i}`
+      const explications = describeArithmeticAstCorrection(
+        expressionAst,
+        !this.sup2,
+      ).join(context.isHtml ? '<br>' : ' ')
+      const correctionEditorId = `${estScratch ? 'scratch-editor' : 'blockly-editor'}CorrEx${this.numeroExercice}Q${i}`
       const texteCorr = context.isHtml
         ? [
-            'La solution en blocs est :<br>',
-            this.sup5
+            `${explications}<br>La solution en blocs est :<br>`,
+            estScratch
               ? addScratchEditor(this, i, {
                   id: correctionEditorId,
                   initialBlocks: solutionBlocks,
@@ -191,14 +246,15 @@ export default class CalculerFormuleParBlockly extends Exercice {
                   },
                 }),
           ].join('')
-        : `La solution en blocs correspond au calcul : ${texteOperation}`
+        : `${explications} La solution en blocs correspond au calcul : $${texteOperation}$.`
 
       if (context.isHtml) {
-        if (this.sup5) {
+        if (estScratch) {
           const scratchOptions: ScratchEditorOptions = {
             height: '250px',
             width: '640px',
             interactivityOn: true,
+            verifyCallbackName: SCRATCH_VERIFY_CALLBACK_NAME,
           }
           texte += addScratchEditor(this, i, scratchOptions)
         } else {
@@ -220,10 +276,13 @@ export default class CalculerFormuleParBlockly extends Exercice {
           i,
           {
             reponse: {
-              value: JSON.stringify({ solutionBlocks }),
+              value: JSON.stringify({
+                solutionBlocks,
+                preferDivToFrac: !this.sup2,
+              }),
             },
           },
-          { formatInteractif: this.sup5 ? 'scratch-editor' : 'blockly-editor' },
+          { formatInteractif: estScratch ? 'scratch-editor' : 'blockly-editor' },
         )
       }
 

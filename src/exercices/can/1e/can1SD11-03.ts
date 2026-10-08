@@ -14,7 +14,7 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 
-export const titre = 'Lire graphiquement la valeur  $b$ dans $ax^2+b$'
+export const titre = 'Lire graphiquement la valeur de $c$ dans $ax^2+c$'
 export const interactifReady = true
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
@@ -77,10 +77,10 @@ export default class LectureGraphiqueParaboleB extends Exercice {
 
             f = (x: number) => a * x ** 2 + b
 
-            texte = ` $f$ est définie par $f(x)=${rienSi1(a)}x^2+b$ .<br>
+            texte = ` $f$ est définie par $f(x)=${rienSi1(a)}x^2+c$ .<br>
                         `
             texte +=
-              `Déterminer la valeur de  $b$.<br>
+              `Déterminer la valeur de $c$.<br>
             
             ` +
               mathalea2d(
@@ -118,10 +118,10 @@ export default class LectureGraphiqueParaboleB extends Exercice {
 
             f = (x: number) => a * x ** 2 + b
 
-            texte = `$f$ est définie par $f(x)=${rienSi1(a)}x^2+b$ .<br>
+            texte = `$f$ est définie par $f(x)=${rienSi1(a)}x^2+c$ .<br>
             `
             texte +=
-              `Déterminer la valeur de $b$.<br>
+              `Déterminer la valeur de $c$.<br>
             
             ` +
               mathalea2d(
@@ -145,14 +145,14 @@ export default class LectureGraphiqueParaboleB extends Exercice {
               i,
               KeyboardType.clavierNumbers,
               {
-                texteAvant: '$b=$',
+                texteAvant: '$c=$',
               },
             )
             handleAnswers(this, i, { reponse: { value: b } })
           }
 
-          texteCorr = `La valeur de $b$ est donnée par l'image de $0$ par la fonction $f$.<br>
-          On lit $f(0)=${b}$. D'où, $b=${miseEnEvidence(b)}$.<br>
+          texteCorr = `La valeur de $c$ est donnée par l'image de $0$ par la fonction $f$.<br>
+          On lit $f(0)=${b}$. D'où, $c=${miseEnEvidence(b)}$.<br>
            On obtient alors $f(x)=${rienSi1(a)}x^2${ecritureAlgebrique(b)}$.<br>
           `
           break
@@ -186,10 +186,10 @@ export default class LectureGraphiqueParaboleB extends Exercice {
 
             f = (x: number) => a * x ** 2 + b
 
-            texte = `$f$ est définie par $f(x)=${rienSi1(a)}x^2+b$ .<br>
+            texte = `$f$ est définie par $f(x)=${rienSi1(a)}x^2+c$ .<br>
             `
             texte +=
-              `Déterminer la valeur de $b$.<br>
+              `Déterminer la valeur de $c$.<br>
             
             ` +
               mathalea2d(
@@ -227,10 +227,10 @@ export default class LectureGraphiqueParaboleB extends Exercice {
 
             f = (x: number) => a * x ** 2 + b
 
-            texte = `$f$ est définie par $f(x)=${rienSi1(a)}x^2+b$ .<br>
+            texte = `$f$ est définie par $f(x)=${rienSi1(a)}x^2+c$ .<br>
             `
             texte +=
-              `Déterminer la valeur de $b$.<br>
+              `Déterminer la valeur de $c$.<br>
             
             ` +
               mathalea2d(
@@ -254,14 +254,14 @@ export default class LectureGraphiqueParaboleB extends Exercice {
               i,
               KeyboardType.clavierDeBase,
               {
-                texteAvant: '$b=$',
+                texteAvant: '$c=$',
               },
             )
             handleAnswers(this, i, { reponse: { value: b } })
           }
 
-          texteCorr = `La valeur de $b$ est donnée par l'image de $0$ par la fonction $f$.<br>
-          On lit $f(0)=${b}$. D'où, $b=${miseEnEvidence(b)}$. <br>
+          texteCorr = `La valeur de $c$ est donnée par l'image de $0$ par la fonction $f$.<br>
+          On lit $f(0)=${b}$. D'où, $c=${miseEnEvidence(b)}$. <br>
           On obtient alors $f(x)=${rienSi1(a)}x^2${ecritureAlgebrique(b)}$.<br>
           `
           break
@@ -276,6 +276,6 @@ export default class LectureGraphiqueParaboleB extends Exercice {
     }
     listeQuestionsToContenu(this)
     this.listeCanEnonces.push(texte)
-    this.listeCanReponsesACompleter.push('$b=\\ldots$')
+    this.listeCanReponsesACompleter.push('$c=\\ldots$')
   }
 }

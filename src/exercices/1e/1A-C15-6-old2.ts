@@ -1,4 +1,8 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid cfce9 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
+import { rienSi1 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -10,8 +14,8 @@ export const dateDeModifImportante = '30/09/2026'
 
 export const uuid = 'cfce9'
 export const refs = {
-  'fr-fr': ['1A-C15-6'],
-  'fr-ch': ['10QCM-36', '11QCM-41'],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
 export const interactifReady = true
 
@@ -24,7 +28,7 @@ export const dateDePublication = '15/12/2025'
  * @author Gilles Mora
  *
  */
-export default class Auto1C15r extends ExerciceQcmACourt {
+export default class Auto1C15rOld2 extends ExerciceQcmACourt {
   private appliquerLesValeurs(
     prixH: number,
     nbreSeance1: number,
@@ -42,9 +46,9 @@ export default class Auto1C15r extends ExerciceQcmACourt {
 D'après le premier ticket : $a + ${nbreSeance1} \\times p = ${texNombre(abo + nbreSeance1 * prixH)}$ soit $a + ${nbreSeance1}p = ${texNombre(abo + nbreSeance1 * prixH)}$.<br>
 D'après le second ticket : $a + ${nbreSeance2} \\times p = ${texNombre(abo + nbreSeance2 * prixH)}$ soit $a + ${nbreSeance2} p = ${texNombre(abo + nbreSeance2 * prixH)}$<br>
 En faisant la différence entre ces deux montants, on obtient :<br>
-$${nbreSeance2} p - ${nbreSeance1}  p = ${texNombre((nbreSeance2 - nbreSeance1) * prixH)}$ soit $${texNombre(nbreSeance2 - nbreSeance1)}p=${texNombre((nbreSeance2 - nbreSeance1) * prixH)}$.<br>
+$${nbreSeance2} p - ${nbreSeance1}  p = ${rienSi1((nbreSeance2 - nbreSeance1) * prixH)}$ soit $${rienSi1(nbreSeance2 - nbreSeance1)}p=${texNombre((nbreSeance2 - nbreSeance1) * prixH)}$.<br>
 
-Donc le montant pour $1$ séance  est : $p = ${prixH}$ €.<br>
+Donc le montant pour $1$ séance  est $p = ${prixH}$ €.<br>
 On peut alors calculer le montant de l'abonnement mensuel :<br>
 $a = ${texNombre(abo + nbreSeance1 * prixH)} - ${nbreSeance1} \\times ${prixH} = ${texNombre(abo + nbreSeance1 * prixH)} - ${texNombre(nbreSeance1 * prixH)} = ${abo}$ €.<br>
  Le montant de l'abonnement mensuel est donc de $${miseEnEvidence(abo)}${sp(1)}\\text{€}$.`
