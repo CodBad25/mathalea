@@ -68,6 +68,7 @@ import {
   updateGlobalOptionsInURL,
 } from './stores/generalStore'
 import { globalOptions } from './stores/globalOptions'
+import { isFormatNumeriqueSaved } from './stores/storage'
 import {
   getLang,
   localisedIDToUuid,
@@ -670,6 +671,7 @@ export function mathaleaUpdateExercicesParamsFromUrl(
     | undefined
   let done: '1' | undefined
   let es
+  let numerique = false
   let presMode:
     | 'liste_exos'
     | 'un_exo_par_page'
@@ -816,6 +818,8 @@ export function mathaleaUpdateExercicesParamsFromUrl(
         ds = entry[1]
       } else if (entry[0] === 'es') {
         es = entry[1]
+      } else if (entry[0] === 'numerique' && entry[1] === '1') {
+        numerique = true
       } else if (entry[0] === 'title') {
         title = decodeURIComponent(entry[1])
       } else if (entry[0] === 'subject') {
@@ -893,6 +897,18 @@ export function mathaleaUpdateExercicesParamsFromUrl(
       "L'URL présente une erreur. Veuillez réessayer et nous contacter si le problème persiste.",
     )
     return {}
+  }
+
+  // Choix « Numérique » de la conception de document : le lien fait foi ;
+  // sans exercice dans l'URL (nouvelle visite), on reprend le dernier choix.
+  if (
+    es === undefined &&
+    (numerique ||
+      (newExercisesParams.length === 0 &&
+        (v === undefined || v === 'l') &&
+        isFormatNumeriqueSaved()))
+  ) {
+    setInteractive = '1'
   }
 
   if (recorder === 'capytale' && es === undefined) {

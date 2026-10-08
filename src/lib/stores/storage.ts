@@ -7,3 +7,19 @@ export function isLocalStorageAvailable() {
     return false
   }
 }
+
+const FORMAT_NUMERIQUE_KEY = 'mathalea-format-numerique'
+
+/**
+ * Choix Papier / Numérique de la conception de document, mémorisé pour les
+ * prochaines visites (le lien partagé, lui, porte `numerique=1`).
+ */
+export function saveFormatNumerique(isNumerique: boolean) {
+  if (!isLocalStorageAvailable()) return
+  window.localStorage.setItem(FORMAT_NUMERIQUE_KEY, isNumerique ? '1' : '0')
+}
+
+export function isFormatNumeriqueSaved(): boolean {
+  if (!isLocalStorageAvailable()) return false
+  return window.localStorage.getItem(FORMAT_NUMERIQUE_KEY) === '1'
+}

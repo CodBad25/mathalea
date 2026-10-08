@@ -1,11 +1,11 @@
 <script lang="ts">
-  import ButtonIconTooltip from '../../../../../../shared/forms/ButtonIconTooltip.svelte'
+  import ToolbarIconButton from './ToolbarIconButton.svelte'
 
   export let newDataForAll: () => void
 </script>
 
-<ButtonIconTooltip
-  icon="bx-refresh text-3xl"
+<ToolbarIconButton
+  icon="bx-refresh"
   tooltip="Nouveaux énoncés"
   on:click={newDataForAll}
 />

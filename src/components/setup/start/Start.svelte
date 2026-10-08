@@ -17,6 +17,7 @@
     tick,
   } from 'svelte'
   import { get } from 'svelte/store'
+  import { saveFormatNumerique } from '../../../lib/stores/storage'
   import { qcmCamExportAll } from '../../../../src/lib/qcmCam'
   import appsTierce from '../../../json/referentielAppsTierce.json'
   import {
@@ -286,6 +287,8 @@
     }
     const event = new window.Event(eventName, { bubbles: true })
     document.dispatchEvent(event)
+    saveFormatNumerique(isAllInteractive)
+    mathaleaUpdateUrlFromExercicesParams()
   }
 
   function newDataForAll() {
