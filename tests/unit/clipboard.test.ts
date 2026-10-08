@@ -37,4 +37,19 @@ describe('copyTextToClipboard', () => {
     })
     await expect(copyTextToClipboard('abc')).resolves.toBe(false)
   })
+
+  it('ajoute le textarea de repli dans le conteneur fourni (dialog modale)', async () => {
+    vi.stubGlobal('navigator', {})
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    let parentAuMomentDeLaCopie: HTMLElement | null = null
+    document.execCommand = vi.fn().mockImplementation(() => {
+      parentAuMomentDeLaCopie =
+        document.querySelector('textarea')?.parentElement ?? null
+      return true
+    })
+    await expect(copyTextToClipboard('abc', container)).resolves.toBe(true)
+    expect(parentAuMomentDeLaCopie).toBe(container)
+    container.remove()
+  })
 })

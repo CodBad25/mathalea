@@ -11,6 +11,7 @@
     buildMathAleaURL,
     buildSingleExerciseURL,
   } from '../../../../lib/components/urls'
+  import { copyTextToClipboard } from '../../../../lib/components/clipboard'
   import { exercicesParams } from '../../../../lib/stores/generalStore'
   import { globalOptions } from '../../../../lib/stores/globalOptions'
 
@@ -42,6 +43,8 @@
   let dialog: HTMLDialogElement | undefined = $state()
   let canal: 'mail' | 'forge' = $state('mail')
   let isCopied = $state(false)
+  let copyFailed = $state(false)
+  let descriptionField: HTMLTextAreaElement | undefined = $state()
   let title = $state('')
   let description = $state('')
 
@@ -91,6 +94,7 @@
     title = titleOverride ?? buildBugReportTitle(context)
     description = buildBugReportDescription(context)
     isCopied = false
+    copyFailed = false
   }
 
   // variable non réactive : sert seulement à repérer les passages fermé -> ouvert
@@ -104,12 +108,17 @@
   })
 
   async function copyToClipboard() {
-    try {
-      await navigator.clipboard.writeText(fullText)
+    copyFailed = false
+    // le repli doit se faire dans la dialog : le reste de la page est inerte
+    const success = await copyTextToClipboard(fullText, dialog)
+    if (success) {
       isCopied = true
       setTimeout(() => (isCopied = false), 2000)
-    } catch (error) {
-      console.error('Copie impossible', error)
+    } else {
+      // dernier recours : sélectionner la description pour un Ctrl+C manuel
+      copyFailed = true
+      descriptionField?.focus()
+      descriptionField?.select()
     }
   }
 
@@ -265,6 +274,7 @@
           <label class="flex flex-col gap-y-1 text-xs">
             Description
             <textarea
+              bind:this={descriptionField}
               bind:value={description}
               rows="12"
               class="{fieldClass} font-mono text-xs"
@@ -273,6 +283,13 @@
         </div>
       </div>
 
+      {#if copyFailed}
+        <p class="mt-4 text-xs text-coopmaths-warn-darkest" role="alert">
+          La copie automatique a échoué. La description est sélectionnée&nbsp;:
+          copiez-la avec Ctrl&nbsp;+&nbsp;C (ou ⌘&nbsp;+&nbsp;C), puis collez-la
+          dans votre message.
+        </p>
+      {/if}
       <div
         class="w-full mt-6 mb-3 flex flex-row flex-wrap justify-center gap-2"
       >
