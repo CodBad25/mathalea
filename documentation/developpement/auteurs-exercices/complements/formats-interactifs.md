@@ -1123,6 +1123,21 @@ une ligne lorsque la transformation est correcte. La dernière ligne non vide
 est exposée dans `value` et vérifiée par le bouton standard « Vérifier les
 réponses » avec la valeur déclarée dans `handleAnswers()`.
 
+La question n'est comptée juste que si la dernière ligne est la forme résolue
+(`isSolvedForm()` : l'inconnue seule d'un côté, un nombre sans calcul à
+poursuivre ni fraction réductible de l'autre) **et** conforme à la valeur
+attendue. Une étape intermédiaire équivalente à la solution (ex : `x+3-3=7-3`)
+ne rapporte donc aucun point.
+
+Lorsque tous les solveurs d'un exercice sont terminés (équation résolue, ou
+étape fausse en mode `evaluation`), l'exercice se vérifie tout seul : le
+solveur émet l'évènement `solveur-termine` et les vues élève et prof appellent
+leur vérification si toutes les questions sont des solveurs
+(`src/lib/customElements/solveurTermine.ts`).
+
+Dans la correction, écrire « La solution de l'équation $…$ est $valeur$ » en
+ne mettant en évidence que la valeur (`3`, pas `x=3`).
+
 ```ts
 import { addMathaleaSolveur } from '../../lib/customElements/MathaleaSolveurElement'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'

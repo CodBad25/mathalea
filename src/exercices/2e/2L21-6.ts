@@ -96,7 +96,7 @@ ${rienSi1(e * a)}x&=${c * d - b * e}`
 \\end{aligned}
 \\]`
 
-      texteCorr += `L'équation a donc pour unique solution : $${miseEnEvidence(resultatFinal.texFractionSimplifiee)}$.`
+      texteCorr += `La solution de l'équation $${equation()}$ est $${miseEnEvidence(resultatFinal.texFractionSimplifiee)}$.`
       handleAnswers(
         this,
         i,

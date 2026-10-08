@@ -13,7 +13,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Résoudre une inéquation pas à pas'
+export const titre = 'Résoudre une inéquation'
 export const interactifReady = true
 export const dateDePublication = '29/09/2026'
 export const dateDeModifImportante = '04/10/2026'
@@ -51,7 +51,7 @@ export default class ResoudreInequationPasAPas extends Exercice {
     this.sup2 = false
     this.besoinFormulaire3Numerique = formulaireBaremeSolveur()
     this.sup3 = 1
-    this.consigne = 'Résoudre les inéquations suivantes pas à pas.'
+    this.consigne = 'Résoudre les inéquations suivantes.'
     this.nbQuestions = 2
     this.spacing = 2
   }
@@ -72,7 +72,7 @@ export default class ResoudreInequationPasAPas extends Exercice {
 
       this.listeCorrections[i] =
         `$\\begin{aligned}${data.correctionSteps.map(alignInequality).join('\\\\[0.4em]')}\\end{aligned}$<br>` +
-        `L'inéquation résolue s'écrit $${miseEnEvidence(data.solution)}$.`
+        `La solution de l'inéquation $${data.inequation}$ est $${miseEnEvidence(data.solution)}$.`
 
       handleAnswers(
         this,
