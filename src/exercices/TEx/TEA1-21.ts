@@ -3,6 +3,7 @@ import { toutPourUnPoint } from '../../lib/interactif/fonctionsBaremes'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
@@ -37,12 +38,12 @@ export default class DivisionEuclidienneOppose extends Exercice {
       const quotientPositif = q + 1
       const quotientNegatif = -quotientPositif - 1
       const resteNegatif = b - r
-      let enonce = `Sachant que $${a}=${q}\\times ${b}+${resteDonne}$, en déduire le quotient $q$ et le reste $r$ des divisions euclidiennes suivantes.<br>`
+      let enonce = `Sachant que $${texNombre(a)}=${texNombre(q)}\\times ${texNombre(b)}+${texNombre(resteDonne)}$, en déduire le quotient $q$ et le reste $r$ des divisions euclidiennes suivantes.<br>`
       const dividendes = [a, -a]
       const quotients = [quotientPositif, quotientNegatif]
       const restes = [r, resteNegatif]
       for (let i = 0; i < 2; i++) {
-        let texte = `${i === 0 ? 'a' : 'b'}) Division euclidienne de $${dividendes[i]}$ par $${b}$.`
+        let texte = `${i === 0 ? 'a' : 'b'}) Division euclidienne de $${texNombre(dividendes[i])}$ par $${texNombre(b)}$.`
         if (this.interactif) {
           texte +=
             '<br>' +
@@ -65,26 +66,26 @@ export default class DivisionEuclidienneOppose extends Exercice {
         champ3: { value: quotients[1] },
         champ4: { value: restes[1] },
       })
-      const correctionPositive = `Dans la division euclidienne de $${a}$ par $${b}$, le reste doit vérifier $0\\leqslant r<${b}$. Le nombre $${resteDonne}$ ne peut donc pas être le reste de cette division, car il est supérieur au diviseur $${b}$.<br>
+      const correctionPositive = `Dans la division euclidienne de $${texNombre(a)}$ par $${texNombre(b)}$, le reste doit vérifier $0\\leqslant r<${texNombre(b)}$. Le nombre $${texNombre(resteDonne)}$ ne peut donc pas être le reste de cette division, car il est supérieur au diviseur $${texNombre(b)}$.<br>
     $\\begin{aligned}
-    ${a}&=${b}\\times ${q}+${resteDonne} &&\\text{mais } ${resteDonne}>${b}\\\\
-    ${a}&=${b}\\times ${q}+${b}+${r}\\\\
-    ${a}&=${b}\\times (${q}+1)+${r}\\\\
-    ${a}&=${b}\\times ${quotientPositif}+${r}.
+    ${texNombre(a)}&=${texNombre(b)}\\times ${texNombre(q)}+${texNombre(resteDonne)} &&\\text{mais } ${texNombre(resteDonne)}>${texNombre(b)}\\\\
+    ${texNombre(a)}&=${texNombre(b)}\\times ${texNombre(q)}+${texNombre(b)}+${texNombre(r)}\\\\
+    ${texNombre(a)}&=${texNombre(b)}\\times (${texNombre(q)}+1)+${texNombre(r)}\\\\
+    ${texNombre(a)}&=${texNombre(b)}\\times ${texNombre(quotientPositif)}+${texNombre(r)}
     \\end{aligned}$<br>
-    Comme $0\\leqslant ${r}<${b}$, il s’agit bien de la division euclidienne de $${a}$ par $${b}$.<br>
-    Le quotient est donc $q=${miseEnEvidence(quotientPositif)}$ et le reste est $r=${miseEnEvidence(r)}$.`
+    Comme $0\\leqslant ${texNombre(r)}<${texNombre(b)}$, il s’agit bien de la division euclidienne de $${texNombre(a)}$ par $${texNombre(b)}$.<br>
+    Le quotient est donc $q=${miseEnEvidence(texNombre(quotientPositif))}$ et le reste est $r=${miseEnEvidence(texNombre(r))}$`
       const correctionNegative = `En prenant l’opposé de l’égalité de l’énoncé, on a :<br>
     $\\begin{aligned}
-    ${-a}&=${b}\\times (${-q})-${resteDonne} &&\\text{mais } -${resteDonne}<0\\\\
-    ${-a}&=${b}\\times (${-q})-${b}-${r}\\\\
-    ${-a}&=${b}\\times (${-q}-1)-${r}\\\\
-    ${-a}&=${b}\\times (${-quotientPositif})-${r}\\\\
-    ${-a}&=${b}\\times (${-quotientPositif})\\underbrace{-${b}+${b}}_{=0}-${r}\\\\
-    ${-a}&=${b}\\times (${quotientNegatif})+${resteNegatif}.
+    ${texNombre(-a)}&=${texNombre(b)}\\times (${texNombre(-q)})-${texNombre(resteDonne)} &&\\text{mais } -${texNombre(resteDonne)}<0\\\\
+    ${texNombre(-a)}&=${texNombre(b)}\\times (${texNombre(-q)})-${texNombre(b)}-${texNombre(r)}\\\\
+    ${texNombre(-a)}&=${texNombre(b)}\\times (${texNombre(-q)}-1)-${texNombre(r)}\\\\
+    ${texNombre(-a)}&=${texNombre(b)}\\times (${texNombre(-quotientPositif)})-${texNombre(r)}\\\\
+    ${texNombre(-a)}&=${texNombre(b)}\\times (${texNombre(-quotientPositif)})\\underbrace{-${texNombre(b)}+${texNombre(b)}}_{=0}-${texNombre(r)}\\\\
+    ${texNombre(-a)}&=${texNombre(b)}\\times (${texNombre(quotientNegatif)})+${texNombre(resteNegatif)}
     \\end{aligned}$<br>
-    Comme $0\\leqslant ${resteNegatif}<${b}$, il s’agit bien de la division euclidienne de $${-a}$ par $${b}$.<br>
-    Le quotient est donc $q=${miseEnEvidence(quotientNegatif)}$ et le reste est $r=${miseEnEvidence(resteNegatif)}$.`
+    Comme $0\\leqslant ${texNombre(resteNegatif)}<${texNombre(b)}$, il s’agit bien de la division euclidienne de $${texNombre(-a)}$ par $${texNombre(b)}$.<br>
+    Le quotient est donc $q=${miseEnEvidence(texNombre(quotientNegatif))}$ et le reste est $r=${miseEnEvidence(texNombre(resteNegatif))}$`
       this.listeCorrections[exercice] =
         'a) ' + correctionPositive + '<br><br>b) ' + correctionNegative
       exercice++
