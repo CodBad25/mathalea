@@ -1,5 +1,6 @@
 import { afterEach, expect, it, vi } from 'vitest'
 import DivisionEuclidienneOppose from '../../src/exercices/TEx/TEA1-21'
+import { texNombre } from '../../src/lib/outils/texNombre'
 import * as outils from '../../src/modules/outils'
 
 afterEach(() => vi.restoreAllMocks())
@@ -17,9 +18,11 @@ it.each([1, 7, 23])(
     const a = 24 * 48 + r
     expect(exercice.nbQuestions).toBe(1)
     expect(exercice.nbQuestionsModifiable).toBe(true)
-    expect(exercice.listeQuestions[0]).toContain(`${a}=47\\times 24+${24 + r}`)
-    expect(exercice.listeQuestions[0]).toContain(`$${a}$`)
-    expect(exercice.listeQuestions[0]).toContain(`$${-a}$`)
+    expect(exercice.listeQuestions[0]).toContain(
+      `${texNombre(a)}=47\\times 24+${24 + r}`,
+    )
+    expect(exercice.listeQuestions[0]).toContain(`$${texNombre(a)}$`)
+    expect(exercice.listeQuestions[0]).toContain(`$${texNombre(-a)}$`)
     for (let i = 0; i < 2; i++) {
       const reponses = exercice.autoCorrection[0].valeur!
       const q = Number(reponses[i === 0 ? 'champ1' : 'champ3'].value)

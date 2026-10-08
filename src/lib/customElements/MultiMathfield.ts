@@ -816,6 +816,19 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
         error,
       })
     }
+    this.contentHost.oninput = () => this.updateConditionalSections()
+    this.updateConditionalSections()
+  }
+
+  /** Affiche les sections liées à la valeur d'un autre champ du gabarit. */
+  private updateConditionalSections(): void {
+    const answers = this.getValue()
+    this.contentHost
+      .querySelectorAll<HTMLElement>('[data-show-when]')
+      .forEach((section) => {
+        const [field, expected] = (section.dataset.showWhen ?? '').split(':')
+        section.hidden = answers[field] !== expected
+      })
   }
 
   getValue() {
@@ -916,6 +929,7 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
           })
       })
     }
+    this.updateConditionalSections()
   }
 
   static verifQuestion(
@@ -984,6 +998,15 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
     const feedbackMessages = new Set<string>()
 
     for (const [field, reponse] of variables) {
+      const conditionalField = multi?.shadowRoot?.querySelector(
+        `[data-name="${field}"]`,
+      )
+      if (conditionalField?.closest('[data-show-when][hidden]') != null) {
+        // Une branche inactive ne demande aucune réponse et ne bloque pas le barème.
+        points.push(1)
+        compteurBonnesReponses++
+        continue
+      }
       const options = reponse.options
       noFeedback = noFeedback || Boolean(options?.noFeedback)
       const compareFunction = reponse.compare ?? fonctionComparaison
