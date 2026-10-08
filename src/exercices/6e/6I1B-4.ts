@@ -262,12 +262,19 @@ export default class ExerciceTableur extends Exercice {
       texte = 'On a créé le programme de calculs suivant :<br>'
       texte += createDigramm(Object.keys(rect).length, rect) + '<br>'
 
-      texte += `On choisit un nombre dans la première case, ici ${steps[0].oldn} et on obtient un nombre à la fin de la chaîne.<br><br>      
-      On veut programmer cette suite de calculs dans un tableur. <br>
-      Par exemple, la cellule B1 doit contenir la formule du premier calcul.<br>
+      texte += `On choisit un nombre dans la première case, ici ${steps[0].oldn} et on obtient un nombre à la fin de la chaîne.<br><br>
+      On veut programmer cette suite de calculs dans un tableur. <br>`
+      if (this.interactif) {
+        texte += `Par exemple, la cellule B1 doit contenir la formule du premier calcul.<br>
       Faire de même pour les autres cellules. <br>
       Attention, les formules doivent fonctionner même si le nombre de départ change (Cellule A1).<br>
       `
+      } else {
+        texte += `Les formules doivent fonctionner même si le nombre de départ change (cellule A1).<br>`
+        for (let i = 0; i < steps.length; i++) {
+          texte += `Quelle formule saisir dans la cellule ${alphabet[i + 1]}1 ?<br>`
+        }
+      }
       const style = buildStyleFromColos(
         Object.values(ExerciceTableur.colors),
         steps.length,
@@ -315,12 +322,14 @@ export default class ExerciceTableur extends Exercice {
 <div class ="ml-2 py-2 italic text-coopmaths-warn-darkest dark:text-coopmathsdark-warn-darkest" id="feedbackEx${this.numeroExercice}Q${q}"></div>`
               : '')
           : sheetElement.render()
-      texte += sheetMarkup
+      texte += context.isHtml && !context.isTypst
+        ? `<div class="my-3">${sheetMarkup}</div>`
+        : `\\medskip ${sheetMarkup}\\medskip `
 
       texteCorr = 'Voici les formules à saisir dans le tableur :<br>'
       for (let i = 0; i < steps.length; i++) {
         const step = steps[i]
-        texteCorr += `$${step.oldn} ${operStr[i]} = ${step.result}$ devient en cellule ${alphabet[i + 1]}1 la formule suivante : "${texteEnCouleurEtGras(`=${alphabet[i]}1${operStr[i].replace('\\times', '*').replace('\\div', '/')}`)}"<br>`
+        texteCorr += `$${step.oldn} ${operStr[i]} = ${step.result}$ devient en cellule ${alphabet[i + 1]}1 la formule suivante : «\u00a0${texteEnCouleurEtGras(`=${alphabet[i]}1${operStr[i].replace('\\times', '*').replace('\\div', '/')}`)}\u00a0»<br>`
       }
 
       /****************************************************/
