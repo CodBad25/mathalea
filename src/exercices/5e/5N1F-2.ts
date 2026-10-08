@@ -26,17 +26,14 @@ const operations = ['somme', 'différence', 'produit', 'quotient']
 
 const pronoms = ['du', 'de', 'le', 'la']
 
-const connecteurs = ['par', 'et']
+const connecteurs = ['par', 'et', 'entre']
 
 /** Met la formulation de la phrase sous la forme des étiquettes proposées. */
 function normalisePhrase(phrase: string): string {
   return phrase
-    .replace(/^La différence entre /, 'la différence de ')
     .replace(/^La /, 'la ')
     .replace(/^Le /, 'le ')
-    .replace(/ la différence entre /g, ' la différence de ')
     .replace(/ de le /g, ' du ')
-    .replace(/ et le /g, ' et du ')
     .replace(/ et de /g, ' et ')
 }
 
@@ -64,7 +61,7 @@ function construitEtiquettes(phrase: string): {
   })
 
   const morceaux = phraseNormalisee.split(
-    /(somme|différence|produit|quotient|du|de|le|la|par|et|\d+(?:[ \u202f]\d+)*(?:[,.]\d+)?)/g,
+    /(somme|différence|produit|quotient|entre|du|de|le|la|par|et|\d+(?:[ \u202f]\d+)*(?:[,.]\d+)?)/g,
   )
   const ids: string[] = []
   for (const morceau of morceaux) {
