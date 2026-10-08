@@ -1,19 +1,20 @@
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid a3828 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
+// Version publiée jusqu'au 07/10/2026 (commit 25d6ac33f).
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
-import ExerciceSimple from '../ExerciceSimple'
+import ExerciceQcmA from '../ExerciceQcmA'
 
 export const dateDePublication = '22/07/2025'
-export const dateDeModifImportante = '07/10/2026'
-
-export const uuid = '49844'
+export const uuid = 'a3828'
 
 export const refs = {
-  'fr-fr': ['1A-E02-2', '2A-E2-2'],
-  'fr-ch': ['10QCM-39', '9QCM-20'],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
 /**
  *
@@ -22,25 +23,18 @@ export const refs = {
  */
 export const interactifReady = true
 
-export const amcReady = true
-export const amcType = 'AMCNum'
+export const amcReady = 'true'
+export const amcType = 'qcmMono'
 export const titre = "Trouver le calcul d'un prix subissant une évolution"
 
-export default class BaissePrix extends ExerciceSimple {
-  // Propositions de la version QCM, utilisées aussi pour le contrôle des doublons
-  private propositions: string[] = []
-
+export default class BaissePrixOld extends ExerciceQcmA {
   private appliquerLesValeurs(prixInitial: number, pourcentage: number): void {
     // Calcul du coefficient multiplicateur
     const coefficientMultiplicateur = (100 - pourcentage) / 100
     const coefficientTexte = texNombre(coefficientMultiplicateur, 2)
 
-    this.question = `Un sac coûte $${texNombre(prixInitial)}$ euros. Le prix baisse de $${pourcentage}\\,\\%$. <br>
-    `
-    this.question += this.versionQcm
-      ? 'Le nouveau prix en euros est donné par le calcul :'
-      : `Écrire un produit qui permet de calculer le nouveau prix en euros.<br>
-    Seul le calcul est attendu, pas son résultat.`
+    this.enonce = `Un sac coûte $${texNombre(prixInitial)}$ euros. Le prix baisse de $${pourcentage}\\,\\%$. <br>
+    Le nouveau prix en euros est donné par le calcul :`
 
     // Bonne réponse (plusieurs formes possibles)
     const bonnesReponses = [
@@ -105,20 +99,10 @@ Ainsi, le nouveau prix est donné par : $${miseEnEvidence(`${texNombre(prixIniti
     }
 
     // Utilisation de la correction spécifique à la bonne réponse choisie
-    this.correction = this.versionQcm
-      ? bonneReponseObj.correction
-      : `Diminuer de $${pourcentage}\\,\\%$ revient à multiplier par $1 - \\dfrac{${pourcentage}}{100} = ${coefficientTexte}$ (coefficient multiplicateur).<br>
-Ainsi, le nouveau prix est donné par : $${miseEnEvidence(`${texNombre(prixInitial)} \\times ${coefficientTexte}`)}$.<br>
-D'autres écritures du produit conviennent, par exemple $${texNombre(prixInitial)} \\times \\left(1 - \\dfrac{${pourcentage}}{100}\\right)$ ou $${texNombre(prixInitial)} \\times \\dfrac{${100 - pourcentage}}{100}$.`
+    this.correction = bonneReponseObj.correction
 
     // Construction du tableau final avec exactement 4 réponses
-    this.propositions = [bonneReponseObj.reponse, ...troisDistracteurs]
-    this.reponse = this.versionQcm
-      ? bonneReponseObj.reponse
-      : `${prixInitial}\\times ${coefficientMultiplicateur}`
-    this.distracteurs = troisDistracteurs
-    this.canEnonce = this.question
-    this.canReponseACompleter = '$\\ldots$'
+    this.reponses = [bonneReponseObj.reponse, ...troisDistracteurs]
   }
 
   versionOriginale: () => void = () => {
@@ -138,36 +122,11 @@ D'autres écritures du produit conviennent, par exemple $${texNombre(prixInitial
 
       this.appliquerLesValeurs(prixInitial, pourcentage)
       compteur++
-    } while (
-      compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(
-        {
-          reponse: this.propositions[0],
-          distracteurs: this.propositions.slice(1),
-        },
-        4,
-        true,
-      )
-    ) // On s'assure d'avoir 4 propositions différentes, sinon on régénère
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true)) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 
   constructor() {
     super()
-    this.typeExercice = 'simple'
-    this.nbQuestions = 1
-    this.besoinFormulaireCaseACocher = ['Sujet original', false]
-    this.sup = false
-    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
-    // Seul un produit égal au nouveau prix est accepté (pas le résultat)
-    this.optionsDeComparaison = { multiplicationSeulementEtNonResultat: true }
-    this.optionsChampTexte = { texteAvant: '<br>' }
-    this.versionQcmDisponible = true
-    this.versionQcm = false
-    this.versionQcmOptions = { radio: true, compact: true }
-  }
-
-  nouvelleVersion(): void {
-    if (this.sup) this.versionOriginale()
-    else this.versionAleatoire()
+    this.versionAleatoire()
   }
 }
