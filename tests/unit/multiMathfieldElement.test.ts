@@ -5,12 +5,100 @@ import { htmlToTypst } from '../../src/components/setup/typst/latexToTypst'
 import { MultiMathfieldElement } from '../../src/lib/customElements/MultiMathfield'
 import { createList } from '../../src/lib/format/lists'
 import { handleAnswers } from '../../src/lib/interactif/gestionInteractif'
+import { toutPourUnPoint } from '../../src/lib/interactif/fonctionsBaremes'
 import { setOutputHtml, setOutputLatex } from '../../src/modules/context'
 
 describe('MultiMathfieldElement', () => {
   beforeEach(() => {
     setOutputHtml()
     document.body.innerHTML = ''
+  })
+
+  it('masque une suite de phrase selon le choix, y compris après restauration', () => {
+    document.body.innerHTML = MultiMathfieldElement.create({
+      numeroExercice: 0,
+      questionIndex: 0,
+      dataTemplate:
+        '%{field0}<span data-show-when="field0:oui">, d’équation %{field1}</span>.',
+      dataOptions: {
+        field0: {
+          choices: [
+            { label: 'Choisir', value: '' },
+            { label: 'Oui', value: 'oui' },
+            { label: 'Non', value: 'non' },
+          ],
+        },
+        field1: {
+          choices: [
+            { label: 'Choisir', value: '' },
+            { label: 'y=3', value: 'y=3' },
+          ],
+        },
+      },
+    })
+    const multi = document.querySelector(
+      'multi-mathfield',
+    ) as MultiMathfieldElement
+    const section = multi.shadowRoot?.querySelector(
+      '[data-show-when]',
+    ) as HTMLElement
+    expect(section.hidden).toBe(true)
+    multi.value = { field0: 'oui', field1: 'y=3' }
+    expect(section.hidden).toBe(false)
+    multi.value = { field0: 'non' }
+    expect(section.hidden).toBe(true)
+    multi.value = { field0: 'oui' }
+    expect(section.hidden).toBe(false)
+  })
+
+  it('ignore les champs masqués mais vérifie le choix avec un maximum fixe', () => {
+    const exercice = new Exercice()
+    exercice.numeroExercice = 0
+    handleAnswers(
+      exercice,
+      0,
+      {
+        bareme: toutPourUnPoint,
+        field0: { value: 'non' },
+        field1: { value: 'y=3', options: { egaliteExpression: true } },
+      },
+      { formatInteractif: 'multi-mathfield' },
+    )
+    document.body.innerHTML = MultiMathfieldElement.create({
+      numeroExercice: 0,
+      questionIndex: 0,
+      dataTemplate:
+        '%{field0}<span data-show-when="field0:oui">, d’équation %{field1}</span>.',
+      dataOptions: {
+        field0: {
+          choices: [
+            { label: 'Choisir', value: '' },
+            { label: 'Oui', value: 'oui' },
+            { label: 'Non', value: 'non' },
+          ],
+        },
+        field1: {
+          choices: [
+            { label: 'Choisir', value: '' },
+            { label: 'y=3', value: 'y=3' },
+          ],
+        },
+      },
+    })
+    const multi = document.querySelector(
+      'multi-mathfield',
+    ) as MultiMathfieldElement
+    multi.value = { field0: 'non' }
+    const result = MultiMathfieldElement.verifQuestion(exercice, 0)
+    expect(result.isOk).toBe(true)
+    expect(result.score).toEqual({ nbBonnesReponses: 1, nbReponses: 1 })
+    multi.value = { field0: 'oui', field1: 'y=3' }
+    const incorrectChoice = MultiMathfieldElement.verifQuestion(exercice, 0)
+    expect(incorrectChoice.isOk).toBe(false)
+    expect(incorrectChoice.score).toEqual({
+      nbBonnesReponses: 0,
+      nbReponses: 1,
+    })
   })
 
   it('hydrate exercice.answers avec la value de l element apres verification', () => {

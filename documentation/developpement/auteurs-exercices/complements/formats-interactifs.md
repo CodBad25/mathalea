@@ -730,6 +730,23 @@ Points à connaître :
 - les libellés sont du **texte** : éviter le LaTeX, qui n'est pas rendu dans le
   shadow DOM de la liste.
 
+### Une suite de phrase conditionnelle
+
+Dans un gabarit interactif, un élément HTML portant
+`data-show-when="field0:oui"` est affiché uniquement si `field0` vaut `oui`.
+Il peut contenir du texte, des listes et des champs MathLive :
+
+```ts
+dataTemplate: 'La courbe %{field0}<span data-show-when="field0:oui"> une asymptote %{field1}, d’équation %{field2}</span>.'
+```
+
+Les champs d'une section masquée ne sont pas exigés à la vérification.
+La réponse au champ qui commande la section reste toujours vérifiée.
+Prévoir un barème de total constant, par exemple `toutPourUnPoint`, et un
+énoncé non interactif explicite (toutes les branches restent visibles dans le
+rendu statique du gabarit). Le rétablissement des réponses sauvegardées met
+également à jour la visibilité. Voir `src/exercices/TSpe/TSA2-12.ts`.
+
 ### Un QCM parmi les champs
 
 Un champ dont les options contiennent `qcm` n'est pas un MathLive mais un QCM
