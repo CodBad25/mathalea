@@ -9,6 +9,7 @@ export const listOfCustomElements = [
   'mathalea-labyrinthe',
   'juniper-green',
   'kenken-grille',
+  'killer-sudoku-grille',
   'grimuku-grille',
   'pyramide-nombres',
   'etoile-calculs',
