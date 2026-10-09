@@ -105,6 +105,7 @@
     type PreviewPageGeometry,
   } from '../shared/typstPreview'
   import { typstLanguage } from './editor/typstLanguage'
+  import { applyCodePatch, createCodePatch } from './codePatch'
   import {
     hasSeenTypstTour,
     startTypstTour,
@@ -909,6 +910,11 @@
   let codeEditPart: 'enonce' | 'correction' = $state('enonce')
   /** Brouillon de la modale d'édition du code Typst */
   let codeEditDraft = $state('')
+  /**
+   * Fiche à plusieurs sujets : la modale reporte aussi la modification sur
+   * les autres sujets (voir `propagateExerciseCode`).
+   */
+  let codeEditApplyToAll = $state(true)
   /** Surcharges d'énoncé par ligne du tableau « Course aux nombres », lues dans le code */
   let codeOverrideCanValues: Record<number, string> = $state({})
   /** Surcharges de réponse par ligne du tableau « Course aux nombres », lues dans le code */
@@ -1751,10 +1757,22 @@
       editorView != null
         ? shiftCarryOverForInsert(harvestCarryOver(currentCode()), inserted, -1)
         : {}
-    const subjectCarry = activeCarryOver(carryOver)
-    subjectCarry.codeOverrides = {
-      ...subjectCarry.codeOverrides,
-      [inserted]: texte,
+    // l'énoncé libre ne dépend d'aucune graine : il est le même dans tous
+    // les sujets
+    for (
+      let version = 0;
+      version < Math.max(1, documentOptions.nbVersions);
+      version++
+    ) {
+      let subjectCarry = carryOver
+      if (version > 0) {
+        carryOver.versions ??= {}
+        subjectCarry = carryOver.versions[version] ??= {}
+      }
+      subjectCarry.codeOverrides = {
+        ...subjectCarry.codeOverrides,
+        [inserted]: texte,
+      }
     }
     const params: InterfaceParams = { uuid: FREE_EXERCISE_UUID }
     let exercise: IExercice | null = null
@@ -2186,6 +2204,11 @@
     if (!confirmOverwrite()) return
     const allCarryOver =
       editorView != null ? harvestCarryOver(currentCode()) : {}
+    const allInputs = buildAllVersionInputs()
+    const failedVersions =
+      codeEditApplyToAll && allInputs.length > 1
+        ? propagateExerciseCode(allCarryOver, allInputs, num, code, part)
+        : []
     const carryOver = activeCarryOver(allCarryOver)
     const trimmed = code.trim()
     if (part === 'correction') {
@@ -2201,7 +2224,7 @@
       else codeOverrides[num] = code
       carryOver.codeOverrides = codeOverrides
     }
-    const [primary, ...extraVersions] = buildAllVersionInputs()
+    const [primary, ...extraVersions] = allInputs
     const newCode = buildTypstDocument(
       primary,
       documentOptions,
@@ -2212,6 +2235,159 @@
     setEditorContent(newCode)
     scheduleCompile(newCode, PALETTE_COMPILE_DELAY)
     codeEditNum = null
+    if (failedVersions.length > 0) {
+      window.alert(
+        `La modification n'a pas pu être reportée sur ${versionNames(failedVersions)} : le passage modifié n'y figure pas à l'identique (nombres différents par exemple). Modifier ce sujet séparément.`,
+      )
+    }
+  }
+
+  /** « le Sujet B », « les Sujets B et C »… */
+  function versionNames(versions: number[]): string {
+    const letters = versions.map((v) => String.fromCharCode(65 + v))
+    return letters.length === 1
+      ? `le Sujet ${letters[0]}`
+      : `les Sujets ${letters.slice(0, -1).join(', ')} et ${letters.at(-1)}`
+  }
+
+  /** Réglages propres au sujet `version`, sans en créer s'il n'en a pas. */
+  function versionCarryOver(
+    carry: TypstCarryOver,
+    version: number,
+  ): TypstCarryOver {
+    return version === 0 ? carry : (carry.versions?.[version] ?? {})
+  }
+
+  /** Code généré (sans surcharge) de l'énoncé ou de la correction d'un exercice. */
+  function generatedPartCode(
+    inputs: TypstExerciseInput[],
+    num: number,
+    part: 'enonce' | 'correction',
+    carry: TypstCarryOver,
+  ): string {
+    return part === 'correction'
+      ? getGeneratedCorrectionCode(inputs, num, documentOptions, carry)
+      : getGeneratedExerciseCode(inputs, num, documentOptions, carry)
+  }
+
+  /**
+   * Surcharge de l'énoncé ou de la correction d'un exercice dans le sujet
+   * `version` : `code` à `undefined` la retire. Une surcharge identique au
+   * code généré n'en est pas une (elle figerait inutilement l'exercice).
+   */
+  function setPartOverride(
+    carry: TypstCarryOver,
+    version: number,
+    num: number,
+    part: 'enonce' | 'correction',
+    code: string | undefined,
+    generated: string,
+  ) {
+    let target = carry
+    if (version > 0) {
+      carry.versions ??= {}
+      target = carry.versions[version] ??= {}
+    }
+    const key =
+      part === 'correction' ? 'codeOverridesCorrection' : 'codeOverrides'
+    const overrides = { ...(target[key] ?? {}) }
+    if (code == null || code.trim().length === 0 || code === generated) {
+      delete overrides[num]
+    } else {
+      overrides[num] = code
+    }
+    target[key] = overrides
+  }
+
+  /**
+   * Reporte sur les autres sujets la modification du sujet affiché saisie
+   * dans la modale d'édition (`code`, vide pour restaurer le code d'origine) :
+   * la différence entre le code précédent et `code` est rejouée sur le code
+   * de chaque autre sujet (voir `codePatch.ts`), qui garde ainsi ses propres
+   * nombres et ses propres retouches. Modifie `allCarry` en place.
+   * @returns les sujets sur lesquels la modification n'a pas pu être reportée
+   */
+  function propagateExerciseCode(
+    allCarry: TypstCarryOver,
+    allInputs: TypstExerciseInput[][],
+    num: number,
+    code: string,
+    part: 'enonce' | 'correction',
+  ): number[] {
+    const currentPartCode = (version: number) => {
+      const carry = versionCarryOver(allCarry, version)
+      const override =
+        part === 'correction'
+          ? carry.codeOverridesCorrection?.[num]
+          : carry.codeOverrides?.[num]
+      return override ?? generatedPartCode(allInputs[version], num, part, carry)
+    }
+    const restore = code.trim().length === 0
+    const patch = restore
+      ? null
+      : createCodePatch(currentPartCode(previewVersion), code)
+    const failed: number[] = []
+    for (let version = 0; version < allInputs.length; version++) {
+      if (version === previewVersion) continue
+      const generated = generatedPartCode(
+        allInputs[version],
+        num,
+        part,
+        versionCarryOver(allCarry, version),
+      )
+      if (patch == null) {
+        setPartOverride(allCarry, version, num, part, undefined, generated)
+        continue
+      }
+      const patched = applyCodePatch(currentPartCode(version), patch)
+      if (patched == null) failed.push(version)
+      else setPartOverride(allCarry, version, num, part, patched, generated)
+    }
+    return failed
+  }
+
+  /**
+   * Sujets ajoutés (`firstNewVersion` et suivants) : ils reprennent les
+   * modifications faites dans la modale d'édition sur le Sujet A, rejouées
+   * sur leur propre code généré (voir `codePatch.ts`). Modifie `allCarry` en
+   * place.
+   * @returns les sujets sur lesquels une modification n'a pas pu être reportée
+   */
+  function propagateOverridesToNewVersions(
+    allCarry: TypstCarryOver,
+    firstNewVersion: number,
+  ): number[] {
+    const allInputs = buildAllVersionInputs()
+    const failed = new Set<number>()
+    for (const part of ['enonce', 'correction'] as const) {
+      const overrides =
+        part === 'correction'
+          ? allCarry.codeOverridesCorrection
+          : allCarry.codeOverrides
+      for (const [key, override] of Object.entries(overrides ?? {})) {
+        const num = Number(key)
+        const patch = createCodePatch(
+          generatedPartCode(allInputs[0], num, part, allCarry),
+          override,
+        )
+        for (
+          let version = firstNewVersion;
+          version < allInputs.length;
+          version++
+        ) {
+          const generated = generatedPartCode(
+            allInputs[version],
+            num,
+            part,
+            versionCarryOver(allCarry, version),
+          )
+          const patched = applyCodePatch(generated, patch)
+          if (patched == null) failed.add(version)
+          else setPartOverride(allCarry, version, num, part, patched, generated)
+        }
+      }
+    }
+    return [...failed].sort()
   }
 
   /**
@@ -2780,6 +2956,30 @@
         Math.max(1, documentOptions.nbVersions),
       )
     }
+    // sujets ajoutés : ils reprennent les modifications de code du Sujet A
+    const renderedVersions =
+      editorView == null
+        ? 0
+        : Math.max(
+            1,
+            ...[
+              ...currentCode().matchAll(/^\/\/ mathalea:sujet\((\d+)\)/gm),
+            ].map((match) => Number(match[1]) + 1),
+          )
+    if (editorView != null && documentOptions.nbVersions > renderedVersions) {
+      const carryOver = harvestCarryOver(currentCode())
+      const failed = propagateOverridesToNewVersions(
+        carryOver,
+        renderedVersions,
+      )
+      regenerateDocument({ carryOver })
+      if (failed.length > 0) {
+        window.alert(
+          `Certaines modifications du code du Sujet A n'ont pas pu être reportées sur ${versionNames(failed)} : le passage modifié n'y figure pas à l'identique (nombres différents par exemple). Modifier ce sujet séparément.`,
+        )
+      }
+      return
+    }
     regenerateDocument()
   }
 
@@ -2800,7 +3000,9 @@
    * code, elles masqueraient le réglage global « Lignes de réponse » qui
    * vient de changer.
    */
-  function regenerateDocument(options: { dropWritingLines?: boolean } = {}) {
+  function regenerateDocument(
+    options: { dropWritingLines?: boolean; carryOver?: TypstCarryOver } = {},
+  ) {
     persistPreferences()
     const code = buildCode(options)
     setEditorContent(code)
@@ -3128,15 +3330,18 @@
     return inputs != null ? ficheUrl(inputs) : undefined
   }
 
-  function buildCode(options: { dropWritingLines?: boolean } = {}): string {
+  function buildCode(
+    options: { dropWritingLines?: boolean; carryOver?: TypstCarryOver } = {},
+  ): string {
     // les ajustements faits via la palette de mise en page (colonnes,
     // espacement, insertions) sont repris du code courant pour survivre
     // à la régénération ; au tout premier rendu (éditeur pas encore créé),
     // on repart des réglages restaurés depuis l'URL le cas échéant
     const harvested =
-      editorView != null
+      options.carryOver ??
+      (editorView != null
         ? harvestCarryOver(currentCode())
-        : (urlCarryOver ?? {})
+        : (urlCarryOver ?? {}))
     const carryOver = options.dropWritingLines
       ? {
           ...harvested,
@@ -5483,6 +5688,21 @@
             if (e.key === 'Escape') codeEditNum = null
           }}
         ></textarea>
+        {#if documentOptions.nbVersions > 1}
+          <label
+            class="flex items-start gap-2 text-sm text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+          >
+            <input
+              type="checkbox"
+              class="mt-0.5"
+              bind:checked={codeEditApplyToAll}
+            />
+            <span>
+              Reporter la modification sur les autres sujets. Seuls les passages
+              modifiés sont reportés : chaque sujet garde ses propres nombres.
+            </span>
+          </label>
+        {/if}
         <div class="flex flex-wrap items-center gap-2">
           <button
             type="button"

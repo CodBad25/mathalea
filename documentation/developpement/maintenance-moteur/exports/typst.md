@@ -189,7 +189,46 @@ FREE_EXERCISE_UUID`) : l'énoncé « généré » auquel il reviendrait n'est qu
   sans effet sur l'énoncé affiché) plutôt que masqués comme pour un exercice
   statique, ce qui aurait aussi masqué le crayon d'édition indispensable ici
   (`nonEditableStaticExercises` se fonde sur l'absence de fichier `.typ` du
-  référentiel, que ce vaisseau n'a pas).
+  référentiel, que ce vaisseau n'a pas) ;
+- sur une fiche à plusieurs sujets, `texte` est posé comme surcharge dans
+  **chaque** sujet : il ne dépend d'aucune graine.
+
+## Modifications de code et plusieurs sujets
+
+Une surcharge de code (crayon de la palette) remplace tout l'énoncé ou toute
+la correction d'un exercice, **nombres compris**, et ne vaut que pour le sujet
+où elle a été saisie (`carryOver.versions[n]`) : la recopier telle quelle dans
+un autre sujet lui donnerait les valeurs du premier. Pour qu'un professeur
+n'ait pas à refaire ses retouches dans chaque sujet, elles sont reportées sous
+forme de **différence** (`src/components/setup/typst/codePatch.ts`) :
+
+- `createCodePatch(avant, après)` découpe les deux textes en mots, nombres,
+  blancs et symboles, les compare (algorithme de Myers) et retient chaque
+  passage modifié avec quelques mots de contexte de part et d'autre ;
+- `applyCodePatch(cible, patch)` rejoue ces remplacements sur le code d'un
+  autre sujet. Dans le **contexte**, un nombre correspond à n'importe quel
+  nombre (les valeurs tirées diffèrent d'un sujet à l'autre) ; le passage
+  **remplacé** doit en revanche figurer à l'identique. Le contexte est
+  raccourci au besoin, et le report échoue (`null`) si le passage est
+  introuvable ou désigne plusieurs endroits : jamais d'approximation qui
+  recopierait les nombres d'un autre sujet.
+
+Deux points d'entrée dans `Typst.svelte` :
+
+- la modale d'édition propose, à partir de deux sujets, la case « Reporter la
+  modification sur les autres sujets » (cochée par défaut,
+  `codeEditApplyToAll`). `propagateExerciseCode` calcule la différence entre
+  le code précédent du sujet affiché (surcharge, sinon code généré) et le
+  brouillon, puis la rejoue sur le code actuel de chaque autre sujet, qui
+  garde ainsi ses propres retouches. « Restaurer le code d'origine » retire la
+  surcharge de tous les sujets ;
+- l'ajout de sujets (`applyDocumentOptions`, nombre de versions supérieur à
+  celui du code affiché) : `propagateOverridesToNewVersions` rejoue sur chaque
+  nouveau sujet la différence entre le code généré du Sujet A et sa surcharge.
+
+Une surcharge identique au code généré n'est pas enregistrée. Les sujets où le
+report a échoué sont signalés par une alerte : le professeur les modifie à
+part.
 
 ## Lignes de réponse (« Lignes pour écrire »)
 
