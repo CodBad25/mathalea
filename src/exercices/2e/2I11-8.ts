@@ -4,7 +4,7 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { numAlphaNum } from '../../lib/outils/outilString'
+import { numAlpha } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { context } from '../../modules/context'
@@ -36,6 +36,10 @@ function formatPourcentage(pourcentage: number): string {
   return `${texNombre(pourcentage, 0)}\\,\\%`
 }
 
+function de(groupe: string): string {
+  return /^[aeiouyéèêàâ]/i.test(groupe) ? `d'${groupe}` : `de ${groupe}`
+}
+
 function ajoutePropositionUnique(
   propositions: { texte: string; statut: boolean }[],
   texte: string,
@@ -50,8 +54,8 @@ export default class ProportionsEntreprise extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 1
-    this.spacing = 2
-    this.spacingCorr = 2
+    this.spacing = 1.5
+    this.spacingCorr = 1.5
     this.sup = false
     this.besoinFormulaireCaseACocher = ['Version QCM', false]
     this.nbQuestionsModifiable = false
@@ -104,21 +108,26 @@ export default class ProportionsEntreprise extends Exercice {
     const pourcentageCategorie3 =
       100 - pourcentageCategorie1 - pourcentageCategorie2
 
-    const introduction = `${contexte.organisation} de $${total}$ ${contexte.totalLabel} est composée de ${contexte.categorie1}, de ${contexte.categorie2} et de ${contexte.categorie3}.`
+    const compose = contexte.organisation.startsWith('Une ')
+      ? 'composée'
+      : 'composé'
+    const introduction = `${contexte.organisation} de $${total}$ ${contexte.totalLabel} est ${compose} ${de(contexte.categorie1)}, ${de(contexte.categorie2)} et ${de(contexte.categorie3)}.`
+    const enonceQuestion1 = `On compte $${effectifCategorie1}$ ${contexte.categorie1}.<br>Calculer la proportion des ${contexte.categorie1} parmi les ${contexte.totalLabel}, sous forme d'un pourcentage.`
+    const enonceQuestion2 = `La proportion des ${contexte.categorie2} parmi les ${contexte.totalLabel} est égale à $${proportionCategorie2.texFraction}$.<br>Calculer la proportion des ${contexte.categorie3} parmi les ${contexte.totalLabel}, sous forme d'un pourcentage.`
     this.consigne = ''
-    let texte = `${introduction}<br><br>
-    1. On compte $${effectifCategorie1}$ ${contexte.categorie1}. Calculer la proportion des ${contexte.categorie1} parmi les ${contexte.totalLabel}. On donnera le résultat sous forme de pourcentage.<br><br>
-    2. La proportion de ${contexte.categorie2} est égale à $${proportionCategorie2.texFraction}$. Déterminer la proportion des ${contexte.categorie3}. On donnera le résultat sous forme d'un pourcentage.`
+    let texte = `${introduction}<br>
+    ${numAlpha(0)}${enonceQuestion1}<br>
+    ${numAlpha(1)}${enonceQuestion2}`
 
     const correctionQuestion1 = `On note $E$ l'ensemble des ${contexte.totalLabel}. Son effectif est $n_E=${total}$.<br>
     On note $A$ l'ensemble des ${contexte.categorie1}. Son effectif est $n_A=${effectifCategorie1}$.<br>
     La proportion des ${contexte.categorie1} parmi les ${contexte.totalLabel} est donc :
     $p_A=\\dfrac{${effectifCategorie1}}{${total}}=\\dfrac{${pourcentageCategorie1}}{100}=${miseEnEvidence(formatPourcentage(pourcentageCategorie1))}$.`
-    const correctionQuestion2 = `La proportion des ${contexte.categorie1} est égale à $${formatPourcentage(pourcentageCategorie1)}$ et la proportion de ${contexte.categorie2} est égale à $${proportionCategorie2.texFraction}$, c'est-à-dire $${formatPourcentage(pourcentageCategorie2)}$.<br>
+    const correctionQuestion2 = `La proportion des ${contexte.categorie1} est égale à $${formatPourcentage(pourcentageCategorie1)}$ et la proportion des ${contexte.categorie2} est égale à $${proportionCategorie2.texFraction}$, c'est-à-dire $${formatPourcentage(pourcentageCategorie2)}$.<br>
     La proportion des ${contexte.categorie3} est donc égale à :
     $100\\,\\%-${formatPourcentage(pourcentageCategorie1)}-${formatPourcentage(pourcentageCategorie2)}=${formatPourcentage(pourcentageCategorie3)}$.<br>
     La proportion des ${contexte.categorie3} est donc $${miseEnEvidence(formatPourcentage(pourcentageCategorie3))}$.`
-    const correction = `1. ${correctionQuestion1}<br><br>2. ${correctionQuestion2}`
+    const correction = `${numAlpha(0)}${correctionQuestion1}<br>${numAlpha(1)}${correctionQuestion2}`
 
     if (this.sup || context.isAmc) {
       this.nbQuestions = 2
@@ -150,8 +159,8 @@ export default class ProportionsEntreprise extends Exercice {
         false,
       )
       this.autoCorrection[0] = {
-        enonce: `On compte $${effectifCategorie1}$ ${contexte.categorie1}. Calculer la proportion des ${contexte.categorie1} parmi les ${contexte.totalLabel}, sous forme de pourcentage.`,
-        options: { radio: true, vertical: true },
+        enonce: enonceQuestion1,
+        options: { radio: true },
         propositions: propositionsQuestion1.slice(0, 4),
       }
       let texteQuestion1 = `${this.autoCorrection[0].enonce}`
@@ -185,8 +194,8 @@ export default class ProportionsEntreprise extends Exercice {
         false,
       )
       this.autoCorrection[1] = {
-        enonce: `La proportion de ${contexte.categorie2} est égale à $${proportionCategorie2.texFraction}$. Déterminer la proportion des ${contexte.categorie3}, sous forme d'un pourcentage.`,
-        options: { radio: true, vertical: true },
+        enonce: enonceQuestion2,
+        options: { radio: true },
         propositions: propositionsQuestion2.slice(0, 4),
       }
       let texteQuestion2 = `${this.autoCorrection[1].enonce}`
@@ -199,9 +208,9 @@ export default class ProportionsEntreprise extends Exercice {
       this.listeCorrections[1] = correctionQuestion2
     } else if (this.interactif) {
       this.nbQuestions = 1
-      texte = `${introduction}<br><br>${addMultiMathfield(this, 0, {
-        dataTemplate: `${numAlphaNum(0)} On compte $${effectifCategorie1}$ ${contexte.categorie1}. Calculer la proportion des ${contexte.categorie1} parmi les ${contexte.totalLabel}. On donnera le résultat sous forme de pourcentage. %{champ1}<br>
-        ${numAlphaNum(1)} La proportion de ${contexte.categorie2} est égale à $${proportionCategorie2.texFraction}$. Déterminer la proportion des ${contexte.categorie3}. On donnera le résultat sous forme d'un pourcentage. %{champ2}`,
+      texte = `${introduction}<br>${addMultiMathfield(this, 0, {
+        dataTemplate: `${numAlpha(0)}${enonceQuestion1} %{champ1}<br>
+        ${numAlpha(1)}${enonceQuestion2} %{champ2}`,
         dataOptions: {
           champ1: {
             keyboard: KeyboardType.clavierDeBase,
