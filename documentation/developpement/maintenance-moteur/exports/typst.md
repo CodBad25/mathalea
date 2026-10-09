@@ -31,7 +31,44 @@ L'éditeur est CodeMirror 6, configuré par `editor/typstEditorSetup.ts` (`typst
 
 ## Réponses mises en évidence (orange et gras)
 
-`miseEnEvidence()` produit `{\color{#F15929}\boldsymbol{…}}`, converti en `text(fill: …, bold(…))`. `bold()` ne met en gras que les lettres et les chiffres : la police de maths n'a pas de variante grasse pour les opérateurs, parenthèses et radicaux (`\boldsymbol` LaTeX les épaissit tous). `latexToTypst.ts` ajoute donc à ces formules un contour de la couleur du texte (`stroke: #stroke(paint: …, thickness: 0.025em)`), ce qui donne un gras homogène avec n'importe quelle police de maths.
+`miseEnEvidence()` produit `{\color{#F15929}\boldsymbol{…}}`. Le convertisseur
+`latexToTypst.ts` restitue la couleur, le gras et un léger contour qui épaissit
+également les opérateurs, parenthèses et radicaux (sans variante grasse dans
+certaines polices de maths).
+
+`typstHighlights.ts` factorise ce style lors de l’assemblage de la fiche et
+des exercices autonomes : `$evidence(x = 2)$` remplace les longs appels
+à `text(fill: …, stroke: …)`. La fonction `evidence` est définie une seule
+fois dans le préambule, uniquement quand le contenu l’utilise. L’orange
+`#F15929` est sa couleur par défaut ; les autres couleurs restent explicites,
+par exemple `$evidence(couleur: #rgb("#216D9A"), x)$`. Cette fonction
+utilise uniquement Typst et conserve le même rendu.
+
+## Copier et télécharger un code Typst propre
+
+Dans les modes **Code** et **Côte à côte**, **Copier le code Typst propre**
+copie toute la fiche avec son préambule. **Télécharger le .typ** utilise le
+même code ; si des images externes sont nécessaires, le téléchargement
+fournit une archive ZIP contenant le `.typ` et ses images.
+
+`buildExportCode` nettoie le texte actuel de l’éditeur avec
+`cleanTypstExport` (`typstExport.ts`), sans reconstruire la fiche depuis les
+exercices. Les retouches libres du préambule, des énoncés, des corrections et
+des blocs de rendu sont donc conservées, ainsi que tous les sujets, quel que
+soit celui montré dans l’aperçu.
+
+Le nettoyage retire la définition et les appels des repères invisibles
+`mathalea-anchor`, ainsi que les commentaires réservés `// mathalea:…`.
+Les chaînes, exemples de code brut et commentaires personnels sont protégés.
+Les variables de mise en page et les fonctions nécessaires au rendu restent
+dans le préambule : ce sont des réglages Typst ordinaires, utilisables et
+modifiables dans un autre éditeur. Elles ne sont pas remplacées par des
+valeurs littérales pour respecter les expressions personnalisées et leurs
+dépendances.
+
+`buildTypstDocument(..., { exportMode: true })` reste disponible pour les
+exports reconstruits depuis les données des exercices : il émet directement
+des valeurs littérales de colonnes et d’espacements, sans repères de palette.
 
 ## Réglages numériques de mise en page
 
@@ -1324,7 +1361,7 @@ Le découpage se fait côté `Typst.svelte` (`previewCode`), pas dans le documen
 - le sélecteur « Aperçu » de la barre d'outils n'apparaît qu'à partir de deux
   sujets. Il ne touche ni au code de l'éditeur ni aux exports : « Télécharger
   le PDF » compile `currentCode()`, qui porte tous les sujets, et le `.typ`
-  est reconstruit par `buildExportCode`.
+  est nettoyé depuis le texte actuel de l’éditeur par `buildExportCode`.
 
 Chaque sujet porte les mêmes repères `mathalea-anchor` et propose la palette
 complète : édition des énoncés et corrections, insertions, fusions, lignes de
@@ -1371,6 +1408,8 @@ nombre de sujets tronque la liste (`applyDocumentOptions`).
 ## Tests
 
 - `src/components/setup/typst/latexToTypst.test.ts` : conversion des formules et du HTML ;
+- `src/components/setup/typst/typstHighlights.test.ts` : factorisation de la mise en évidence et comparaison du rendu SVG avec le CLI Typst ;
+- `src/components/setup/typst/typstExport.test.ts` : conservation des retouches libres, nettoyage des repères et comparaison du rendu SVG de plusieurs sujets ;
 - `src/components/setup/typst/imageCuts.test.ts` : découpage des images, conservation par sujet et partie, export et compilation des fragments sur plusieurs pages ;
 - `src/components/setup/typst/typstDiagnostics.test.ts` : lecture du format « unix » et traduction des messages ;
 - `src/components/setup/typst/buildTypstDocument.test.ts` : structure du document généré. Les cas qui lancent le binaire externe `typst compile` sont exécutés en local quand le CLI `typst` est installé, ignorés en CI par défaut, et réactivables avec `TYPST_CLI_TESTS=1` pour un job dédié ;
