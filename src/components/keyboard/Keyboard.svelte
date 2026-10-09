@@ -11,6 +11,7 @@
   import { latexMatriceAvecPlaceholders } from './lib/matrix'
   import {
     enregistreTouchesPersonnalisees,
+    ordonneChiffresEnLigne,
     TITRE_BLOC_PERSONNALISE,
   } from './lib/touchesPersonnalisees'
   import Alphanumeric from './presentationalComponents/alphanumeric/Alphanumeric.svelte'
@@ -130,7 +131,7 @@
       const noms = enregistreTouchesPersonnalisees(touches)
       if (noms.length === 0) continue
       myKeyboard.add({
-        keycaps: { inline: noms, block: noms },
+        keycaps: { inline: ordonneChiffresEnLigne(noms), block: noms },
         cols: Math.min(noms.length, noms.length > 12 ? 7 : 3),
         title: TITRE_BLOC_PERSONNALISE,
         isUnits: false,

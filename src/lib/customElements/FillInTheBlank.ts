@@ -1,3 +1,4 @@
+import type { ToucheDeQuestion } from '../../components/keyboard/lib/touchesPersonnalisees'
 import { MathfieldElement } from 'mathlive'
 import {
   compteChampsDeReponse,
@@ -41,6 +42,7 @@ export type FillInTheBlankOptions = {
    */
   elementId?: string
   className?: string
+  dataKeys?: ToucheDeQuestion
   dataKeyboard?: string
   content?: string
   interactivityOn?: boolean
@@ -73,6 +75,7 @@ export class FillInTheBlankElement extends MathaleaCustomElement {
     questionIndex,
     className = 'fillInTheBlanks',
     dataKeyboard = '',
+    dataKeys,
     content = '',
     interactivityOn = true,
     verifyCallbackName,
@@ -97,12 +100,14 @@ export class FillInTheBlankElement extends MathaleaCustomElement {
       mathfieldId: legacyMathfieldId,
       className,
       dataKeyboard,
+      dataKeys: dataKeys == null || dataKeys.length === 0 ? null : dataKeys,
       interactivityOn,
       verifyCallbackName: computedCallbackName,
     })
     const mathfieldAttributes = this.buildAttributes({
       id: legacyMathfieldId,
       dataKeyboard,
+      dataKeys: dataKeys == null || dataKeys.length === 0 ? null : dataKeys,
       virtualKeyboardMode: 'manual',
       readonly: true,
       className,
@@ -245,6 +250,12 @@ export class FillInTheBlankElement extends MathaleaCustomElement {
       'data-keyboard',
       this.getAttribute('data-keyboard') ?? '',
     )
+    const dataKeys = this.getAttribute('data-keys')
+    if (dataKeys != null && dataKeys !== '') {
+      this.mathfield.setAttribute('data-keys', dataKeys)
+    } else {
+      this.mathfield.removeAttribute('data-keys')
+    }
     this.mathfield.setAttribute('virtual-keyboard-mode', 'manual')
     this.mathfield.className = [
       this.getAttribute('class-name') ?? 'fillInTheBlanks',

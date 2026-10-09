@@ -95,6 +95,20 @@ export function enregistreTouchesPersonnalisees(cles: string[]): Keys[] {
 }
 
 /**
+ * Un pavé numérique complet suit l'ordre 1…9, 0 en mode réduit.
+ * Les autres touches gardent leur place, ainsi que les sélections de chiffres
+ * qui ne constituent pas un pavé complet.
+ */
+export function ordonneChiffresEnLigne(noms: Keys[]): Keys[] {
+  const chiffres = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'].map(
+    (chiffre) => `${PREFIXE}${chiffre}` as Keys,
+  )
+  if (!chiffres.every((chiffre) => noms.includes(chiffre))) return [...noms]
+  let index = 0
+  return noms.map((nom) => (chiffres.includes(nom) ? chiffres[index++] : nom))
+}
+
+/**
  * Les touches d'une question sous forme de blocs : une liste plate de chaînes
  * forme un seul bloc, une liste de listes donne un bloc par sous-liste.
  * Les blocs vides sont ignorés.

@@ -1,7 +1,9 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import ModeliserSuites from '../1e/1AL10-1'
 export const titre = 'Modéliser une situation avec une suite'
 export const dateDePublication = '29/07/2025'
 export const amcReady = true
+export const interactifReady = true
 
 /**
  * @author Gilles Mora
@@ -16,6 +18,12 @@ export const refs = {
 export default class ModeliserSuites2 extends ModeliserSuites {
   constructor() {
     super()
+    this.clavierSuite = KeyboardType.clavierEntierementPersonnalisable
+    this.touchesSuite = [
+      ['7', '8', '9', '4', '5', '6', '1', '2', '3', '0', ','],
+      ['+', '-', '\\times'],
+      ['c_n', 'u_n', 'v_n', 'n'],
+    ]
     this.nbQuestions = 1
     this.sup = '11'
     this.sup2 = false

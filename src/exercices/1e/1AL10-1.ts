@@ -33,6 +33,9 @@ export const refs = {
   'fr-ch': [],
 }
 export default class ModeliserSuites extends Exercice {
+  clavierSuite = KeyboardType.clavierSuite
+  touchesSuite?: string[][]
+
   constructor() {
     super()
     this.nbQuestions = 1
@@ -105,7 +108,9 @@ export default class ModeliserSuites extends Exercice {
                 this,
                 i,
                 '\\begin{cases}c_0=%{champ1}\\\\c_{n+1}=%{champ2}\\end{cases}',
-                KeyboardType.clavierSuite,
+                this.clavierSuite,
+                '\\ldots',
+                { dataKeys: this.touchesSuite },
               )
           }
           handleAnswers(
@@ -157,7 +162,9 @@ qui suit le 1er juillet 2024.<br>
                 this,
                 i,
                 '\\begin{cases}u_0=%{champ1}\\\\u_{n+1}=%{champ2}\\end{cases}',
-                KeyboardType.clavierSuite,
+                this.clavierSuite,
+                '\\ldots',
+                { dataKeys: this.touchesSuite },
               )
           }
           handleAnswers(
@@ -210,7 +217,9 @@ au 1er janvier de l'année $2022 + n$.<br>
                 this,
                 i,
                 '\\begin{cases}v_0=%{champ1}\\\\v_{n+1}=%{champ2}\\end{cases}',
-                KeyboardType.clavierSuite,
+                this.clavierSuite,
+                '\\ldots',
+                { dataKeys: this.touchesSuite },
               )
           }
           handleAnswers(
@@ -258,7 +267,9 @@ au 1er janvier de l'année $2022 + n$.<br>
                 this,
                 i,
                 '\\begin{cases}c_0=%{champ1}\\\\c_{n+1}=%{champ2}\\end{cases}',
-                KeyboardType.clavierSuite,
+                this.clavierSuite,
+                '\\ldots',
+                { dataKeys: this.touchesSuite },
               )
           }
           handleAnswers(
@@ -309,7 +320,9 @@ Pour l'année $2024$, il y a $${a}$ abonnés.<br>`
                 this,
                 i,
                 '\\begin{cases}u_0=%{champ1}\\\\u_{n+1}=%{champ2}\\end{cases}',
-                KeyboardType.clavierSuite,
+                this.clavierSuite,
+                '\\ldots',
+                { dataKeys: this.touchesSuite },
               )
           }
           handleAnswers(
@@ -363,7 +376,9 @@ Le premier versement a lieu le $25$ février $2024$.<br>`
                 this,
                 i,
                 '\\begin{cases}v_0=%{champ1}\\\\v_{n+1}=%{champ2}\\end{cases}',
-                KeyboardType.clavierSuite,
+                this.clavierSuite,
+                '\\ldots',
+                { dataKeys: this.touchesSuite },
               )
           }
           handleAnswers(
@@ -413,7 +428,9 @@ Au point de départ, la température est de $${temp}$ degrés Celsius.<br>`
                 this,
                 i,
                 'u_n=%{champ1}',
-                KeyboardType.clavierSuite,
+                this.clavierSuite,
+                '\\ldots',
+                { dataKeys: this.touchesSuite },
               )
           }
           handleAnswers(
@@ -448,7 +465,9 @@ Au point de départ, la température est de $${temp}$ degrés Celsius.<br>`
                 this,
                 i,
                 'w_n=%{champ1}',
-                KeyboardType.clavierSuite,
+                this.clavierSuite,
+                '\\ldots',
+                { dataKeys: this.touchesSuite },
               )
             handleAnswers(
               this,
@@ -483,7 +502,9 @@ Au point de départ, la température est de $${temp}$ degrés Celsius.<br>`
                 this,
                 i,
                 'u_n=%{champ1}',
-                KeyboardType.clavierSuite,
+                this.clavierSuite,
+                '\\ldots',
+                { dataKeys: this.touchesSuite },
               )
             handleAnswers(
               this,
@@ -521,7 +542,9 @@ Au point de départ, la température est de $${temp}$ degrés Celsius.<br>`
                 this,
                 i,
                 'u_n=%{champ1}',
-                KeyboardType.clavierSuite,
+                this.clavierSuite,
+                '\\ldots',
+                { dataKeys: this.touchesSuite },
               )
             handleAnswers(
               this,
