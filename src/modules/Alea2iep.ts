@@ -192,6 +192,23 @@ export type OptionsTexte = OptionsIep & {
  *
  * @author Rémi Angot
  */
+/**
+ * Angles (en degrés, sens trigonométrique) de début et de fin de l'arc de
+ * centre centre allant de A à B : le plus petit des deux arcs, et pour un
+ * demi-cercle, celui parcouru de A à B dans le sens trigonométrique.
+ */
+export function anglesArcCentre2Extremites(
+  centre: PointAbstrait,
+  A: PointAbstrait,
+  B: PointAbstrait,
+): { debut: number; fin: number } {
+  const debut = (Math.atan2(A.y - centre.y, A.x - centre.x) * 180) / Math.PI
+  const angleB = (Math.atan2(B.y - centre.y, B.x - centre.x) * 180) / Math.PI
+  let balayage = (((angleB - debut) % 360) + 360) % 360
+  if (balayage > 180 + 1e-6) balayage -= 360
+  return { debut, fin: debut + balayage }
+}
+
 export default class Alea2iep {
   idIEP: number // Identifiant pour les tracés
   idHTML: number // Identifiant pour les div et le svg
@@ -1091,8 +1108,9 @@ export default class Alea2iep {
   }
 
   /**
-   *
-   * @param centre Trace un arc de centre centre allant de A à B
+   * Trace l'arc de centre centre allant de A à B : le plus petit des deux arcs
+   * (pour un demi-cercle, celui parcouru de A à B dans le sens trigonométrique).
+   * @param centre
    * @param A
    * @param B
    * @param options
@@ -1113,11 +1131,8 @@ export default class Alea2iep {
       options,
     )*/
     this.compasEcarter2Points(centre, A, options)
-    this.compasTracerArc2Angles(
-      angleOriente(pointAbstrait(centre.x + 5, centre.y), centre, A),
-      angleOriente(pointAbstrait(centre.x + 5, centre.y), centre, B),
-      options,
-    )
+    const { debut, fin } = anglesArcCentre2Extremites(centre, A, B)
+    this.compasTracerArc2Angles(debut, fin, options)
 
     if (options?.positionsRangementInstruments !== undefined) {
       this.rangerInstruments(

@@ -1,7 +1,9 @@
 import { describe, expect, it, vi } from 'vitest'
 import {
   construireAnimation,
+  decrireInstruction,
   ElementIepEditeur,
+  type InstructionIep,
 } from '../../src/lib/customElements/ElementIepEditeur'
 import CreateurAnimationInstruments from '../../src/exercices/profs/P025'
 import { context } from '../../src/modules/context'
@@ -206,6 +208,62 @@ describe('ElementIepEditeur compass arc instructions', () => {
     expect(xml).toMatch(/debut="0" fin="-90" mouvement="tracer" objet="compas"/)
   })
 
+  const balayageArcTrace = (programme: InstructionIep[]) => {
+    const xml = construireAnimation(programme).script()
+    const trace = xml.match(
+      /debut="(-?[\d.]+)" fin="(-?[\d.]+)" mouvement="tracer" objet="compas"/,
+    )
+    if (trace === null) return undefined
+    return Number(trace[2]) - Number(trace[1])
+  }
+  const coinDuCarre: InstructionIep[] = [
+    { type: 'point', nom: 'G', x: 9, y: 9 },
+    { type: 'point', nom: 'H', x: 6, y: 9 },
+    { type: 'point', nom: 'F', x: 9, y: 6 },
+    { type: 'point', nom: 'I', x: 3, y: 9 },
+    { type: 'point', nom: 'J', x: 0, y: 9 },
+  ]
+
+  it('draws the minor arc whatever the order of the extremities', () => {
+    for (const [p2, p3] of [
+      ['H', 'F'],
+      ['F', 'H'],
+    ]) {
+      const balayage = balayageArcTrace([
+        ...coinDuCarre,
+        { type: 'arcPointPointCentre', p1: 'G', p2, p3 },
+      ])
+      expect(Math.abs(balayage ?? 0)).toBeCloseTo(90)
+    }
+  })
+
+  it('draws a half circle counterclockwise from the first extremity', () => {
+    // Le repère d'Instrumenpoche a l'axe des ordonnées vers le bas
+    const xmlParLeBas = construireAnimation([
+      ...coinDuCarre,
+      { type: 'arcPointPointCentre', p1: 'I', p2: 'J', p3: 'H' },
+    ]).script()
+    expect(xmlParLeBas).toMatch(
+      /debut="-180" fin="-360" mouvement="tracer" objet="compas"/,
+    )
+    const xmlParLeHaut = construireAnimation([
+      ...coinDuCarre,
+      { type: 'arcPointPointCentre', p1: 'I', p2: 'H', p3: 'J' },
+    ]).script()
+    expect(xmlParLeHaut).toMatch(
+      /debut="0" fin="-180" mouvement="tracer" objet="compas"/,
+    )
+  })
+
+  it('ignores an arc whose extremities are not at the same distance from its center', () => {
+    expect(
+      balayageArcTrace([
+        ...coinDuCarre,
+        { type: 'arcPointPointCentre', p1: 'G', p2: 'H', p3: 'I' },
+      ]),
+    ).toBeUndefined()
+  })
+
   it('reports a length from two points to a directed compass arc', () => {
     const animation = construireAnimation([
       { type: 'point', nom: 'A', x: 0, y: 0 },
@@ -395,6 +453,33 @@ describe('ElementIepEditeur static rendering', () => {
     }
   })
 
+  it('renders a Latex arc instead of a full circle', () => {
+    const htmlContextAvantTest = context.isHtml
+    const typstContextAvantTest = context.isTypst
+    context.isHtml = false
+    context.isTypst = false
+
+    try {
+      const rendu = ElementIepEditeur.create({
+        programmeInitial: [
+          { type: 'point', nom: 'G', x: 9, y: 9 },
+          { type: 'point', nom: 'H', x: 6, y: 9 },
+          { type: 'point', nom: 'F', x: 9, y: 6 },
+          { type: 'arcPointPointCentre', p1: 'G', p2: 'F', p3: 'H' },
+        ],
+        interactivityOn: false,
+      })
+
+      expect(rendu).not.toContain('circle')
+      expect(rendu).toContain(
+        '\\draw (9,6) arc[start angle=-90, end angle=-180, radius=3];',
+      )
+    } finally {
+      context.isHtml = htmlContextAvantTest
+      context.isTypst = typstContextAvantTest
+    }
+  })
+
   it('renders Typst without constructing the custom element directly', () => {
     const htmlContextAvantTest = context.isHtml
     const typstContextAvantTest = context.isTypst
@@ -576,5 +661,21 @@ describe('P025 editor identity', () => {
     } finally {
       context.isHtml = htmlContextAvantTest
     }
+  })
+})
+
+describe('ElementIepEditeur step numbering', () => {
+  it('numbers initial steps and added steps separately', () => {
+    const programme: InstructionIep[] = [
+      { type: 'point', nom: 'A', x: 0, y: 0 },
+      { type: 'point', nom: 'B', x: 4, y: 0 },
+      { type: 'droite', p1: 'A', p2: 'B' },
+      { type: 'point', nom: 'C', x: 2, y: 3 },
+      { type: 'perpendiculaire', p1: 'A', p2: 'B', p3: 'C' },
+      { type: 'intersection', nom: 'H', etape1: 2, etape2: 4, choix: 1 },
+    ]
+    expect(decrireInstruction(programme[5], programme, 3)).toBe(
+      'Placer le point H, intersection de la droite de l’étape initiale 3 et de la perpendiculaire de l’étape 2.',
+    )
   })
 })
