@@ -25,6 +25,7 @@ import handleInteractiveClock from '../../src/lib/customElements/InteractiveCloc
 import '../../src/lib/customElements/IntervalleDroiteElement'
 import '../../src/lib/customElements/GrimukuGrilleElement'
 import '../../src/lib/customElements/KenKenGrilleElement'
+import '../../src/lib/customElements/KillerSudokuGrilleElement'
 import '../../src/lib/customElements/PyramideNombresElement'
 import '../../src/lib/customElements/LabyrintheBlockly'
 import '../../src/lib/customElements/ListeDeroulanteElement'

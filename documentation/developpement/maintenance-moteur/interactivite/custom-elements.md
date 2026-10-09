@@ -453,7 +453,7 @@ argument, à utiliser quand la désinscription a lieu hors de ce nettoyage — v
 ## Grilles de chiffres
 
 Les composants qui font remplir un damier de chiffres (`kenken-grille`,
-`grimuku-grille`, `tables-effacees-grille`) partagent
+`killer-sudoku-grille`, `grimuku-grille`, `tables-effacees-grille`) partagent
 `src/lib/customElements/grilleDeChiffres.ts` :
 
 - `verifieLesCases()` et `pointsMaxDesCases()` portent le barème « un point par
@@ -470,7 +470,7 @@ Les composants qui font remplir un damier de chiffres (`kenken-grille`,
   (`cleDeLaCase()` produit `L1C1`, `L1C2`...), ce qui rend la grille corrigeable
   par le même code que `tableau-hybride`. Attention : le type `Valeur` ne
   déclare ces clés que jusqu'à `L3C5`, une grille plus grande doit donc les
-  ajouter une à une (voir `EN-gratte-ciel`, `EN-kenken`, `EN-grimuku`).
+  ajouter une à une (voir `EN-gratte-ciel`, `EN-kenken`, `EN-killer-sudoku`, `EN-grimuku`).
 
 Un composant dont les cases n'attendent pas un chiffre isolé n'emprunte que le
 barème et les clés de réponse. `pyramide-nombres` (voir `EN-pyramide`) est dans

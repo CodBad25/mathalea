@@ -365,6 +365,7 @@ export type InteractivityType =
   | 'mathalea-labyrinthe' // Non compatible AMC
   | 'juniper-green' // Non compatible AMC
   | 'kenken-grille' // Non compatible AMC
+  | 'killer-sudoku-grille' // Non compatible AMC
   | 'grimuku-grille' // Non compatible AMC
   | 'pyramide-nombres' // Non compatible AMC
   | 'etoile-calculs' // Non compatible AMC
@@ -431,6 +432,7 @@ export function isInteractivityType(
     value === 'mathalea-labyrinthe' ||
     value === 'juniper-green' ||
     value === 'kenken-grille' ||
+    value === 'killer-sudoku-grille' ||
     value === 'grimuku-grille' ||
     value === 'pyramide-nombres' ||
     value === 'etoile-calculs' ||

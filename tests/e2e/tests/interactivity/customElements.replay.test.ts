@@ -28,6 +28,7 @@ const customElementModules = [
   'IntervalleDroiteElement',
   'JuniperGreenElement',
   'KenKenGrilleElement',
+  'KillerSudokuGrilleElement',
   'LabyrintheBlockly',
   'ListeDeroulanteElement',
   'MathaleaBranchingQcm',
