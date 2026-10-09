@@ -112,7 +112,7 @@ describe('5G3A-1 : construction interactive des symétriques', () => {
     expect(feedback.textContent).toContain('Nommer un seul point')
   })
 
-  it('fixe les points donnés et réserve le magnétisme aux petits carreaux', () => {
+  it("fixe les points donnés et active le magnétisme dès qu'une grille est affichée", () => {
     for (const notebook of [1, 2, 3]) {
       const exercise = generate(true, notebook)
       const figure = exercise.figuresApiGeom![0]
@@ -133,7 +133,7 @@ describe('5G3A-1 : construction interactive des symétriques', () => {
           isDeletable: false,
         })
       }
-      expect(figure.snapGrid).toBe(notebook === 1)
+      expect(figure.snapGrid).toBe(notebook < 3)
       expect(
         [...figure.elements.values()].filter(
           (element) => element.type === 'Grid',
