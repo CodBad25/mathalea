@@ -91,14 +91,18 @@ Fonctionnement :
 
 Les contrôles font des **éditions ciblées du code** dans CodeMirror (pas de régénération) : les boutons modifient les lignes `#let exN-colonnes`/`#let exN-gutter`, les insertions ajoutent une ligne marquée `// mathalea:insertion` après le repère de gap. Elles sont donc annulables (Ctrl+Z) et présentes dans le `.typ` exporté. Exception : l'icône de l'étiquette de version régénère tout le code (`toggleVersionLabel` → `applyDocumentOptions`), la présence de l'étiquette dans la grille (voir « En-tête et pied de page ») étant structurelle plutôt qu'une simple valeur de variable. Ces éditions ne marquent **pas** le code comme « modifié à la main » (`isEdited`) : puisqu'elles survivent à la régénération via le carry-over, elles ne déclenchent pas l'avertissement d'écrasement — seule la frappe directe dans l'éditeur le fait. Avec plusieurs sujets, chacun porte ses repères et ses marqueurs de relecture. `subjectEditorCode` masque les autres sujets (banques et rendus) sans déplacer les positions dans CodeMirror ; `harvestCarryOver` relit séparément leurs ajustements dans `versions`, afin de préserver les insertions et les surcharges de chaque sujet.
 
-Le zoom et l'alignement d'une figure sont communs aux sujets. Les figures sont
-numérotées à la suite, sujet après sujet ; quand un sujet B, C… a autant de
-figures que le sujet A (mêmes exercices), sa k-ième figure reprend les
-variables de la k-ième figure du sujet A (`#let fig-5-zoom = fig-1-zoom`, voir
-`sharedFigureNumber`). Régler une figure depuis n'importe quel sujet modifie la
-ligne de la figure du sujet A (`figureSettingTarget` dans `Typst.svelte`), donc
-tous les sujets. Si le nombre de figures diffère (tirage au hasard), chaque
-sujet garde ses propres réglages.
+Le zoom et l'alignement d'une figure du sujet A valent par défaut pour les
+autres sujets. Les figures sont numérotées à la suite, sujet après sujet ;
+quand un sujet B, C… a autant de figures que le sujet A (mêmes exercices), sa
+k-ième figure reprend les variables de la k-ième figure du sujet A
+(`#let fig-5-zoom = fig-1-zoom`, voir `sharedFigureNumber`) : régler une figure
+du sujet A modifie donc tous les sujets. Régler une figure depuis un sujet B,
+C… remplace ce renvoi par une valeur propre (`#let fig-5-zoom = 0.8`) : le
+réglage ne vaut que pour ce sujet. Sur une fiche à plusieurs sujets,
+`harvestCarryOver` relit toutes les valeurs, même celles par défaut : à la
+régénération, une figure qui a une valeur la garde, les autres reprennent le
+renvoi. Si le nombre de figures diffère (tirage au hasard),
+chaque sujet garde ses propres réglages.
 
 À la régénération (réglages, « Nouvelles données »), `harvestCarryOver` relit ces ajustements dans le code courant et les réémet (paramètre `carryOver` de `buildTypstDocument`) : ils survivent à la régénération, contrairement aux autres modifications manuelles. Les sauts de page ou de colonne sont normalisés à un exemplaire par repère (`stabilizeStructuralInsertions`, espaces `exo` et `corr`) et, entre les exercices, supprimés après le dernier, où ils n'ont aucun contenu suivant à déplacer ; cela répare aussi les anciens `typstParam` qui en contiennent des copies. « Réinitialiser les réglages du document » efface tout le carry-over.
 

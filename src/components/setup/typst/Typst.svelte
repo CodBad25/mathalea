@@ -696,6 +696,15 @@
     }
   }
   let isCompiling = $state(false)
+  /**
+   * Aperçu en attente d'une compilation demandée par un bouton (palette de
+   * mise en page, sujet affiché, nouvelles données...), de la demande à la
+   * fin de la compilation : l'aperçu est voilé et ses boutons inactifs, pour
+   * qu'on ne clique pas à nouveau sur un aperçu pas encore à jour (une fiche
+   * à plusieurs sujets avec des figures peut mettre plusieurs secondes). La
+   * frappe dans l'éditeur ne voile pas l'aperçu.
+   */
+  let isPreviewBusy = $state(false)
   let isCompilerLoading = $state(false)
   /**
    * Vrai seulement une fois confirmé que le compilateur n'est PAS en cache
@@ -1236,26 +1245,14 @@
   /** Pas d'ajustement du zoom d'une figure, et bornes (20 % à 300 %) */
   const FIGURE_ZOOM_STEP = 0.1
   /**
-   * Figure dont la variable porte le réglage : une figure d'un sujet B, C...
-   * qui suit celle du sujet A (`#let fig-5-zoom = fig-1-zoom`) se règle sur
-   * celle-ci, et le réglage vaut pour tous les sujets
+   * Zoom d'une figure. Une figure du sujet A entraîne celles des sujets B,
+   * C... qui la suivent (`#let fig-5-zoom = fig-1-zoom`) ; régler une figure
+   * d'un autre sujet remplace ce renvoi par sa propre valeur : le réglage ne
+   * vaut alors que pour ce sujet.
    */
-  function figureSettingTarget(
-    doc: string,
-    figNum: number,
-    setting: 'zoom' | 'align',
-  ): number {
-    const alias = new RegExp(
-      `^#let fig-${figNum}-${setting} = fig-(\\d+)-${setting}$`,
-      'm',
-    ).exec(doc)
-    return alias != null ? Number(alias[1]) : figNum
-  }
-
   function adjustFigureZoom(figNum: number, delta: number) {
     if (editorView == null) return
     const doc = subjectEditorCode(currentCode(), previewVersion)
-    figNum = figureSettingTarget(doc, figNum, 'zoom')
     const match = new RegExp(`^#let fig-${figNum}-zoom = .*$`, 'm').exec(doc)
     if (match == null) return
     const current = figureZoomValues[figNum] ?? 1
@@ -1343,11 +1340,13 @@
     })
   }
 
-  /** Alignement d'une figure : gauche, centré ou à droite */
+  /**
+   * Alignement d'une figure : gauche, centré ou à droite (pour les autres
+   * sujets, même règle que `adjustFigureZoom`)
+   */
   function setFigureAlign(figNum: number, align: 'left' | 'center' | 'right') {
     if (editorView == null) return
     const doc = subjectEditorCode(currentCode(), previewVersion)
-    figNum = figureSettingTarget(doc, figNum, 'align')
     const match = new RegExp(`^#let fig-${figNum}-align = .*$`, 'm').exec(doc)
     if (match == null) return
     dispatchPaletteEdit({
@@ -3210,7 +3209,10 @@
               const code = update.state.doc.toString()
               canRestoreLastGood = lastGoodCode != null && lastGoodCode !== code
               scheduleDocumentSync(code, isPaletteEdit)
-              scheduleCompile(code)
+              scheduleCompile(
+                code,
+                isPaletteEdit ? PALETTE_COMPILE_DELAY : undefined,
+              )
             }
           }),
         ],
@@ -3488,6 +3490,7 @@
   }
   function scheduleCompile(code: string, delay = 500) {
     clearTimeout(compileTimer)
+    if (isPaletteEdit || delay <= PALETTE_COMPILE_DELAY) isPreviewBusy = true
     compileTimer = setTimeout(() => compile(code), delay)
   }
 
@@ -3517,14 +3520,28 @@
     }
   }
 
+  /** Résolue une fois la prochaine image affichée par le navigateur */
+  function nextPaint(): Promise<void> {
+    return new Promise((resolve) =>
+      requestAnimationFrame(() => setTimeout(resolve, 0)),
+    )
+  }
+
   async function compile(code: string) {
     const source = previewCode(code)
-    if (source === lastCompiledCode) return
+    if (source === lastCompiledCode) {
+      if (!isCompiling) isPreviewBusy = false
+      return
+    }
     lastCompiledCode = source
     const token = ++compileToken
     isCompiling = true
     if (svgContent === '') isCompilerLoading = true
     try {
+      // la compilation occupe le fil principal : on laisse d'abord le
+      // navigateur afficher le voile (`isPreviewBusy`)
+      if (isPreviewBusy) await nextPaint()
+      if (token !== compileToken) return
       const { compileTypstToSvg, isCompilerCached } =
         await import('./typstCompiler')
       // adapte le message d'attente : « première visite » seulement si le
@@ -3560,6 +3577,7 @@
       if (token === compileToken) {
         isCompiling = false
         isCompilerLoading = false
+        isPreviewBusy = false
       }
     }
   }
@@ -4226,7 +4244,8 @@
             : 'Nouvelles données pour le Sujet A (les autres sujets sont conservés)'
           : 'Nouvelles données aléatoires pour tous les exercices'}
         data-tour="typst-new-data"
-        class="flex items-center gap-1 text-sm text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
+        disabled={isPreviewBusy}
+        class="flex items-center gap-1 text-sm disabled:cursor-wait disabled:opacity-50 text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
         onclick={newDataForAll}
       >
         <i class="bx bx-refresh text-xl"></i>
@@ -4254,8 +4273,9 @@
         <i class="bx bx-copy text-xl"></i>
         Versions
         <select
-          class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+          class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm disabled:cursor-wait disabled:opacity-50"
           bind:value={documentOptions.nbVersions}
+          disabled={isPreviewBusy}
           onchange={applyDocumentOptions}
         >
           <option value={1}>1</option>
@@ -4277,8 +4297,9 @@
           <i class="bx bx-file text-xl"></i>
           Aperçu
           <select
-            class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+            class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm disabled:cursor-wait disabled:opacity-50"
             value={previewVersion}
+            disabled={isPreviewBusy}
             onchange={(event) => showVersion(Number(event.currentTarget.value))}
           >
             {#each Array(documentOptions.nbVersions) as _, i (i)}
@@ -5038,7 +5059,7 @@
               ? 'w-full'
               : displayMode === 'split'
                 ? 'w-1/2'
-                : 'hidden'} min-h-0 flex flex-col"
+                : 'hidden'} relative min-h-0 flex flex-col"
         >
           <!-- `isolate` : les pastilles de la palette de mise en page portent
                des z-index (jusqu'à z-30) qui, sans contexte d'empilement ici,
@@ -5048,7 +5069,10 @@
                et les clics hors du cadre : le bouton « Revenir à la dernière
                version qui compilait » se retrouvait sous une pastille
                invisible. -->
-          <div class="relative isolate grow overflow-auto p-4">
+          <div
+            class="relative isolate grow overflow-auto p-4"
+            aria-busy={isPreviewBusy}
+          >
             {#if isCompilerLoading}
               <div
                 class="flex flex-col items-center gap-2 py-24 text-coopmaths-corpus dark:text-coopmathsdark-corpus"
@@ -5061,7 +5085,7 @@
                 </span>
               </div>
             {:else if svgContent !== ''}
-              {#if isCompiling}
+              {#if isCompiling && !isPreviewBusy}
                 <div
                   class="absolute top-2 right-4 z-10 text-coopmaths-action dark:text-coopmathsdark-action"
                 >
@@ -5165,6 +5189,22 @@
               </div>
             {/if}
           </div>
+          {#if isPreviewBusy && svgContent !== '' && !isCompilerLoading}
+            <!-- voile pendant la compilation : capte les clics destinés à un
+                 aperçu pas encore à jour (voir `isPreviewBusy`) -->
+            <div
+              class="typst-preview-veil absolute inset-0 z-10 flex items-center justify-center bg-coopmaths-canvas/60 dark:bg-coopmathsdark-canvas/60 cursor-wait"
+              role="status"
+              aria-live="polite"
+            >
+              <div
+                class="flex flex-col items-center gap-2 rounded-lg bg-coopmaths-canvas px-6 py-4 text-coopmaths-action shadow-lg dark:bg-coopmathsdark-canvas dark:text-coopmathsdark-action"
+              >
+                <i class="bx bx-loader-alt bx-spin text-4xl"></i>
+                <span class="text-sm">Mise à jour de l’aperçu…</span>
+              </div>
+            </div>
+          {/if}
         </div>
       </div>
 
@@ -5583,6 +5623,17 @@
 </main>
 
 <style>
+  .typst-preview-veil {
+    animation: typst-preview-veil-in 100ms ease-out both;
+  }
+  @keyframes typst-preview-veil-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
   .typst-svg-container {
     max-width: 900px;
   }

@@ -1151,7 +1151,10 @@ export function harvestCarryOver(code: string): TypstCarryOver {
   const versions = [...code.matchAll(/^\/\/ mathalea:sujet\((\d+)\)/gm)]
     .map((match) => Number(match[1]))
     .filter((version) => version > 0)
-  const primary = harvestSubjectCarryOver(subjectEditorCode(code, 0))
+  const primary = harvestSubjectCarryOver(
+    subjectEditorCode(code, 0),
+    versions.length > 0,
+  )
   if (versions.length > 0)
     primary.versions = Object.fromEntries(
       versions.map((version) => {
@@ -1168,7 +1171,16 @@ export function harvestCarryOver(code: string): TypstCarryOver {
   return primary
 }
 
-function harvestSubjectCarryOver(code: string): TypstCarryOver {
+/**
+ * `keepFigureDefaults` : fiche à plusieurs sujets, où une figure d'un sujet
+ * B, C... réglée à part porte une valeur au lieu du renvoi vers celle du
+ * sujet A (`#let fig-5-zoom = fig-1-zoom`) ; cette valeur est à conserver
+ * même si c'est celle par défaut.
+ */
+function harvestSubjectCarryOver(
+  code: string,
+  keepFigureDefaults = false,
+): TypstCarryOver {
   const tasksLayout: Record<
     string,
     { columns?: string; gutter?: string; numbering?: string }
@@ -1236,6 +1248,12 @@ function harvestSubjectCarryOver(code: string): TypstCarryOver {
       currentCorr = Number(corr[1])
       continue
     }
+    // tri préalable indispensable : sur les lignes des autres sujets, que
+    // `subjectEditorCode` remplace par des milliers d'espaces, les motifs
+    // ci-dessous (`\s*(.*?)\s*`) font exploser le retour arrière (plusieurs
+    // secondes à chaque clic de la palette). `INSERTION_TAG` est aussi le
+    // début de `INSERTION_CORRECTION_TAG`.
+    if (!line.includes(INSERTION_TAG)) continue
     const insertion = line.match(/^\s*(.*?)\s*\/\/ mathalea:insertion\s*$/)
     if (insertion != null && currentGap != null && insertion[1].length > 0) {
       ;(insertions[currentGap] ??= []).push(insertion[1])
@@ -1254,13 +1272,15 @@ function harvestSubjectCarryOver(code: string): TypstCarryOver {
   const figureZoom: Record<number, number> = {}
   for (const match of code.matchAll(/^#let fig-(\d+)-zoom = ([\d.]+)/gm)) {
     const value = Number(match[2])
-    if (value !== 1) figureZoom[Number(match[1])] = value
+    if (keepFigureDefaults || value !== 1) figureZoom[Number(match[1])] = value
   }
   const figureAlign: Record<number, string> = {}
   for (const match of code.matchAll(
     /^#let fig-(\d+)-align = (left|center|right)/gm,
   )) {
-    if (match[2] !== 'center') figureAlign[Number(match[1])] = match[2]
+    if (keepFigureDefaults || match[2] !== 'center') {
+      figureAlign[Number(match[1])] = match[2]
+    }
   }
   const exerciseZoom: Record<number, number> = {}
   for (const match of code.matchAll(/^#let exo-(\d+)-zoom = ([\d.]+)/gm)) {
@@ -4061,17 +4081,20 @@ export function buildTypstDocument(
         `#let fig-${figNum} = ${applyDocumentFontsToFigure(figure, options)}`,
       )
       // figure d'un sujet B, C... : zoom et alignement de la figure
-      // correspondante du sujet A (voir `sharedFigureNumber`)
+      // correspondante du sujet A (voir `sharedFigureNumber`), sauf si elle a
+      // été réglée depuis son propre sujet (valeur relue par `harvestCarryOver`)
       const shared = sharedFigureNumber(figNum, figureOffsets, figures.length)
+      const zoom = stableCarryOver.figureZoom?.[figNum]
+      const align = stableCarryOver.figureAlign?.[figNum]
       lines.push(
-        shared != null
+        shared != null && zoom == null
           ? `#let fig-${figNum}-zoom = fig-${shared}-zoom`
-          : `#let fig-${figNum}-zoom = ${stableCarryOver.figureZoom?.[figNum] ?? 1}`,
+          : `#let fig-${figNum}-zoom = ${zoom ?? 1}`,
       )
       lines.push(
-        shared != null
+        shared != null && align == null
           ? `#let fig-${figNum}-align = fig-${shared}-align`
-          : `#let fig-${figNum}-align = ${stableCarryOver.figureAlign?.[figNum] ?? 'center'}`,
+          : `#let fig-${figNum}-align = ${align ?? 'center'}`,
       )
     }
     lines.push('')
