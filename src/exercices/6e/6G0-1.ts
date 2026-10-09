@@ -1,12 +1,15 @@
 import { demiDroite } from '../../lib/2d/DemiDroite'
 import { droite } from '../../lib/2d/droites'
+import type { AllChoicesType } from '../../lib/customElements/ListeDeroulanteElement'
 import type { ObjetMathalea2D } from '../../lib/2d/ObjetMathalea2D'
 import { PointAbstrait, pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { amcConvert } from '../../lib/amc/amcBuilders'
-import { combinaisonListes } from '../../lib/outils/arrayOutils'
+import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { combinaisonListes, shuffle } from '../../lib/outils/arrayOutils'
 import { creerNomDePolygone } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -14,6 +17,7 @@ import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre = 'Utiliser la notation de droites, segments et demi-droites'
+export const interactifReady = true
 export const amcReady = true
 export const amcType = 'AMCOpen'
 
@@ -28,6 +32,22 @@ export const refs = {
   'fr-2016': ['6G10'],
   'fr-ch': ['9ES1A-1'],
 }
+type ReponseLigne = {
+  /** Valeur de la liste « la droite / le segment / la demi-droite » */
+  type: 'droite' | 'segment' | 'demi-droite'
+  /** Valeur de la liste des notations : `()`, `[]`, `[)` ou `(]` */
+  notation: '()' | '[]' | '[)' | '(]'
+  extremites: [string, string]
+}
+
+const CHOISIR = { label: 'Choisir', value: '' }
+
+const libellesType = {
+  droite: 'la droite',
+  segment: 'le segment',
+  'demi-droite': 'la demi-droite',
+}
+
 export default class NotationSegmentDroiteDemiDroite extends Exercice {
   constructor() {
     super()
@@ -46,6 +66,7 @@ export default class NotationSegmentDroiteDemiDroite extends Exercice {
       this.nbQuestions * 3,
     )
     let listeDeNomsDePolygones: string[] = []
+    const reponsesInteractives: ReponseLigne[][] = []
     for (
       let i = 0, texte, texteCorr, figure, enonceAMC, cpt = 0;
       i < this.nbQuestions && cpt < 50;
@@ -62,42 +83,56 @@ export default class NotationSegmentDroiteDemiDroite extends Exercice {
         type: number,
       ) => {
         let trait: ObjetMathalea2D, notation, typeLigne
+        let reponse: Omit<ReponseLigne, 'extremites'>
         switch (type) {
           case 1:
             trait = droite(A, B)
             notation = `$(${A.nom}${B.nom})$`
             typeLigne = 'la droite'
+            reponse = { type: 'droite', notation: '()' }
             break
           case 2:
             trait = demiDroite(A, B)
             notation = `$[${A.nom}${B.nom})$`
             typeLigne = 'la demi-droite'
+            reponse = { type: 'demi-droite', notation: '[)' }
             break
           case 3:
             trait = demiDroite(B, A)
-            notation = `$[${B.nom}${A.nom})$`
+            // Les listes déroulantes ne proposent que l'ordre des lettres du
+            // couple (A, B) : la demi-droite d'origine B s'y note (AB].
+            notation = this.interactif
+              ? `$(${A.nom}${B.nom}]$`
+              : `$[${B.nom}${A.nom})$`
             typeLigne = 'la demi-droite'
+            reponse = { type: 'demi-droite', notation: '(]' }
             break
           case 4:
           default:
             trait = segment(A, B)
             notation = `$[${A.nom}${B.nom}]$`
             typeLigne = 'le segment'
+            reponse = { type: 'segment', notation: '[]' }
             break
         }
-        return [trait, notation, typeLigne] as [ObjetMathalea2D, string, string]
+        return [
+          trait,
+          notation,
+          typeLigne,
+          { ...reponse, extremites: [A.nom, B.nom] },
+        ] as [ObjetMathalea2D, string, string, ReponseLigne]
       }
-      const [dAB, dABCorr, typeLigneAB] = creerDroiteDemiSegment(
+      const [dAB, dABCorr, typeLigneAB, reponseAB] = creerDroiteDemiSegment(
         A,
         B,
         listeDesTypesDeQuestions[3 * i],
       )
-      const [dAC, dACCorr, typeLigneAC] = creerDroiteDemiSegment(
+      const [dAC, dACCorr, typeLigneAC, reponseAC] = creerDroiteDemiSegment(
         A,
         C,
         listeDesTypesDeQuestions[3 * i + 1],
       )
-      const [dBC, dBCCorr, typeLigneBC] = creerDroiteDemiSegment(
+      const [dBC, dBCCorr, typeLigneBC, reponseBC] = creerDroiteDemiSegment(
         B,
         C,
         listeDesTypesDeQuestions[3 * i + 2],
@@ -105,7 +140,9 @@ export default class NotationSegmentDroiteDemiDroite extends Exercice {
       context.pixelsParCm = 20
       const labels = labelPoint(A, B, C)
 
-      texte = `Placer 3 points $${p[0]}$, $${p[1]}$ et $${p[2]}$ non alignés puis tracer... <br><br>`
+      texte = this.interactif
+        ? `Placer 3 points $${p[0]}$, $${p[1]}$ et $${p[2]}$ non alignés.<br><br>`
+        : `Placer 3 points $${p[0]}$, $${p[1]}$ et $${p[2]}$ non alignés puis tracer... <br><br>`
       figure = mathalea2d(
         {
           xmin: -1,
@@ -145,9 +182,50 @@ export default class NotationSegmentDroiteDemiDroite extends Exercice {
         // Si la question n'a jamais été posée, on en crée une autre
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
+        reponsesInteractives[i] = [reponseAB, reponseBC, reponseAC]
         i++
       }
       cpt++
+    }
+    if (this.interactif && context.isHtml) {
+      // Les mélanges des listes sont faits après tous les tirages de l'énoncé,
+      // pour que les figures soient les mêmes qu'en mode non interactif.
+      const typesPossibles = Object.entries(libellesType).map(
+        ([value, label]) => ({ value, label }),
+      )
+      for (let i = 0; i < this.nbQuestions; i++) {
+        const lignes = reponsesInteractives[i]
+        const dataOptions: Record<string, { choices: AllChoicesType }> = {}
+        const reponses: Record<string, { value: string }> = {}
+        const template: string[] = []
+        lignes.forEach((ligne, rang) => {
+          const [X, Y] = ligne.extremites
+          const notations = [
+            { value: '()', label: `(${X}${Y})` },
+            { value: '[]', label: `[${X}${Y}]` },
+            { value: '[)', label: `[${X}${Y})` },
+            { value: '(]', label: `(${X}${Y}]` },
+          ]
+          const champType = `field${2 * rang}`
+          const champNotation = `field${2 * rang + 1}`
+          template.push(`Tracer %{${champType}} %{${champNotation}}`)
+          dataOptions[champType] = {
+            choices: [CHOISIR, ...shuffle(typesPossibles)],
+          }
+          dataOptions[champNotation] = {
+            choices: [CHOISIR, ...shuffle(notations)],
+          }
+          reponses[champType] = { value: ligne.type }
+          reponses[champNotation] = { value: ligne.notation }
+        })
+        this.listeQuestions[i] += addMultiMathfield(this, i, {
+          dataTemplate: template.join('\n'),
+          dataOptions,
+        })
+        handleAnswers(this, i, reponses, {
+          formatInteractif: 'multi-mathfield',
+        })
+      }
     }
     listeQuestionsToContenu(this)
   }
