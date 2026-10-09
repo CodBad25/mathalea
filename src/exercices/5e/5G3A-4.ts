@@ -85,8 +85,13 @@ class ConstructionsSymetrieCentraleFigures extends Exercice {
       'Type de figures',
       '1 : Segment\n2 : Droite\n3 : Demi-droite\n4 : Cercle\n5 : Triangle\n6 : Mélange',
     ]
+    this.besoinFormulaire3Texte = [
+      'Formulation des questions',
+      "1 : Construire l'image de ... par la symétrie de centre ...\n2 : Construire le symétrique de ... par rapport au point ...",
+    ]
     this.sup = 1
     this.sup2 = '6'
+    this.sup3 = '1'
   }
 
   nouvelleVersion() {
@@ -111,6 +116,16 @@ class ConstructionsSymetrieCentraleFigures extends Exercice {
       defaut: 6,
       listeOfCase: ['segment', 'droite', 'demidroite', 'cercle', 'triangle'],
     }) as typeof this.typesDeQuestions
+    const formulations = gestionnaireFormulaireTexte({
+      nbQuestions: this.nbQuestions,
+      saisie: this.sup3,
+      min: 1,
+      max: 2,
+      melange: 0,
+      defaut: 1,
+      // Conserver les tirages des figures, même si les deux formulations sont choisies.
+      shuffle: false,
+    })
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 20;) {
       let nuage: { x: number; y: number }[] = []
       // On construit les points
@@ -130,7 +145,10 @@ class ConstructionsSymetrieCentraleFigures extends Exercice {
         this.labels[i].join('') + 'Q',
         true,
       )[0]
-      let enonce = `Construire par symétrie de centre $${labelCentre}$, l'image `
+      let enonce =
+        formulations[i] === 1
+          ? "Construire l'image "
+          : 'Construire le symétrique '
       // Les antécédents sont des points nommés
 
       const options = {}
@@ -190,7 +208,7 @@ class ConstructionsSymetrieCentraleFigures extends Exercice {
       switch (this.typesDeQuestions[i]) {
         case 'segment':
           this.nbPoints[i] = 2
-          enonce += `du segment $[${this.labels[i][0]}${this.labels[i][1]}]$.`
+          enonce += `du segment $[${this.labels[i][0]}${this.labels[i][1]}]$`
           this.figuresApiGeom![i].create('Segment', {
             point1: this.antecedentsApiGeom[i][0],
             point2: this.antecedentsApiGeom[i][1],
@@ -200,7 +218,7 @@ class ConstructionsSymetrieCentraleFigures extends Exercice {
           break
         case 'droite':
           this.nbPoints[i] = 2
-          enonce += `de la droite $(${this.labels[i][0]}${this.labels[i][1]})$.`
+          enonce += `de la droite $(${this.labels[i][0]}${this.labels[i][1]})$`
 
           this.figuresApiGeom![i].create('Line', {
             point1: this.antecedentsApiGeom[i][0],
@@ -211,7 +229,7 @@ class ConstructionsSymetrieCentraleFigures extends Exercice {
           break
         case 'demidroite':
           this.nbPoints[i] = 2
-          enonce += `de la demi-droite $(${this.labels[i][0]}${this.labels[i][1]})$.`
+          enonce += `de la demi-droite $[${this.labels[i][0]}${this.labels[i][1]})$`
           this.figuresApiGeom![i].create('Ray', {
             point1: this.antecedentsApiGeom[i][0],
             point2: this.antecedentsApiGeom[i][1],
@@ -221,7 +239,7 @@ class ConstructionsSymetrieCentraleFigures extends Exercice {
           break
         case 'cercle':
           this.nbPoints[i] = 2
-          enonce += `du cercle de centre $${this.labels[i][0]}$ passant par $${this.labels[i][1]}$.`
+          enonce += `du cercle de centre $${this.labels[i][0]}$ passant par $${this.labels[i][1]}$`
           this.figuresApiGeom![i].create('CircleCenterPoint', {
             center: this.antecedentsApiGeom[i][0],
             point: this.antecedentsApiGeom[i][1],
@@ -231,7 +249,7 @@ class ConstructionsSymetrieCentraleFigures extends Exercice {
           break
         case 'triangle':
           this.nbPoints[i] = 3
-          enonce += `du triangle $${this.labels[i][0]}${this.labels[i][1]}${this.labels[i][2]}$.`
+          enonce += `du triangle $${this.labels[i][0]}${this.labels[i][1]}${this.labels[i][2]}$`
           this.figuresApiGeom![i].create('Polygon', {
             points: [
               this.antecedentsApiGeom[i][0],
@@ -245,6 +263,10 @@ class ConstructionsSymetrieCentraleFigures extends Exercice {
         default:
           throw new Error('Type de question inconnu')
       }
+      enonce +=
+        formulations[i] === 1
+          ? ` par la symétrie de centre $${labelCentre}$.`
+          : ` par rapport au point $${labelCentre}$.`
       // On rend visible les points nécessaires à la figure.
       this.antecedentsApiGeom[i][0].isVisible = true
       this.antecedentsApiGeom[i][1].isVisible = true
