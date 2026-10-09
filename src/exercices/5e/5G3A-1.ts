@@ -52,7 +52,7 @@ export default class SymetrieCentralePoint extends ConstruireParSymetrie {
       width: (xmax - xmin) * pixelsPerUnit,
       height: (ymax - ymin) * pixelsPerUnit,
       pixelsPerUnit,
-      snapGrid: this.sup2 === 1,
+      snapGrid: this.sup2 < 3,
     })
     this.figuresApiGeom![i] = figure
     figure.options.pointDescriptionWithCoordinates = false
@@ -105,6 +105,13 @@ export default class SymetrieCentralePoint extends ConstruireParSymetrie {
         })
       }
     }
+    // Les points de l'énoncé ne doivent être ni supprimés ni déplacés
+    // (l'outil DRAG ignore `isFree`, on neutralise donc `moveTo`).
+    const fixeLePoint = (point: Point) => {
+      point.isDeletable = false
+      point.isFree = false
+      point.moveTo = () => {}
+    }
     const initialPointIds: string[] = []
     for (const point of [center, ...points]) {
       const initialPoint = figure.create('Point', {
@@ -113,17 +120,14 @@ export default class SymetrieCentralePoint extends ConstruireParSymetrie {
         label: point.nom,
         isFree: false,
       })
-      initialPoint.isDeletable = false
+      fixeLePoint(initialPoint)
       initialPointIds.push(initialPoint.id)
     }
     // Réappliquer les contraintes des points donnés après un undo/redo.
     figure.onChange(() => {
       for (const id of initialPointIds) {
         const point = figure.elements.get(id) as Point | undefined
-        if (point) {
-          point.isDeletable = false
-          point.isFree = false
-        }
+        if (point) fixeLePoint(point)
       }
     })
     figure.options.color = 'blue'
