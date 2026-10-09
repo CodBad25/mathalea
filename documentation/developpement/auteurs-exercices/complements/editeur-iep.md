@@ -79,6 +79,12 @@ conditions initiales. Les exercices n'ont donc pas besoin d'ajouter une figure
 `mathalea2d` séparée uniquement pour ce contexte. Si aucune condition initiale
 n'est fournie, aucun aperçu SVG n'est affiché.
 
+Quand l'éditeur HTML est interactif, il affiche aussi, sous cette figure, la liste
+repliable « Étapes déjà construites » qui décrit les conditions initiales. Quand
+cette liste n'apporte rien à l'élève (par exemple une grille de points nommés),
+passer `masquerEtapesInitiales: true` : seule la figure reste affichée et la
+numérotation des instructions de l'élève commence toujours à 1.
+
 Dans l'animation de l'éditeur, les instruments nécessaires au programme sont
 affichés dès le départ dans une zone de rangement en haut à droite du SVG. Après
 chaque instruction, l'éditeur les remet silencieusement dans cette zone avec une

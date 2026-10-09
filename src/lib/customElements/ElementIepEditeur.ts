@@ -263,6 +263,7 @@ export type EditeurIepOptions = {
   allowFullscreen?: boolean
   interactivityOn?: boolean
   masquerProgramme?: boolean
+  masquerEtapesInitiales?: boolean
   tailleLabelsPoints?: number
   verifyCallbackName?: string
   verifyCallback?: ElementIepVerificationCallback
@@ -3239,6 +3240,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     allowFullscreen = false,
     interactivityOn = true,
     masquerProgramme = false,
+    masquerEtapesInitiales = false,
     tailleLabelsPoints,
     verifyCallbackName,
     verifyCallback,
@@ -3289,6 +3291,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
       allowFullscreen,
       interactivityOn,
       masquerProgramme,
+      masquerEtapesInitiales,
       tailleLabelsPoints,
       verifyCallbackName: computedCallbackName,
     })
@@ -3408,6 +3411,14 @@ export class ElementIepEditeur extends MathaleaCustomElement {
    */
   private get masquerProgrammeActif(): boolean {
     return this.getAttribute('masquer-programme') === 'true'
+  }
+
+  /**
+   * Masque la liste « Étapes déjà construites » : la figure initiale reste affichée
+   * @attr {boolean} [masquer-etapes-initiales=false]
+   */
+  private get masquerEtapesInitialesActif(): boolean {
+    return this.getAttribute('masquer-etapes-initiales') === 'true'
   }
 
   private get tailleLabelsPoints(): number | undefined {
@@ -3810,7 +3821,11 @@ export class ElementIepEditeur extends MathaleaCustomElement {
   }
 
   private construireAideConditionsInitiales(): HTMLDetailsElement | undefined {
-    if (!this.interactivityOn || this.conditionsInitiales.length === 0) {
+    if (
+      !this.interactivityOn ||
+      this.masquerEtapesInitialesActif ||
+      this.conditionsInitiales.length === 0
+    ) {
       return undefined
     }
     const details = document.createElement('details')
@@ -4539,7 +4554,9 @@ export class ElementIepEditeur extends MathaleaCustomElement {
       vide.innerText =
         this.conditionsInitiales.length === 0
           ? 'Le programme est vide : ajoutez une première instruction (par exemple, placer deux points).'
-          : `Le programme contient déjà ${this.conditionsInitiales.length === 1 ? 'une instruction' : 'des instructions'}, vous pouvez ${this.conditionsInitiales.length === 1 ? 'la' : 'les'} consulter en déroulant "Étapes déjà construites". Ajoutez votre première instruction.`
+          : this.masquerEtapesInitialesActif
+            ? 'Le programme est vide : ajoutez une première instruction.'
+            : `Le programme contient déjà ${this.conditionsInitiales.length === 1 ? 'une instruction' : 'des instructions'}, vous pouvez ${this.conditionsInitiales.length === 1 ? 'la' : 'les'} consulter en déroulant "Étapes déjà construites". Ajoutez votre première instruction.`
       this.listeProgramme.appendChild(vide)
     }
     const programmeComplet = this.programmeComplet()

@@ -1,8 +1,11 @@
+import Figure from 'apigeom'
 import { Arc } from '../../lib/2d/Arc'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { carre } from '../../lib/2d/polygonesParticuliers'
 import { segment } from '../../lib/2d/segmentsVecteurs'
+import { labelPoint } from '../../lib/2d/textes'
+import { tracePoint } from '../../lib/2d/TracePoint'
 import { angleOriente } from '../../lib/2d/utilitairesGeometriques'
 import {
   addEditeurIep,
@@ -11,11 +14,15 @@ import {
   type InstructionIep,
   type TypeInstructionIep,
 } from '../../lib/customElements/ElementIepEditeur'
+import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
+import figureApigeom from '../../lib/figureApigeom'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 import { sortRandomlyLikeV8 } from '../../lib/outils/arrayOutils'
+import { listeQuestionsToContenu } from '../../modules/outils'
 
 export const interactifReady = true
 
@@ -48,6 +55,26 @@ const pointsDuCarre = [
   { nom: 'O', x: 6, y: 6 },
   { nom: 'P', x: 3, y: 6 },
 ]
+
+// Position du nom de chaque point, pour qu'il ne chevauche ni le cadre ni les arcs
+const positionsNomsPoints: Record<string, string> = {
+  J: 'above left',
+  I: 'above',
+  H: 'above',
+  G: 'above right',
+  F: 'right',
+  E: 'right',
+  D: 'below right',
+  C: 'below',
+  B: 'below',
+  A: 'below left',
+  L: 'left',
+  K: 'left',
+  M: 'below left',
+  N: 'below right',
+  O: 'above right',
+  P: 'above left',
+}
 
 const pointAPArtirDuNumero = (n: number) =>
   pointAbstrait(pointsDuCarre[n].x, pointsDuCarre[n].y)
@@ -280,7 +307,7 @@ function creerForme(): FormeDansLeCarre {
   return arcsAvecCentreEtSens
 }
 
-function traceShape(arcs: FormeDansLeCarre): string {
+function traceShape(arcs: FormeDansLeCarre, avecNomsDesPoints = false): string {
   const A = pointAbstrait(0, 0)
   const B = pointAbstrait(9, 0)
   const cadre = carre(A, B)
@@ -295,8 +322,63 @@ function traceShape(arcs: FormeDansLeCarre): string {
     const centre = pointAbstrait(arc.xCentre ?? 0, arc.yCentre ?? 0)
     objets.push(new Arc(E1, centre, angleOriente(E1, centre, E2)))
   }
+  if (avecNomsDesPoints) {
+    const pointsNommes = pointsDuCarre.map(({ nom, x, y }) =>
+      pointAbstrait(x, y, nom, positionsNomsPoints[nom]),
+    )
+    objets.push(tracePoint(...pointsNommes), labelPoint(...pointsNommes))
+  }
 
   return mathalea2d(Object.assign({}, fixeBordures(objets)), objets)
+}
+
+/**
+ * Clé d'un arc tracé : centre, point de départ et angle balayé (positif).
+ * Un arc parcouru dans le sens horaire est décrit à partir de son autre
+ * extrémité, pour que les deux sens de tracé donnent la même clé.
+ */
+function cleArcTrace(
+  centre: { x: number; y: number },
+  depart: { x: number; y: number },
+  angle: number,
+): string {
+  let debut = depart
+  if (angle < 0) {
+    const radians = (angle * Math.PI) / 180
+    const dx = depart.x - centre.x
+    const dy = depart.y - centre.y
+    debut = {
+      x: centre.x + dx * Math.cos(radians) - dy * Math.sin(radians),
+      y: centre.y + dx * Math.sin(radians) + dy * Math.cos(radians),
+    }
+  }
+  const arrondi = (n: number) => Math.round(n * 100) / 100 + 0
+  return `${arrondi(centre.x)};${arrondi(centre.y)}|${arrondi(debut.x)};${arrondi(debut.y)}|${Math.round(Math.abs(angle))}`
+}
+
+function arcsAttendusDansLeCarre(arcs: FormeDansLeCarre): string[] {
+  return arcs.map((arc) => {
+    const E1 = pointAPArtirDuNumero(arc.extremite1)
+    const E2 = pointAPArtirDuNumero(arc.extremite2)
+    const centre = pointAbstrait(arc.xCentre ?? 0, arc.yCentre ?? 0)
+    return cleArcTrace(centre, E1, angleOriente(E1, centre, E2))
+  })
+}
+
+type ArcApigeom = {
+  center: { x: number; y: number }
+  start: { x: number; y: number }
+  dynamicAngle: { value: number }
+}
+
+function arcsTracesDansFigure(figure: Figure): string[] {
+  return [...figure.elements.values()]
+    .filter((element) => element.type === 'ArcByCenterAndTwoPoints')
+    .map((element) => {
+      const arc = element as unknown as ArcApigeom
+      return cleArcTrace(arc.center, arc.start, arc.dynamicAngle.value)
+    })
+    .filter((cle, index, cles) => cles.indexOf(cle) === index)
 }
 
 export const titre = 'Reproduire une forme avec des arcs de cercles'
@@ -312,12 +394,22 @@ export const refs = {
  * @author Jean-Claude Lhote
  */
 export default class FormeDansLeCarreATracer extends Exercice {
+  arcsAttendus: string[][] = []
   constructor() {
     super()
     this.nbQuestions = 1
     this.nbQuestionsModifiable = false
+    this.besoinFormulaireNumerique = [
+      'Type d’exercice',
+      2,
+      '1 : Rédiger un programme de construction\n2 : Reproduire la forme',
+    ]
+    this.sup = 1
   }
+
   nouvelleVersion() {
+    this.figuresApiGeom = []
+    this.arcsAttendus = []
     const forme = creerForme()
     const conditionsInitiales: InstructionIep[] = [
       ...pointsDuCarre.map(({ nom, x, y }) => ({
@@ -341,29 +433,139 @@ export default class FormeDansLeCarreATracer extends Exercice {
       p2: pointsDuCarre[arc.extremite1].nom,
       p3: pointsDuCarre[arc.extremite2].nom,
     }))
-    const editeur = addEditeurIep(this, 0, {
-      conditionsInitiales,
-      instructionsDisponibles,
-      programmeAttendu,
-      verifyCallbackName: VERIFICATION_FORME_DANS_LE_CARRE_CALLBACK_NAME,
-    })
-    handleAnswers(
-      this,
-      0,
-      {
-        reponse: { value: JSON.stringify(programmeAttendu) },
-      },
-      { formatInteractif: 'alea-iep-editeur' },
-    )
-    this.listeQuestions[0] = `Reproduire la forme ci-dessous<br>${traceShape(forme)}${editeur}`
-
+    // La correction est générée avant l'énoncé : addEditeurIep() déclare le
+    // format interactif de la question, que figureApigeom() doit pouvoir remplacer.
     this.listeCorrections[0] = `Voici un programme de construction de la forme demandée :<br>
         ${addEditeurIep(this, 0, {
           id: `IepEditeur-corr-Ex${this.numeroExercice}Q0`,
           conditionsInitiales,
           interactivityOn: false,
+          masquerEtapesInitiales: true,
           programmeInitial: programmeAttendu,
           instructionsDisponibles,
         })}`
+    if (this.sup === 2) {
+      this.listeQuestions[0] = this.enonceReproduction(forme)
+    } else {
+      const consigne =
+        'Rédiger un programme de construction de la forme ci-dessous, en utilisant uniquement des arcs de cercle définis par leur centre et leurs deux extrémités, choisis parmi les points nommés.'
+      if (this.interactif) {
+        const editeur = addEditeurIep(this, 0, {
+          conditionsInitiales,
+          instructionsDisponibles,
+          programmeAttendu,
+          masquerEtapesInitiales: true,
+          verifyCallbackName: VERIFICATION_FORME_DANS_LE_CARRE_CALLBACK_NAME,
+        })
+        handleAnswers(
+          this,
+          0,
+          {
+            reponse: { value: JSON.stringify(programmeAttendu) },
+          },
+          { formatInteractif: 'alea-iep-editeur' },
+        )
+        this.listeQuestions[0] = `${consigne}<br>${traceShape(forme)}${editeur}`
+      } else {
+        this.listeQuestions[0] = `${consigne}<br>${traceShape(forme, true)}`
+      }
+    }
+
+    listeQuestionsToContenu(this)
+  }
+
+  /**
+   * Énoncé de la version « Reproduire la forme » : sur papier, l'élève trace la
+   * forme dans un carré de 9 cm ; en interactif, il la trace dans une figure
+   * apiGeom avec l'outil « arc de cercle de centre donné entre deux points ».
+   */
+  private enonceReproduction(forme: FormeDansLeCarre): string {
+    const i = 0
+    if (!this.interactif || !context.isHtml) {
+      return `Reproduire la forme ci-dessous dans un carré de $9\\text{ cm}$ de côté.<br>${traceShape(forme)}`
+    }
+    this.arcsAttendus[i] = arcsAttendusDansLeCarre(forme)
+    const figure = new Figure({
+      xMin: -1,
+      yMin: -1,
+      width: 440,
+      height: 440,
+      pixelsPerUnit: 40,
+    })
+    this.figuresApiGeom = [figure]
+    const pointsFigure = new Map(
+      pointsDuCarre.map(({ nom, x, y }) => [
+        nom,
+        figure.create('Point', {
+          x,
+          y,
+          label: nom,
+          shape: 'x',
+          isFree: false,
+          isDeletable: false,
+          labelDxInPixels: 8,
+          labelDyInPixels: 16,
+        }),
+      ]),
+    )
+    for (const [nom1, nom2] of [
+      ['A', 'D'],
+      ['D', 'G'],
+      ['G', 'J'],
+      ['J', 'A'],
+      ['B', 'I'],
+      ['C', 'H'],
+      ['L', 'E'],
+      ['K', 'F'],
+    ]) {
+      figure.create('Segment', {
+        point1: pointsFigure.get(nom1)!,
+        point2: pointsFigure.get(nom2)!,
+        color: 'gray',
+        isSelectable: false,
+        isDeletable: false,
+      })
+    }
+    figure.setToolbar({
+      tools: ['ARC_CENTER_TWO_POINTS', 'DRAG', 'REMOVE', 'UNDO', 'REDO'],
+      position: 'top',
+    })
+    const consigne =
+      'Reproduire la forme ci-dessous dans le carré. Pour tracer un arc de cercle, choisir l’outil arc de cercle, puis cliquer sur son centre, sur sa première extrémité et enfin sur sa seconde extrémité.'
+    return `${consigne}<br>${traceShape(forme)}${figureApigeom({
+      exercice: this,
+      i,
+      figure,
+      defaultAction: 'ARC_CENTER_TWO_POINTS',
+    })}`
+  }
+
+  correctionInteractive = (i: number) => {
+    const figure = this.figuresApiGeom?.[i]
+    if (figure === undefined) return 'KO'
+    if (this.answers == null) this.answers = {}
+    // Sauvegarde de la réponse pour Capytale
+    this.answers[figure.id] = figureAnswerJson(figure)
+    const arcsEleve = arcsTracesDansFigure(figure)
+    const arcsAttendus = this.arcsAttendus[i] ?? []
+    const nbArcsCorrects = arcsAttendus.filter((arc) =>
+      arcsEleve.includes(arc),
+    ).length
+    const nbArcsFaux = arcsEleve.filter(
+      (arc) => !arcsAttendus.includes(arc),
+    ).length
+    const isOk = nbArcsCorrects === arcsAttendus.length && nbArcsFaux === 0
+    const divFeedback = document.querySelector(
+      `#feedbackEx${this.numeroExercice}Q${i}`,
+    )
+    if (divFeedback != null) {
+      divFeedback.innerHTML = isOk
+        ? 'Bravo !'
+        : `${nbArcsCorrects} arc${nbArcsCorrects > 1 ? 's' : ''} sur ${arcsAttendus.length} ${nbArcsCorrects > 1 ? 'sont corrects' : 'est correct'}${nbArcsFaux > 0 ? ` et ${nbArcsFaux} arc${nbArcsFaux > 1 ? 's ne font' : ' ne fait'} pas partie de la forme` : ''}.`
+    }
+    figure.isDynamic = false
+    figure.divButtons.style.display = 'none'
+    figure.divUserMessage.style.display = 'none'
+    return isOk ? 'OK' : 'KO'
   }
 }

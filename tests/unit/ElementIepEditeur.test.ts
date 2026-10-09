@@ -6,6 +6,7 @@ import {
   type InstructionIep,
 } from '../../src/lib/customElements/ElementIepEditeur'
 import CreateurAnimationInstruments from '../../src/exercices/profs/P025'
+import FormeDansLeCarreATracer from '../../src/exercices/6e/6G2B-1'
 import { context } from '../../src/modules/context'
 
 describe('ElementIepEditeur intersections', () => {
@@ -677,5 +678,121 @@ describe('ElementIepEditeur step numbering', () => {
     expect(decrireInstruction(programme[5], programme, 3)).toBe(
       'Placer le point H, intersection de la droite de l’étape initiale 3 et de la perpendiculaire de l’étape 2.',
     )
+  })
+})
+
+describe('6G2B-1 forme avec des arcs de cercle', () => {
+  const renduQuestion = (interactif: boolean) => {
+    const htmlContextAvantTest = context.isHtml
+    context.isHtml = true
+    try {
+      const exercice = new FormeDansLeCarreATracer()
+      exercice.interactif = interactif
+      exercice.nouvelleVersion()
+      return exercice
+    } finally {
+      context.isHtml = htmlContextAvantTest
+    }
+  }
+
+  it('masque les étapes initiales dans l’éditeur interactif', () => {
+    const exercice = renduQuestion(true)
+    expect(exercice.listeQuestions[0]).toContain('<alea-iep-editeur')
+    expect(exercice.listeQuestions[0]).toContain(
+      'masquer-etapes-initiales="true"',
+    )
+  })
+
+  it('n’affiche pas l’éditeur dans l’énoncé non interactif', () => {
+    const exercice = renduQuestion(false)
+    expect(exercice.listeQuestions[0]).not.toContain('<alea-iep-editeur')
+    expect(exercice.listeQuestions[0]).toContain('<svg')
+    expect(exercice.listeCorrections[0]).toContain('<alea-iep-editeur')
+  })
+})
+
+describe('6G2B-1 version « Reproduire la forme »', () => {
+  type ArcProgramme = { p1: string; p2: string; p3: string }
+
+  const creerExercice = () => {
+    const htmlContextAvantTest = context.isHtml
+    context.isHtml = true
+    try {
+      const exercice = new FormeDansLeCarreATracer()
+      exercice.interactif = true
+      exercice.sup = 2
+      exercice.nouvelleVersion()
+      return exercice
+    } finally {
+      context.isHtml = htmlContextAvantTest
+    }
+  }
+
+  const programmeAttendu = (exercice: FormeDansLeCarreATracer) =>
+    JSON.parse(
+      (
+        exercice.listeCorrections[0].match(
+          /programme-initial="([^"]*)"/,
+        )?.[1] ?? '[]'
+      )
+        .replaceAll('&quot;', '"')
+        .replaceAll('&amp;', '&'),
+    ) as ArcProgramme[]
+
+  const pointsFigure = (exercice: FormeDansLeCarreATracer) => {
+    const elements = [...exercice.figuresApiGeom![0].elements.values()]
+    return (nom: string) =>
+      elements.find(
+        (e) => e.type === 'Point' && (e as { label?: string }).label === nom,
+      ) as unknown as { x: number; y: number }
+  }
+
+  const tracerArcs = (
+    exercice: FormeDansLeCarreATracer,
+    arcs: ArcProgramme[],
+  ) => {
+    const point = pointsFigure(exercice)
+    for (const { p1, p2, p3 } of arcs) {
+      exercice.figuresApiGeom![0].create('ArcByCenterAndTwoPoints', {
+        center: point(p1) as never,
+        start: point(p2) as never,
+        end: point(p3) as never,
+      })
+    }
+  }
+
+  it('remplace l’éditeur de programme par une figure apiGeom', () => {
+    const exercice = creerExercice()
+    expect(exercice.listeQuestions[0]).not.toContain('<alea-iep-editeur')
+    expect(exercice.figuresApiGeom).toHaveLength(1)
+  })
+
+  it('valide la forme tracée, quel que soit le sens de tracé des quarts de cercle', () => {
+    const exercice = creerExercice()
+    const point = pointsFigure(exercice)
+    tracerArcs(
+      exercice,
+      programmeAttendu(exercice).map(({ p1, p2, p3 }) => {
+        const [centre, debut, fin] = [point(p1), point(p2), point(p3)]
+        const estUnDemiCercle =
+          debut.x + fin.x === 2 * centre.x && debut.y + fin.y === 2 * centre.y
+        return estUnDemiCercle ? { p1, p2, p3 } : { p1, p2: p3, p3: p2 }
+      }),
+    )
+    expect(exercice.correctionInteractive(0)).toBe('OK')
+  })
+
+  it('refuse une forme incomplète ou avec un arc en trop', () => {
+    const incomplete = creerExercice()
+    tracerArcs(incomplete, programmeAttendu(incomplete).slice(1))
+    expect(incomplete.correctionInteractive(0)).toBe('KO')
+
+    const enTrop = creerExercice()
+    tracerArcs(enTrop, [
+      ...programmeAttendu(enTrop),
+      // N n'est jamais une extrémité des arcs de la forme
+      { p1: 'M', p2: 'L', p3: 'N' },
+    ])
+    expect(enTrop.correctionInteractive(0)).toBe('KO')
   })
 })
