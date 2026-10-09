@@ -445,4 +445,22 @@ export function addPossibleMultiLinesAnswer(
   )
 }
 
+/**
+ * Paramètre « Vérification » commun aux exercices qui proposent une réponse en
+ * plusieurs étapes, à associer à `baremeMultiLignes()`.
+ */
+export const besoinFormulaireVerificationMultiLignes: [string, number, string] =
+  ['Vérification (en interactif)', 2, '1 : À la fin\n2 : À chaque étape']
+
+/** Barème correspondant à la valeur du paramètre « Vérification ». */
+export function baremeMultiLignes(sup: unknown): BaremeMultiLignes {
+  return Number(sup) === 1 ? 'toutOuRien' : 'etapes'
+}
+
+/** Commentaire pour l'enseignant décrivant la réponse en plusieurs étapes. */
+export const commentaireMultiLignes = `En interactif, l'élève peut rédiger son calcul en plusieurs étapes : le bouton ⊕ ajoute une ligne. Chaque étape doit être égale à l'expression de départ, sous n'importe quelle forme.<br>
+Le paramètre « Vérification » propose deux modes :<br>
+- Vérification à la fin (1 point par question) : les étapes et le résultat sont corrigés à la validation. Le point n'est accordé que si le résultat et toutes les étapes sont justes. L'élève peut supprimer une ligne avant de valider.<br>
+- Vérification à chaque étape (2 points par question) : chaque ligne est corrigée dès son ajout et ne peut plus être modifiée. Une étape fausse est barrée et l'élève la corrige sur la ligne suivante. Il obtient 2 points si le résultat et toutes les étapes sont justes, 1 point si le résultat est juste malgré une étape fausse, 0 point si le résultat est faux.`
+
 registerMathaleaCustomElement(PossibleMultiLinesAnswerElement)

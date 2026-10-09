@@ -1,5 +1,10 @@
+import {
+  addPossibleMultiLinesAnswer,
+  baremeMultiLignes,
+  besoinFormulaireVerificationMultiLignes,
+  commentaireMultiLignes,
+} from '../../lib/customElements/PossibleMultiLinesAnswerElement'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { lettreDepuisChiffre } from '../../lib/outils/outilString'
 import FractionEtendue from '../../modules/FractionEtendue'
@@ -33,7 +38,10 @@ export default class FractionEtPriorites extends Exercice {
       'Nombres séparés par des tirets :\n1 : produit en premier\n2 : produit en deuxième sans piège\n3 : produit en deuxième avec piège\n4 : quotient en premier\n5 : quotient en deuxième sans piège\n6 : quotient en deuxième avec piège\n7 : Mélange',
     ]
     this.besoinFormulaire2CaseACocher = ['Présence de nombre relatifs', false]
+    this.besoinFormulaire3Numerique = besoinFormulaireVerificationMultiLignes
     this.sup = '3'
+    this.sup3 = 2
+    this.comment = commentaireMultiLignes
 
     this.correctionDetaillee = true
     this.correctionDetailleeDisponible = true
@@ -295,12 +303,19 @@ export default class FractionEtPriorites extends Exercice {
           // dernière étape on simplifie si c'est nécessaire après le switch car étape commune
           break
       }
-      texte += ajouteChampTexteMathLive(
-        this,
-        i,
-        KeyboardType.clavierDeBaseAvecFraction,
-        { texteAvant: '$=$' },
-      )
+      if (this.interactif) {
+        handleAnswers(this, i, {
+          reponse: {
+            value: reponse.texFractionSimplifiee,
+            options: { fractionIrreductible: true },
+          },
+        })
+        texte += addPossibleMultiLinesAnswer(this, i, {
+          prefix: `${lettreDepuisChiffre(i + 1)} =`,
+          style: KeyboardType.clavierDeBaseAvecFraction,
+          bareme: baremeMultiLignes(this.sup3),
+        })
+      }
 
       // La dernière étape de réduction est commune on la fait maintenant si besoin
       if (!reponse.estIrreductible) {
@@ -317,15 +332,6 @@ export default class FractionEtPriorites extends Exercice {
       ) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
-
-        if (this.interactif) {
-          handleAnswers(this, i, {
-            reponse: {
-              value: reponse.texFractionSimplifiee,
-              options: { fractionIrreductible: true },
-            },
-          })
-        }
         i++
       }
       cpt++

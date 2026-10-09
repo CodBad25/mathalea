@@ -156,6 +156,22 @@ En mode `etapes`, le helper remplace le `bareme` de la réponse pour annoncer
 2 points avant toute saisie. Hors HTML ou sans interactivité, le helper ne
 retourne rien.
 
+Pour laisser l'enseignant choisir le mode, le module exporte un paramètre et un
+commentaire communs, utilisés par tous les exercices concernés (4C11, 5N1G,
+4C23, 5N5B…) :
+
+```ts
+this.besoinFormulaire3Numerique = besoinFormulaireVerificationMultiLignes // 1 : À la fin, 2 : À chaque étape
+this.sup3 = 2
+this.comment = commentaireMultiLignes
+
+texte += addPossibleMultiLinesAnswer(this, i, {
+  prefix: 'A =',
+  style: KeyboardType.clavierDeBase,
+  bareme: baremeMultiLignes(this.sup3),
+})
+```
+
 ## Bouton de réponse prédéfinie
 
 À utiliser quand une réponse revient telle quelle et serait pénible à saisir au

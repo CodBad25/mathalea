@@ -1,9 +1,14 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { bleuMathalea } from '../../lib/colors'
+import {
+  addPossibleMultiLinesAnswer,
+  baremeMultiLignes,
+  besoinFormulaireVerificationMultiLignes,
+  commentaireMultiLignes,
+} from '../../lib/customElements/PossibleMultiLinesAnswerElement'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   choice,
   combinaisonListes,
@@ -82,6 +87,8 @@ export default class Priorites extends Exercice {
     ]
     this.besoinFormulaire3CaseACocher = ['Équilibre entre les questions']
     this.besoinFormulaire4CaseACocher = ['Inclure des divisions']
+    this.besoinFormulaire5Numerique = besoinFormulaireVerificationMultiLignes
+    this.comment = commentaireMultiLignes
     this.consigne = 'Calculer.'
     this.nbQuestions = 5
     this.nbCols = 2
@@ -90,6 +97,7 @@ export default class Priorites extends Exercice {
     this.sup2 = false
     this.sup3 = true
     this.sup4 = true
+    this.sup5 = 2
   }
 
   nouvelleVersion() {
@@ -422,11 +430,11 @@ export default class Priorites extends Exercice {
           texteCorr += `${lettreDepuisChiffre(i + 1)} = $${etape}$ <br>`
         })
       }
-      if (this.interactif && context.isHtml)
-        texte =
-          texte.substring(0, texte.length - 1) +
-          '~=$' +
-          ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)
+      texte += addPossibleMultiLinesAnswer(this, i, {
+        prefix: `${lettreDepuisChiffre(i + 1)} =`,
+        style: KeyboardType.clavierDeBase,
+        bareme: baremeMultiLignes(this.sup5),
+      })
       if (this.questionJamaisPosee(i, a, b, c)) {
         if (context.isAmc) {
           // On est en context AMC, on est passé par setReponse, pas de this.autoCorrection[i] !

@@ -1,6 +1,11 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import {
+  addPossibleMultiLinesAnswer,
+  baremeMultiLignes,
+  besoinFormulaireVerificationMultiLignes,
+  commentaireMultiLignes,
+} from '../../lib/customElements/PossibleMultiLinesAnswerElement'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   choice,
   combinaisonListes,
@@ -54,6 +59,9 @@ export default class ExerciceSubstituer extends Exercice {
       2,
       '1 : Multiplication par un facteur positif\n2 : Multiplication par un facteur relatif',
     ]
+    this.besoinFormulaire2Numerique = besoinFormulaireVerificationMultiLignes
+    this.sup2 = 2
+    this.comment = commentaireMultiLignes
 
     this.consigneModifiable = false
   }
@@ -150,18 +158,20 @@ export default class ExerciceSubstituer extends Exercice {
           reponse = k * x * x + k2 * x + k3
           break
       }
-      if (this.interactif) {
-        texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase, {
-          texteAvant: '$~=~$',
-        })
-      } else if (context.isAmc)
-        texte = 'Calculer ' + texte + ` pour $x=${x}$, $y=${y}$ et $z=${z}$.`
       handleAnswers(
         this,
         i,
         { reponse: { value: reponse } },
         { digits: 3, decimals: 0 },
       )
+      if (this.interactif) {
+        texte += addPossibleMultiLinesAnswer(this, i, {
+          prefix: `${lettreDepuisChiffre(i + 1)} =`,
+          style: KeyboardType.clavierDeBase,
+          bareme: baremeMultiLignes(this.sup2),
+        })
+      } else if (context.isAmc)
+        texte = 'Calculer ' + texte + ` pour $x=${x}$, $y=${y}$ et $z=${z}$.`
 
       if (this.questionJamaisPosee(i, texte)) {
         // Si la question n'a jamais été posée, on en créé une autre

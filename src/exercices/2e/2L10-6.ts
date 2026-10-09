@@ -1,8 +1,14 @@
+import {
+  addPossibleMultiLinesAnswer,
+  baremeMultiLignes,
+  besoinFormulaireVerificationMultiLignes,
+  commentaireMultiLignes,
+} from '../../lib/customElements/PossibleMultiLinesAnswerElement'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { lettreDepuisChiffre } from '../../lib/outils/outilString'
 import FractionEtendue from '../../modules/FractionEtendue'
 import {
   gestionnaireFormulaireTexte,
@@ -78,6 +84,9 @@ export default class CalculerExpressionPourDifferentesValeurs extends Exercice {
       'Nombres séparés par des tirets :\n1 : Entier positif\n2 : Entier négatif\n3 : Fraction\n4 : Racine carrée\n5 : Mélange',
     ]
     this.sup = 5
+    this.besoinFormulaire2Numerique = besoinFormulaireVerificationMultiLignes
+    this.sup2 = 2
+    this.comment = commentaireMultiLignes
   }
 
   nouvelleVersion() {
@@ -164,10 +173,10 @@ export default class CalculerExpressionPourDifferentesValeurs extends Exercice {
         ])
       }
 
+      const lettre = lettreDepuisChiffre(i + 1)
       let texte = 'Pour $x=' + xLatex + '$, calculer $' + expression + '$.'
       if (this.interactif) {
-        texte = 'Pour $x=' + xLatex + '$, $' + expression + '=$'
-        texte += ajouteChampTexteMathLive(this, i, KeyboardType.lycee)
+        texte = `Pour $x=${xLatex}$, calculer $${lettre}=${expression}$.`
       }
 
       let correction =
@@ -181,6 +190,11 @@ export default class CalculerExpressionPourDifferentesValeurs extends Exercice {
       correction += 'Le résultat est donc $' + miseEnEvidence(resultat) + '$.'
 
       handleAnswers(this, i, { reponse: { value: resultat } })
+      texte += addPossibleMultiLinesAnswer(this, i, {
+        prefix: `${lettre} =`,
+        style: KeyboardType.lycee,
+        bareme: baremeMultiLignes(this.sup2),
+      })
       if (this.questionJamaisPosee(i, a, b, c, xLatex)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = correction

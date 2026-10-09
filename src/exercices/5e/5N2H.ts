@@ -1,7 +1,12 @@
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import {
+  addPossibleMultiLinesAnswer,
+  baremeMultiLignes,
+  besoinFormulaireVerificationMultiLignes,
+  commentaireMultiLignes,
+} from '../../lib/customElements/PossibleMultiLinesAnswerElement'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   choice,
   combinaisonListes,
@@ -59,6 +64,7 @@ export default class ExerciceAdditionsDe5Relatifs extends Exercice {
     this.sup = 20
     this.sup3 = false
     this.sup2 = 1
+    this.sup4 = 2
     this.consigne = 'Calculer.'
     this.spacing = 2
     this.spacingCorr = context.isHtml ? 3 : 0.5
@@ -74,6 +80,8 @@ export default class ExerciceAdditionsDe5Relatifs extends Exercice {
       'Tous les nombres entre parenthèses \n2 : Seul les termes négatifs sont entre parenthèses \n3 : Écriture simplifiée',
     ]
     this.besoinFormulaire3CaseACocher = ['Avec des nombres décimaux']
+    this.besoinFormulaire4Numerique = besoinFormulaireVerificationMultiLignes
+    this.comment = commentaireMultiLignes
     // this.comment = "Si l'option « Avec des nombres décimaux » est activée, 2 fois sur 3 les nombres auront un chiffre après la virgule et une fois sur 3 un seul terme aura deux chiffres après la virgule."
   }
 
@@ -184,25 +192,26 @@ export default class ExerciceAdditionsDe5Relatifs extends Exercice {
         texte += `<br>$ ${lettreDepuisChiffre(i + 1)} =$`
       }
 
+      handleAnswers(
+        this,
+        i,
+        { reponse: { value: reponse } },
+        {
+          signe: true,
+          digits: Math.max(2, nombreDeChiffresDansLaPartieEntiere(reponse)),
+          decimals: 0,
+        },
+      )
       if (this.interactif && !context.isAmc) {
-        // Supprime le dernier caractère de texte et le remplace par = $
-        texte +=
-          `<br> $${lettreDepuisChiffre(i + 1)} = $ ` +
-          ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)
+        texte += addPossibleMultiLinesAnswer(this, i, {
+          prefix: `${lettreDepuisChiffre(i + 1)} =`,
+          style: KeyboardType.clavierDeBase,
+          bareme: baremeMultiLignes(this.sup4),
+        })
       }
 
       if (this.listeQuestions.indexOf(texte) === -1) {
         // Si la question n'a jamais été posée, on en créé une autre
-        handleAnswers(
-          this,
-          i,
-          { reponse: { value: reponse } },
-          {
-            signe: true,
-            digits: Math.max(2, nombreDeChiffresDansLaPartieEntiere(reponse)),
-            decimals: 0,
-          },
-        )
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++

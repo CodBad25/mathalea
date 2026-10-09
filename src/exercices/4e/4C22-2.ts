@@ -1,5 +1,10 @@
+import {
+  addPossibleMultiLinesAnswer,
+  baremeMultiLignes,
+  besoinFormulaireVerificationMultiLignes,
+  commentaireMultiLignes,
+} from '../../lib/customElements/PossibleMultiLinesAnswerElement'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   obtenirListeFractionsIrreductibles,
@@ -44,6 +49,9 @@ export default class ExerciceDiviserFractions extends Exercice {
       ' 1 : Fractions à numérateur et dénominateur positifs \n 2 : Fractions à numérateur et dénominateur relatifs',
     ]
     this.sup = 1 // Avec ou sans relatifs
+    this.besoinFormulaire2Numerique = besoinFormulaireVerificationMultiLignes
+    this.sup2 = 2
+    this.comment = commentaireMultiLignes
 
     this.consigne = 'Calculer et donner le résultat sous forme irréductible.'
     this.spacing = 2
@@ -170,17 +178,16 @@ export default class ExerciceDiviserFractions extends Exercice {
 
       reponse = fraction((signe === '-' ? -1 : 1) * a * d, b * c).simplifie()
       if (this.questionJamaisPosee(i, a, b, c, d, typesDeQuestions)) {
-        texte += ajouteChampTexteMathLive(
-          this,
-          i,
-          KeyboardType.clavierDeBaseAvecFraction,
-          { texteAvant: '$=$' },
-        )
         handleAnswers(this, i, {
           reponse: {
             value: reponse.toLatex(),
             options: { fractionIrreductible: true },
           },
+        })
+        texte += addPossibleMultiLinesAnswer(this, i, {
+          prefix: '=',
+          style: KeyboardType.clavierDeBaseAvecFraction,
+          bareme: baremeMultiLignes(this.sup2),
         })
 
         if (context.isAmc) {
