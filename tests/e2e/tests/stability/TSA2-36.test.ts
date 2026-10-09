@@ -27,14 +27,13 @@ it.each([
     expect(propositions).toHaveLength(4)
     const correct = propositions.filter((proposition) => proposition.statut)
     expect(correct).toHaveLength(1)
+    expect(propositions.at(-1)?.texte).toBe('Aucune de ces limites')
     expect(correct[0].texte).toContain(
-      direction === null
-        ? 'Aucune de ces limites.'
-        : `x\\to${direction}\\infty`,
+      direction === null ? 'Aucune de ces limites' : `x\\to${direction}\\infty`,
     )
     expect(
       propositions.some(
-        (proposition) => proposition.texte === 'Aucune de ces limites.',
+        (proposition) => proposition.texte === 'Aucune de ces limites',
       ),
     ).toBe(true)
   },
