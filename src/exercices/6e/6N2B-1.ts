@@ -3,7 +3,7 @@ import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
 import { arrondi } from '../../lib/outils/nombres'
-import { texNombre, texNombre2 } from '../../lib/outils/texNombre'
+import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
@@ -83,31 +83,31 @@ export default class PlacerLaVirgule extends Exercice {
       )
       nombre = arrondi(nombreentier * 10 ** exposant)
       resultat = arrondi(nombre * 10 ** coef)
-      texte = `$${texNombre2(nombre)} \\times ${texNombre2(arrondi(10 ** coef))}$`
+      texte = `$${texNombre(nombre)} \\times ${texNombre(arrondi(10 ** coef))}$`
       if (!this.interactif) {
-        texte += `$~~ = ~~\\phantom{......}${texNombre2(nombreentier)}$<br>`
+        texte += `$~~ = ~~\\phantom{......}${texNombre(nombreentier)}$<br>`
       }
-      texteCorr = `Quand on multiplie par $${texNombre2(arrondi(10 ** coef))}=${texFractionFromString(1, arrondi(10 ** -coef))}$, chaque chiffre prend une valeur $${texNombre(10 ** -coef)}$ fois plus petite.<br>`
+      texteCorr = `Quand on multiplie par $${texNombre(arrondi(10 ** coef))}=${texFractionFromString(1, arrondi(10 ** -coef))}$, chaque chiffre prend une valeur $${texNombre(10 ** -coef)}$ fois plus petite.<br>`
       texteCorr += `Le chiffre des unités se positionne donc dans les ${rang[3 + coef]} :<br>`
-      texteCorr += `$${texNombre2(nombre)} \\times ${texNombre2(arrondi(10 ** coef))} = ${miseEnEvidence(texNombre2(resultat))}$` // ${texNombre(Math.floor(resultat))}${miseEnEvidence(',')}${texNombre(resultat-Math.floor(resultat)).replace('0,','')}$`
+      texteCorr += `$${texNombre(nombre)} \\times ${texNombre(arrondi(10 ** coef))} = ${miseEnEvidence(texNombre(resultat))}$` // ${texNombre(Math.floor(resultat))}${miseEnEvidence(',')}${texNombre(resultat-Math.floor(resultat)).replace('0,','')}$`
 
       this.autoCorrection[i] = {}
       this.autoCorrection[i].enonce = `${texte}\n`
       this.autoCorrection[i].propositions = [
         {
-          texte: `$${texNombre2(resultat)}$`,
+          texte: `$${texNombre(resultat)}$`,
           statut: true,
         },
         {
-          texte: `$${texNombre2(arrondi(resultat / 10))}$`,
+          texte: `$${texNombre(arrondi(resultat / 10))}$`,
           statut: false,
         },
         {
-          texte: `$${texNombre2(arrondi(resultat * 10))}$`,
+          texte: `$${texNombre(arrondi(resultat * 10))}$`,
           statut: false,
         },
         {
-          texte: `$${texNombre2(arrondi(resultat / 100))}$`,
+          texte: `$${texNombre(arrondi(resultat / 100))}$`,
           statut: false,
         },
       ]

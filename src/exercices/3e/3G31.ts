@@ -17,7 +17,7 @@ import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
 import { creerNomDePolygone } from '../../lib/outils/outilString'
-import { texNombre2 } from '../../lib/outils/texNombre'
+import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -86,9 +86,9 @@ export default class CalculDAngle extends Exercice {
           ac = bc * Math.sin(Math.acos(ab / bc))
           if (this.level === 4 || this.sup) {
             ac = arrondi(ac, 1)
-            texte += `Le triangle $${nom}$ est rectangle en $${nom[0]}$ tel que $${nom[1] + nom[2]}=${texNombre2(bc)}\\text{ cm}$, $${nom[0] + nom[1]}=${texNombre2(ab)}\\text{ cm}$ et $${nom[0] + nom[2]}=${texNombre2(ac)}\\text{ cm}$.<br>`
+            texte += `Le triangle $${nom}$ est rectangle en $${nom[0]}$ tel que $${nom[1] + nom[2]}=${texNombre(bc)}\\text{ cm}$, $${nom[0] + nom[1]}=${texNombre(ab)}\\text{ cm}$ et $${nom[0] + nom[2]}=${texNombre(ac)}\\text{ cm}$.<br>`
           } else {
-            texte += `Le triangle $${nom}$ est rectangle en $${nom[0]}$ tel que $${nom[1] + nom[2]}=${texNombre2(bc)}\\text{ cm}$ et $${nom[0] + nom[1]}=${texNombre2(ab)}\\text{ cm}$.<br>`
+            texte += `Le triangle $${nom}$ est rectangle en $${nom[0]}$ tel que $${nom[1] + nom[2]}=${texNombre(bc)}\\text{ cm}$ et $${nom[0] + nom[1]}=${texNombre(ab)}\\text{ cm}$.<br>`
           }
           break
         case 'Asin':
@@ -96,7 +96,7 @@ export default class CalculDAngle extends Exercice {
           ac = randint(40, (bc - 2) * 10) / 10
           angleABC = Math.round((Math.asin(ac / bc) * 180) / Math.PI)
           ab = bc * Math.cos(Math.asin(ac / bc))
-          texte += `Le triangle $${nom}$ est rectangle en $${nom[0]}$ tel que $${nom[1] + nom[2]}=${texNombre2(bc)}\\text{ cm}$ et $${nom[0] + nom[2]}=${texNombre2(ac)}\\text{ cm}$.<br>`
+          texte += `Le triangle $${nom}$ est rectangle en $${nom[0]}$ tel que $${nom[1] + nom[2]}=${texNombre(bc)}\\text{ cm}$ et $${nom[0] + nom[2]}=${texNombre(ac)}\\text{ cm}$.<br>`
           break
         case 'Atan':
         default:
@@ -104,7 +104,7 @@ export default class CalculDAngle extends Exercice {
           ac = randint(40, 100) / 10
           angleABC = Math.round((Math.atan(ac / ab) * 180) / Math.PI)
           bc = ab / Math.cos(Math.atan(ac / ab))
-          texte += `Le triangle $${nom}$ est rectangle en $${nom[0]}$ tel que $${nom[0] + nom[1]}=${texNombre2(ab)}\\text{ cm}$ et  $${nom[0] + nom[2]}=${texNombre2(ac)}\\text{ cm}$.<br>`
+          texte += `Le triangle $${nom}$ est rectangle en $${nom[0]}$ tel que $${nom[0] + nom[1]}=${texNombre(ab)}\\text{ cm}$ et  $${nom[0] + nom[2]}=${texNombre(ac)}\\text{ cm}$.<br>`
           break
       }
 
@@ -169,7 +169,7 @@ export default class CalculDAngle extends Exercice {
       switch (choixRapportTrigo) {
         case 'Acos': // AB=BCxcos(B)
           texteBC = latexParPoint(
-            `${texNombre2(bc)} \\text{ cm}`,
+            `${texNombre(bc)} \\text{ cm}`,
             pLabelBC,
             'black',
             120,
@@ -177,7 +177,7 @@ export default class CalculDAngle extends Exercice {
             '',
           )
           texteAB = latexParPoint(
-            `${texNombre2(ab)} \\text{ cm}`,
+            `${texNombre(ab)} \\text{ cm}`,
             pLabelAB,
             'black',
             120,
@@ -188,7 +188,7 @@ export default class CalculDAngle extends Exercice {
             const pLabelAC = homothetie(mAC, mBC, 1 + 1.5 / longueur(mBC, mAC))
             pLabelAC.positionLabel = 'center'
             texteAC = latexParPoint(
-              `${texNombre2(ac)} \\text{ cm}`,
+              `${texNombre(ac)} \\text{ cm}`,
               pLabelAC,
               'black',
               120,
@@ -206,7 +206,7 @@ export default class CalculDAngle extends Exercice {
           pLabelAngle.positionLabel = 'center'
           texteAngle = latexParPoint('?', pLabelAngle, 'black', 50, 12, '')
           t3b = latexParPoint(
-            `${texNombre2(bc)} \\text{ cm}`,
+            `${texNombre(bc)} \\text{ cm}`,
             m3b,
             'black',
             120,
@@ -214,7 +214,7 @@ export default class CalculDAngle extends Exercice {
             '',
           )
           t2b = latexParPoint(
-            `${texNombre2(ab)} \\text{ cm}`,
+            `${texNombre(ab)} \\text{ cm}`,
             m1b,
             'black',
             120,
@@ -233,7 +233,7 @@ export default class CalculDAngle extends Exercice {
           break
         case 'Asin':
           texteBC = latexParPoint(
-            `${texNombre2(bc)} \\text{ cm}`,
+            `${texNombre(bc)} \\text{ cm}`,
             pLabelBC,
             'black',
             120,
@@ -241,7 +241,7 @@ export default class CalculDAngle extends Exercice {
             '',
           )
           texteAB = latexParPoint(
-            `${texNombre2(ac)} \\text{ cm}`,
+            `${texNombre(ac)} \\text{ cm}`,
             pLabelAC,
             'black',
             120,
@@ -257,7 +257,7 @@ export default class CalculDAngle extends Exercice {
           pLabelAngle.positionLabel = 'center'
           texteAngle = latexParPoint('?', pLabelAngle, 'black', 100, 12, '')
           t3b = latexParPoint(
-            `${texNombre2(bc)} \\text{ cm}`,
+            `${texNombre(bc)} \\text{ cm}`,
             m3b,
             'black',
             120,
@@ -265,7 +265,7 @@ export default class CalculDAngle extends Exercice {
             '',
           )
           t2b = latexParPoint(
-            `${texNombre2(ac)} \\text{ cm}`,
+            `${texNombre(ac)} \\text{ cm}`,
             m2b,
             'black',
             120,
@@ -284,7 +284,7 @@ export default class CalculDAngle extends Exercice {
         case 'Atan':
         default:
           texteAngle = latexParPoint(
-            `${texNombre2(ab)} \\text{ cm}`,
+            `${texNombre(ab)} \\text{ cm}`,
             pLabelAB,
             'black',
             120,
@@ -292,7 +292,7 @@ export default class CalculDAngle extends Exercice {
             '',
           )
           texteAB = latexParPoint(
-            `${texNombre2(ac)} \\text{ cm}`,
+            `${texNombre(ac)} \\text{ cm}`,
             pLabelAC,
             'black',
             120,
@@ -309,7 +309,7 @@ export default class CalculDAngle extends Exercice {
           texteBC = latexParPoint('?', pLabelAngle, 'black', 100, 12, '')
 
           t1b = latexParPoint(
-            `${texNombre2(ab)} \\text{ cm}`,
+            `${texNombre(ab)} \\text{ cm}`,
             m1b,
             'black',
             120,
@@ -317,7 +317,7 @@ export default class CalculDAngle extends Exercice {
             '',
           )
           t2b = latexParPoint(
-            `${texNombre2(ac)} \\text{ cm}`,
+            `${texNombre(ac)} \\text{ cm}`,
             m2b,
             'black',
             120,
@@ -398,15 +398,15 @@ export default class CalculDAngle extends Exercice {
           texteCorr += `Dans le triangle $${nom}$ rectangle en $${nom[0]}$, le cosinus de l'angle $\\widehat{${nom}}$ est défini par :<br>`
           texteCorr += `$\\cos\\left(\\widehat{${nom}}\\right)=\\dfrac{${nom[0] + nom[1]}}{${nom[1] + nom[2]}}$.<br>`
           texteCorr += 'Avec les données numériques :<br>'
-          texteCorr += `$\\cos\\left(\\widehat{${nom}}\\right)=${texFractionFromString(texNombre2(ab), texNombre2(bc))}$<br>`
-          texteCorr += `$\\widehat{${nom}}=\\arccos\\left(${texFractionFromString(texNombre2(ab), texNombre2(bc))}\\right)`
+          texteCorr += `$\\cos\\left(\\widehat{${nom}}\\right)=${texFractionFromString(texNombre(ab), texNombre(bc))}$<br>`
+          texteCorr += `$\\widehat{${nom}}=\\arccos\\left(${texFractionFromString(texNombre(ab), texNombre(bc))}\\right)`
           break
         case 'Asin':
           texteCorr += `Dans le triangle $${nom}$ rectangle en $${nom[0]}$, le sinus de l'angle $\\widehat{${nom}}$ est défini par :<br>`
           texteCorr += `$\\sin \\left(\\widehat{${nom}}\\right)=${texFractionFromString(nom[0] + nom[2], nom[1] + nom[2])}$<br>`
           texteCorr += 'Avec les données numériques :<br>'
-          texteCorr += `$\\sin\\left(\\widehat{${nom}}\\right)=${texFractionFromString(texNombre2(ac), texNombre2(bc))}$<br>`
-          texteCorr += `$\\widehat{${nom}}=\\arcsin\\left(${texFractionFromString(texNombre2(ac), texNombre2(bc))}\\right)`
+          texteCorr += `$\\sin\\left(\\widehat{${nom}}\\right)=${texFractionFromString(texNombre(ac), texNombre(bc))}$<br>`
+          texteCorr += `$\\widehat{${nom}}=\\arcsin\\left(${texFractionFromString(texNombre(ac), texNombre(bc))}\\right)`
 
           break
         case 'Atan':
@@ -414,8 +414,8 @@ export default class CalculDAngle extends Exercice {
           texteCorr += `Dans le triangle $${nom}$ rectangle en $${nom[0]}$, la tangente de l'angle $\\widehat{${nom}}$ est défini par :<br>`
           texteCorr += `$\\tan \\left(\\widehat{${nom}}\\right)=${texFractionFromString(nom[0] + nom[2], nom[0] + nom[1])}$<br>`
           texteCorr += 'Avec les données numériques :<br>'
-          texteCorr += `$\\tan\\left(\\widehat{${nom}}\\right)=${texFractionFromString(texNombre2(ac), texNombre2(ab))}$<br>`
-          texteCorr += `$\\widehat{${nom}}=\\arctan\\left(${texFractionFromString(texNombre2(ac), texNombre2(ab))}\\right)`
+          texteCorr += `$\\tan\\left(\\widehat{${nom}}\\right)=${texFractionFromString(texNombre(ac), texNombre(ab))}$<br>`
+          texteCorr += `$\\widehat{${nom}}=\\arctan\\left(${texFractionFromString(texNombre(ac), texNombre(ab))}\\right)`
           break
       }
       texteCorr += `\\approx ${miseEnEvidence(angleABC)}^\\circ$<br>`

@@ -148,7 +148,7 @@ export default class CalculDeLongueur extends Exercice {
           ab = bc * Math.cos(angleABCr)
           ac = bc * Math.sin(angleABCr)
           /* if (this.level === 4) {
-            texteAMC += `Dans le triangle $${nom}$ rectangle en $${nom[0]}$,<br> $${nom[1] + nom[2]}=${texNombre2(bc)}\\text{ ${unite}}$, $${nom[0] + nom[2]} = ${texNombre2(arrondi(ac, 1))}\\text{ ${unite}}$ et $\\widehat{${nom}}=${angleABC}^\\circ$.<br>`
+            texteAMC += `Dans le triangle $${nom}$ rectangle en $${nom[0]}$,<br> $${nom[1] + nom[2]}=${texNombre(bc)}\\text{ ${unite}}$, $${nom[0] + nom[2]} = ${texNombre(arrondi(ac, 1))}\\text{ ${unite}}$ et $\\widehat{${nom}}=${angleABC}^\\circ$.<br>`
           } else { */
           texteAMC += `Dans le triangle $${nom}$ rectangle en $${nom[0]}$,<br> $${nom[1] + nom[2]}=${bc}\\text{ ${unite}}$ et $\\widehat{${nom}}=${angleABC}^\\circ$.<br>`
           // }
@@ -176,7 +176,7 @@ export default class CalculDeLongueur extends Exercice {
           bc = ab / Math.cos(angleABCr)
           ac = bc * Math.sin(angleABCr)
           /* if (this.level === 4) {
-            texteAMC += `Dans le triangle $${nom}$ rectangle en $${nom[0]}$,<br> $${nom[0] + nom[1]}=${texNombre2(ab)}\\text{ ${unite}}$, $${nom[0] + nom[2]} = ${texNombre2(arrondi(ac, 1))}\\text{ ${unite}}$  et $\\widehat{${nom}}=${angleABC}^\\circ$.<br>`
+            texteAMC += `Dans le triangle $${nom}$ rectangle en $${nom[0]}$,<br> $${nom[0] + nom[1]}=${texNombre(ab)}\\text{ ${unite}}$, $${nom[0] + nom[2]} = ${texNombre(arrondi(ac, 1))}\\text{ ${unite}}$  et $\\widehat{${nom}}=${angleABC}^\\circ$.<br>`
           } else { */
           texteAMC += `Dans le triangle $${nom}$ rectangle en $${nom[0]}$,<br> $${nom[0] + nom[1]}=${ab}\\text{ ${unite}}$ et $\\widehat{${nom}}=${angleABC}^\\circ$.<br>`
           //  }
@@ -268,7 +268,7 @@ export default class CalculDeLongueur extends Exercice {
           /*  if (this.level === 4) {
             const mAC = milieu(A, C)
             const tAC = latexParPoint(
-              `${texNombre2(arrondi(ac, 1))} \\text{ ${unite}}`,
+              `${texNombre(arrondi(ac, 1))} \\text{ ${unite}}`,
               mAC,
               'black',
               120,

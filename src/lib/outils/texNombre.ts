@@ -108,46 +108,6 @@ export function texNombre(
 }
 
 /**
- * Renvoie un nombre dans le format français (séparateur de classes) pour la partie entière comme pour la partie décimale
- * @author Rémi Angot
- */
-export function texNombre2(nb: number) {
-  if (typeof nb === 'string') {
-    window.notify("texNombre2 appelé avec un string à la place d'un nombre", {
-      nombre: nb,
-    })
-  }
-  let nombre = stringNombre(nb)
-  const rangVirgule = nombre.indexOf(',')
-  let partieEntiere
-  if (rangVirgule !== -1) {
-    partieEntiere = nombre.substring(0, rangVirgule)
-  } else {
-    partieEntiere = nombre
-  }
-  let partieDecimale = ''
-  if (rangVirgule !== -1) {
-    partieDecimale = nombre.substring(rangVirgule + 1)
-  }
-
-  for (let i = partieEntiere.length - 3; i > 0; i -= 3) {
-    partieEntiere =
-      partieEntiere.substring(0, i) + '\\,' + partieEntiere.substring(i)
-  }
-  for (let i = 3; i < partieDecimale.length; i += 5) {
-    partieDecimale =
-      partieDecimale.substring(0, i) + '\\,' + partieDecimale.substring(i)
-    i += 12
-  }
-  if (partieDecimale === '') {
-    nombre = partieEntiere
-  } else {
-    nombre = partieEntiere + ',' + partieDecimale
-  }
-  return nombre
-}
-
-/**
  * Renvoie un nombre dans le format français (séparateur de classes)
  * Fonctionne sans le mode maths contrairement à texNombre()
  * insereEspaceDansNombre fonctionne peut-être mieux

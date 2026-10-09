@@ -5,7 +5,7 @@ import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
-import { texNombre, texNombre2 } from '../../lib/outils/texNombre'
+import { texNombre } from '../../lib/outils/texNombre'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
@@ -85,42 +85,42 @@ export default class DiviserPar001 extends Exercice {
           texte = remplisLesBlancs(
             this,
             i,
-            `%{champ1} ~\\div~ ${texNombre2(10 ** coefficient)}${sp(2)}~=~${sp(2)}${texNombre2(resultat)}`,
+            `%{champ1} ~\\div~ ${texNombre(10 ** coefficient)}${sp(2)}~=~${sp(2)}${texNombre(resultat)}`,
             KeyboardType.numbersSpace,
           )
           if (this.correctionDetaillee) {
-            texteCorr = `Quand on divise par $${texNombre2(10 ** coefficient)}=${texFractionFromString(1, 10 ** -coefficient)}$, cela revient à multiplier par $${texNombre2(10 ** -coefficient)}$.<br>`
+            texteCorr = `Quand on divise par $${texNombre(10 ** coefficient)}=${texFractionFromString(1, 10 ** -coefficient)}$, cela revient à multiplier par $${texNombre(10 ** -coefficient)}$.<br>`
             texteCorr += `Le chiffre des unités se positionne donc dans les ${rang[3 + coefficient]} :<br>`
           }
-          texteCorr += `$${miseEnEvidence(texNombre2(nombre))} ~\\div~ ${texNombre2(10 ** coefficient)}${sp(2)}=${sp(2)}${texNombre2(resultat)}$.`
+          texteCorr += `$${miseEnEvidence(texNombre(nombre))} ~\\div~ ${texNombre(10 ** coefficient)}${sp(2)}=${sp(2)}${texNombre(resultat)}$.`
           reponse = texNombre(nombre, 6)
           break
         case 3:
           texte = remplisLesBlancs(
             this,
             i,
-            `${texNombre2(nombre)}  ~\\div~ ${texNombre2(10 ** coefficient)}${sp(2)} ~=~ %{champ1}`,
+            `${texNombre(nombre)}  ~\\div~ ${texNombre(10 ** coefficient)}${sp(2)} ~=~ %{champ1}`,
             KeyboardType.numbersSpace,
           )
           if (this.correctionDetaillee) {
-            texteCorr = `Quand on divise par $${texNombre2(10 ** coefficient)}~=~${texFractionFromString(1, 10 ** -coefficient)}$, cela revient à multiplier par $${texNombre2(10 ** -coefficient)}$.<br>`
+            texteCorr = `Quand on divise par $${texNombre(10 ** coefficient)}~=~${texFractionFromString(1, 10 ** -coefficient)}$, cela revient à multiplier par $${texNombre(10 ** -coefficient)}$.<br>`
             texteCorr += `Le chiffre des unités se positionne donc dans les ${rang[3 + coefficient]} :<br>`
           }
-          texteCorr += `$${texNombre2(nombre)} ~\\div~ ${texNombre2(10 ** coefficient)}${sp(2)}~=~${sp(2)}${miseEnEvidence(texNombre2(resultat))}$`
+          texteCorr += `$${texNombre(nombre)} ~\\div~ ${texNombre(10 ** coefficient)}${sp(2)}~=~${sp(2)}${miseEnEvidence(texNombre(resultat))}$`
           reponse = texNombre(resultat, 6)
           break
         case 2:
           texte = remplisLesBlancs(
             this,
             i,
-            `${texNombre2(nombre)}  ~\\div~ %{champ1}${sp(2)} ~=~ ${sp(2)}${texNombre2(resultat)}`,
+            `${texNombre(nombre)}  ~\\div~ %{champ1}${sp(2)} ~=~ ${sp(2)}${texNombre(resultat)}`,
             KeyboardType.numbersSpace,
           )
           if (this.correctionDetaillee) {
-            texteCorr = `Quand on divise par $${texNombre2(10 ** coefficient)}=${texFractionFromString(1, 10 ** -coefficient)}$, cela revient à multiplier par $${texNombre2(10 ** -coefficient)}$.<br>`
+            texteCorr = `Quand on divise par $${texNombre(10 ** coefficient)}=${texFractionFromString(1, 10 ** -coefficient)}$, cela revient à multiplier par $${texNombre(10 ** -coefficient)}$.<br>`
             texteCorr += `Le chiffre des unités se positionne donc dans les ${rang[3 + coefficient]} :<br>`
           }
-          texteCorr += `$${texNombre2(nombre)} ~\\div~ ${miseEnEvidence(texNombre2(10 ** coefficient))}${sp(2)}~=~${sp(2)}${texNombre2(resultat)}$.`
+          texteCorr += `$${texNombre(nombre)} ~\\div~ ${miseEnEvidence(texNombre(10 ** coefficient))}${sp(2)}~=~${sp(2)}${texNombre(resultat)}$.`
           reponse = texNombre(10 ** coefficient, 6)
           break
       }

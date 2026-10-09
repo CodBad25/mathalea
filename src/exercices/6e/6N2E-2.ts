@@ -2,7 +2,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { arrondi } from '../../lib/outils/nombres'
-import { texNombre2 } from '../../lib/outils/texNombre'
+import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
@@ -62,29 +62,29 @@ export default class MultiplicationMentalDecimaux extends Exercice {
           a = 10 * randint(1, 9) + randint(1, 9)
           b = 10 * randint(1, 9) + randint(1, 9)
           texte += `Calcul : $${a} + ${b}$.`
-          texteCorr += `$${a} + ${b}=${miseEnEvidence(texNombre2(arrondi(a + b)))}$`
+          texteCorr += `$${a} + ${b}=${miseEnEvidence(texNombre(arrondi(a + b)))}$`
 
           this.autoCorrection[i] = {}
           this.autoCorrection[i].enonce = `${texte}\n`
           this.autoCorrection[i].propositions = [
             {
-              texte: `$${texNombre2(arrondi(a + b))}$`,
+              texte: `$${texNombre(arrondi(a + b))}$`,
               statut: true,
             },
             {
-              texte: `$${texNombre2(arrondi(a * b))}$`,
+              texte: `$${texNombre(arrondi(a * b))}$`,
               statut: false,
             },
             {
-              texte: `$${texNombre2(arrondi((a + b) / 10))}$`,
+              texte: `$${texNombre(arrondi((a + b) / 10))}$`,
               statut: false,
             },
             {
-              texte: `$${texNombre2(arrondi(10 * (a + b)))}$`,
+              texte: `$${texNombre(arrondi(10 * (a + b)))}$`,
               statut: false,
             },
             {
-              texte: `$${texNombre2(arrondi(a + b + 1))}$`,
+              texte: `$${texNombre(arrondi(a + b + 1))}$`,
               statut: false,
             },
           ]
@@ -98,28 +98,28 @@ export default class MultiplicationMentalDecimaux extends Exercice {
           a = 10 * randint(1, 9) + randint(1, 9)
           b = 10 * randint(1, 9) + randint(1, 9)
           texte += `Calcul : $${a} \\times ${b}$.`
-          texteCorr += `$${a} \\times ${b}=${miseEnEvidence(texNombre2(arrondi(a * b)))}$`
+          texteCorr += `$${a} \\times ${b}=${miseEnEvidence(texNombre(arrondi(a * b)))}$`
           this.autoCorrection[i] = {}
           this.autoCorrection[i].enonce = `${texte}\n`
           this.autoCorrection[i].propositions = [
             {
-              texte: `$${texNombre2(a * b)}$`,
+              texte: `$${texNombre(a * b)}$`,
               statut: true,
             },
             {
-              texte: `$${texNombre2(10 * a * b)}$`,
+              texte: `$${texNombre(10 * a * b)}$`,
               statut: false,
             },
             {
-              texte: `$${texNombre2((a * b) / 10)}$`,
+              texte: `$${texNombre((a * b) / 10)}$`,
               statut: false,
             },
             {
-              texte: `$${texNombre2(a + b)}$`,
+              texte: `$${texNombre(a + b)}$`,
               statut: false,
             },
             {
-              texte: `$${texNombre2(a * b + 1)}$`,
+              texte: `$${texNombre(a * b + 1)}$`,
               statut: false,
             },
           ]
@@ -140,29 +140,29 @@ export default class MultiplicationMentalDecimaux extends Exercice {
             100 * randint(0, 9, [3, 4, 5, 6, 7]) +
             10 * randint(0, 9) +
             randint(0, 9)
-          texte += `Calcul : $${texNombre2(a / 100)} + ${texNombre2(b / 100)}$.`
-          texteCorr += ` $${texNombre2(a / 100)} + ${texNombre2(b / 100)}=${miseEnEvidence(texNombre2(arrondi(a / 100 + b / 100)))}$.`
+          texte += `Calcul : $${texNombre(a / 100)} + ${texNombre(b / 100)}$.`
+          texteCorr += ` $${texNombre(a / 100)} + ${texNombre(b / 100)}=${miseEnEvidence(texNombre(arrondi(a / 100 + b / 100)))}$.`
           this.autoCorrection[i] = {}
           this.autoCorrection[i].enonce = `${texte}\n`
           this.autoCorrection[i].propositions = [
             {
-              texte: `$${texNombre2(arrondi((a + b) / 100))}$`,
+              texte: `$${texNombre(arrondi((a + b) / 100))}$`,
               statut: true,
             },
             {
-              texte: `$${texNombre2(arrondi((a * b) / 100))}$`,
+              texte: `$${texNombre(arrondi((a * b) / 100))}$`,
               statut: false,
             },
             {
-              texte: `$${texNombre2(arrondi((a + b) / 1000))}$`,
+              texte: `$${texNombre(arrondi((a + b) / 1000))}$`,
               statut: false,
             },
             {
-              texte: `$${texNombre2(arrondi((10 * (a + b)) / 100))}$`,
+              texte: `$${texNombre(arrondi((10 * (a + b)) / 100))}$`,
               statut: false,
             },
             {
-              texte: `$${texNombre2(arrondi((a + b + 1) / 100))}$`,
+              texte: `$${texNombre(arrondi((a + b + 1) / 100))}$`,
               statut: false,
             },
           ]
@@ -185,29 +185,29 @@ export default class MultiplicationMentalDecimaux extends Exercice {
             100 * randint(1, 9, [3, 4, 5, 6, 7]) +
             10 * randint(1, 9) +
             randint(0, 9)
-          texte += `Calcul : $${texNombre2(a / 100)} \\times ${texNombre2(b / 100)}$.`
-          texteCorr += `$${texNombre2(a / 100)} \\times ${texNombre2(b / 100)}=${miseEnEvidence(texNombre2(arrondi((a * b) / 10000)))}$.`
+          texte += `Calcul : $${texNombre(a / 100)} \\times ${texNombre(b / 100)}$.`
+          texteCorr += `$${texNombre(a / 100)} \\times ${texNombre(b / 100)}=${miseEnEvidence(texNombre(arrondi((a * b) / 10000)))}$.`
           this.autoCorrection[i] = {}
           this.autoCorrection[i].enonce = `${texte}\n`
           this.autoCorrection[i].propositions = [
             {
-              texte: `$${texNombre2(arrondi((a * b) / 10000))}$`,
+              texte: `$${texNombre(arrondi((a * b) / 10000))}$`,
               statut: true,
             },
             {
-              texte: `$${texNombre2(arrondi((10 * a * b) / 10000))}$`,
+              texte: `$${texNombre(arrondi((10 * a * b) / 10000))}$`,
               statut: false,
             },
             {
-              texte: `$${texNombre2(arrondi((a * b) / 100000))}$`,
+              texte: `$${texNombre(arrondi((a * b) / 100000))}$`,
               statut: false,
             },
             {
-              texte: `$${texNombre2(arrondi((a + b) / 100))}$`,
+              texte: `$${texNombre(arrondi((a + b) / 100))}$`,
               statut: false,
             },
             {
-              texte: `$${texNombre2(arrondi((a * b + 1) / 10000))}$`,
+              texte: `$${texNombre(arrondi((a * b + 1) / 10000))}$`,
               statut: false,
             },
           ]
