@@ -128,12 +128,12 @@ async function action(page: Page, description: string) {
   } else {
     logDebug('Pas de bouton « Nouvel énoncé » (exercice non aléatoire)')
   }
-  const buttonZoom = page.locator(
-    '#setupButtonsBar > div > div:nth-child(2) > button',
-  )
-  const buttonZoomMoins = page.locator(
-    '#setupButtonsBar > div > div:nth-child(1) > button',
-  )
+  const buttonZoom = page.getByRole('button', {
+    name: 'Augmenter la taille du texte',
+  })
+  const buttonZoomMoins = page.getByRole('button', {
+    name: 'Réduire la taille du texte',
+  })
   const zParam = new URL(page.url()).searchParams.get('z')
   const z = zParam === null || zParam === '' ? 1 : Number(zParam)
   log('Zoom')
