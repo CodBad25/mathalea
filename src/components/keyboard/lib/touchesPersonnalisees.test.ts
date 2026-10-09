@@ -4,6 +4,7 @@ import {
   blocsDeTouches,
   enregistreTouchesPersonnalisees,
   litTouchesPersonnalisees,
+  ordonneChiffresEnLigne,
   toucheDepuisCle,
 } from './touchesPersonnalisees'
 
@@ -40,6 +41,46 @@ describe('touches personnalisées', () => {
     const table = keys as Record<string, { display: string; insert?: string }>
     expect(table[noms[0]]).toEqual({ display: '$u_n$', insert: 'u_n' })
     expect(table[noms[1]].insert).toBe('#@^{#0}')
+  })
+
+  it('ordonne un pavé numérique en ligne sans modifier le pavé ni les autres touches', () => {
+    const touches = [
+      '7',
+      '8',
+      '9',
+      '4',
+      '5',
+      '6',
+      '1',
+      '2',
+      '3',
+      '0',
+      ',',
+      'u_n',
+    ]
+    const noms = enregistreTouchesPersonnalisees(touches)
+    expect(ordonneChiffresEnLigne(noms)).toEqual(
+      enregistreTouchesPersonnalisees([
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+        '0',
+        ',',
+        'u_n',
+      ]),
+    )
+    expect(noms).toEqual(enregistreTouchesPersonnalisees(touches))
+  })
+
+  it('préserve les sélections de chiffres et les touches numériques à plusieurs chiffres', () => {
+    const noms = enregistreTouchesPersonnalisees(['3', '2', '1', '10', 'x'])
+    expect(ordonneChiffresEnLigne(noms)).toEqual(noms)
   })
 
   it('regroupe les touches en blocs', () => {

@@ -279,6 +279,7 @@ export function remplisLesBlancs(
   content: string,
   classes: string = '',
   blanc = '\\ldots',
+  { dataKeys }: Pick<OptionsChamp, 'dataKeys'> = {},
 ) {
   let mfeValue = ''
   let resteContent = content
@@ -325,6 +326,7 @@ export function remplisLesBlancs(
       className: classe,
       dataKeyboard,
       content: mfeValue,
+      dataKeys,
     })}<span id="resultatCheckEx${exercice.numeroExercice}Q${question}"></span>${ajouteFeedback(exercice, question)}`
   }
   if (mfeValue === '') return ''

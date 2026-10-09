@@ -98,6 +98,11 @@ passer une liste de listes : chaque sous-liste forme un bloc.
 }
 ```
 
+Quand un bloc personnalisé contient les dix chiffres, le mode réduit les
+présente dans l'ordre `1 2 3 4 5 6 7 8 9 0`, comme les claviers standards.
+Le mode pavé conserve l'ordre déclaré dans `dataKeys`, ainsi que les autres
+touches et les sélections de chiffres incomplètes.
+
 Chaque touche est décrite par une chaîne :
 
 - un nom de raccourci prédéfini (`POW`, `SQRT`, `VECT`, `SIGMA`,
@@ -112,6 +117,26 @@ Les raccourcis disponibles et cette mécanique vivent dans
 `src/components/keyboard/lib/touchesPersonnalisees.ts`. Le clavier lit ces
 touches dans l'attribut `data-keys` du champ au moment où il prend le focus :
 elles changent donc d'une question à l'autre.
+
+Pour un texte à trous, passer ces mêmes touches dans le sixième argument de
+`remplisLesBlancs()`. Pour afficher uniquement les touches demandées, choisir
+`KeyboardType.clavierEntierementPersonnalisable` (aucun bloc prédéfini) :
+
+```ts
+texte += remplisLesBlancs(
+  this,
+  i,
+  'u_n=%{champ1}',
+  KeyboardType.clavierEntierementPersonnalisable,
+  '\\ldots',
+  {
+    dataKeys: [
+      ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ','],
+      ['+', '-', '\\times', 'n'],
+    ],
+  },
+)
+```
 
 ## Calcul en plusieurs étapes
 
