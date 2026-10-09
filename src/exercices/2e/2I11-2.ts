@@ -15,6 +15,7 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
+import { gcd } from '../../lib/outils/primalite'
 import { texNombre } from '../../lib/outils/texNombre'
 import FractionEtendue from '../../modules/FractionEtendue'
 export const titre = "Compléter et utiliser un tableau d'effectif"
@@ -41,11 +42,16 @@ export default class TableauProportion extends Exercice {
       'Types de questions',
       'nombres séparés par des tirets\n1 : Tableau à compléter \n2 : Tableau à utiliser\n3 : Mélange',
     ]
+    this.besoinFormulaire2CaseACocher = [
+      'Sans calculatrice (tableau à utiliser)',
+      false,
+    ]
 
     this.spacing = context.isHtml ? 1.5 : 2
     this.spacingCorr = context.isHtml ? 1 : 2
     this.nbQuestions = 1
     this.sup = 2
+    this.sup2 = false
 
     this.listeAvecNumerotation = true
     this.exoCustomResultat = true
@@ -129,6 +135,37 @@ export default class TableauProportion extends Exercice {
         // Calculer les pourcentages pour l'énoncé
         pourcF = arrondi((totalF * 100) / total, 0)
         pourcT = arrondi((totalT * 100) / total, 0)
+      } else if (this.sup2) {
+        // Sans calculatrice : effectifs choisis pour que les trois fractions demandées
+        // se simplifient en fractions irréductibles de dénominateur au plus 12.
+        // Les valeurs sont construites pour les garçons, puis échangées avec les filles si besoin.
+        total = choice([120, 150, 160, 180, 200, 240, 300, 360, 400])
+        const estSimplifiable = (n: number, d: number) =>
+          gcd(n, d) > 1 && d / gcd(n, d) <= 12
+        const candidats: [number, number, number][] = []
+        for (let x = 1; x < total; x++) {
+          if (!estSimplifiable(x, total)) continue
+          for (let t = Math.ceil(0.25 * total); t <= 0.45 * total; t++) {
+            if (x < 0.3 * t || x > 0.75 * t || !estSimplifiable(x, t)) continue
+            for (let s = Math.ceil(0.4 * total); s <= 0.6 * total; s++) {
+              if (s <= x || !estSimplifiable(x, s) || total - s - (t - x) <= 0)
+                continue
+              if (new Set([x / total, x / t, x / s]).size < 3) continue
+              candidats.push([x, t, s])
+            }
+          }
+        }
+        ;[GAetT, totalT, totalGA] = choice(candidats)
+        totalF = total - totalGA
+        totalG = total - totalT
+        GAetG = totalGA - GAetT
+        FetT = totalT - GAetT
+        FetG = totalF - FetT
+        pourcGA = arrondi((totalGA * 100) / total, 0)
+        pourcG = arrondi((totalG * 100) / total, 0)
+        pourcGAetG = arrondi((GAetG * 100) / total, 0)
+        pourcF = arrondi((totalF * 100) / total, 0)
+        pourcT = arrondi((totalT * 100) / total, 0)
       } else {
         // Pour le cas "utiliser le tableau", on peut utiliser l'ancienne méthode
         total = choice([240, 280, 320, 342, 360, 420, 450, 480])
@@ -151,6 +188,12 @@ export default class TableauProportion extends Exercice {
         pourcT = arrondi((totalT * 100) / total, 0)
       }
       const choix = choice([true, false])
+      if (this.sup2 && typesDeQuestions === 2 && choix) {
+        // Les valeurs ont été construites pour les garçons : on échange les colonnes
+        ;[GAetG, FetG] = [FetG, GAetG]
+        ;[GAetT, FetT] = [FetT, GAetT]
+        ;[totalGA, totalF] = [totalF, totalGA]
+      }
       let texte = ''
       let texteCorr = ''
 
@@ -191,7 +234,7 @@ export default class TableauProportion extends Exercice {
       switch (typesDeQuestions) {
         case 1: // tableau à compléter
           texte = `${choixEnonce[0]}`
-          texte += '<br> Compléter le tableau suivant :<br><br>'
+          texte += '<br> Compléter le tableau suivant :<br>'
           if (this.interactif) {
             const tableauVide =
               AddTabDbleEntryMathlive.convertTclToTableauMathlive(
@@ -220,7 +263,7 @@ export default class TableauProportion extends Exercice {
             )
           }
           texteCorr = `${choixEnonce[1]}`
-          texteCorr += 'On en déduit le tableau suivant : <br> <br>'
+          texteCorr += 'On en déduit le tableau suivant : <br> '
           texteCorr += tableauColonneLigne(
             ['~', '\\text{Garçons}', '\\text{Filles}', '\\text{Total}'],
             [
@@ -264,7 +307,7 @@ export default class TableauProportion extends Exercice {
           break
         case 2: // tableau à utiliser
           texte = `Dans un lycée, on compte $${total}$ élèves en classe de première.<br>
-        Ils sont répartis selon le tableau suivant :<br><br> `
+        Ils sont répartis selon le tableau suivant :<br> `
           texte += tableauColonneLigne(
             ['~', '\\text{Garçons}', '\\text{Filles}', '\\text{Total}'],
             [
@@ -284,6 +327,69 @@ export default class TableauProportion extends Exercice {
               `${total}`,
             ],
           )
+          if (this.sup2) {
+            const eleves = choix ? 'filles' : 'garçons'
+            const effectif = choix ? FetT : GAetT
+            const effectifSexe = choix ? totalF : totalGA
+            const proportions = [
+              {
+                question: `Quelle est la proportion de ${eleves} en première technologique parmi les élèves de ce lycée ?`,
+                debutCorr: `La proportion de ${eleves} en première technologique parmi les élèves de ce lycée est donnée par le quotient :`,
+                den: total,
+              },
+              {
+                question: `Quelle est la proportion de ${eleves} en première technologique parmi les élèves en première technologique ?`,
+                debutCorr: `La proportion de ${eleves} en première technologique parmi les élèves en première technologique est donnée par le quotient :`,
+                den: totalT,
+              },
+              {
+                question: `Quelle est la proportion de ${eleves} en première technologique parmi les ${eleves} ?`,
+                debutCorr: `La proportion de ${eleves} en première technologique parmi les ${eleves} est donnée par le quotient :`,
+                den: effectifSexe,
+              },
+            ]
+            texte += addMultiMathfield(this, i, {
+              dataTemplate: `Donner les réponses sous la forme de fractions irréductibles.
+  ${proportions.map((p, k) => `${String.fromCharCode(97 + k)}) ${p.question}${this.interactif ? '\n  ' : ' '}%{champ${k + 1}}`).join('\n  ')}`,
+              dataOptions: {
+                champ1: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
+                champ2: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
+                champ3: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
+              },
+            })
+            const reponses = proportions.map((p) =>
+              new FractionEtendue(effectif, p.den).simplifie(),
+            )
+            handleAnswers(
+              this,
+              i,
+              {
+                bareme: toutAUnPoint,
+                champ1: {
+                  value: reponses[0].texFraction,
+                  options: { fractionIrreductible: true },
+                },
+                champ2: {
+                  value: reponses[1].texFraction,
+                  options: { fractionIrreductible: true },
+                },
+                champ3: {
+                  value: reponses[2].texFraction,
+                  options: { fractionIrreductible: true },
+                },
+              },
+              { formatInteractif: 'multi-mathfield' },
+            )
+            texteCorr = proportions
+              .map((p, k) => {
+                const k2 = gcd(effectif, p.den)
+                const f = reponses[k]
+                return `${numAlpha(k)} ${p.debutCorr}<br>
+            $\\dfrac{${effectif}}{${p.den}}=\\dfrac{${f.num}\\times ${k2}}{${f.den}\\times ${k2}}=${miseEnEvidence(f.texFraction)}$.`
+              })
+              .join('<br>')
+            break
+          }
           texte += addMultiMathfield(this, i, {
             dataTemplate: `a) Quelle est la proportion de ${choix ? 'filles' : 'garçons'} en première technologique parmi les élèves de ce lycée ?
   Sous la forme d'une fraction : %{champ1}
