@@ -1,6 +1,11 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import {
+  addPossibleMultiLinesAnswer,
+  baremeMultiLignes,
+  besoinFormulaireVerificationMultiLignes,
+  commentaireMultiLignes,
+} from '../../lib/customElements/PossibleMultiLinesAnswerElement'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -49,6 +54,9 @@ export default class CalculerUneExpressionSimple extends Exercice {
     this.sup3 = 8
     this.besoinFormulaire4CaseACocher = ['Avec uniquement la lettre $x$']
     this.sup4 = true
+    this.besoinFormulaire5Numerique = besoinFormulaireVerificationMultiLignes
+    this.sup5 = 2
+    this.comment = commentaireMultiLignes
   }
 
   nouvelleVersion() {
@@ -160,9 +168,12 @@ export default class CalculerUneExpressionSimple extends Exercice {
       }
       texte = `Calculer $${lettreDepuisChiffre(i + 1)} = ${expression}$, pour $${inconnue} = ${x}$.`
       if (this.interactif) {
-        texte += `<br>$${lettreDepuisChiffre(i + 1)} = $`
-        texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)
         handleAnswers(this, i, { reponse: { value: answer } })
+        texte += addPossibleMultiLinesAnswer(this, i, {
+          prefix: `${lettreDepuisChiffre(i + 1)} =`,
+          style: KeyboardType.clavierDeBase,
+          bareme: baremeMultiLignes(this.sup5),
+        })
       }
       if (this.questionJamaisPosee(i, texte)) {
         this.listeQuestions[i] = texte

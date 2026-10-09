@@ -1,7 +1,12 @@
 import { bleuMathalea } from '../../lib/colors'
+import {
+  addPossibleMultiLinesAnswer,
+  baremeMultiLignes,
+  besoinFormulaireVerificationMultiLignes,
+  commentaireMultiLignes,
+} from '../../lib/customElements/PossibleMultiLinesAnswerElement'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif' // fonction qui va préparer l'analyse de la saisie
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive' // fonctions de mise en place des éléments interactifs
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { lettreDepuisChiffre } from '../../lib/outils/outilString'
@@ -40,8 +45,9 @@ export default class nomExercice extends Exercice {
     this.sup = '1-2-3'
     this.besoinFormulaire2Numerique = ['Résulat maximum', 10000] // 10000 car listeNombresPremiersStrictJusqua renvoie un tableau de premiers inférieurs à 10000
     this.sup2 = 200
-    this.comment =
-      "Résultat maximum : Il s'agit de produire des expressions dont le résulat est inférieur au maximum. Si ce maximum est trop petit il sera fixé à 50."
+    this.besoinFormulaire3Numerique = besoinFormulaireVerificationMultiLignes
+    this.sup3 = 2
+    this.comment = `Résultat maximum : Il s'agit de produire des expressions dont le résulat est inférieur au maximum. Si ce maximum est trop petit il sera fixé à 50.<br><br>${commentaireMultiLignes}`
   }
 
   nouvelleVersion() {
@@ -160,14 +166,16 @@ export default class nomExercice extends Exercice {
         resultat = evalueArbre(tree.root)
         tree = undefined
       }
-      texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, {
-        texteAvant: `<br>$${lettre} = $`,
-      })
       handleAnswers(this, i, {
         reponse: {
           value: resultat,
           options: { nombreDecimalSeulement: true },
         },
+      })
+      texte += addPossibleMultiLinesAnswer(this, i, {
+        prefix: `${lettre} =`,
+        style: KeyboardType.clavierDeBase,
+        bareme: baremeMultiLignes(this.sup3),
       })
       if (resultat < ResultatMmax && this.questionJamaisPosee(i, texte)) {
         this.listeQuestions[i] = texte

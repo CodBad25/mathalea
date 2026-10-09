@@ -1,7 +1,12 @@
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
+import {
+  addPossibleMultiLinesAnswer,
+  baremeMultiLignes,
+  besoinFormulaireVerificationMultiLignes,
+  commentaireMultiLignes,
+} from '../../lib/customElements/PossibleMultiLinesAnswerElement'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   choice,
   combinaisonListes,
@@ -59,6 +64,9 @@ export default class SommeOuProduitFractions extends Exercice {
       "Avec l'écriture simplifiée de la fraction résultat",
     ]
     this.sup2 = true
+    this.besoinFormulaire3Numerique = besoinFormulaireVerificationMultiLignes
+    this.sup3 = 2
+    this.comment = commentaireMultiLignes
     this.correctionDetailleeDisponible = true // booléen qui indique si une correction détaillée est disponible.
     this.correctionDetaillee = false
     this.listeAvecNumerotation = false
@@ -375,19 +383,16 @@ export default class SommeOuProduitFractions extends Exercice {
         }
       }
       texteCorr += '<br>'
-      texte += ajouteChampTexteMathLive(
-        this,
-        i,
-        KeyboardType.clavierDeBaseAvecFraction,
-        {
-          texteAvant: `<br>$${lettre}=$`,
-        },
-      )
       handleAnswers(this, i, {
         reponse: {
           value: new FractionEtendue(num, den).texFraction,
           options: { fractionEgale: true },
         },
+      })
+      texte += addPossibleMultiLinesAnswer(this, i, {
+        prefix: `${lettre} =`,
+        style: KeyboardType.clavierDeBaseAvecFraction,
+        bareme: baremeMultiLignes(this.sup3),
       })
 
       // Si la question n'a jamais été posée, on l'enregistre

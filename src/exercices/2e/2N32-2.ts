@@ -1,6 +1,11 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import {
+  addPossibleMultiLinesAnswer,
+  baremeMultiLignes,
+  besoinFormulaireVerificationMultiLignes,
+  commentaireMultiLignes,
+} from '../../lib/customElements/PossibleMultiLinesAnswerElement'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { lettreDepuisChiffre } from '../../lib/outils/outilString'
@@ -64,6 +69,9 @@ export default class CalculsComplexesFractions extends Exercice {
 3 : Somme de produits
 4 : Mélange`,
     ]
+    this.besoinFormulaire2Numerique = besoinFormulaireVerificationMultiLignes
+    this.sup2 = 2
+    this.comment = commentaireMultiLignes
   }
 
   nouvelleVersion() {
@@ -180,13 +188,6 @@ export default class CalculsComplexesFractions extends Exercice {
       ) {
         const nom = lettreDepuisChiffre(i + 1)
         let texte = `$${nom}=${expression}$`
-        texte += ajouteChampTexteMathLive(
-          this,
-          i,
-          KeyboardType.clavierDeBaseAvecFraction,
-          { texteAvant: '$=$' },
-        )
-
         const resultat = reponse.simplifie()
         const texteCorr =
           `$\\begin{aligned}${nom}&=${expressionCorrection || expression}${commentairePremiereEtape}\\\\` +
@@ -198,6 +199,11 @@ export default class CalculsComplexesFractions extends Exercice {
             value: resultat.texFSD,
             options: { fractionIrreductible: true },
           },
+        })
+        texte += addPossibleMultiLinesAnswer(this, i, {
+          prefix: `${nom} =`,
+          style: KeyboardType.clavierDeBaseAvecFraction,
+          bareme: baremeMultiLignes(this.sup2),
         })
 
         this.listeQuestions[i] = texte

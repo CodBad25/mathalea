@@ -1,4 +1,10 @@
 import {
+  addPossibleMultiLinesAnswer,
+  baremeMultiLignes,
+  besoinFormulaireVerificationMultiLignes,
+  commentaireMultiLignes,
+} from '../../lib/customElements/PossibleMultiLinesAnswerElement'
+import {
   lireFormulaireComplexe,
   serialiseFormulaireComplexe,
   valeursParDefaut,
@@ -6,7 +12,6 @@ import {
 } from '../../lib/formulaireComplexe'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { shuffle } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -136,6 +141,9 @@ export default class ExerciceSommesAlgebriquesDeFractions2nde extends Exercice {
       leSuperFormulaire,
       valeursParDefaut(leSuperFormulaire),
     )
+    this.besoinFormulaire2Numerique = besoinFormulaireVerificationMultiLignes
+    this.sup2 = 2
+    this.comment = commentaireMultiLignes
   }
 
   choixDenominateurs(choix: string) {
@@ -168,7 +176,10 @@ export default class ExerciceSommesAlgebriquesDeFractions2nde extends Exercice {
     }
   }
 
-  uneSommeOuDifferenceDeDeuxFractions(choixDenominateurs: string, lettre: string) {
+  uneSommeOuDifferenceDeDeuxFractions(
+    choixDenominateurs: string,
+    lettre: string,
+  ) {
     // Les deux dénominateurs de départ doivent déjà être distincts : sinon,
     // pour un dénominateur premier (2, 3, 5...), la seule façon de rester
     // non entier est de garder ce même dénominateur des deux côtés, ce qui
@@ -238,7 +249,14 @@ export default class ExerciceSommesAlgebriquesDeFractions2nde extends Exercice {
     let calcul = `\\begin{aligned}${lettre}&=${f1.texFSD} ${signe1} ${f2.texFraction} ${signe2} ${f3.texFraction}\\\\\n&=`
     const cm = ppcmListe([f1.den, f2.den, f3.den])
     if (cm === f1.den && cm === f2.den && cm === f3.den) {
-      calcul += calculeSomme3Fractions(f1, f2, f3, resultatFinal, signe1, signe2)
+      calcul += calculeSomme3Fractions(
+        f1,
+        f2,
+        f3,
+        resultatFinal,
+        signe1,
+        signe2,
+      )
     } else {
       calcul += `${f1.reduire(cm / f1.den).texFSD} ${signe1} ${
         f2.reduire(cm / f2.den).texFraction
@@ -259,7 +277,10 @@ export default class ExerciceSommesAlgebriquesDeFractions2nde extends Exercice {
       resultat: resultatFinal,
     }
   }
-  uneSommeOuDifferenceDeTroisFractions(choixDenominateurs: string, lettre: string) {
+  uneSommeOuDifferenceDeTroisFractions(
+    choixDenominateurs: string,
+    lettre: string,
+  ) {
     const denominateurs = this.choixDenominateurs(choixDenominateurs)
     let f1: FractionEtendue
     let f2: FractionEtendue
@@ -294,10 +315,22 @@ export default class ExerciceSommesAlgebriquesDeFractions2nde extends Exercice {
     let f3: FractionEtendue
     let f4: FractionEtendue
     do {
-      f1 = fraction(randint(1, 9, denominateurs[0]), denominateurs[0]).simplifie()
-      f2 = fraction(randint(1, 9, denominateurs[1]), denominateurs[1]).simplifie()
-      f3 = fraction(randint(1, 9, denominateurs[2]), denominateurs[2]).simplifie()
-      f4 = fraction(randint(1, 9, denominateurs[3]), denominateurs[3]).simplifie()
+      f1 = fraction(
+        randint(1, 9, denominateurs[0]),
+        denominateurs[0],
+      ).simplifie()
+      f2 = fraction(
+        randint(1, 9, denominateurs[1]),
+        denominateurs[1],
+      ).simplifie()
+      f3 = fraction(
+        randint(1, 9, denominateurs[2]),
+        denominateurs[2],
+      ).simplifie()
+      f4 = fraction(
+        randint(1, 9, denominateurs[3]),
+        denominateurs[3],
+      ).simplifie()
     } while (f1.estEntiere && f2.estEntiere && f3.estEntiere && f4.estEntiere)
     const signe1 = ['+', '-'][randint(0, 1)]
     const signe2 = ['+', '-'][randint(0, 1)]
@@ -389,18 +422,17 @@ export default class ExerciceSommesAlgebriquesDeFractions2nde extends Exercice {
             ))
           break
       }
-      texte += ajouteChampTexteMathLive(
-        this,
-        i,
-        KeyboardType.clavierDeBaseAvecFraction,
-        { texteAvant: '<br><br>' },
-      )
       if (this.questionJamaisPosee(i, texteCorr)) {
         handleAnswers(this, i, {
           reponse: {
             value: resultat.texFractionSimplifiee,
             options: { fractionSimplifiee: true },
           },
+        })
+        texte += addPossibleMultiLinesAnswer(this, i, {
+          prefix: `${lettre} =`,
+          style: KeyboardType.clavierDeBaseAvecFraction,
+          bareme: baremeMultiLignes(this.sup2),
         })
         this.listeQuestions.push(texte)
         this.listeCorrections.push(texteCorr)

@@ -1,4 +1,9 @@
-import { addPossibleMultiLinesAnswer } from '../../lib/customElements/PossibleMultiLinesAnswerElement'
+import {
+  addPossibleMultiLinesAnswer,
+  baremeMultiLignes,
+  besoinFormulaireVerificationMultiLignes,
+  commentaireMultiLignes,
+} from '../../lib/customElements/PossibleMultiLinesAnswerElement'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
@@ -66,10 +71,7 @@ export default class PrioritesEtRelatifs extends Exercice {
     super()
 
     this.consigne = 'Calculer.'
-    this.comment = `En interactif, l'élève peut rédiger son calcul en plusieurs étapes : le bouton ⊕ ajoute une ligne. Chaque étape doit être égale à l'expression de départ, sous n'importe quelle forme.<br>
-Le paramètre « Vérification » propose deux modes :<br>
-- Vérification à la fin (1 point par question) : les étapes et le résultat sont corrigés à la validation. Le point n'est accordé que si le résultat et toutes les étapes sont justes. L'élève peut supprimer une ligne avant de valider.<br>
-- Vérification à chaque étape (2 points par question) : chaque ligne est corrigée dès son ajout et ne peut plus être modifiée. Une étape fausse est barrée et l'élève la corrige sur la ligne suivante. Il obtient 2 points si le résultat et toutes les étapes sont justes, 1 point si le résultat est juste malgré une étape fausse, 0 point si le résultat est faux.`
+    this.comment = commentaireMultiLignes
     this.spacing = 2
     this.nbQuestions = 6
     this.nbCols = 2
@@ -86,11 +88,7 @@ Le paramètre « Vérification » propose deux modes :<br>
       'Présentation des corrections en ligne',
       false,
     ]
-    this.besoinFormulaire3Numerique = [
-      'Vérification (en interactif)',
-      2,
-      '1 : À la fin\n2 : À chaque étape',
-    ]
+    this.besoinFormulaire3Numerique = besoinFormulaireVerificationMultiLignes
     this.listeAvecNumerotation = false
   }
 
@@ -529,7 +527,7 @@ Le paramètre « Vérification » propose deux modes :<br>
       texte += addPossibleMultiLinesAnswer(this, i, {
         prefix: `${lettreDepuisChiffre(i + 1)} =`,
         style: KeyboardType.clavierDeBase,
-        bareme: Number(this.sup3) === 2 ? 'etapes' : 'toutOuRien',
+        bareme: baremeMultiLignes(this.sup3),
       })
       if (this.questionJamaisPosee(i, listeTypeDeQuestions[i], a, b, c)) {
         // Si la question n'a jamais été posée, on en créé une autre

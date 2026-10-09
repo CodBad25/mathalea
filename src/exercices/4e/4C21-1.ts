@@ -1,5 +1,10 @@
+import {
+  addPossibleMultiLinesAnswer,
+  baremeMultiLignes,
+  besoinFormulaireVerificationMultiLignes,
+  commentaireMultiLignes,
+} from '../../lib/customElements/PossibleMultiLinesAnswerElement'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   simplificationDeFractionAvecEtapes,
@@ -42,6 +47,7 @@ export default class ExerciceAdditionnerDesFractions extends Exercice {
     this.sup = 2 // Niveau de difficulté
     this.sup2 = false // Avec ou sans relatifs
     this.sup3 = false // Fraction irréductible attendue
+    this.sup4 = 2
 
     this.spacing = 2
     this.spacingCorr = 2
@@ -54,6 +60,8 @@ export default class ExerciceAdditionnerDesFractions extends Exercice {
     ]
     this.besoinFormulaire2CaseACocher = ['Avec des nombres relatifs']
     this.besoinFormulaire3CaseACocher = ['Fraction irréductible attendue']
+    this.besoinFormulaire4Numerique = besoinFormulaireVerificationMultiLignes
+    this.comment = commentaireMultiLignes
   }
 
   nouvelleVersion() {
@@ -226,12 +234,6 @@ export default class ExerciceAdditionnerDesFractions extends Exercice {
       // Fin de cette uniformisation
 
       reponse = fraction(num, den).simplifie()
-      texte += ajouteChampTexteMathLive(
-        this,
-        i,
-        KeyboardType.clavierDeBaseAvecFraction,
-        { texteAvant: '$=$' },
-      )
       handleAnswers(this, i, {
         reponse: {
           value: reponse.toLatex(),
@@ -240,6 +242,11 @@ export default class ExerciceAdditionnerDesFractions extends Exercice {
             fractionIrreductible: this.sup3,
           },
         },
+      })
+      texte += addPossibleMultiLinesAnswer(this, i, {
+        prefix: '=',
+        style: KeyboardType.clavierDeBaseAvecFraction,
+        bareme: baremeMultiLignes(this.sup4),
       })
 
       if (context.isAmc) {
