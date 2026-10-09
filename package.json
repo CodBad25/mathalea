@@ -125,7 +125,7 @@
     "@types/jsdom": "^28.0.3",
     "@types/nunjucks": "^3.2.6",
     "@types/three": "^0.185.1",
-    "apigeom": "git+https://forge.apps.education.fr/coopmaths/apigeom.git#v1.8.6",
+    "apigeom": "git+https://forge.apps.education.fr/coopmaths/apigeom.git#v1.8.7",
     "blockly": "12.5.1",
     "boxicons": "^2.1.4",
     "daisyui": "^5.7.46",
