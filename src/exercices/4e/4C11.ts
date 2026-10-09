@@ -1,6 +1,11 @@
+import {
+  addPossibleMultiLinesAnswer,
+  baremeMultiLignes,
+  besoinFormulaireVerificationMultiLignes,
+  commentaireMultiLignes,
+} from '../../lib/customElements/PossibleMultiLinesAnswerElement'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   choice,
   combinaisonListes,
@@ -66,12 +71,14 @@ export default class PrioritesEtRelatifs extends Exercice {
     super()
 
     this.consigne = 'Calculer.'
+    this.comment = commentaireMultiLignes
     this.spacing = 2
     this.nbQuestions = 6
     this.nbCols = 2
     this.nbColsCorr = 2
     this.sup = 3
     this.sup2 = false
+    this.sup3 = 1
     this.besoinFormulaireNumerique = [
       'Type de calculs',
       3,
@@ -81,6 +88,7 @@ export default class PrioritesEtRelatifs extends Exercice {
       'Présentation des corrections en ligne',
       false,
     ]
+    this.besoinFormulaire3Numerique = besoinFormulaireVerificationMultiLignes
     this.listeAvecNumerotation = false
   }
 
@@ -516,8 +524,11 @@ export default class PrioritesEtRelatifs extends Exercice {
           handleAnswers(this, i, { reponse: { value: (a + b + c) * d } })
           break
       }
-      texte += this.interactif ? ` = ` : ''
-      texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)
+      texte += addPossibleMultiLinesAnswer(this, i, {
+        prefix: `${lettreDepuisChiffre(i + 1)} =`,
+        style: KeyboardType.clavierDeBase,
+        bareme: baremeMultiLignes(this.sup3),
+      })
       if (this.questionJamaisPosee(i, listeTypeDeQuestions[i], a, b, c)) {
         // Si la question n'a jamais été posée, on en créé une autre
         this.listeQuestions[i] = texte

@@ -113,6 +113,65 @@ Les raccourcis disponibles et cette mécanique vivent dans
 touches dans l'attribut `data-keys` du champ au moment où il prend le focus :
 elles changent donc d'une question à l'autre.
 
+## Calcul en plusieurs étapes
+
+À utiliser quand l'élève doit pouvoir détailler un calcul ligne par ligne
+(`A = …`, `A = …`, `A = …`), comme dans
+[4C11](../../../../src/exercices/4e/4C11.ts).
+
+```ts
+import { addPossibleMultiLinesAnswer } from '../../lib/customElements/PossibleMultiLinesAnswerElement'
+
+handleAnswers(this, i, { reponse: { value: a + b * c } })
+texte += addPossibleMultiLinesAnswer(this, i, {
+  prefix: 'A =',
+  style: KeyboardType.clavierDeBase,
+  bareme: 'toutOuRien', // ou 'etapes'
+})
+```
+
+Le helper injecte un custom element `possible-multi-lines-answer` et pose le
+`formatInteractif` de la question. Il doit être appelé **après**
+`handleAnswers()`. L'élève voit une ligne `A = [champ]` suivie d'un bouton
+discret ⊕ (un plus dans un cercle) : un clic recopie la saisie sur une nouvelle
+ligne au-dessus et vide la ligne finale.
+
+Chaque ligne intermédiaire non vide doit être égale à la réponse attendue, sous
+n'importe quelle forme (comparaison par défaut avec `value` convertie en
+LaTeX). Elle est marquée d'une coche verte ou d'une croix rouge discrètes ; une
+ligne fausse est barrée en diagonale en restant lisible. La dernière ligne est vérifiée
+exactement comme un champ MathLive simple (options de comparaison, `compare`,
+`callback`, feedback) et reçoit le smiley habituel quand tout est réussi. Si une
+étape est fausse, un résultat final juste reçoit seulement une coche verte. Une
+étape fausse ajoute le message « La ligne n n'est pas égale à l'expression de départ. ».
+
+Deux barèmes sont proposés, chacun avec un nombre de points fixe par question :
+
+| `bareme`              | Points | Notation                                                                                           | Saisie                                                                                                                         |
+| --------------------- | ------ | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `toutOuRien` (défaut) | 1      | Le point (ou le `bareme` de la réponse) seulement si le résultat et toutes les étapes sont justes. | Les étapes sont corrigées à la vérification. Chaque ligne intermédiaire peut être supprimée avec `×`.                          |
+| `etapes`              | 2      | 2 points si tout est juste, 1 point si le résultat est juste malgré une étape fausse.              | Chaque ligne est corrigée dès son ajout puis verrouillée, sans suppression : l'élève corrige son erreur sur la ligne suivante. |
+
+En mode `etapes`, le helper remplace le `bareme` de la réponse pour annoncer
+2 points avant toute saisie. Hors HTML ou sans interactivité, le helper ne
+retourne rien.
+
+Pour laisser l'enseignant choisir le mode, le module exporte un paramètre et un
+commentaire communs, utilisés par tous les exercices concernés (4C11, 5N1G,
+4C23, 5N5B…) :
+
+```ts
+this.besoinFormulaire3Numerique = besoinFormulaireVerificationMultiLignes // 1 : À la fin, 2 : À chaque étape
+this.sup3 = 2
+this.comment = commentaireMultiLignes
+
+texte += addPossibleMultiLinesAnswer(this, i, {
+  prefix: 'A =',
+  style: KeyboardType.clavierDeBase,
+  bareme: baremeMultiLignes(this.sup3),
+})
+```
+
 ## Bouton de réponse prédéfinie
 
 À utiliser quand une réponse revient telle quelle et serait pénible à saisir au
@@ -687,6 +746,23 @@ Points à connaître :
 - les libellés sont du **texte** : éviter le LaTeX, qui n'est pas rendu dans le
   shadow DOM de la liste.
 
+### Une suite de phrase conditionnelle
+
+Dans un gabarit interactif, un élément HTML portant
+`data-show-when="field0:oui"` est affiché uniquement si `field0` vaut `oui`.
+Il peut contenir du texte, des listes et des champs MathLive :
+
+```ts
+dataTemplate: 'La courbe %{field0}<span data-show-when="field0:oui"> une asymptote %{field1}, d’équation %{field2}</span>.'
+```
+
+Les champs d'une section masquée ne sont pas exigés à la vérification.
+La réponse au champ qui commande la section reste toujours vérifiée.
+Prévoir un barème de total constant, par exemple `toutPourUnPoint`, et un
+énoncé non interactif explicite (toutes les branches restent visibles dans le
+rendu statique du gabarit). Le rétablissement des réponses sauvegardées met
+également à jour la visibilité. Voir `src/exercices/TSpe/TSA2-12.ts`.
+
 ### Un QCM parmi les champs
 
 Un champ dont les options contiennent `qcm` n'est pas un MathLive mais un QCM
@@ -1122,6 +1198,21 @@ l'élève. La première ligne reste affichée et chaque clic sur « Évaluer » 
 une ligne lorsque la transformation est correcte. La dernière ligne non vide
 est exposée dans `value` et vérifiée par le bouton standard « Vérifier les
 réponses » avec la valeur déclarée dans `handleAnswers()`.
+
+La question n'est comptée juste que si la dernière ligne est la forme résolue
+(`isSolvedForm()` : l'inconnue seule d'un côté, un nombre sans calcul à
+poursuivre ni fraction réductible de l'autre) **et** conforme à la valeur
+attendue. Une étape intermédiaire équivalente à la solution (ex : `x+3-3=7-3`)
+ne rapporte donc aucun point.
+
+Lorsque tous les solveurs d'un exercice sont terminés (équation résolue, ou
+étape fausse en mode `evaluation`), l'exercice se vérifie tout seul : le
+solveur émet l'évènement `solveur-termine` et les vues élève et prof appellent
+leur vérification si toutes les questions sont des solveurs
+(`src/lib/customElements/solveurTermine.ts`).
+
+Dans la correction, écrire « La solution de l'équation $…$ est $valeur$ » en
+ne mettant en évidence que la valeur (`3`, pas `x=3`).
 
 ```ts
 import { addMathaleaSolveur } from '../../lib/customElements/MathaleaSolveurElement'

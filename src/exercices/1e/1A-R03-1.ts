@@ -7,7 +7,9 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
 
-export const uuid = 'cc63e'
+export const dateDeModifImportante = '06/10/2026'
+
+export const uuid = '3da51'
 export const refs = {
   'fr-fr': ['1A-R03-1'],
   'fr-ch': [],

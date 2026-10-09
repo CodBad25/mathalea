@@ -427,7 +427,7 @@ export default class constructionElementaire extends Exercice {
 
     const { isValid: isValid5, message: message5 } = figure.checkPointOnLine({
       labelPt: this.Fnom,
-      nameLine: `${this.Anom}${this.Bnom}`,
+      nameLine: [`(${this.Anom}${this.Bnom})`, `(${this.Bnom}${this.Anom})`],
     })
     if (!isValid5 && message5 !== '') {
       feedback += numAlpha(questind++) + message5

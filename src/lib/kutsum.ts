@@ -135,6 +135,7 @@ export function buildKutsumQuestionsFromAutoCorrection(
       })
     } else if (
       formatInteractif === 'mathalea-mathfield' ||
+      formatInteractif === 'possible-multi-lines-answer' ||
       formatInteractif === 'mathalea-textfield'
     ) {
       const options = autoCorrection.valeur?.reponse?.options

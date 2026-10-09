@@ -2,6 +2,10 @@
   import seedrandom from 'seedrandom'
   import { afterUpdate, beforeUpdate, onDestroy, onMount } from 'svelte'
   import { get } from 'svelte/store'
+  import {
+    ecouteSolveursTermines,
+    tousLesSolveursSontTermines,
+  } from '../../../../../lib/customElements/solveurTermine'
   import type TypeExercice from '../../../../../exercices/Exercice'
   import { sendToCapytaleSaveStudentAssignment } from '../../../../../lib/handleCapytale'
   import {
@@ -749,6 +753,22 @@
     metsAJourApresVerificationParQuestion()
   }
 
+  /**
+   * Lorsque tous les solveurs de l'exercice sont terminés, l'élève n'a plus
+   * rien à saisir : l'exercice est vérifié sans clic sur le bouton.
+   */
+  function verifieSiSolveursTermines(conteneur: HTMLElement) {
+    if (
+      !isInteractif ||
+      isCorrectVisible ||
+      isAllChecked ||
+      exercise.isDone === true ||
+      !tousLesSolveursSontTermines(exercise, conteneur)
+    )
+      return
+    verifExerciceVueEleve()
+  }
+
   async function verifExerciceVueEleve() {
     log('verifExerciceVueEleve')
     exercise.nbTentativesVerification =
@@ -972,6 +992,7 @@
         showNewDataButton={!exercise.pasDeVersionAleatoire}
       />
       <article
+        use:ecouteSolveursTermines={verifieSiSolveursTermines}
         class=" {$isMenuNeededForExercises
           ? 'text-2xl'
           : 'text-base'} relative w-full"

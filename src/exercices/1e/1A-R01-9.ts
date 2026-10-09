@@ -6,7 +6,9 @@ import ExerciceSimple from '../ExerciceSimple'
 
 export const titre = "Calculer la proportion d'une partie restante"
 export const dateDePublication = '15/07/2026'
-export const uuid = 'acd7f'
+export const dateDeModifImportante = '06/10/2026'
+
+export const uuid = '665eb'
 // @Author Stéphane Guyon
 export const refs = {
   'fr-fr': ['1A-R01-9', '2A-R1-9'],

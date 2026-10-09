@@ -179,12 +179,17 @@ export const TASKIZE_IMPORT = typstImport(
  * ligne de base descend sans que le numéro suive — c'est le décalage visible
  * sur les QCM à fractions.
  *
- * L'enrobage ne change rien aux listes dont toutes les questions sont
- * purement en ligne (elles sont passées telles quelles au paquet). Pour les
- * autres, il numérote lui-même : chaque question est décalée du retrait de
- * l'étiquette (`pad`), et son numéro, posé en tête de la première ligne dans
- * une boîte de largeur nulle, est ramené dans la marge ainsi libérée
+ * Il numérote lui-même chaque liste : chaque question est décalée du retrait
+ * de l'étiquette (`pad`), et son numéro, posé en tête de la première ligne
+ * dans une boîte de largeur nulle, est ramené dans la marge ainsi libérée
  * (`move`) — il partage donc la ligne du texte, quelle que soit sa hauteur.
+ * Pour les listes purement en ligne, le retrait est celui du paquet (le
+ * numéro et l'écart), donc le rendu est le même ; mais le numéro n'occupe plus
+ * de place dans la ligne. C'est nécessaire car le `#show math.equation` du
+ * préambule enrobe chaque formule en ligne dans une boîte insécable : avec le
+ * numéro dans le paragraphe (cas du paquet), une formule presque aussi large
+ * que la ligne ne tenait plus à côté du numéro et passait en dessous, laissant
+ * « a) » seul sur sa ligne.
  * Une question commençant par un bloc n'a pas de ligne de texte où poser le
  * numéro : elle garde la présentation en deux cellules.
  *
@@ -249,15 +254,19 @@ export const MATHALEA_TASKS_HELPER = `#let mathalea-items-questions(corps) = {
       )
     })
   }
-  if label in (auto, none) or items.len() == 0 or items.all(is-inline-content) {
+  if label in (auto, none) or items.len() == 0 {
     taskize-tasks(
       label: label, start: start, label-width: label-width,
       indent-after-label: indent-after-label, label-weight: label-weight, ..args, corps,
     )
   } else {
     let etiquettes = range(items.len()).map(i => text(weight: label-weight, format-label(start + i, label)))
-    let largeur = if label-width == auto { calc.max(..etiquettes.map(e => measure(e).width)) } else { label-width }
     let ecart = if indent-after-label == auto { 0.4em } else { indent-after-label }
+    // listes purement en ligne : même retrait que le paquet (étiquette + écart)
+    let en-ligne = items.all(is-inline-content)
+    let largeur = if label-width != auto { label-width } else {
+      calc.max(..etiquettes.map(e => measure(e).width)) + if en-ligne { ecart } else { 0pt }
+    }
     let numerotees = items.enumerate().map(((i, item)) => enum.item(
       mathalea-question-numerotee(etiquettes.at(i), largeur, ecart, item),
     ))

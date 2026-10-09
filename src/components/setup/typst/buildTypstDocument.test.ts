@@ -824,6 +824,17 @@ describe('buildTypstDocument', () => {
       expect(code).toContain('#tasks(columns: ex1-colonnes')
     })
 
+    it('numérote lui-même les listes purement en ligne (numéro de largeur nulle)', () => {
+      const code = buildTypstDocument([
+        exercise({ questions: ['$1+1$', '$2+2$'], numbered: true }),
+      ])
+      // une formule en ligne est enrobée dans une boîte insécable : le numéro
+      // ne doit pas occuper de place dans la ligne, sinon une formule large
+      // passe sous un numéro resté seul
+      expect(code).not.toContain('items.all(is-inline-content) {')
+      expect(code).toContain('let en-ligne = items.all(is-inline-content)')
+    })
+
     it('ne déclare pas l’enrobage sans liste de questions ni QCM', () => {
       const code = buildTypstDocument([exercise({ questions: ['$1+1$'] })])
       expect(code).not.toContain('mathalea-question-numerotee')
@@ -3400,6 +3411,33 @@ describe('zoom des figures commun aux sujets', () => {
     expect(code).toContain('#let fig-4-align = fig-2-align')
     // les alias ne sont pas relus comme des réglages propres au sujet B
     expect(harvestCarryOver(code).figureZoom).toEqual({ 1: 0.5, 2: 0.4 })
+  })
+
+  it('garde le réglage propre à une figure du sujet B', () => {
+    const svg =
+      '<svg width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="5" /></svg>'
+    const inputs = [exercise({ questions: [svg, svg] })]
+    const options = { ...defaultTypstDocumentOptions, nbVersions: 2 }
+    const code = buildTypstDocument(
+      inputs,
+      options,
+      { figureZoom: { 1: 0.5, 3: 0.8 }, figureAlign: { 4: 'right' } },
+      [inputs],
+    )
+    expect(code).toContain('#let fig-3-zoom = 0.8')
+    expect(code).toContain('#let fig-4-zoom = fig-2-zoom')
+    expect(code).toContain('#let fig-3-align = fig-1-align')
+    expect(code).toContain('#let fig-4-align = right')
+    // ramené à 1 alors que le sujet A est à 0.5 : reste détaché
+    const reset = code.replace('#let fig-3-zoom = 0.8', '#let fig-3-zoom = 1')
+    const rebuilt = buildTypstDocument(
+      inputs,
+      options,
+      harvestCarryOver(reset),
+      [inputs],
+    )
+    expect(rebuilt).toContain('#let fig-3-zoom = 1')
+    expect(rebuilt).toContain('#let fig-1-zoom = 0.5')
   })
 })
 

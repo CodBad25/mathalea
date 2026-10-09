@@ -9,7 +9,9 @@ import ExerciceQcmACourt from '../ExerciceQcmACourt'
 
 export const titre = 'Retrouver le calcul après une augmentation'
 export const dateDePublication = '04/08/2026'
-export const uuid = '799cf'
+export const dateDeModifImportante = '07/10/2026'
+
+export const uuid = '38be8'
 
 export const refs = {
   'fr-fr': ['1A-E02-6', '2A-E2-6'],

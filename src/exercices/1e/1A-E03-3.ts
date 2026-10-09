@@ -5,7 +5,9 @@ import { texNombre } from '../../lib/outils/texNombre'
 
 import ExerciceQcmACourt from '../ExerciceQcmACourt'
 
-export const uuid = 'f9d32'
+export const dateDeModifImportante = '07/10/2026'
+
+export const uuid = '116e8'
 export const refs = {
   'fr-fr': ['1A-E03-3', '2A-E3-3'],
   'fr-ch': ['9QCM-21', '10QCM-45'],

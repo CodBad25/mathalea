@@ -4,7 +4,9 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
 export const dateDePublication = '07/01/2026'
-export const uuid = '40c12'
+export const dateDeModifImportante = '06/10/2026'
+
+export const uuid = '7c52f'
 // @Author Gilles Mora
 export const refs = {
   'fr-fr': ['1A-R02-7', '2A-R2-7'],

@@ -1,7 +1,12 @@
 import { amcConvert } from '../../lib/amc/amcBuilders'
+import {
+  addPossibleMultiLinesAnswer,
+  baremeMultiLignes,
+  besoinFormulaireVerificationMultiLignes,
+  commentaireMultiLignes,
+} from '../../lib/customElements/PossibleMultiLinesAnswerElement'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { lettreDepuisChiffre, sp } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
@@ -39,6 +44,7 @@ export default class CalculerUneExpressionNumerique extends Exercice {
     this.sup2 = false // si false alors utilisation de nombres entiers (calcul mental), si true alors utilisation de nombres à un chiffre après la virgule.
     this.sup3 = true
     this.sup4 = true
+    this.sup5 = 2
     this.besoinFormulaireTexte = [
       'Choix des expressions',
       'Nombres séparés par des tirets :\n2 : Expressions à deux opérations\n3 : Expressions à 3 opérations\n4 : Expressions à 4 opérations\n5 : Expressions complexes',
@@ -55,6 +61,8 @@ export default class CalculerUneExpressionNumerique extends Exercice {
       'Calculs nommés avec des lettres',
       false,
     ]
+    this.besoinFormulaire5Numerique = besoinFormulaireVerificationMultiLignes
+    this.comment = commentaireMultiLignes
     this.version = 5
   }
 
@@ -135,13 +143,12 @@ export default class CalculerUneExpressionNumerique extends Exercice {
       if (this.questionJamaisPosee(i, expn, expf)) {
         // Si la question n'a jamais été posée, on en créé une autre
         if (this.interactif) {
-          texte += ajouteChampTexteMathLive(
-            this,
-            i,
-            KeyboardType.clavierDeBase,
-            { texteAvant: '$=$' },
-          )
           handleAnswers(this, i, { reponse: { value: reponse } })
+          texte += addPossibleMultiLinesAnswer(this, i, {
+            prefix: this.sup4 ? `${lettreDepuisChiffre(i + 1)} =` : '=',
+            style: KeyboardType.clavierDeBase,
+            bareme: baremeMultiLignes(this.sup5),
+          })
         } else if (context.isAmc) {
           texte +=
             '<br>Détailler les calculs dans le cadre et coder le résultat.<br>'

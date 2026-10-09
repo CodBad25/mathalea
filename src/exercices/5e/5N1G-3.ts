@@ -1,7 +1,12 @@
 import { bleuMathalea } from '../../lib/colors'
+import {
+  addPossibleMultiLinesAnswer,
+  baremeMultiLignes,
+  besoinFormulaireVerificationMultiLignes,
+  commentaireMultiLignes,
+} from '../../lib/customElements/PossibleMultiLinesAnswerElement'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
@@ -29,9 +34,10 @@ export default class CalculsAvecGrandsTraitsDeFraction extends Exercice {
     super()
     this.consigne = 'Calculer.'
     this.nbQuestions = 6
-    this.comment =
-      "6 types de calculs différents avec une division d'un entier par 10 et 5 quotients entiers."
+    this.comment = `6 types de calculs différents avec une division d'un entier par 10 et 5 quotients entiers.<br><br>${commentaireMultiLignes}`
     this.listeAvecNumerotation = false
+    this.besoinFormulaireNumerique = besoinFormulaireVerificationMultiLignes
+    this.sup = 2
   }
 
   nouvelleVersion() {
@@ -137,16 +143,16 @@ export default class CalculsAvecGrandsTraitsDeFraction extends Exercice {
         }
       }
       if (this.interactif) {
-        texte +=
-          '<br><br>' +
-          ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase, {
-            texteAvant: `$${lettreDepuisChiffre(i + 1)} = $`,
-          })
         handleAnswers(this, i, {
           reponse: {
             value: answer,
             options: { nombreDecimalSeulement: true },
           },
+        })
+        texte += addPossibleMultiLinesAnswer(this, i, {
+          prefix: `${lettreDepuisChiffre(i + 1)} =`,
+          style: KeyboardType.clavierDeBaseAvecFraction,
+          bareme: baremeMultiLignes(this.sup),
         })
       }
       if (this.questionJamaisPosee(i, answer)) {

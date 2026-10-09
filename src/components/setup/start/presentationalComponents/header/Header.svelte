@@ -37,7 +37,7 @@
 
 <header
   class="flex flex-col scrollbar-hide w-full
-  md:sticky md:top-0 md:z-50
+  md:sticky md:top-0 md:z-[1040]
   bg-coopmaths-canvas dark:bg-coopmathsdark-canvas"
 >
   {#if isRecorder}

@@ -21,6 +21,43 @@ export const refs = {
   'fr-fr': ['2I12-1'],
   'fr-ch': ['10FA2B-17'],
 }
+type Situation = 'association' | 'lycee' | 'election'
+
+/**
+ * Tire p1 = b % et p2 = c % simples à manipuler de tête : b × c est un multiple
+ * de 100 (résultat entier) et c est un multiple de 10.
+ * Pour retrouver p2 (versions « Bis »), b vaut 10, 20 ou 50 % : diviser par
+ * 0,1, 0,2 ou 0,5 revient à multiplier par 10, 5 ou 2.
+ * @returns [b, c]
+ */
+function valeursSansCalculatrice(
+  situation: Situation,
+  retrouverP2: boolean,
+): [number, number] {
+  const listesB: Record<Situation, number[]> = {
+    association: [10, 20, 25, 50],
+    lycee: [20, 25, 30, 40],
+    election: [40, 50, 60, 80],
+  }
+  const listesC: Record<Situation, number[]> = {
+    association: [20, 30, 40, 50],
+    lycee: [10, 20, 30, 40, 50, 60, 70],
+    election: [10, 20, 30, 40, 50, 60, 70],
+  }
+  const listesBRetrouverP2: Record<Situation, number[]> = {
+    association: [10, 20, 50],
+    lycee: [20],
+    election: [50],
+  }
+  const b = choice(
+    retrouverP2 ? listesBRetrouverP2[situation] : listesB[situation],
+  )
+  const c = choice(
+    listesC[situation].filter((valeur) => (b * valeur) % 100 === 0),
+  )
+  return [b, c]
+}
+
 export default class ProportiondeProportion extends ExerciceSimple {
   constructor() {
     super()
@@ -28,6 +65,8 @@ export default class ProportiondeProportion extends ExerciceSimple {
     this.nbQuestions = 1
 
     this.optionsChampTexte = { texteApres: ' %' }
+    this.besoinFormulaireCaseACocher = ['Sans calculatrice', false]
+    this.sup = false
   }
 
   nouvelleVersion() {
@@ -43,12 +82,20 @@ export default class ProportiondeProportion extends ExerciceSimple {
       ]) //
     ) {
       case 'association':
-        b = randint(3, 80)
-        tauxb = b / 100
-        a = randint(20, 50)
-        c = randint(20, 50)
-        tauxc = c / 100
-        d = randint(2, 15)
+        if (this.sup) {
+          ;[b, c] = valeursSansCalculatrice('association', false)
+          a = randint(20, 50)
+          d = randint(2, 15)
+          tauxb = b / 100
+          tauxc = c / 100
+        } else {
+          b = randint(3, 80)
+          tauxb = b / 100
+          a = randint(20, 50)
+          c = randint(20, 50)
+          tauxc = c / 100
+          d = randint(2, 15)
+        }
         g = (b * c) / 100
         tauxG = (b * c) / 10000
 
@@ -65,12 +112,20 @@ export default class ProportiondeProportion extends ExerciceSimple {
         this.reponse = g.toFixed(2)
         break
       case 'associationBis':
-        b = randint(3, 80)
-        tauxb = b / 100
-        a = randint(35, 50)
-        c = randint(20, 50)
-        tauxc = c / 100
-        d = randint(3, 15)
+        if (this.sup) {
+          ;[b, c] = valeursSansCalculatrice('association', true)
+          a = randint(35, 50)
+          d = randint(3, 15)
+          tauxb = b / 100
+          tauxc = c / 100
+        } else {
+          b = randint(3, 80)
+          tauxb = b / 100
+          a = randint(35, 50)
+          c = randint(20, 50)
+          tauxc = c / 100
+          d = randint(3, 15)
+        }
         g = (b * c) / 100
         tauxG = (b * c) / 10000
 
@@ -89,11 +144,18 @@ export default class ProportiondeProportion extends ExerciceSimple {
         break
 
       case 'lycee':
-        b = randint(20, 40)
-        tauxb = b / 100
-        a = randint(20, 50)
-        c = randint(10, 70)
-        tauxc = c / 100
+        if (this.sup) {
+          ;[b, c] = valeursSansCalculatrice('lycee', false)
+          a = randint(20, 50)
+          tauxb = b / 100
+          tauxc = c / 100
+        } else {
+          b = randint(20, 40)
+          tauxb = b / 100
+          a = randint(20, 50)
+          c = randint(10, 70)
+          tauxc = c / 100
+        }
         g = (b * c) / 100
         tauxG = (b * c) / 10000
         this.question = `Dans un lycée,  $${b}\\,\\%$ des lycéens sont en classe de première. <br>
@@ -108,11 +170,18 @@ export default class ProportiondeProportion extends ExerciceSimple {
         this.reponse = g.toFixed(2)
         break
       case 'lyceeBis':
-        b = randint(20, 40)
-        tauxb = b / 100
-        a = randint(20, 50)
-        c = randint(10, 70)
-        tauxc = c / 100
+        if (this.sup) {
+          ;[b, c] = valeursSansCalculatrice('lycee', true)
+          a = randint(20, 50)
+          tauxb = b / 100
+          tauxc = c / 100
+        } else {
+          b = randint(20, 40)
+          tauxb = b / 100
+          a = randint(20, 50)
+          c = randint(10, 70)
+          tauxc = c / 100
+        }
         g = (b * c) / 100
         tauxG = (b * c) / 10000
         this.question = `Dans un lycée,  $${b}\\,\\%$ des lycéens sont en classe de première et  $${texNombre(g, 2)}\\,\\%$ des lycéens sont en première technologique.<br>
@@ -129,11 +198,18 @@ export default class ProportiondeProportion extends ExerciceSimple {
         break
 
       case 'election':
-        b = randint(40, 80)
-        tauxb = b / 100
-        a = randint(20, 50)
-        c = randint(10, 70)
-        tauxc = c / 100
+        if (this.sup) {
+          ;[b, c] = valeursSansCalculatrice('election', false)
+          a = randint(20, 50)
+          tauxb = b / 100
+          tauxc = c / 100
+        } else {
+          b = randint(40, 80)
+          tauxb = b / 100
+          a = randint(20, 50)
+          c = randint(10, 70)
+          tauxc = c / 100
+        }
         g = (b * c) / 100
         tauxG = (b * c) / 10000
 
@@ -150,11 +226,18 @@ export default class ProportiondeProportion extends ExerciceSimple {
         break
 
       case 'electionBis':
-        b = randint(40, 80)
-        tauxb = b / 100
-        a = randint(20, 50)
-        c = randint(10, 70)
-        tauxc = c / 100
+        if (this.sup) {
+          ;[b, c] = valeursSansCalculatrice('election', true)
+          a = randint(20, 50)
+          tauxb = b / 100
+          tauxc = c / 100
+        } else {
+          b = randint(40, 80)
+          tauxb = b / 100
+          a = randint(20, 50)
+          c = randint(10, 70)
+          tauxc = c / 100
+        }
         g = (b * c) / 100
         tauxG = (b * c) / 10000
 

@@ -365,6 +365,7 @@ export type InteractivityType =
   | 'mathalea-labyrinthe' // Non compatible AMC
   | 'juniper-green' // Non compatible AMC
   | 'kenken-grille' // Non compatible AMC
+  | 'killer-sudoku-grille' // Non compatible AMC
   | 'grimuku-grille' // Non compatible AMC
   | 'pyramide-nombres' // Non compatible AMC
   | 'etoile-calculs' // Non compatible AMC
@@ -413,6 +414,7 @@ export type InteractivityType =
   | 'intervalle-droite' // Non compatible AMC
   | 'ensemble-intervalles-droite' // Non compatible AMC
   | 'mathalea-solveur' // Non compatible AMC
+  | 'possible-multi-lines-answer' // Non compatible AMC
 export function isInteractivityType(
   value: unknown,
 ): value is InteractivityType {
@@ -430,6 +432,7 @@ export function isInteractivityType(
     value === 'mathalea-labyrinthe' ||
     value === 'juniper-green' ||
     value === 'kenken-grille' ||
+    value === 'killer-sudoku-grille' ||
     value === 'grimuku-grille' ||
     value === 'pyramide-nombres' ||
     value === 'etoile-calculs' ||
@@ -484,7 +487,8 @@ export function isInteractivityType(
     value === 'shape-2d-grid-editor' ||
     value === 'intervalle-droite' ||
     value === 'ensemble-intervalles-droite' ||
-    value === 'mathalea-solveur'
+    value === 'mathalea-solveur' ||
+    value === 'possible-multi-lines-answer'
   )
 }
 
@@ -538,7 +542,8 @@ export function isMathaleaCustomElementFormat(value: unknown): boolean {
     value === 'shape-2d-grid-editor' ||
     value === 'intervalle-droite' ||
     value === 'ensemble-intervalles-droite' ||
-    value === 'mathalea-solveur'
+    value === 'mathalea-solveur' ||
+    value === 'possible-multi-lines-answer'
   )
 }
 

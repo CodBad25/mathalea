@@ -7,7 +7,9 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import ExerciceQcmACourt from '../ExerciceQcmACourt'
 
 export const dateDePublication = '22/07/2025'
-export const uuid = '6201b'
+export const dateDeModifImportante = '07/10/2026'
+
+export const uuid = '11bf3'
 
 export const refs = {
   'fr-fr': ['1A-E02-3', '2A-E2-3'],

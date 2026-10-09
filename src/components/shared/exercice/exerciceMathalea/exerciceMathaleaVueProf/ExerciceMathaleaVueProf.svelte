@@ -9,6 +9,10 @@
     tick,
   } from 'svelte'
   import { get } from 'svelte/store'
+  import {
+    ecouteSolveursTermines,
+    tousLesSolveursSontTermines,
+  } from '../../../../../lib/customElements/solveurTermine'
   import ExerciceSimple from '../../../../../exercices/ExerciceSimple'
   import {
     exercisesUuidRanking,
@@ -597,6 +601,21 @@
     await adjustMathalea2dFiguresWidth()
   }
 
+  /**
+   * Lorsque tous les solveurs de l'exercice sont terminés, l'élève n'a plus
+   * rien à saisir : l'exercice est vérifié sans clic sur le bouton.
+   */
+  function verifieSiSolveursTermines(conteneur: HTMLElement) {
+    if (
+      !isInteractif ||
+      isCorrectionVisible ||
+      isExerciceChecked ||
+      !tousLesSolveursSontTermines(exercise, conteneur)
+    )
+      return
+    verifExercice()
+  }
+
   function verifExercice() {
     if (divExercice?.dataset.exerciseRenderState !== 'ready') return
     exercise.nbTentativesVerification =
@@ -884,6 +903,7 @@
           </button>
         </div>
         <article
+          use:ecouteSolveursTermines={verifieSiSolveursTermines}
           class="lg:text-base relative w-full max-w-none"
           style="font-size: {(
             $globalOptions.z || 1

@@ -13,7 +13,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Résoudre une équation pas à pas'
+export const titre = 'Résoudre une équation'
 export const interactifReady = true
 export const dateDePublication = '29/09/2026'
 export const dateDeModifImportante = '04/10/2026'
@@ -46,7 +46,7 @@ export default class ResoudreEquationPasAPas extends Exercice {
     this.sup = false
     this.besoinFormulaire2Numerique = formulaireBaremeSolveur()
     this.sup2 = 1
-    this.consigne = 'Résoudre les équations suivantes pas à pas.'
+    this.consigne = 'Résoudre les équations suivantes.'
     this.nbQuestions = 4
     this.spacing = 2
   }
@@ -65,7 +65,7 @@ export default class ResoudreEquationPasAPas extends Exercice {
 
       this.listeCorrections[i] =
         `$\\begin{aligned}${data.correctionSteps.map(alignEquation).join('\\\\[0.4em]')}\\end{aligned}$<br>` +
-        `La solution de l'équation est $${miseEnEvidence(expected)}$.`
+        `La solution de l'équation $${data.equation}$ est $${miseEnEvidence(String(data.solution))}$.`
 
       handleAnswers(
         this,

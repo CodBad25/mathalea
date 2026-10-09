@@ -8,7 +8,9 @@ import { randint } from '../../modules/outils'
 import { nombreElementsDifferents } from '../ExerciceQcm'
 import ExerciceQcmACourt from '../ExerciceQcmACourt'
 
-export const uuid = 'c8369'
+export const dateDeModifImportante = '07/10/2026'
+
+export const uuid = '9262a'
 export const refs = {
   'fr-fr': ['1A-E04-1'],
   'fr-ch': ['10QCM-46', '11QCM-48'],

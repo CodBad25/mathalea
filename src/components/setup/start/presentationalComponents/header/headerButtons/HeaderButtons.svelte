@@ -16,7 +16,7 @@
 <ButtonsDeck class="md:pl-10 flex md:flex">
   <div
     slot="setup-buttons"
-    class="flex flex-row justify-start items-center space-x-3 md:space-x-4"
+    class="flex flex-row justify-start items-center gap-3 md:gap-4"
   >
     <SetupButtons
       bind:reorderModalDisplayed

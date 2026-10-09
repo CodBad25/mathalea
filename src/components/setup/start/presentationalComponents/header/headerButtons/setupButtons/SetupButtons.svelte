@@ -1,6 +1,6 @@
 <script lang="ts">
   import ZoomButtons from './ZoomButtons.svelte'
-  import InteractivityButton from './InteractivityButton.svelte'
+  import FormatToggle from './FormatToggle.svelte'
   import ReorderButton from './ReorderButton.svelte'
   import NewDataButton from './NewDataButton.svelte'
   import TrashButton from './TrashButton.svelte'
@@ -12,8 +12,13 @@
   export let trash: () => void
 </script>
 
-<ZoomButtons {zoomUpdate} />
-<InteractivityButton {setAllInteractive} />
-<ReorderButton bind:reorderModalDisplayed />
-<NewDataButton {newDataForAll} />
-<TrashButton {trash} />
+<FormatToggle {setAllInteractive} />
+<div
+  class="h-6 w-px bg-coopmaths-canvas-moredark dark:bg-coopmathsdark-canvas-darkest"
+></div>
+<div class="flex flex-row items-center gap-1">
+  <ZoomButtons {zoomUpdate} />
+  <ReorderButton bind:reorderModalDisplayed />
+  <NewDataButton {newDataForAll} />
+  <TrashButton {trash} />
+</div>

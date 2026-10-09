@@ -5,7 +5,9 @@ import { texNombre } from '../../lib/outils/texNombre'
 import FractionEtendue from '../../modules/FractionEtendue'
 import ExerciceSimple from '../ExerciceSimple'
 
-export const uuid = '3292c'
+export const dateDeModifImportante = '06/10/2026'
+
+export const uuid = 'c3684'
 export const refs = {
   'fr-fr': ['1A-R03-2'],
   'fr-ch': ['10NO3C-7'],

@@ -36,7 +36,9 @@ import ExerciceSimple from '../ExerciceSimple'
 // ============================================================================
 // MÉTADONNÉES
 // ============================================================================
-export const uuid = 'a4b8f'
+export const dateDeModifImportante = '06/10/2026'
+
+export const uuid = 'c564e'
 export const refs = { 'fr-fr': ['1A-R02-6', '2A-R2-6'], 'fr-ch': ['9FA2B-24'] }
 export const interactifReady = true
 

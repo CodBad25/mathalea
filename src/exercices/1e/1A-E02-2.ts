@@ -7,7 +7,9 @@ import { randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
 
 export const dateDePublication = '22/07/2025'
-export const uuid = 'a3828'
+export const dateDeModifImportante = '07/10/2026'
+
+export const uuid = '49844'
 
 export const refs = {
   'fr-fr': ['1A-E02-2', '2A-E2-2'],
