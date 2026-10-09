@@ -4,7 +4,7 @@ import { sp } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import ExerciceSimple from '../../ExerciceSimple'
-export const titre = 'Écrire une fraction sous la forme d’un pourcentage'
+export const titre = 'Écrire une proportion sous la forme d’un pourcentage'
 export const interactifReady = true
 
 export const amcReady = true
@@ -17,10 +17,10 @@ export const dateDePublication = '13/09/2026'
 export const uuid = 'fdd72'
 
 export const refs = {
-  'fr-fr': ['can5P2-03', '2I10-flash2'],
+  'fr-fr': ['can5P2-03', '2I10-flash2', '1A-R01-10'],
   'fr-ch': [],
 }
-export default class ÉcrireFractionPourcentage extends ExerciceSimple {
+export default class ÉcrireProportionPourcentage extends ExerciceSimple {
   constructor() {
     super()
     this.typeExercice = 'simple'
