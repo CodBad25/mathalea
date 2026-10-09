@@ -7,7 +7,10 @@ import {
   shuffle,
 } from '../../lib/outils/arrayOutils'
 import { reduireAxPlusB } from '../../lib/outils/ecritures'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -68,13 +71,18 @@ export default class LimitesDeterminablesParComparaison extends Exercice {
           texte: `$${limit('+\\infty')}$`,
           statut: direction === '+',
         },
-        { texte: 'Aucune de ces limites.', statut: direction === null },
+        { texte: 'Aucune de ces limites', statut: direction === null },
       ])
+      // Conserver le tirage initial, puis placer le choix « aucune » en dernier.
+      const noneIndex = propositions.findIndex(
+        (proposition) => proposition.texte === 'Aucune de ces limites',
+      )
+      propositions.push(...propositions.splice(noneIndex, 1))
       let correction: string
       if (direction === null) {
         correction = `Une borne constante ne permet de déterminer aucune des trois limites proposées.<br>
-        L’inégalité donne seulement ${lowerBound ? 'un minorant' : 'un majorant'} constant, égal à $${constant}$. Elle ne force $f(x)$ à tendre ni vers une valeur précise, ni vers un infini.<br>
-        La bonne réponse est $${miseEnEvidence('\\text{Aucune de ces limites}')}$.`
+        L’inégalité donne seulement ${lowerBound ? 'un minorant' : 'un majorant'} constant, égal à $${constant}$. On ne peut rien déduire sur une limite éventuelle de $f$ avec la seule inégalité donnée.<br>
+        La bonne réponse est ${texteEnCouleurEtGras('Aucune de ces limites')}.`
       } else {
         const value = lowerBound ? '+\\infty' : '-\\infty'
         const otherDirection = direction === '+' ? '-' : '+'
@@ -83,18 +91,14 @@ export default class LimitesDeterminablesParComparaison extends Exercice {
         correction = `On sait que $\\displaystyle\\lim_{x\\to${direction}\\infty}(${bound})=${value}$.<br>
         Comme $${inequality}$ pour tout réel $x$, le théorème de comparaison permet de conclure que $${limit(`${direction}\\infty`)}=${miseEnEvidence(value)}$.<br>
         À l’autre infini, on a $\\displaystyle\\lim_{x\\to${otherDirection}\\infty}(${bound})=${otherValue}$.<br>
-        ${
-          lowerBound
-            ? 'Être au-dessus d’une fonction qui tend vers $-\\infty$ ne force pas $f$ à tendre vers $-\\infty$. Pour appliquer le théorème de comparaison, il faudrait un majorant qui tende vers $-\\infty$.'
-            : 'Être en dessous d’une fonction qui tend vers $+\\infty$ ne force pas $f$ à tendre vers $+\\infty$. Pour appliquer le théorème de comparaison, il faudrait un minorant qui tende vers $+\\infty$.'
-        }<br>
+        ${lowerBound ? '' : 'La fonction est donc inférieure, pour tout $x$, à une fonction qui tend vers $+\\infty$.<br>'}
         On ne peut donc pas déterminer $${limit(`${otherDirection}\\infty`)}$ avec cette comparaison.<br><br>
-        En $${finitePoint}$, on a $\\displaystyle\\lim_{x\\to${finitePoint}}(${bound})=${finiteBound}$. Une seule ${lowerBound ? 'minoration' : 'majoration'} ne force pas $f$ à avoir cette limite. Il faudrait un encadrement par deux fonctions ayant la même limite pour appliquer le théorème des gendarmes.<br>
+        En $${finitePoint}$, on a $\\displaystyle\\lim_{x\\to${finitePoint}}(${bound})=${finiteBound}$. On ne peut rien déduire sur une limite éventuelle de $f$ avec la seule inégalité donnée.<br>
         On ne peut donc pas non plus déterminer $${limit(String(finitePoint))}$.`
       }
       let text = `Soit $f$ une fonction définie sur $\\mathbb R$. On sait que, pour tout réel $x$, $${inequality}$.<br>
-      Quelle limite peut-on déterminer ?`
-      const options = { radio: true, vertical: false }
+      Parmi ces limites, laquelle peut-on déterminer à partir de la seule information donnée ?`
+      const options = { radio: true, vertical: false, ordered: true }
       handleAnswers(
         this,
         i,
