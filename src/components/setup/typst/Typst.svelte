@@ -13,6 +13,7 @@
     getStaticExerciceTypUrl,
   } from '../../../lib/components/exercisesUtils'
   import { applyExerciceSettings } from '../../../lib/components/exerciceSettings'
+  import { stringWithNoAccent } from '../../../lib/components/textUtils'
   import {
     mathaleaFormatExercice,
     mathaleaHandleExerciceSimple,
@@ -4005,9 +4006,9 @@
 
   function exportFilename() {
     return (
-      documentOptions.title
+      stringWithNoAccent(documentOptions.title)
         .trim()
-        .replace(/[^\p{L}\p{N} _-]/gu, '')
+        .replace(/[^a-zA-Z0-9 _-]/g, '')
         .replace(/\s+/g, '_') || 'fiche'
     )
   }

@@ -1183,6 +1183,13 @@ sources d’annales publiées restent inchangées.
 
 `typstCompiler.ts` s'appuie sur `@myriaddreamin/typst.ts` : le compilateur WASM (~28 Mo) et le moteur de rendu sont chargés à la première compilation (import dynamique, URL des `.wasm` résolues par Vite). L'aperçu est un rendu SVG du document ; le bouton « Télécharger le PDF » compile en vrai PDF côté client, sans serveur.
 
+Les noms des fichiers téléchargés sont dérivés du titre du document : les
+accents sont retirés (`é` devient `e`), seuls les lettres ASCII, chiffres,
+espaces, tirets et underscores sont conservés, puis les espaces deviennent
+des underscores. Un titre vide après nettoyage utilise `fiche`. Cette règle
+s'applique aux PDF, aux fichiers `.typ` et aux archives `.zip` ; les PDF
+séparés ajoutent les suffixes `_enonce.pdf` et `_corrige.pdf`.
+
 ### Coût de démarrage
 
 Les gros fichiers passent par un cache persistant du navigateur (Cache API,
