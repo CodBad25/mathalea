@@ -1,6 +1,6 @@
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
-import { texNombre2 } from '../../lib/outils/texNombre'
+import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import Exercice from '../Exercice'
 export const amcReady = true
@@ -87,7 +87,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
                   choice(listeDeFacteurs.slice(30))
                 : choice(listeDeFacteurs)),
           )
-          tableauDeNombresAvecCorrection[i] = `${texNombre2(
+          tableauDeNombresAvecCorrection[i] = `${texNombre(
             tableauDeNombres[i],
           )} & \\color{blue}{\\text{oui}} & \\text{non} & \\text{non} & \\text{non} & \\text{non} \\\\`
           this.autoCorrection[i].propositions = [
@@ -125,7 +125,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
             },
           ]
           this.autoCorrection[i].enonce =
-            `$${texNombre2(tableauDeNombres[i])}$ est divisible par\n`
+            `$${texNombre(tableauDeNombres[i])}$ est divisible par\n`
 
           break
         case 'div3':
@@ -138,7 +138,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
                   choice(listeDeFacteurs.slice(30))
                 : choice(listeDeFacteurs)),
           )
-          tableauDeNombresAvecCorrection[i] = `${texNombre2(
+          tableauDeNombresAvecCorrection[i] = `${texNombre(
             tableauDeNombres[i],
           )} & \\text{non} & \\color{blue}{\\text{oui}} & \\text{non} & \\text{non}& \\text{non}  \\\\`
           this.autoCorrection[i].propositions = [
@@ -177,7 +177,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
             },
           ]
           this.autoCorrection[i].enonce =
-            `$${texNombre2(tableauDeNombres[i])}$ est divisible par\n`
+            `$${texNombre(tableauDeNombres[i])}$ est divisible par\n`
           break
         case 'div39':
           tableauDeNombres[i] = genereValeurUnique(
@@ -189,7 +189,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
                   choice(listeDeFacteurs.slice(30))
                 : choice(listeDeFacteurs)),
           )
-          tableauDeNombresAvecCorrection[i] = `${texNombre2(
+          tableauDeNombresAvecCorrection[i] = `${texNombre(
             tableauDeNombres[i],
           )} & \\text{non} & \\color{blue}{\\text{oui}} & \\text{non} & \\color{blue}{\\text{oui}} & \\text{non} \\\\`
           this.autoCorrection[i].propositions = [
@@ -229,7 +229,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
             },
           ]
           this.autoCorrection[i].enonce =
-            `$${texNombre2(tableauDeNombres[i])}$ est divisible par\n`
+            `$${texNombre(tableauDeNombres[i])}$ est divisible par\n`
           break
         case 'div5':
           tableauDeNombres[i] = genereValeurUnique(
@@ -241,7 +241,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
                   choice(listeDeFacteurs.slice(30))
                 : choice(listeDeFacteurs)),
           )
-          tableauDeNombresAvecCorrection[i] = `${texNombre2(
+          tableauDeNombresAvecCorrection[i] = `${texNombre(
             tableauDeNombres[i],
           )} & \\text{non} & \\text{non} & \\color{blue}{\\text{oui}} & \\text{non}  & \\text{non}\\\\`
           this.autoCorrection[i].propositions = [
@@ -279,7 +279,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
             },
           ]
           this.autoCorrection[i].enonce =
-            `$${texNombre2(tableauDeNombres[i])}$ est divisible par\n`
+            `$${texNombre(tableauDeNombres[i])}$ est divisible par\n`
           break
         case 'div25':
           tableauDeNombres[i] = genereValeurUnique(
@@ -291,7 +291,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
                   choice(listeDeFacteurs.slice(30))
                 : choice(listeDeFacteurs)),
           )
-          tableauDeNombresAvecCorrection[i] = `${texNombre2(
+          tableauDeNombresAvecCorrection[i] = `${texNombre(
             tableauDeNombres[i],
           )} & \\color{blue}{\\text{oui}} & \\text{non} & \\color{blue}{\\text{oui}} & \\text{non} & \\color{blue}{\\text{oui}}\\\\`
           this.autoCorrection[i].propositions = [
@@ -328,7 +328,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
             },
           ]
           this.autoCorrection[i].enonce =
-            `$${texNombre2(tableauDeNombres[i])}$ est divisible par\n`
+            `$${texNombre(tableauDeNombres[i])}$ est divisible par\n`
           break
         case 'div23':
           tableauDeNombres[i] = genereValeurUnique(
@@ -340,7 +340,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
                   choice(listeDeFacteurs.slice(30))
                 : choice(listeDeFacteurs)),
           )
-          tableauDeNombresAvecCorrection[i] = `${texNombre2(
+          tableauDeNombresAvecCorrection[i] = `${texNombre(
             tableauDeNombres[i],
           )} & \\color{blue}{\\text{oui}} & \\color{blue}{\\text{oui}} & \\text{non} & \\text{non} & \\text{non} \\\\`
           this.autoCorrection[i].propositions = [
@@ -378,7 +378,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
             },
           ]
           this.autoCorrection[i].enonce =
-            `$${texNombre2(tableauDeNombres[i])}$ est divisible par\n`
+            `$${texNombre(tableauDeNombres[i])}$ est divisible par\n`
           break
         case 'div239':
           tableauDeNombres[i] = genereValeurUnique(
@@ -390,7 +390,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
                   choice(listeDeFacteurs.slice(30))
                 : choice(listeDeFacteurs)),
           )
-          tableauDeNombresAvecCorrection[i] = `${texNombre2(
+          tableauDeNombresAvecCorrection[i] = `${texNombre(
             tableauDeNombres[i],
           )} & \\color{blue}{\\text{oui}} & \\color{blue}{\\text{oui}} & \\text{non} & \\color{blue}{\\text{oui}} & \\text{non} \\\\`
           this.autoCorrection[i].propositions = [
@@ -428,7 +428,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
             },
           ]
           this.autoCorrection[i].enonce =
-            `$${texNombre2(tableauDeNombres[i])}$ est divisible par\n`
+            `$${texNombre(tableauDeNombres[i])}$ est divisible par\n`
           break
         case 'div35':
           tableauDeNombres[i] = genereValeurUnique(
@@ -440,7 +440,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
                   choice(listeDeFacteurs.slice(30))
                 : choice(listeDeFacteurs)),
           )
-          tableauDeNombresAvecCorrection[i] = `${texNombre2(
+          tableauDeNombresAvecCorrection[i] = `${texNombre(
             tableauDeNombres[i],
           )} & \\text{non} & \\color{blue}{\\text{oui}} & \\color{blue}{\\text{oui}} & \\text{non} & \\text{non} \\\\`
           this.autoCorrection[i].propositions = [
@@ -479,7 +479,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
             },
           ]
           this.autoCorrection[i].enonce =
-            `$${texNombre2(tableauDeNombres[i])}$ est divisible par\n`
+            `$${texNombre(tableauDeNombres[i])}$ est divisible par\n`
           break
         case 'div2359':
           tableauDeNombres[i] = genereValeurUnique(
@@ -491,7 +491,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
                   choice(listeDeFacteurs.slice(30))
                 : choice(listeDeFacteurs)),
           )
-          tableauDeNombresAvecCorrection[i] = `${texNombre2(
+          tableauDeNombresAvecCorrection[i] = `${texNombre(
             tableauDeNombres[i],
           )} & \\color{blue}{\\text{oui}} & \\color{blue}{\\text{oui}} & \\color{blue}{\\text{oui}} & \\color{blue}{\\text{oui}} & \\color{blue}{\\text{oui}}\\\\`
           this.autoCorrection[i].propositions = [
@@ -528,7 +528,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
             },
           ]
           this.autoCorrection[i].enonce =
-            `$${texNombre2(tableauDeNombres[i])}$ est divisible par\n`
+            `$${texNombre(tableauDeNombres[i])}$ est divisible par\n`
           break
         case 'divrien':
           tableauDeNombres[i] = genereValeurUnique(
@@ -537,7 +537,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
               choice(listeDeFacteurs) *
               (this.sup ? choice(listeDeFacteurs.slice(30)) : 1),
           )
-          tableauDeNombresAvecCorrection[i] = `${texNombre2(
+          tableauDeNombresAvecCorrection[i] = `${texNombre(
             tableauDeNombres[i],
           )} & \\text{non} & \\text{non} & \\text{non} & \\text{non} & \\text{non} \\\\`
           this.autoCorrection[i].propositions = [
@@ -575,7 +575,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
             },
           ]
           this.autoCorrection[i].enonce =
-            `$${texNombre2(tableauDeNombres[i])}$ est divisible par\n`
+            `$${texNombre(tableauDeNombres[i])}$ est divisible par\n`
           break
       }
       this.autoCorrection[i].options = {
@@ -586,7 +586,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
       if (this.interactif || context.isAmc) {
         const props = propositionsQcm(this, i)
         this.listeQuestions[i] =
-          `$${texNombre2(tableauDeNombres[i])}$ est divisible par : ` +
+          `$${texNombre(tableauDeNombres[i])}$ est divisible par : ` +
           props.texte
         this.listeCorrections[i] = props.texteCorr
       }
@@ -607,7 +607,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
         '\\text{... est divisible} & \\text{par }2 & \\text{par }3 & \\text{par }5 & \\text{par }9 & \\text{par }10\\\\\n'
       texte += '\\hline\n'
       for (let k = 0; k < this.nbQuestions; k++) {
-        texte += `${texNombre2(tableauDeNombres[k])} & & & & & \\\\\n`
+        texte += `${texNombre(tableauDeNombres[k])} & & & & & \\\\\n`
         texte += '\\hline\n'
       }
       texte += '\\end{array}\n$'
@@ -648,7 +648,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
           return arr.slice(0, -1).join(', ') + ' et ' + arr[arr.length - 1]
         }
         const nums = tableauDeNombres.slice(0, this.nbQuestions)
-        const fmt = (n: number) => `$${texNombre2(n)}$`
+        const fmt = (n: number) => `$${texNombre(n)}$`
         const conclusionSimple = (d: number): string => {
           const yes = nums.filter((n) => n % d === 0).map(fmt)
           const no = nums.filter((n) => n % d !== 0).map(fmt)
@@ -673,7 +673,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
           for (const n of nums) {
             const s = digitSum(n)
             const div = n % 3 === 0
-            texteCorr += `<li>Pour $${texNombre2(n)}$ : $${digitSumExpr(n)}$, $${s}$ ${div ? 'est' : "n'est pas"} divisible par 3 donc $${texNombre2(n)}$ ${div ? 'est' : "n'est pas"} divisible par 3.</li>\n`
+            texteCorr += `<li>Pour $${texNombre(n)}$ : $${digitSumExpr(n)}$, $${s}$ ${div ? 'est' : "n'est pas"} divisible par 3 donc $${texNombre(n)}$ ${div ? 'est' : "n'est pas"} divisible par 3.</li>\n`
           }
           texteCorr += `</ul></li>\n`
           texteCorr += `<li style="margin-top:0.6em"><b>Par 5 :</b> un nombre est divisible par 5 si son chiffre des unités est 0 ou 5, ${conclusionSimple(5)}</li>\n`
@@ -681,7 +681,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
           for (const n of nums) {
             const s = digitSum(n)
             const div = n % 9 === 0
-            texteCorr += `<li>Pour $${texNombre2(n)}$ : $${digitSumExpr(n)}$, $${s}$ ${div ? 'est' : "n'est pas"} divisible par 9 donc $${texNombre2(n)}$ ${div ? 'est' : "n'est pas"} divisible par 9.</li>\n`
+            texteCorr += `<li>Pour $${texNombre(n)}$ : $${digitSumExpr(n)}$, $${s}$ ${div ? 'est' : "n'est pas"} divisible par 9 donc $${texNombre(n)}$ ${div ? 'est' : "n'est pas"} divisible par 9.</li>\n`
           }
           texteCorr += `</ul></li>\n`
           texteCorr += `</ul>\n`
@@ -692,7 +692,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
           for (const n of nums) {
             const s = digitSum(n)
             const div = n % 3 === 0
-            texteCorr += `\\item Pour $${texNombre2(n)}$ : $${digitSumExpr(n)}$, $${s}$ ${div ? 'est' : "n'est pas"} divisible par 3 donc $${texNombre2(n)}$ ${div ? 'est' : "n'est pas"} divisible par 3.\n`
+            texteCorr += `\\item Pour $${texNombre(n)}$ : $${digitSumExpr(n)}$, $${s}$ ${div ? 'est' : "n'est pas"} divisible par 3 donc $${texNombre(n)}$ ${div ? 'est' : "n'est pas"} divisible par 3.\n`
           }
           texteCorr += `\\end{itemize}\n`
           texteCorr += `\\vspace{0.4em}\\item {\\bfseries Par 5 :} un nombre est divisible par 5 si son chiffre des unités est 0 ou 5, ${conclusionSimple(5)}\n`
@@ -700,7 +700,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
           for (const n of nums) {
             const s = digitSum(n)
             const div = n % 9 === 0
-            texteCorr += `\\item Pour $${texNombre2(n)}$ : $${digitSumExpr(n)}$, $${s}$ ${div ? 'est' : "n'est pas"} divisible par 9 donc $${texNombre2(n)}$ ${div ? 'est' : "n'est pas"} divisible par 9.\n`
+            texteCorr += `\\item Pour $${texNombre(n)}$ : $${digitSumExpr(n)}$, $${s}$ ${div ? 'est' : "n'est pas"} divisible par 9 donc $${texNombre(n)}$ ${div ? 'est' : "n'est pas"} divisible par 9.\n`
           }
           texteCorr += `\\end{itemize}\n`
           texteCorr += `\\end{itemize}\n`
