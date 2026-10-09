@@ -81,7 +81,15 @@ function cleArcDepuisInstruction(
   ) {
     return undefined
   }
-  const extremites = [extremite1, extremite2].sort()
+  const [xCentre, yCentre] = centre.split(';').map(Number)
+  const [x1, y1] = extremite1.split(';').map(Number)
+  const [x2, y2] = extremite2.split(';').map(Number)
+  const estUnDemiCercle = x1 + x2 === 2 * xCentre && y1 + y2 === 2 * yCentre
+  // Un demi-cercle est tracé de la première à la seconde extrémité dans le sens
+  // trigonométrique : l'ordre des extrémités détermine le côté du tracé.
+  const extremites = estUnDemiCercle
+    ? [extremite1, extremite2]
+    : [extremite1, extremite2].sort()
   return `${centre}|${extremites[0]}|${extremites[1]}`
 }
 

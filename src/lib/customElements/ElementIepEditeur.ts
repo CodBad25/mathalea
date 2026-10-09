@@ -1,4 +1,4 @@
-import Alea2iep from '../../modules/Alea2iep'
+import Alea2iep, { anglesArcCentre2Extremites } from '../../modules/Alea2iep'
 import { context } from '../../modules/context'
 import { cercle } from '../2d/cercle'
 import { droite } from '../2d/droites'
@@ -854,17 +854,29 @@ function lireSommetsPolygone(sommets: string): string[] {
 }
 
 /**
+ * Référence à une étape du programme complet (ex. « de l'étape 1 »). Les étapes
+ * initiales et celles ajoutées ensuite sont numérotées séparément à partir de 1.
+ */
+function libelleEtape(etape: number, nombreEtapesInitiales = 0): string {
+  return etape < nombreEtapesInitiales
+    ? `de l’étape initiale ${etape + 1}`
+    : `de l’étape ${etape - nombreEtapesInitiales + 1}`
+}
+
+/**
  * Décrit l'élément référencé par une intersection (ex. « de la droite de l'étape 1 »)
  */
 function decrireElementPourIntersection(
   programme: InstructionIep[],
   etape: number,
+  nombreEtapesInitiales = 0,
 ): string {
   const instr = programme[etape]
+  const libelle = libelleEtape(etape, nombreEtapesInitiales)
   if (instr === undefined || !estElementIntersectable(instr)) {
-    return `de l’étape ${etape + 1}`
+    return libelle
   }
-  return `${prepositionElementIntersectable[instr.type]} de l’étape ${etape + 1}`
+  return `${prepositionElementIntersectable[instr.type]} ${libelle}`
 }
 
 function etapeObjetDirection(
@@ -879,10 +891,12 @@ function etapeObjetDirection(
 /**
  * Description en français d'une instruction pour l'affichage du programme
  * @param {InstructionIep[]} [programme] Programme complet, nécessaire pour décrire les étapes référencées par une intersection
+ * @param {number} [nombreEtapesInitiales] Nombre d'étapes initiales en tête du programme, numérotées à part
  */
 export function decrireInstruction(
   instr: InstructionIep,
   programme: InstructionIep[] = [],
+  nombreEtapesInitiales = 0,
 ): string {
   switch (instr.type) {
     case 'point':
@@ -920,21 +934,21 @@ export function decrireInstruction(
     case 'demiTourPoint':
       return `Construire le symétrique ${instr.nom} du point ${instr.p1} par rapport au point ${instr.p2} et coder le milieu.`
     case 'intersection':
-      return `Placer le point ${instr.nom}, intersection ${decrireElementPourIntersection(programme, instr.etape1)} et ${decrireElementPourIntersection(programme, instr.etape2)}.`
+      return `Placer le point ${instr.nom}, intersection ${decrireElementPourIntersection(programme, instr.etape1, nombreEtapesInitiales)} et ${decrireElementPourIntersection(programme, instr.etape2, nombreEtapesInitiales)}.`
     case 'mediatrice':
       return `Tracer la médiatrice du segment [${instr.p1}${instr.p2}] au compas.`
     case 'perpendiculaire':
       return `Tracer la perpendiculaire à (${instr.p1}${instr.p2}) passant par ${instr.p3} avec la règle et l’équerre.`
     case 'perpendiculaireAObjet':
-      return `Tracer la perpendiculaire ${decrireElementPourIntersection(programme, instr.etape)} passant par ${instr.p1} avec la règle et l’équerre.`
+      return `Tracer la perpendiculaire ${decrireElementPourIntersection(programme, instr.etape, nombreEtapesInitiales)} passant par ${instr.p1} avec la règle et l’équerre.`
     case 'parallele':
       return `Tracer la parallèle à (${instr.p1}${instr.p2}) passant par ${instr.p3} avec la règle et l’équerre.`
     case 'paralleleAObjet':
-      return `Tracer la parallèle ${decrireElementPourIntersection(programme, instr.etape)} passant par ${instr.p1} avec la règle et l’équerre.`
+      return `Tracer la parallèle ${decrireElementPourIntersection(programme, instr.etape, nombreEtapesInitiales)} passant par ${instr.p1} avec la règle et l’équerre.`
     case 'paralleleObjet':
-      return `Tracer la parallèle ${decrireElementPourIntersection(programme, instr.element)} passant par ${instr.p1} avec la règle et l’équerre.`
+      return `Tracer la parallèle ${decrireElementPourIntersection(programme, instr.element, nombreEtapesInitiales)} passant par ${instr.p1} avec la règle et l’équerre.`
     case 'prolongerObjet':
-      return `Prolonger ${decrireElementPourIntersection(programme, instr.etape).replace('de', '')} à la règle (${formateNombre(instr.longueur ?? longueurProlongementObjetEditeurIep)} cm).`
+      return `Prolonger ${decrireElementPourIntersection(programme, instr.etape, nombreEtapesInitiales).replace('de', '')} à la règle (${formateNombre(instr.longueur ?? longueurProlongementObjetEditeurIep)} cm).`
     case 'bissectrice':
       return `Tracer la bissectrice de l’angle ${instr.p1}${instr.p2}${instr.p3} au compas.`
     case 'codageAngleDroit':
@@ -1294,7 +1308,47 @@ function instructionEstValide(
       references.push((instr as unknown as Record<string, string>)[cle])
     }
   }
-  return references.every((nom) => nomsConnus.has(nom))
+  if (!references.every((nom) => nomsConnus.has(nom))) return false
+  if (instr.type === 'arcPointPointCentre') {
+    return (
+      messageArcImpossible(
+        instr,
+        pointsConstruitsDepuisProgramme(programme.slice(0, index)),
+      ) === undefined
+    )
+  }
+  return true
+}
+
+/**
+ * Donne la raison pour laquelle un arc (centre + extrémités) ne peut pas être tracé :
+ * extrémités confondues, centre confondu avec une extrémité ou extrémités
+ * qui ne sont pas à la même distance du centre.
+ * Renvoie undefined si l'arc est traçable ou si un de ses points n'est pas placé.
+ */
+function messageArcImpossible(
+  instr: Extract<InstructionIep, { type: 'arcPointPointCentre' }>,
+  points: Map<string, PointAbstrait>,
+): string | undefined {
+  const centre = points.get(instr.p1)
+  const A = points.get(instr.p2)
+  const B = points.get(instr.p3)
+  if (centre === undefined || A === undefined || B === undefined) {
+    return undefined
+  }
+  const rayonA = Math.hypot(A.x - centre.x, A.y - centre.y)
+  const rayonB = Math.hypot(B.x - centre.x, B.y - centre.y)
+  const tolerance = 1e-6
+  if (rayonA < tolerance || rayonB < tolerance) {
+    return `le centre ${instr.p1} ne peut pas être une extrémité de l’arc.`
+  }
+  if (Math.hypot(B.x - A.x, B.y - A.y) < tolerance) {
+    return 'les deux extrémités de l’arc doivent être différentes.'
+  }
+  if (Math.abs(rayonA - rayonB) > tolerance * Math.max(1, rayonA)) {
+    return `${instr.p2} et ${instr.p3} ne sont pas à la même distance de ${instr.p1}.`
+  }
+  return undefined
 }
 
 /**
@@ -1330,6 +1384,14 @@ type CommandeFigureStatiqueIep =
   | { type: 'point'; point: PointAbstrait; label?: string }
   | { type: 'segment'; p1: PointAbstrait; p2: PointAbstrait; couleur?: string }
   | { type: 'cercle'; centre: PointAbstrait; rayon: number }
+  | {
+      type: 'arc'
+      centre: PointAbstrait
+      rayon: number
+      // angles en degrés, sens trigonométrique
+      debut: number
+      fin: number
+    }
   | {
       type: 'segmentCodage'
       p1: PointAbstrait
@@ -1628,6 +1690,9 @@ function positionsRangementInstruments(
  * Joue le programme sur une instance d'Alea2iep.
  * Renvoie la liste des indices des étapes ignorées (points non définis).
  */
+// Décalage (en cm) du nom d'un point pour qu'il ne chevauche pas sa croix
+const decalageLabelPoint = { dx: 0.25, dy: -0.1 }
+
 function jouerProgramme(
   anim: Alea2iep,
   programme: InstructionIep[],
@@ -1682,6 +1747,7 @@ function jouerProgramme(
           anim.pointCreer(A, {
             label: instr.nom,
             taille: tailleLabelsPoints ?? 10,
+            ...decalageLabelPoint,
           })
           points.set(instr.nom, A)
           break
@@ -1701,6 +1767,7 @@ function jouerProgramme(
           anim.pointCreer(A, {
             label: instr.nom,
             taille: tailleLabelsPoints ?? 10,
+            ...decalageLabelPoint,
           })
           points.set(instr.nom, A)
           break
@@ -1853,7 +1920,7 @@ function jouerProgramme(
         }
         case 'arcPointPointCentre': {
           const pts = recupere(instr.p1, instr.p2, instr.p3)
-          if (pts === undefined) {
+          if (pts === undefined || messageArcImpossible(instr, points)) {
             etapesIgnorees.push(index)
             break
           }
@@ -1953,6 +2020,7 @@ function jouerProgramme(
           anim.pointCreer(A, {
             label: instr.nom,
             taille: tailleLabelsPoints ?? 10,
+            ...decalageLabelPoint,
           })
           points.set(instr.nom, A)
           break
@@ -2572,12 +2640,22 @@ function construireCommandesFigureStatique(
       }
       case 'arcPointPointCentre': {
         const pts = recupere(instr.p1, instr.p2, instr.p3)
-        if (pts !== undefined) {
-          ajouterCercleFigureStatique(
-            commandes,
+        if (
+          pts !== undefined &&
+          messageArcImpossible(instr, points) === undefined
+        ) {
+          const { debut, fin } = anglesArcCentre2Extremites(
             pts[0],
-            longueur(pts[0], pts[1]),
+            pts[1],
+            pts[2],
           )
+          commandes.push({
+            type: 'arc',
+            centre: pts[0],
+            rayon: longueur(pts[0], pts[1], 6),
+            debut,
+            fin,
+          })
         }
         break
       }
@@ -2637,6 +2715,16 @@ function construireCommandesFigureStatique(
   return commandes
 }
 
+function pointArcFigureStatique(
+  arc: Extract<CommandeFigureStatiqueIep, { type: 'arc' }>,
+  angle: number,
+) {
+  return {
+    x: arc.centre.x + arc.rayon * Math.cos((angle * Math.PI) / 180),
+    y: arc.centre.y + arc.rayon * Math.sin((angle * Math.PI) / 180),
+  }
+}
+
 function bornesFigureStatique(commandes: CommandeFigureStatiqueIep[]) {
   const bornes = { xmin: 0, ymin: 0, xmax: 10, ymax: 10 }
   let initialise = false
@@ -2670,6 +2758,15 @@ function bornesFigureStatique(commandes: CommandeFigureStatiqueIep[]) {
         commande.centre.x + commande.rayon,
         commande.centre.y + commande.rayon,
       )
+    }
+    if (commande.type === 'arc') {
+      for (let i = 0; i <= 8; i++) {
+        const { x, y } = pointArcFigureStatique(
+          commande,
+          commande.debut + ((commande.fin - commande.debut) * i) / 8,
+        )
+        ajoute(x, y)
+      }
     }
     if (commande.type === 'texte') ajoute(commande.x, commande.y)
   }
@@ -2736,6 +2833,11 @@ function rendreFigureStatiqueLatex(figure: FigureStatiqueIep) {
     } else if (commande.type === 'cercle') {
       lignes.push(
         `\\draw (${nombreFigureStatique(commande.centre.x)},${nombreFigureStatique(commande.centre.y)}) circle (${nombreFigureStatique(commande.rayon)});`,
+      )
+    } else if (commande.type === 'arc') {
+      const depart = pointArcFigureStatique(commande, commande.debut)
+      lignes.push(
+        `\\draw (${nombreFigureStatique(depart.x)},${nombreFigureStatique(depart.y)}) arc[start angle=${nombreFigureStatique(commande.debut)}, end angle=${nombreFigureStatique(commande.fin)}, radius=${nombreFigureStatique(commande.rayon)}];`,
       )
     } else if (commande.type === 'point') {
       const x = nombreFigureStatique(commande.point.x)
@@ -2841,6 +2943,15 @@ function rendreFigureStatiqueSvg(figure: FigureStatiqueIep) {
     } else if (commande.type === 'cercle') {
       lignes.push(
         `<circle cx="${nombreFigureStatique(sx(commande.centre.x))}" cy="${nombreFigureStatique(sy(commande.centre.y))}" r="${nombreFigureStatique(commande.rayon * pixelsParCm)}" />`,
+      )
+    } else if (commande.type === 'arc') {
+      const depart = pointArcFigureStatique(commande, commande.debut)
+      const arrivee = pointArcFigureStatique(commande, commande.fin)
+      const rayon = nombreFigureStatique(commande.rayon * pixelsParCm)
+      // L'axe des ordonnées du SVG est orienté vers le bas
+      const sensSvg = commande.fin > commande.debut ? 0 : 1
+      lignes.push(
+        `<path d="M ${nombreFigureStatique(sx(depart.x))} ${nombreFigureStatique(sy(depart.y))} A ${rayon} ${rayon} 0 0 ${sensSvg} ${nombreFigureStatique(sx(arrivee.x))} ${nombreFigureStatique(sy(arrivee.y))}" />`,
       )
     }
   }
@@ -2950,9 +3061,12 @@ type ProgrammeSauvegardeIep = {
   programme: InstructionIep[]
   conditionsInitialesAttribut: string
   programmeInitialAttribut: string
+  programmeAttenduAttribut: string
 }
 
-// Les programmes sont conservés ici pour survivre aux re-rendus de l'exercice
+// Les programmes sont conservés ici pour survivre aux re-rendus de l'exercice.
+// Le programme attendu fait partie de la clé : un nouvel énoncé dont les
+// conditions initiales sont identiques repart d'un programme vierge.
 const programmesParId = new Map<string, ProgrammeSauvegardeIep>()
 
 function clonerProgramme(programme: InstructionIep[]): InstructionIep[] {
@@ -3074,6 +3188,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     return [
       'conditions-initiales',
       'programme-initial',
+      'programme-attendu',
       'instructions-disponibles',
     ]
   }
@@ -3328,6 +3443,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
       ![
         'conditions-initiales',
         'programme-initial',
+        'programme-attendu',
         'instructions-disponibles',
       ].includes(name)
     ) {
@@ -3352,12 +3468,16 @@ export class ElementIepEditeur extends MathaleaCustomElement {
       programmeInitialAttribut,
     )
     this.initialiserInstructionsProtegees(programmeInitial)
+    const programmeAttenduAttribut =
+      this.getAttribute('programme-attendu') ?? ''
     const programmeSauvegarde = programmesParId.get(id)
     if (
       programmeSauvegarde !== undefined &&
       programmeSauvegarde.conditionsInitialesAttribut ===
         conditionsInitialesAttribut &&
-      programmeSauvegarde.programmeInitialAttribut === programmeInitialAttribut
+      programmeSauvegarde.programmeInitialAttribut ===
+        programmeInitialAttribut &&
+      programmeSauvegarde.programmeAttenduAttribut === programmeAttenduAttribut
     ) {
       this.programme = programmeSauvegarde.programme
     } else {
@@ -3367,6 +3487,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
         programme: this.programme,
         conditionsInitialesAttribut,
         programmeInitialAttribut,
+        programmeAttenduAttribut,
       })
     }
     this.prochaineLettre = pointsDefinis(this.programmeComplet()).length
@@ -3489,6 +3610,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
       conditionsInitialesAttribut:
         this.getAttribute('conditions-initiales') ?? '',
       programmeInitialAttribut: this.getAttribute('programme-initial') ?? '',
+      programmeAttenduAttribut: this.getAttribute('programme-attendu') ?? '',
     })
     this.terminerEdition()
     this.rafraichirProgramme()
@@ -3724,7 +3846,11 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     )
     this.conditionsInitiales.forEach((instr) => {
       const item = document.createElement('li')
-      item.innerText = decrireInstruction(instr, this.conditionsInitiales)
+      item.innerText = decrireInstruction(
+        instr,
+        this.conditionsInitiales,
+        this.conditionsInitiales.length,
+      )
       liste.appendChild(item)
     })
     details.appendChild(liste)
@@ -4054,7 +4180,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
         for (const { index: etape, type: typeElement } of elements) {
           const option = document.createElement('option')
           option.value = String(etape)
-          option.innerText = `${nomsTypesElementsIntersectables[typeElement]} de l’étape ${etape + 1}`
+          option.innerText = `${nomsTypesElementsIntersectables[typeElement]} ${libelleEtape(etape, this.conditionsInitiales.length)}`
           select.appendChild(option)
         }
         // Par défaut, on propose des étapes différentes pour chaque champ
@@ -4272,6 +4398,25 @@ export class ElementIepEditeur extends MathaleaCustomElement {
       }
       if (!enEdition) this.prochaineLettre++
     }
+    if (type === 'arcPointPointCentre') {
+      const etapesPrecedentes = enEdition
+        ? this.programme.slice(0, this.editingIndex as number)
+        : this.programme
+      const message = messageArcImpossible(
+        instruction as unknown as Extract<
+          InstructionIep,
+          { type: 'arcPointPointCentre' }
+        >,
+        pointsConstruitsDepuisProgramme([
+          ...this.conditionsInitiales,
+          ...etapesPrecedentes,
+        ]),
+      )
+      if (message !== undefined) {
+        window.alert(`Impossible de tracer cet arc : ${message}`)
+        return
+      }
+    }
     if (enEdition) {
       this.programme[this.editingIndex as number] =
         instruction as unknown as InstructionIep
@@ -4414,18 +4559,33 @@ export class ElementIepEditeur extends MathaleaCustomElement {
       }
       const numero = document.createElement('span')
       numero.classList.add('text-gray-500', 'w-6', 'text-right', 'shrink-0')
-      numero.innerText = `${indexComplet + 1}.`
+      numero.innerText = `${index + 1}.`
       ligne.appendChild(numero)
 
       const texte = document.createElement('span')
       texte.classList.add('grow')
-      texte.innerText = decrireInstruction(instruction, programmeComplet)
+      texte.innerText = decrireInstruction(
+        instruction,
+        programmeComplet,
+        offset,
+      )
       if (!instructionEstValide(programmeComplet, indexComplet)) {
         texte.classList.add('text-red-600', 'line-through')
+        const messageArc =
+          instruction.type === 'arcPointPointCentre'
+            ? messageArcImpossible(
+                instruction,
+                pointsConstruitsDepuisProgramme(
+                  programmeComplet.slice(0, indexComplet),
+                ),
+              )
+            : undefined
         texte.title =
-          instruction.type === 'intersection'
-            ? 'Étape ignorée : un des éléments choisis n’est pas valide.'
-            : 'Étape ignorée : un des points n’est pas encore placé.'
+          messageArc !== undefined
+            ? `Étape ignorée : ${messageArc}`
+            : instruction.type === 'intersection'
+              ? 'Étape ignorée : un des éléments choisis n’est pas valide.'
+              : 'Étape ignorée : un des points n’est pas encore placé.'
       }
       ligne.appendChild(texte)
 
