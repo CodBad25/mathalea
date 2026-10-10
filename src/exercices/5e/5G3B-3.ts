@@ -51,7 +51,7 @@ export const titre = 'Utiliser les propriétés de conservation de la symétrie'
 
 // Gestion de la date de publication initiale
 export const dateDePublication = '25/01/2023'
-export const dateDeModifImportante = '13/11/2025'
+export const dateDeModifImportante = '10/10/2026'
 
 /**
  * Utiliser les propriétés de la symétrie pour répondre à des questions
@@ -494,14 +494,15 @@ export default class SymetrieProprietes extends Exercice {
               ),
             )
           }
+          // Réserver trois lignes sous les figures : les mesures restent lisibles,
+          // même pour un triangle très aplati ou des triangles qui se chevauchent.
+          const figureBounds = fixeBordures(objetsEnonce)
+          const legendX = (figureBounds.xmin + figureBounds.xmax) / 2
+          const legendY = figureBounds.ymin - 0.8
           ptRef1 = longueur(A, B) < longueur(C, B) ? A : C
           ptRef2 = longueur(A, B) < longueur(C, B) ? C : A
           Barc = homothetie(ptRef1, B, 2 / 10)
-          BLabel = rotation(
-            homothetie(ptRef1, B, 2 / 10 + 1 / longueur(ptRef1, B)),
-            B,
-            angleOriente(ptRef1, B, ptRef2) / 3,
-          )
+          BLabel = pointAbstrait(legendX, legendY)
           BLabel.positionLabel = 'center'
           objetsEnonce.push(
             arc(
@@ -513,7 +514,7 @@ export default class SymetrieProprietes extends Exercice {
               'green',
             ),
             latexParPoint(
-              `${angle(ptRef1, B, ptRef2, 0)}^\\circ`,
+              `\\widehat{${A.nom}${B.nom}${C.nom}}=${angle(ptRef1, B, ptRef2, 0)}^\\circ`,
               BLabel,
               'green',
               12,
@@ -524,11 +525,7 @@ export default class SymetrieProprietes extends Exercice {
           ptRef1 = longueur(A, C) < longueur(C, B) ? A : B
           ptRef2 = longueur(A, C) < longueur(C, B) ? B : A
           Carc = homothetie(ptRef1, C, 2 / 10)
-          CLabel = rotation(
-            homothetie(ptRef1, C, 2 / 10 + 1 / longueur(ptRef1, C)),
-            C,
-            angleOriente(ptRef1, C, ptRef2) / 3,
-          )
+          CLabel = pointAbstrait(legendX, legendY - 1)
           CLabel.positionLabel = 'center'
           objetsEnonce.push(
             arc(
@@ -540,7 +537,7 @@ export default class SymetrieProprietes extends Exercice {
               'green',
             ),
             latexParPoint(
-              `${angle(ptRef1, C, ptRef2, 0)}^\\circ`,
+              `\\widehat{${A.nom}${C.nom}${B.nom}}=${angle(ptRef1, C, ptRef2, 0)}^\\circ`,
               CLabel,
               'green',
               12,
@@ -551,11 +548,7 @@ export default class SymetrieProprietes extends Exercice {
           ptRef1 = longueur(A, C) < longueur(A, B) ? C : B
           ptRef2 = longueur(A, C) < longueur(A, B) ? B : C
           Aarc = homothetie(ptRef1, A, 2 / 10)
-          ALabel = rotation(
-            homothetie(ptRef1, A, 2 / 10 + 1 / longueur(A, ptRef1)),
-            A,
-            angleOriente(ptRef1, A, ptRef2) / 3,
-          )
+          ALabel = pointAbstrait(legendX, legendY - 2)
           ALabel.positionLabel = 'center'
           objetsEnonce.push(
             arc(
@@ -567,7 +560,7 @@ export default class SymetrieProprietes extends Exercice {
               'green',
             ),
             latexParPoint(
-              `${180 - angle(A, ptRef2, ptRef1, 0) - angle(A, ptRef1, ptRef2, 0)}^\\circ`,
+              `\\widehat{${B.nom}${A.nom}${C.nom}}=${180 - angle(A, ptRef2, ptRef1, 0) - angle(A, ptRef1, ptRef2, 0)}^\\circ`,
               ALabel,
               'green',
               12,
