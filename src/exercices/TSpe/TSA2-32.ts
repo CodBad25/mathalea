@@ -138,7 +138,7 @@ export default class LimitesEnUnReel extends Exercice {
           })
         : quadratic
           ? `Calculer les limites à gauche et à droite de $f$ en $${pointTex}$ et en $${otherPointTex}$.`
-          : `Calculer la limite de $f$ en $${pointTex}$.`
+          : `Calculer les limites à gauche et à droite de $f$ en $${pointTex}$.`
       this.listeQuestions[i] =
         `Soit $f$ la fonction définie sur $\\mathbb R\\setminus\\{${quadratic ? `${texNombre(-root)};${texNombre(root)}` : pointTex}\\}$ par $f(x)=${expression}$.<br>${answerFields}`
 
