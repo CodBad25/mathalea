@@ -9,6 +9,7 @@ import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import type { AnswerType, IExercice } from '../../lib/types'
+import { context } from '../../modules/context'
 import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
@@ -344,7 +345,14 @@ class MettreDesParentheses extends Exercice {
         if (char === '_') content += `~%{champ${index++}}`
       }
       content += `~=~${resultat}`
-      texte += remplisLesBlancs(this, i, content)
+      // En Typst, pas de pointillés : on n'a pas besoin de place pour ajouter des parenthèses
+      texte += remplisLesBlancs(
+        this,
+        i,
+        content,
+        '',
+        context.isTypst ? '' : '\\ldots',
+      )
       // on élimine test des assignations, car on n'en a pas besoin pour la suite, le nouvel objet contenant les opérandes s'appelle valeurs
       const valeurs = {
         a: assignations.a,
