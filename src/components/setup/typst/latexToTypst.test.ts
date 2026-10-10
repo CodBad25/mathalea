@@ -296,7 +296,7 @@ describe('latexMathToTypst', () => {
   })
 
   it('conserve les espaces insécables HTML dans les formules', () => {
-    // 5G3B-3 : sp() émet &nbsp; même lors de la génération Typst.
+    // 5G3B-2 : sp() émet &nbsp; même lors de la génération Typst.
     for (const space of ['&nbsp;', '&#160;', '&#xA0;', '\u00a0']) {
       expect(latexMathToTypst(`AB=4${space}\\text{cm}`)).toBe(
         'A B = 4 space.nobreak#txt("cm")',
