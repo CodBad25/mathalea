@@ -167,6 +167,7 @@ type GestionnaireFormulaireTexteParams = {
   shuffle?: boolean
   nbQuestions: number
   melange: number
+  melangeMax?: number
   enleveDoublons?: boolean
   exclus?: number[]
 }
@@ -181,6 +182,7 @@ type GestionnaireFormulaireTexteParams = {
  * @param {boolean} [params.shuffle=true] - Si true, on brasse la liste en sortie sinon on garde l'ordre
  * @param {number} params.nbQuestions - Obligatoire : c'est la taille de la liste en sortie. Si 0, alors le nbQuestions correspond à la longueur de saisie.
  * @param {number} params.melange - La valeur utilisée pour l'option mélange
+ * @param {number} [params.melangeMax=max] - Dernière valeur incluse dans le mélange (pour garder hors mélange des cas ajoutés après la valeur de mélange)
  * @param {boolean} [params.enleveDoublons=false] - Si true, la liste en sortie ne peut pas contenir deux fois la même valeur
  * @param {number[]} [params.exclus] - Liste de valeurs à exclure entre min et max
  */
@@ -195,6 +197,7 @@ export function gestionnaireFormulaireTexte(
     listeOfCase,
     shuffle = true,
     melange = 0,
+    melangeMax = max,
     enleveDoublons = false,
   } = params
   let { nbQuestions, exclus } = params
@@ -260,7 +263,7 @@ export function gestionnaireFormulaireTexte(
   if (listeIndex.length === 0) listeIndex = [defaut] // EE : Le cas où finalement listeIndex est vide car la saisie n'était pas un paramètre attendu.
 
   if (melange != null && compteOccurences(listeIndex, melange)) {
-    listeIndex = rangeMinMax(min, max, exclus)
+    listeIndex = rangeMinMax(min, melangeMax, exclus)
   }
   if (nbQuestions === 0) {
     nbQuestions = listeIndex.length
