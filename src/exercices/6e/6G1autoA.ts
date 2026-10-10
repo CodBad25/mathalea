@@ -136,14 +136,17 @@ export default class constructionElementaire extends Exercice {
       if (context.isHtml && !this.interactif)
         enonce += numAlpha(questind++) + ' Reproduire la figure ci-dessous.<br>'
       enonce +=
-        numAlpha(questind++) + `Tracer $(${A.nom}${B.nom})$ en bleu.<br>`
-      enonce +=
-        numAlpha(questind++) + `Tracer $[${A.nom}${C.nom}]$ en rouge.<br>`
-      enonce +=
-        numAlpha(questind++) + `Tracer $[${C.nom}${D.nom})$ en vert.<br>`
+        numAlpha(questind++) +
+        `Tracer la droite $(${A.nom}${B.nom})$ en bleu.<br>`
       enonce +=
         numAlpha(questind++) +
-        `Placer $${E.nom}$ le point d'intersection de $(${A.nom}${B.nom})$ et $[${C.nom}${D.nom})$.<br>`
+        `Tracer le segment $[${A.nom}${C.nom}]$ en rouge.<br>`
+      enonce +=
+        numAlpha(questind++) +
+        `Tracer la demi-droite $[${C.nom}${D.nom})$ en vert.<br>`
+      enonce +=
+        numAlpha(questind++) +
+        `Placer $${E.nom}$ le point d'intersection de la droite $(${A.nom}${B.nom})$ et de la demi-droite $[${C.nom}${D.nom})$.<br>`
       enonce +=
         numAlpha(questind++) +
         `Placer un point $${F.nom}$ tel que $${F.nom} \\notin [${A.nom}${B.nom}]$ et $${F.nom} \\in (${A.nom}${B.nom})$.<br>`
