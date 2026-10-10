@@ -6,6 +6,7 @@
     TBI_MAX_ZOOM,
     TBI_MIN_ZOOM,
     moveCardToTab,
+    setTbiCardCorrectionMode,
     tbiState,
   } from '../../../lib/stores/tbiStore'
   import TbiCardActions from './TbiCardActions.svelte'
@@ -55,7 +56,12 @@
     onDelete = () => {},
   }: Props = $props()
 
-  let correctionMode: StaticCorrectionMode = $state('hidden')
+  // Réglage porté par tbiState (partagé dans l'URL et le fichier de réglages).
+  // « Après chaque question » n'existe pas pour une image : traité comme « sous l'énoncé ».
+  let correctionMode: StaticCorrectionMode = $derived.by(() => {
+    const mode = $tbiState.cards[paramsIndex]?.correctionMode ?? 'hidden'
+    return mode === 'perQuestion' ? 'below' : mode
+  })
   /** Zoom propre à la correction en plein écran, indépendant du zoom de la carte */
   let modalZoom = $state(1.2)
 
@@ -74,9 +80,7 @@
   ]
 
   function setCorrectionMode(mode: StaticCorrectionMode) {
-    correctionMode = mode
-    // une seule correction en plein écran à la fois sur l'ensemble des cartes
-    activeTbiModalCard.set(mode === 'modal' ? paramsIndex : null)
+    setTbiCardCorrectionMode(paramsIndex, mode)
     if (mode === 'modal') modalZoom = Math.max(zoom, 1.2)
   }
 
@@ -86,7 +90,7 @@
 
   $effect(() => {
     if (correctionMode === 'modal' && $activeTbiModalCard !== paramsIndex) {
-      correctionMode = 'hidden'
+      setTbiCardCorrectionMode(paramsIndex, 'hidden')
     }
   })
 
@@ -104,7 +108,10 @@
   }
 
   function zoomModalBy(delta: number) {
-    modalZoom = Math.min(TBI_MAX_ZOOM, Math.max(TBI_MIN_ZOOM, modalZoom + delta))
+    modalZoom = Math.min(
+      TBI_MAX_ZOOM,
+      Math.max(TBI_MIN_ZOOM, modalZoom + delta),
+    )
   }
 
   function toggleColBreak() {

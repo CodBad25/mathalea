@@ -17,6 +17,8 @@
     TBI_MIN_QUESTION_SPACING,
     TBI_MIN_ZOOM,
     moveCardToTab,
+    setTbiCardCorrectionDetail,
+    setTbiCardCorrectionMode,
     tbiState,
   } from '../../../lib/stores/tbiStore'
   import type { IExercice } from '../../../lib/types'
@@ -64,17 +66,20 @@
     onDelete = () => {},
   }: Props = $props()
 
-  let correctionMode: TbiCorrectionMode = $state('hidden')
-  let correctionDetail: TbiCorrectionDetail = $state('full')
+  // Réglages de correction portés par tbiState (et non par la carte) pour
+  // être partagés dans l'URL et conservés dans le fichier de réglages.
+  let correctionMode: TbiCorrectionMode = $derived(
+    $tbiState.cards[paramsIndex]?.correctionMode ?? 'hidden',
+  )
+  let correctionDetail: TbiCorrectionDetail = $derived(
+    $tbiState.cards[paramsIndex]?.correctionDetail ?? 'full',
+  )
   let isSettingsModalDisplayed = $state(false)
   /** Zoom propre à la correction en plein écran, indépendant du zoom de la carte */
   let modalZoom = $state(1.2)
 
   function setCorrectionMode(mode: TbiCorrectionMode) {
-    correctionMode = mode
-    // une seule correction en plein écran à la fois, même si le mode est
-    // propre à chaque carte : ouvrir celle-ci ferme celle d'une autre carte
-    activeTbiModalCard.set(mode === 'modal' ? paramsIndex : null)
+    setTbiCardCorrectionMode(paramsIndex, mode)
     if (mode === 'modal') modalZoom = Math.max(zoom, 1.2)
   }
 
@@ -97,9 +102,10 @@
     )
   }
 
+  // ouvrir la correction en plein écran d'une autre carte ferme celle-ci
   $effect(() => {
     if (correctionMode === 'modal' && $activeTbiModalCard !== paramsIndex) {
-      correctionMode = 'hidden'
+      setTbiCardCorrectionMode(paramsIndex, 'hidden')
     }
   })
   /** Incrémenté à chaque régénération pour ré-injecter le HTML */
@@ -424,7 +430,7 @@
           {correctionMode}
           {correctionDetail}
           onCorrection={setCorrectionMode}
-          onDetail={(detail) => (correctionDetail = detail)}
+          onDetail={(detail) => setTbiCardCorrectionDetail(paramsIndex, detail)}
         />
       {/if}
     </div>
@@ -578,8 +584,10 @@
               ? 'Afficher la correction entière'
               : "Quand une correction met sa réponse en évidence (en orange), n'afficher que cette réponse"}
             onclick={() =>
-              (correctionDetail =
-                correctionDetail === 'minimal' ? 'full' : 'minimal')}
+              setTbiCardCorrectionDetail(
+                paramsIndex,
+                correctionDetail === 'minimal' ? 'full' : 'minimal',
+              )}
           >
             {correctionDetail === 'minimal' ? 'Complète' : 'Minimale'}
           </button>
