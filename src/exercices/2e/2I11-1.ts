@@ -17,7 +17,7 @@ export const interactifReady = true
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '9/12/2021'
-export const dateDeModifImportante = '28/04/2023' // ajout du cas entreprise
+export const dateDeModifImportante = '10/10/2026'
 /**
  * Problèmes de proportions
  *
@@ -42,12 +42,16 @@ export const refs = {
 type Situation = 'spectacle' | 'cadeau' | 'réserve' | 'entreprise'
 type TypeDeQuestion = 'sous-population' | 'proportion' | 'population-totale'
 
-// Pourcentages qui permettent de retrouver facilement le total de tête (× 20, × 10, × 5, × 4, × 2)
-const tauxFacilesPourLeTotal = [5, 10, 20, 25, 50]
+// Pourcentages qui permettent de retrouver facilement le total de tête (× 20, × 10, × 5, × 4)
+const tauxFacilesPourLeTotal = [5, 10, 20, 25]
+
+/** Multiples de 100 de min à max */
+const centaines = (min: number, max: number) =>
+  Array.from({ length: (max - min) / 100 + 1 }, (_, k) => min + 100 * k)
 
 /**
  * Tire un effectif total et un pourcentage simples, calculables sans calculatrice :
- * pourcentages usuels (10 %, 25 %, 50 %…) et effectifs « ronds » pour que la
+ * pourcentages usuels (10 %, 20 %, 25 %…, jamais 50 %) et effectifs « ronds » pour que la
  * sous-population soit entière et facile à obtenir de tête.
  * Pour retrouver la population totale, seuls les pourcentages les plus simples sont proposés.
  * @returns [effectif total, pourcentage]
@@ -56,32 +60,46 @@ function valeursSansCalculatrice(
   situation: Situation,
   typeDeQuestion: TypeDeQuestion,
 ): [number, number] {
+  const proportion = typeDeQuestion === 'proportion'
   const tauxPossibles = (liste: number[]) =>
     typeDeQuestion === 'population-totale'
       ? liste.filter((taux) => tauxFacilesPourLeTotal.includes(taux))
       : liste
+  const totauxPossibles = (liste: number[], taux: number) =>
+    liste.filter((effectif) => {
+      // Sous-population entière
+      if ((effectif * taux) % 100 !== 0) return false
+      // Pour 25 % et 75 %, le quart doit être simple (pas 2 500 ÷ 4 = 625)
+      const quart = effectif / 4
+      if ((taux === 25 || taux === 75) && quart % 10 !== 0 && quart >= 50)
+        return false
+      // Pour une proportion, la fraction se ramène à un dénominateur 100 en une seule étape
+      return (
+        !proportion ||
+        100 % effectif === 0 ||
+        (effectif % 100 === 0 && effectif <= 1000)
+      )
+    })
+  const tirer = (listeTaux: number[], listeTotaux: number[]) => {
+    const taux = choice(tauxPossibles(listeTaux))
+    return [choice(totauxPossibles(listeTotaux, taux)), taux] as [
+      number,
+      number,
+    ]
+  }
   switch (situation) {
     case 'spectacle':
-      return [
-        100 * randint(2, 30),
-        choice(tauxPossibles([5, 10, 20, 25, 30, 40, 50, 75])),
-      ]
+      return tirer([5, 10, 20, 25, 30, 40, 75], centaines(200, 2000))
     case 'réserve':
-      return [100 * randint(5, 30), choice([5, 10, 20, 25, 50])]
-    case 'cadeau': {
-      const taux = choice([10, 20, 25, 50])
-      return [choice([20, 40, 60, 80, 100, 120, 160, 200]), taux]
-    }
+      return tirer([5, 10, 20, 25], centaines(500, 2000))
+    case 'cadeau':
+      return tirer([10, 20, 25], [20, 40, 60, 80, 100, 120, 160, 200])
     case 'entreprise':
-    default: {
-      const taux = choice(tauxPossibles([2, 5, 10, 20, 25, 30, 40, 50]))
-      const totale = choice(
-        [50, 100, 150, 200, 250, 300, 400, 500].filter(
-          (effectif) => (effectif * taux) % 100 === 0,
-        ),
+    default:
+      return tirer(
+        [5, 10, 20, 25, 30, 40],
+        [50, 100, 150, 200, 250, 300, 400, 500],
       )
-      return [totale, taux]
-    }
   }
 }
 const pgcd = (a: number, b: number): number => (b === 0 ? a : pgcd(b, a % b))
@@ -176,7 +194,7 @@ function correctionDeTete(
         calcul = `$\\dfrac{${s}}{100}$`
       } else if (total % 100 === 0 && total / 100 <= 10) {
         const k = total / 100
-        calcul = `$\\dfrac{${s}}{${t}} = \\dfrac{${s} \\div ${k}}{${t} \\div ${k}} = \\dfrac{${taux}}{100}$`
+        calcul = `$\\dfrac{${s}}{${t}} = \\dfrac{${taux} \\times ${k}}{100 \\times ${k}} = \\dfrac{${taux}}{100}$`
       } else if (100 % total === 0) {
         const k = 100 / total
         calcul = `$\\dfrac{${s}}{${t}} = \\dfrac{${s} \\times ${k}}{${t} \\times ${k}} = \\dfrac{${taux}}{100}$`
@@ -202,7 +220,7 @@ export default class Proportions extends Exercice {
   constructor() {
     super()
     this.besoinFormulaireNumerique = [
-      'Niveau de difficulté',
+      'Choix des questions',
       4,
       "1 : Déterminer l'effectif d'une sous-population \n2 : Calculer une proportion en pourcentage\n3 : Calculer l'effectif de la population totale \n4 : Mélange",
     ]
@@ -611,6 +629,7 @@ export default class Proportions extends Exercice {
         }
       }
 
+      if (this.interactif) texte += '<br>'
       texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, {
         texteApres:
           listeTypeDeQuestions[i] === 'proportion'
