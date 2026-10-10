@@ -1226,6 +1226,20 @@ de composer le texte avec les réglages du document.
 
 #### Outil « Découper l’image »
 
+Lorsqu'un énoncé ou un corrigé d'annale en image dépasse réellement la page, un
+encart au-dessus de l'aperçu explique comment répartir une image trop haute
+sur plusieurs pages sans réduire le texte. « Choisir une image à découper »
+donne accès à chaque énoncé et corrigé concerné, même lorsque la palette est
+masquée. Les corrigés sont proposés seulement si leur affichage est activé,
+et cet encart n'apparaît pas en présentation « Course aux nombres ».
+Une croix permet de le masquer jusqu'au prochain chargement de la vue.
+`imageOverflow.ts` instrumente uniquement la source de l'aperçu : Typst
+publie la position et les dimensions finales de chaque image ou fragment,
+après ajustement de largeur et zoom. `overflowingImages` compare ces mesures
+aux limites des pages, avec une tolérance de 0,5 pt. Les images qui tiennent
+dans la page ne sont pas proposées. Les repères de mesure ne figurent ni
+dans le code de l'éditeur ni dans les exports.
+
 La palette de mise en page propose un bouton ciseaux pour les énoncés et
 les corrections statiques sans source Typst, hors présentation « Course aux
 nombres ». `TypstImageCutModal.svelte` affiche chaque image originale :

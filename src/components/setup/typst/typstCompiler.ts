@@ -355,6 +355,7 @@ export interface TypstCompileResult {
   diagnostics: string[]
   /** Repères de la palette de mise en page (vide si le code n'en émet pas) */
   anchors?: TypstAnchor[]
+  imageGeometries?: import('./imageOverflow').ImageGeometry[]
 }
 
 /** Compile la source et rend le document en SVG pour l'aperçu */
@@ -384,7 +385,14 @@ export async function compileTypstToSvg(
       } catch {
         // document sans repère (code réécrit à la main) : pas de palette
       }
-      return { svg, diagnostics, anchors }
+      const { parseImageGeometries } = await import('./imageOverflow')
+      const imageGeometries = parseImageGeometries(
+        await world.query({
+          selector: '<mathalea-image-geometry>',
+          field: 'value',
+        }),
+      )
+      return { svg, diagnostics, anchors, imageGeometries }
     },
   )
 }
