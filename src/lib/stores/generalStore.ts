@@ -71,13 +71,23 @@ export const exercicesParams = writable<InterfaceParams[]>([])
  */
 export const pointsMaxParExercice = writable<number[]>([])
 
+/** Capacités d'un exercice vis-à-vis de l'interactivité. */
+export type InteractiviteExercice = {
+  id: string
+  titre: string
+  /** Faux pour un exercice sans version interactive. */
+  interactifReady: boolean
+  /** Vrai pour un exercice toujours interactif (non basculable en papier). */
+  interactifObligatoire: boolean
+}
+
 /**
- * Indique, pour chaque exercice (indexé comme `exercicesParams`), si son
- * interactivité peut être basculée : faux pour un exercice sans version
- * interactive ou qui est interactif obligatoirement. Alimenté par
- * `ExerciceMathaleaVueProf`.
+ * Pour chaque exercice (indexé comme `exercicesParams`), ce qu'il permet en
+ * matière d'interactivité. Alimenté par `ExerciceMathaleaVueProf`, il sert au
+ * sélecteur Papier / Numérique et à la modale qui liste les exercices sans
+ * version interactive.
  */
-export const interactiviteBasculableParExercice = writable<boolean[]>([])
+export const interactiviteParExercice = writable<InteractiviteExercice[]>([])
 
 /**
  * Nombre total de points de la copie numérique (somme des barèmes de tous
