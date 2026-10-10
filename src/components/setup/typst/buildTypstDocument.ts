@@ -2698,6 +2698,91 @@ function computeGeneratedExercises(
 }
 
 /**
+ * Renumérote les réglages et références des figures avant un échange
+ * d'exercices. Chaque bloc comprend les figures de l'énoncé et du corrigé ;
+ * les sujets supplémentaires ont leur propre nombre de figures.
+ */
+export function swapExerciseFigures(
+  carryOver: TypstCarryOver,
+  versions: TypstExerciseInput[][],
+  options: TypstDocumentOptions,
+  numA: number,
+  numB: number,
+): TypstCarryOver {
+  options = normalizeTypstLayoutOptions(options)
+  const globalPermutation = new Map<number, number>()
+  const localPermutations: Map<number, number>[] = []
+  let offset = 0
+  for (const exercises of versions) {
+    const figures: string[] = []
+    const blocks = exercises.map((exercise) => {
+      const start = figures.length
+      if (options.canMode) {
+        computeGeneratedCanRows([exercise], options, figures)
+      } else {
+        computeGeneratedExercises([exercise], options, {}, figures, false)
+      }
+      return Array.from(
+        { length: figures.length - start },
+        (_, index) => start + index + 1,
+      )
+    })
+    ;[blocks[numA - 1], blocks[numB - 1]] = [blocks[numB - 1], blocks[numA - 1]]
+    const local = new Map<number, number>()
+    blocks.flat().forEach((oldNum, index) => {
+      local.set(oldNum, index + 1)
+      globalPermutation.set(offset + oldNum, offset + index + 1)
+    })
+    localPermutations.push(local)
+    offset += figures.length
+  }
+  const remap = (
+    carry: TypstCarryOver,
+    permutation: Map<number, number>,
+  ): TypstCarryOver => {
+    const result = { ...carry }
+    for (const key of ['figureZoom', 'figureAlign'] as const) {
+      if (carry[key] != null) {
+        const entries = Object.entries(carry[key]).map(([num, value]) => [
+          permutation.get(Number(num)) ?? Number(num),
+          value,
+        ])
+        if (key === 'figureZoom')
+          result.figureZoom = Object.fromEntries(entries)
+        else result.figureAlign = Object.fromEntries(entries)
+      }
+    }
+    for (const key of [
+      'codeOverrides',
+      'codeOverridesCorrection',
+      'codeOverridesCan',
+      'codeOverridesCanReponse',
+    ] as const) {
+      if (carry[key] != null)
+        result[key] = Object.fromEntries(
+          Object.entries(carry[key]).map(([num, code]) => [
+            num,
+            code.replace(
+              /\bfig-(\d+)\b/g,
+              (_, n) => `fig-${permutation.get(Number(n)) ?? Number(n)}`,
+            ),
+          ]),
+        )
+    }
+    return result
+  }
+  const result = remap(carryOver, globalPermutation)
+  if (carryOver.versions != null)
+    result.versions = Object.fromEntries(
+      Object.entries(carryOver.versions).map(([version, carry]) => [
+        version,
+        remap(carry, localPermutations[Number(version)] ?? new Map()),
+      ]),
+    )
+  return result
+}
+
+/**
  * Code Typst actuellement généré pour l'énoncé d'un exercice (préremplissage
  * de la modale d'édition), sans appliquer sa surcharge existante : c'est le
  * texte de départ que le professeur affine, pas la surcharge déjà enregistrée

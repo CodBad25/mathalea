@@ -230,6 +230,18 @@ FREE_EXERCISE_UUID`) : l'énoncé « généré » auquel il reviendrait n'est qu
 - sur une fiche à plusieurs sujets, `texte` est posé comme surcharge dans
   **chaque** sujet : il ne dépend d'aucune graine.
 
+## Déplacer un exercice avec ses figures
+
+Les zooms et alignements des figures suivent l'exercice déplacé, y compris
+les figures de sa correction. `swapExerciseFigures` (`buildTypstDocument.ts`)
+recalcule les blocs de numéros de figures de chaque exercice à partir des
+contenus des sujets, puis renumérote `figureZoom`, `figureAlign` et les
+références `fig-N` des surcharges de code. Les sujets supplémentaires sont
+traités indépendamment : leurs tirages peuvent produire des nombres de
+figures différents, et leurs surcharges utilisent des numéros locaux.
+`swapCarryOver` (`typstCarryOver.ts`) échange ensuite les réglages indexés
+par exercice en conservant les réglages des figures renumérotés.
+
 ## Modifications de code et plusieurs sujets
 
 Une surcharge de code (crayon de la palette) remplace tout l'énoncé ou toute
