@@ -481,6 +481,21 @@ remonte les réponses du sous-exercice vers l'exercice affiché. Ces questions n
 nécessitent donc plus l'ancre de secours `<meta-custom>` lorsqu'elles sont
 réhébergées.
 
+Au montage, `figureApigeom()` et `ApigeomFigureElement` installent
+`enableFigureUiRecovery()` (`src/lib/apigeom/recoverFigureUi.ts`). Si une action
+apiGeom met la machine XState en état `error`, le prochain clic sur un outil
+recrée uniquement la machine avant d'envoyer l'action choisie. Les éléments
+construits et les piles annuler/rétablir sont conservés ; les éléments
+temporaires et la sélection en cours sont abandonnés. L'erreur initiale est
+signalée dans la console. Une machine active n'est pas remplacée.
+
+Ce mécanisme utilise la machine interne `apigeom/src/uiMachine` et une
+dépendance directe à `xstate`. Vérifier cette intégration lors d'une mise à jour
+d'apiGeom, notamment l'action `setupKeyboardRename`, désactivée à la reprise
+pour ne pas doubler les raccourcis clavier. Le test
+`tests/unit/apigeom9795.test.ts` simule une erreur pendant une construction et
+vérifie la reprise ainsi que l'historique.
+
 Un cas particulier subsiste :
 
 - un sous-exercice qui déclare `nouvelleVersion(numeroExercice, numeroQuestion)` place lui-même sa question au bon index : il est relancé avec les coordonnées de l'hôte et ne reçoit pas de décalage, sinon les identifiants seraient décalés deux fois ;

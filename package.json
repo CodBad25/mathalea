@@ -152,7 +152,8 @@
     "tex2typst": "^0.6.2",
     "three": "^0.185.1",
     "troika-three-text": "^0.52.5",
-    "ua-parser-js": "^2.0.10"
+    "ua-parser-js": "^2.0.10",
+    "xstate": "^5.33.2"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
