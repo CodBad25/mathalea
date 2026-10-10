@@ -105,12 +105,33 @@ export default class SymetrieCentralePoint extends ConstruireParSymetrie {
         })
       }
     }
-    // Les points de l'énoncé ne doivent être ni supprimés ni déplacés
-    // (l'outil DRAG ignore `isFree`, on neutralise donc `moveTo`).
+    // Les points de l'énoncé ne doivent être ni supprimés, ni déplacés, ni
+    // masqués, ni renommés (les outils DRAG et NAME_POINT ignorent `isFree` et
+    // `isDeletable`, on neutralise donc `moveTo`, `hide` et le setter `label`).
     const fixeLePoint = (point: Point) => {
       point.isDeletable = false
       point.isFree = false
       point.moveTo = () => {}
+      point.hide = () => {}
+      const nom = point.label
+      let proto = Object.getPrototypeOf(point)
+      let descripteur = Object.getOwnPropertyDescriptor(proto, 'label')
+      while (!descripteur && proto) {
+        proto = Object.getPrototypeOf(proto)
+        descripteur = proto && Object.getOwnPropertyDescriptor(proto, 'label')
+      }
+      if (descripteur?.get && descripteur.set) {
+        const { get, set } = descripteur
+        Object.defineProperty(point, 'label', {
+          configurable: true,
+          get() {
+            return get.call(point)
+          },
+          set(valeur: string | undefined) {
+            if (valeur === nom) set.call(point, valeur)
+          },
+        })
+      }
     }
     const initialPointIds: string[] = []
     for (const point of [center, ...points]) {
