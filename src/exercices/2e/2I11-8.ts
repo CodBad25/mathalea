@@ -13,6 +13,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Calculer et exprimer des proportions'
 export const dateDePublication = '08/07/2026'
+export const dateDeModifImportante = '10/10/2026'
 export const interactifReady = true
 
 export const amcReady = true
@@ -209,8 +210,8 @@ export default class ProportionsEntreprise extends Exercice {
     } else if (this.interactif) {
       this.nbQuestions = 1
       texte = `${introduction}<br>${addMultiMathfield(this, 0, {
-        dataTemplate: `${numAlpha(0)}${enonceQuestion1} %{champ1}<br>
-        ${numAlpha(1)}${enonceQuestion2} %{champ2}`,
+        dataTemplate: `${numAlpha(0)}${enonceQuestion1}<br>%{champ1}<br>
+        ${numAlpha(1)}${enonceQuestion2}<br>%{champ2}`,
         dataOptions: {
           champ1: {
             keyboard: KeyboardType.clavierDeBase,

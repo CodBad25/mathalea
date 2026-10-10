@@ -1,6 +1,8 @@
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texNombre } from '../../lib/outils/texNombre'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import FractionEtendue from '../../modules/FractionEtendue'
 import { randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
 export const titre = 'Calculer des proportions de proportions'
@@ -8,7 +10,7 @@ export const interactifReady = true
 
 export const amcReady = true
 export const amcType = 'AMCNum'
-export const dateDeModifImportante = '09/05/2023'
+export const dateDeModifImportante = '10/10/2026'
 /**
 * Modèle d'exercice très simple pour la course aux nombres
 * @author Stéphane Guyon et Gilles Mora pour augmenter les cas
@@ -22,6 +24,74 @@ export const refs = {
   'fr-ch': ['10FA2B-17'],
 }
 type Situation = 'association' | 'lycee' | 'election'
+
+/**
+ * Fractions simples [numérateur, dénominateur] utilisées pour p1 et p2
+ * quand les proportions sont données sous forme de fractions.
+ */
+const listesFractions: Record<Situation, { p1: number[][]; p2: number[][] }> = {
+  association: {
+    p1: [
+      [1, 2],
+      [1, 3],
+      [1, 4],
+      [2, 5],
+      [3, 4],
+    ],
+    p2: [
+      [1, 2],
+      [1, 3],
+      [2, 3],
+      [1, 4],
+      [3, 4],
+      [1, 5],
+      [2, 5],
+    ],
+  },
+  lycee: {
+    p1: [
+      [1, 3],
+      [1, 4],
+      [1, 5],
+      [3, 10],
+    ],
+    p2: [
+      [1, 2],
+      [1, 3],
+      [1, 4],
+      [2, 5],
+      [3, 5],
+    ],
+  },
+  election: {
+    p1: [
+      [1, 2],
+      [3, 5],
+      [2, 3],
+      [3, 4],
+      [4, 5],
+    ],
+    p2: [
+      [1, 2],
+      [1, 3],
+      [1, 4],
+      [1, 5],
+      [2, 5],
+      [3, 10],
+    ],
+  },
+}
+
+/**
+ * Écrit le calcul f1 × f2 détaillé, avec la simplification finale si besoin.
+ */
+function texProduitFractions(f1: FractionEtendue, f2: FractionEtendue) {
+  const brut = new FractionEtendue(f1.num * f2.num, f1.den * f2.den)
+  const resultat = brut.simplifie()
+  let tex = `${f1.texFraction}\\times ${f2.texFraction}=\\dfrac{${f1.num}\\times ${f2.num}}{${f1.den}\\times ${f2.den}}=${brut.texFraction}`
+  if (resultat.den !== brut.den) tex += `=${resultat.texFraction}`
+  return tex
+}
 
 /**
  * Tire p1 = b % et p2 = c % simples à manipuler de tête : b × c est un multiple
@@ -63,23 +133,41 @@ export default class ProportiondeProportion extends ExerciceSimple {
     super()
     this.typeExercice = 'simple'
     this.nbQuestions = 1
+    this.spacing = 1.5
 
     this.optionsChampTexte = { texteApres: ' %' }
     this.besoinFormulaireCaseACocher = ['Sans calculatrice', false]
     this.sup = false
+    this.besoinFormulaire2Numerique = [
+      'Forme des proportions',
+      3,
+      '1 : Pourcentage\n2 : Fraction\n3 : Mélange',
+    ]
+    this.sup2 = 1
   }
 
   nouvelleVersion() {
     let a, b, c, d, g, tauxb, tauxc, tauxG
+    const cas = choice([
+      'association',
+      'lycee',
+      'lyceeBis',
+      'election',
+      'associationBis',
+      'electionBis',
+    ])
+    // En mode mélange, la forme est tirée à chaque question
+    const forme = Number(this.sup2) === 3 ? choice([1, 2]) : Number(this.sup2)
+    if (forme === 2) {
+      this.versionFraction(cas)
+      if (this.interactif) this.question += '<br>'
+      return
+    }
+    this.optionsChampTexte = { texteApres: ' %' }
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsDeComparaison = {}
     switch (
-      choice([
-        'association',
-        'lycee',
-        'lyceeBis',
-        'election',
-        'associationBis',
-        'electionBis',
-      ]) //
+      cas //
     ) {
       case 'association':
         if (this.sup) {
@@ -99,7 +187,7 @@ export default class ProportiondeProportion extends ExerciceSimple {
         g = (b * c) / 100
         tauxG = (b * c) / 10000
 
-        this.question = `Dans une association,  $${b}\\,\\%$ des adhérents ont plus de $${a}$ ans. <br>
+        this.question = `Dans une association,  $${b}\\,\\%$ des adhérents ont plus de $${a}$ ans. 
         Parmi eux,   $${c}\\,\\%$ ont plus de $${d}$ années d'ancienneté.<br>
         Quel est le pourcentage d'adhérents de plus de $${a}$ ans ayant plus de $${d}$ années d'ancienneté dans cette association ?<br>`
         this.correction = `La population de référence est celle des membres de l'association.<br>
@@ -129,7 +217,7 @@ export default class ProportiondeProportion extends ExerciceSimple {
         g = (b * c) / 100
         tauxG = (b * c) / 10000
 
-        this.question = `Dans une association,  $${b}\\,\\%$ des adhérents ont plus de  $${a}$ ans. <br>
+        this.question = `Dans une association,  $${b}\\,\\%$ des adhérents ont plus de  $${a}$ ans. 
        On dénombre également dans cette association  $${texNombre(g, 2)}\\,\\%$ d'adhérents de  plus $${a}$ ans ayant plus de $${d}$ années d'ancienneté.<br>
        Parmi les adhérents de plus de $${a}$ ans, quel est le pourcentage de ceux qui ont plus de $${d}$ années d'ancienneté ?<br> `
         this.correction = `La population de référence est celle des membres de l'association.<br>
@@ -158,7 +246,7 @@ export default class ProportiondeProportion extends ExerciceSimple {
         }
         g = (b * c) / 100
         tauxG = (b * c) / 10000
-        this.question = `Dans un lycée,  $${b}\\,\\%$ des lycéens sont en classe de première. <br>
+        this.question = `Dans un lycée,  $${b}\\,\\%$ des lycéens sont en classe de première. 
             Parmi eux,   $${c}\\,\\%$ sont en filière technologique.<br>
             Quel est le pourcentage d'élèves en première technologique de ce lycée ?<br>`
         this.correction = `La population de référence est celle des élèves du lycée.<br>
@@ -184,7 +272,7 @@ export default class ProportiondeProportion extends ExerciceSimple {
         }
         g = (b * c) / 100
         tauxG = (b * c) / 10000
-        this.question = `Dans un lycée,  $${b}\\,\\%$ des lycéens sont en classe de première et  $${texNombre(g, 2)}\\,\\%$ des lycéens sont en première technologique.<br>
+        this.question = `Dans un lycée,  $${b}\\,\\%$ des lycéens sont en classe de première et  $${texNombre(g, 2)}\\,\\%$ des lycéens sont en première technologique.
               Quel est le pourcentage d'élèves en première technologique parmi les élèves de première du lycée ?<br>`
         this.correction = `La population de référence est celle des élèves du lycée.<br>
               La sous-population est celle des élèves de première et d'après l'énoncé, $p_1=${b}\\,\\%$.<br>
@@ -213,7 +301,7 @@ export default class ProportiondeProportion extends ExerciceSimple {
         g = (b * c) / 100
         tauxG = (b * c) / 10000
 
-        this.question = `Lors d'une élection,  la participation (suffrages exprimés) a été de $${b}\\,\\%$ des inscrits.<br>
+        this.question = `Lors d'une élection,  la participation (suffrages exprimés) a été de $${b}\\,\\%$ des inscrits.
                Un candidat a obtenu   $${c}\\,\\%$ des suffrages exprimés.<br>
                 Quel est le pourcentage de voix obtenues par ce candidat par rapport au nombre d' inscrits ?<br>`
         this.correction = `La population de référence est celle des inscrits sur les listes électorales.<br>
@@ -241,7 +329,7 @@ export default class ProportiondeProportion extends ExerciceSimple {
         g = (b * c) / 100
         tauxG = (b * c) / 10000
 
-        this.question = `Lors d'une élection,  la participation (suffrages exprimés) a été de $${b}\\,\\%$ des inscrits.<br>
+        this.question = `Lors d'une élection,  la participation (suffrages exprimés) a été de $${b}\\,\\%$ des inscrits.
         Un candidat a obtenu $${texNombre(g, 2)}\\,\\%$ de voix parmi les inscrits.<br>
                 Quel est le pourcentage de voix obtenues par ce candidat par rapport aux suffrages exprimés ?<br>`
         this.correction = `La population de référence est celle des inscrits sur les listes électorales.<br>
@@ -255,5 +343,90 @@ $${miseEnEvidence(texNombre(c, 2))}\\,\\%$ des suffrages exprimés ont voté pou
         break
     }
     if (this.interactif) this.question += '<br>'
+  }
+
+  versionFraction(cas: string) {
+    this.optionsChampTexte = {}
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.optionsDeComparaison = { fractionIrreductible: true }
+    const retrouverP2 = cas.endsWith('Bis')
+    const situation = cas.replace('Bis', '') as Situation
+    const [n1, d1] = choice(listesFractions[situation].p1)
+    const [n2, d2] = choice(listesFractions[situation].p2)
+    const p1 = new FractionEtendue(n1, d1)
+    const p2 = new FractionEtendue(n2, d2)
+    const P = new FractionEtendue(n1 * n2, d1 * d2).simplifie()
+    const a = situation === 'association' ? randint(20, 50) : 0
+    const d = situation === 'association' ? randint(2, 15) : 0
+    const textes = {
+      association: {
+        enonceP1: `Dans une association, $${p1.texFraction}$ des adhérents ont plus de $${a}$ ans.`,
+        enonceP2: `Parmi eux, $${p2.texFraction}$ ont plus de $${d}$ années d'ancienneté.`,
+        enonceP: `On dénombre également dans cette association une proportion de $${P.texFraction}$ d'adhérents de plus de $${a}$ ans ayant plus de $${d}$ années d'ancienneté.`,
+        questionP: `Quelle est la proportion d'adhérents de plus de $${a}$ ans ayant plus de $${d}$ années d'ancienneté dans cette association ?`,
+        questionP2: `Parmi les adhérents de plus de $${a}$ ans, quelle est la proportion de ceux qui ont plus de $${d}$ années d'ancienneté ?`,
+        reference: "celle des membres de l'association",
+        sousPopulation: `celle des plus de $${a}$ ans`,
+        sousSousPopulation: `ceux qui ont plus de $${d}$ années d'ancienneté`,
+        deSousSousPopulation: `de ceux qui ont plus de $${d}$ années d'ancienneté`,
+        conclusionP: `d'adhérents de plus de $${a}$ ans ayant plus de $${d}$ années d'ancienneté`,
+        conclusionP2: `d'adhérents de plus de $${d}$ ans d'ancienneté parmi les adhérents de plus de $${a}$ ans`,
+      },
+      lycee: {
+        enonceP1: `Dans un lycée, $${p1.texFraction}$ des lycéens sont en classe de première.`,
+        enonceP2: `Parmi eux, $${p2.texFraction}$ sont en filière technologique.`,
+        enonceP: `De plus, $${P.texFraction}$ des lycéens sont en première technologique.`,
+        questionP:
+          "Quelle est la proportion d'élèves en première technologique parmi les élèves de ce lycée ?",
+        questionP2:
+          "Quelle est la proportion d'élèves en première technologique parmi les élèves de première du lycée ?",
+        reference: 'celle des élèves du lycée',
+        sousPopulation: 'celle des élèves de première',
+        sousSousPopulation: 'les élèves de première technologique',
+        deSousSousPopulation: 'des élèves de première technologique',
+        conclusionP:
+          "d'élèves de première technologique parmi les élèves du lycée",
+        conclusionP2:
+          "d'élèves de première technologique parmi les élèves de première",
+      },
+      election: {
+        enonceP1: `Lors d'une élection, la participation (suffrages exprimés) a été de $${p1.texFraction}$ des inscrits.`,
+        enonceP2: `Un candidat a obtenu $${p2.texFraction}$ des suffrages exprimés.`,
+        enonceP: `Un candidat a obtenu $${P.texFraction}$ des voix des inscrits.`,
+        questionP:
+          "Quelle est la proportion de voix obtenues par ce candidat par rapport au nombre d'inscrits ?",
+        questionP2:
+          'Quelle est la proportion de voix obtenues par ce candidat par rapport aux suffrages exprimés ?',
+        reference: 'celle des inscrits sur les listes électorales',
+        sousPopulation: 'celle des suffrages exprimés',
+        sousSousPopulation: 'les suffrages du candidat',
+        deSousSousPopulation: 'des suffrages du candidat',
+        conclusionP: 'de voix obtenues par le candidat parmi les inscrits',
+        conclusionP2:
+          'de voix obtenues par le candidat parmi les suffrages exprimés',
+      },
+    }[situation]
+    const consigne =
+      "<br>Donner le résultat sous la forme d'une fraction irréductible."
+    const debutCorrection = `La population de référence est ${textes.reference}.<br>
+    La sous-population est ${textes.sousPopulation}, qui représente $p_1=${p1.texFraction}$ de la population de référence.<br>`
+    if (retrouverP2) {
+      this.question = `${textes.enonceP1} ${textes.enonceP}<br>${textes.questionP2}${consigne}`
+      this.correction = `${debutCorrection}
+      Dans cette sous-population, on note $p_2$ la proportion ${textes.deSousSousPopulation}.<br>
+      La proportion $P$ ${textes.conclusionP} est $P=${P.texFraction}$.<br>
+      D'après le cours, on a $P=p_1\\times p_2$, ce qui donne $${P.texFraction}=${p1.texFraction}\\times p_2$.<br>
+      Ainsi, $p_2=${P.texFraction}\\div ${p1.texFraction}=${texProduitFractions(P, p1.inverse())}$.<br>
+      La proportion ${textes.conclusionP2} est $${miseEnEvidence(p2.simplifie().texFraction)}$.`
+      this.reponse = p2.simplifie()
+    } else {
+      this.question = `${textes.enonceP1} ${textes.enonceP2}<br>${textes.questionP}${consigne}`
+      this.correction = `${debutCorrection}
+      Dans cette sous-population, ${textes.sousSousPopulation} représentent $p_2=${p2.texFraction}$.<br>
+      D'après le cours, on calcule $p=p_1\\times p_2$.<br>
+      Ainsi, $p=${texProduitFractions(p1, p2)}$.<br>
+      La proportion ${textes.conclusionP} est $${miseEnEvidence(P.texFraction)}$.`
+      this.reponse = P
+    }
   }
 }
