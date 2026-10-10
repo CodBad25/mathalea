@@ -1,11 +1,26 @@
 <script lang="ts">
+  import {
+    exercicesParams,
+    interactiviteBasculableParExercice,
+  } from '../../../../../../../lib/stores/generalStore'
   import { globalOptions } from '../../../../../../../lib/stores/globalOptions'
 
   export let setAllInteractive: (isAllInteractive: boolean) => void
 
-  // L'état est lu dans le store, alimenté par l'URL (`numerique=1`) ou, pour
-  // une nouvelle visite, par le dernier choix mémorisé.
-  $: isDigital = $globalOptions.setInteractive === '1'
+  // Sans exercice, l'état est lu dans le store, alimenté par l'URL
+  // (`numerique=1`) ou, pour une nouvelle visite, par le dernier choix
+  // mémorisé. Sinon il reflète les exercices dont l'interactivité peut être
+  // basculée : `null` (état neutre) quand ils sont mixtes.
+  $: interactifs = $exercicesParams
+    .filter((_, i) => $interactiviteBasculableParExercice[i] !== false)
+    .map((params) => params.interactif === '1')
+  $: isDigital = interactifs.length
+    ? interactifs.every(Boolean)
+      ? true
+      : interactifs.some(Boolean)
+        ? null
+        : false
+    : $globalOptions.setInteractive === '1'
 
   const options = [
     {
@@ -31,7 +46,10 @@
     bg-coopmaths-canvas-darkest dark:bg-coopmathsdark-canvas-dark"
 >
   {#each options as option (option.label)}
-    <div class="tooltip tooltip-bottom tooltip-neutral" data-tip={option.tooltip}>
+    <div
+      class="tooltip tooltip-bottom tooltip-neutral"
+      data-tip={option.tooltip}
+    >
       <button
         type="button"
         role="radio"

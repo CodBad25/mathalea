@@ -72,6 +72,14 @@ export const exercicesParams = writable<InterfaceParams[]>([])
 export const pointsMaxParExercice = writable<number[]>([])
 
 /**
+ * Indique, pour chaque exercice (indexé comme `exercicesParams`), si son
+ * interactivité peut être basculée : faux pour un exercice sans version
+ * interactive ou qui est interactif obligatoirement. Alimenté par
+ * `ExerciceMathaleaVueProf`.
+ */
+export const interactiviteBasculableParExercice = writable<boolean[]>([])
+
+/**
  * Nombre total de points de la copie numérique (somme des barèmes de tous
  * les exercices), utilisé notamment dans la vue prof en mode recorder
  * Capytale.
