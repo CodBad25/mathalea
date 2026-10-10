@@ -1,5 +1,5 @@
 import { afterEach, expect, it, vi } from 'vitest'
-import LimitesDeterminables from '../../../../src/exercices/TSpe/TSA2-36'
+import LimitesDeterminables from '../../../../src/exercices/TSpe/TSA2-41'
 import * as arrayOutils from '../../../../src/lib/outils/arrayOutils'
 import * as outils from '../../../../src/modules/outils'
 
