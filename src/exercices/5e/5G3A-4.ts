@@ -155,16 +155,21 @@ class ConstructionsSymetrieCentraleFigures extends Exercice {
       if (this.sup === 1)
         Object.assign(options, { snapGrid: true, dx: 1, dy: 1 })
 
+      // En Typst, le rayon minimal de 4 unités doit dépasser 2 cm sur papier
+      // (4 × 30 × 0,7 pixels à 96 dpi), pour faciliter le tracé au compas.
+      // Agrandir l'affichage conserve les coordonnées et tous les tirages.
+      const scale =
+        context.isTypst && this.typesDeQuestions[i] === 'cercle' ? 0.7 : 0.5
+
       this.figuresApiGeom![i] = new Figure(
         Object.assign(options, {
           xMin: -10,
           yMin: -10,
           // `width`/`height` sont exprimées à l'échelle 1 : `scale` les réduit
-          // ensuite, d'où un SVG de 300×300 px pour une fenêtre de 20×20
-          // unités ([-10;10]²).
+          // ensuite, pour une fenêtre de 20×20 unités ([-10;10]²).
           width: 600,
           height: 600,
-          scale: 0.5,
+          scale,
         }),
       )
       this.figuresApiGeom![i].options.latexHeight = 20
@@ -341,7 +346,7 @@ class ConstructionsSymetrieCentraleFigures extends Exercice {
           // Même cadrage que la figure de l'énoncé (cf. plus haut).
           width: 600,
           height: 600,
-          scale: 0.5,
+          scale,
           isDynamic: false,
         }),
       )

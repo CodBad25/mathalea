@@ -47,9 +47,31 @@ texte += figureApigeom({ exercice: this, i, figure, defaultAction: 'POINT' })
   question ou celle de la correction), `isDynamic: false` (figure figée même en
   interactif), `animation`, `hasFeedback`.
 - `figureApigeom()` ne produit rien hors HTML : prévoir une figure
-  MathALÉA 2D ou un texte pour les sorties LaTeX et Typst.
+  MathALÉA 2D, `figure.tikz()` ou un texte pour la sortie LaTeX. En Typst,
+  `context.isHtml` reste vrai et `context.isTypst` est activé :
+  `figureApigeom()` et `wrapperApigeomToMathalea()` exportent un SVG autonome
+  avec les textes intégrés.
 - Utiliser des couleurs simples (`'blue'`) plutôt que les constantes
   `bleuMathalea`… dans les options apiGeom.
+
+### Dimensions des constructions sur papier
+
+Avec apiGeom, `width` et `height` sont les dimensions à l'échelle 1 et
+`scale` agrandit ou réduit ensemble le dessin et son cadre. Par exemple,
+`width: 600, height: 600, scale: 0.7` donne un SVG de 420 × 420 pixels,
+avec le même cadrage que `scale: 0.5` (300 × 300 pixels).
+
+En Typst, les dimensions du SVG apiGeom sont converties à 96 dpi : une
+longueur de `r` unités mesure `r × pixelsPerUnit × scale × 2,54 / 96` cm
+avant une éventuelle réduction à la largeur disponible ou un zoom manuel.
+Pour une construction au compas, vérifier que le plus petit rayon imprimé
+reste manipulable. Dans `5G3A-4`, un rayon minimal de 4 unités avec
+`pixelsPerUnit: 30` et `scale: 0.7` mesure environ 2,2 cm.
+
+Adapter l'échelle avec `context.isTypst`, à l'identique pour l'énoncé et
+la correction, permet d'agrandir la construction papier sans modifier les
+coordonnées ni les appels aléatoires des liens partagés. La mise en page
+peut encore réduire la figure dans des colonnes étroites.
 
 ## Vérifier la construction de l'élève
 
