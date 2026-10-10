@@ -21,6 +21,7 @@ export type IntervalleDroiteOptions = {
   labelValue?: number
   labelValues?: number[]
   showGraduations?: boolean
+  intervalColor?: string
   interactivityOn?: boolean
 }
 
@@ -48,6 +49,7 @@ export class IntervalleDroiteElement extends MathaleaCustomElement {
     labelValue,
     labelValues,
     showGraduations = true,
+    intervalColor = bleuMathalea,
     interactivityOn = true,
   }: IntervalleDroiteOptions): string {
     return super.create({
@@ -59,6 +61,7 @@ export class IntervalleDroiteElement extends MathaleaCustomElement {
       labelValue,
       labelValues,
       showGraduations,
+      intervalColor,
       interactivityOn,
     })
   }
@@ -127,6 +130,7 @@ export class IntervalleDroiteElement extends MathaleaCustomElement {
     const labelValue = this.getNumberAttribute('label-value', Number.NaN)
     const valuesToLabel = this.getNumberArrayAttribute('label-values')
     const showGraduations = this.getAttribute('show-graduations') !== 'false'
+    const intervalColor = this.getAttribute('interval-color') ?? bleuMathalea
     const width = 560
     const height = 105
     const margin = 34
@@ -145,7 +149,7 @@ export class IntervalleDroiteElement extends MathaleaCustomElement {
     const rightInfinitySelected = end != null && this.rightBracket == null
     const colored =
       start != null && end != null
-        ? `<line class="colored" x1="${this.leftBracket == null ? axisStartX : xFor(start)}" y1="${axisY}" x2="${rightInfinitySelected ? arrowTipX : xFor(end)}" y2="${axisY}" />`
+        ? `<line class="colored" x1="${this.leftBracket == null ? axisStartX : xFor(start)}" y1="${axisY}" x2="${rightInfinitySelected ? arrowTipX - 6 : xFor(end)}" y2="${axisY}" />`
         : ''
     const brackets =
       start != null && end != null
@@ -171,23 +175,23 @@ export class IntervalleDroiteElement extends MathaleaCustomElement {
         .figure { display: flex; align-items: center; gap: .5rem; }
         svg { display: block; width: min(100%, 560px); height: auto; overflow: visible; }
         .axis { stroke: currentColor; stroke-width: 2; }
-        .arrow { fill: currentColor; }
-        .arrow.infinity-selected { fill: ${bleuMathalea}; }
+        .arrow { fill: none; stroke: currentColor; stroke-width: 2; }
+        .arrow.infinity-selected { stroke: ${intervalColor}; }
         .point line { stroke: currentColor; stroke-width: 1.5; pointer-events: none; }
         .point circle { fill: transparent; stroke: transparent; cursor: pointer; }
         .point text { fill: currentColor; font: 16px sans-serif; text-anchor: middle; pointer-events: none; }
         .point:hover circle, .point:focus circle { fill: ${bleuMathalea}18; stroke: ${bleuMathalea}; stroke-width: 1.5; outline: none; }
         .point.selected circle { fill: ${bleuMathalea}24; }
-        .colored { stroke: ${bleuMathalea}; stroke-width: 7; stroke-linecap: butt; pointer-events: none; }
-        .bracket { fill: none; stroke: ${bleuMathalea}; stroke-width: 3; stroke-linecap: round; pointer-events: none; }
+        .colored { stroke: ${intervalColor}; stroke-width: 7; stroke-linecap: butt; pointer-events: none; }
+        .bracket { fill: none; stroke: ${intervalColor}; stroke-width: 3; stroke-linecap: round; pointer-events: none; }
         button { border: 1px solid ${bleuMathalea}80; border-radius: .35rem; background: transparent; color: ${bleuMathalea}; cursor: pointer; padding: .3rem .55rem; font: inherit; font-size: .82rem; white-space: nowrap; }
         button:hover, button:focus-visible { background: ${bleuMathalea}12; }
       </style>
-      ${this.interactivityOn ? '<p class="instructions">Cliquer sur les deux extrémités de la partie à colorier. Cliquer ensuite sur une extrémité pour changer le sens de son crochet.</p>' : ''}
+      ${this.interactivityOn ? '<p class="instructions">Cliquer sur les deux extrémités de la partie à colorier.<br>Cliquer ensuite sur une extrémité pour changer le sens de son crochet.</p>' : ''}
       <div class="figure">
         <svg viewBox="0 0 ${width} ${height}" aria-label="Droite graduée interactive">
           <line class="axis" x1="${axisStartX}" y1="${axisY}" x2="${axisEndX}" y2="${axisY}" />
-          <path class="arrow${rightInfinitySelected ? ' infinity-selected' : ''}" d="M ${arrowTipX} ${axisY} l -8 -5 v 10 z" />
+          <path class="arrow${rightInfinitySelected ? ' infinity-selected' : ''}" d="M ${arrowTipX} ${axisY} m -8 -5 l 8 5 l -8 5" />
           ${colored}${ticks}${brackets}
         </svg>
         ${this.interactivityOn ? '<button type="button">Réinitialiser</button>' : ''}
