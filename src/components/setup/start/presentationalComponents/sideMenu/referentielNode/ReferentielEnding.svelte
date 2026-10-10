@@ -22,7 +22,6 @@
   import type { InterfaceParams } from '../../../../../../lib/types'
   import { isLessThan1Month } from '../../../../../../lib/types/dates'
   import SelectedIndicator from '../../../../../shared/forms/SelectedIndicator.svelte'
-  import NoInteractivityIcon from '../../../../../shared/icons/NoInteractivityIcon.svelte'
   import NoRandomizationIcon from '../../../../../shared/icons/NoRandomizationIcon.svelte'
   import QcmCamIcon from '../../../../../shared/icons/QcmCamIcon.svelte'
 
@@ -209,13 +208,17 @@
               </span>
             {/if}
             {#if !ending.features.interactif?.isActive}
-              &nbsp;<span
+              &nbsp;
+              <span
                 class="tooltip tooltip-bottom tooltip-neutral"
-                data-tip="Pas d'interactivité"
+                data-tip="Pas de version interactive : exercice à faire sur papier"
               >
-                <NoInteractivityIcon
-                  class="inline-flex h-3 w-3 text-coopmaths-warn-dark dark:text-coopmathsdark-warn-dark fill-coopmaths-warn-dark dark:fill-coopmathsdark-warn-dark stroke-coopmaths-warn-dark dark:stroke-coopmathsdark-warn-dark"
-                />
+                <span
+                  class="inline-flex flex-wrap items-center justify-center rounded-full border border-coopmaths-warn-dark dark:border-coopmathsdark-warn-dark text-coopmaths-warn-dark dark:text-coopmathsdark-warn-dark text-[0.6rem] px-2 ml-2 font-semibold leading-normal"
+                >
+                  <i class="bx bx-file mr-0.5"></i>
+                  Non interactif
+                </span>
               </span>
             {/if}
             {#if !ending.features.aleatoire?.isActive}

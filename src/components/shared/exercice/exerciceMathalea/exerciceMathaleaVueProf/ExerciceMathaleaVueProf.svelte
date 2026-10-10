@@ -46,6 +46,7 @@
     changes,
     exercicesParams,
     pointsMaxParExercice,
+    interactiviteBasculableParExercice,
     resultsByExercice,
   } from '../../../../../lib/stores/generalStore'
   import { globalOptions } from '../../../../../lib/stores/globalOptions'
@@ -268,6 +269,22 @@
     })
   }
 
+  /**
+   * Signale si l'interactivité de l'exercice peut être basculée, pour que le
+   * sélecteur Papier / Numérique ignore les exercices au réglage imposé.
+   */
+  function refreshInteractiviteBasculable() {
+    const basculable = Boolean(
+      exercise.interactifReady && !exercise.interactifObligatoire,
+    )
+    interactiviteBasculableParExercice.update((liste) => {
+      if (liste[exerciseIndex] === basculable) return liste
+      const nouvelleListe = [...liste]
+      nouvelleListe[exerciseIndex] = basculable
+      return nouvelleListe
+    })
+  }
+
   beforeUpdate(async () => {
     invalidateRendering()
     log('beforeUpdate:' + exercise.id)
@@ -275,6 +292,7 @@
       numberOfAnswerFields = countMathField(exercise)
     }
     refreshPointsMax()
+    refreshInteractiviteBasculable()
     if (get(exercicesParams)[exerciseIndex] !== interfaceParams) {
       // interface à changer car un exercice a été supprimé au dessus...
       interfaceParams = get(exercicesParams)[exerciseIndex]
