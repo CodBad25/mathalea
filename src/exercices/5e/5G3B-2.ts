@@ -291,7 +291,7 @@ export default class SymetrieProprietes extends Exercice {
             segmentAvecExtremites(A, B),
             nommePolygone(polygone([A, B]), A.nom + B.nom),
             placeLatexSurSegment(
-              `${texNombre(longueur(A, B, 1))} \\text{cm}`,
+              `${texNombre(longueur(A, B, 1))}~\\text{cm}`,
               A,
               B,
               { letterSize: 'small' },
