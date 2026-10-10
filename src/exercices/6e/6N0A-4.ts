@@ -5,7 +5,7 @@ import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { creerCouples, shuffle } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
-import { texNombre, texNombre2 } from '../../lib/outils/texNombre'
+import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import {
   gestionnaireFormulaireTexte,
@@ -123,27 +123,27 @@ export default class ExerciceTablesMultiplicationsEtMultiplesDe10 extends Exerci
       this.autoCorrection[i].enonce = `${texte}\n`
       this.autoCorrection[i].propositions = [
         {
-          texte: `$${texNombre2(a * b)}$`,
+          texte: `$${texNombre(a * b)}$`,
           statut: true,
           feedback: 'Correct !',
         },
         {
-          texte: `$${texNombre2(arrondi((a * b) / 10))}$`,
+          texte: `$${texNombre(arrondi((a * b) / 10))}$`,
           statut: false,
           feedback: 'Compte le nombre de zéros dans chaque facteur',
         },
         {
-          texte: `$${texNombre2(arrondi(a * b * 10))}$`,
+          texte: `$${texNombre(arrondi(a * b * 10))}$`,
           statut: false,
           feedback: 'Compte le nombre de zéros dans chaque facteur',
         },
         {
-          texte: `$${texNombre2(arrondi((a * b) / 100))}$`,
+          texte: `$${texNombre(arrondi((a * b) / 100))}$`,
           statut: false,
           feedback: 'Compte le nombre de zéros dans chaque facteur',
         },
         {
-          texte: `$${texNombre2(arrondi(a * b * 100))}$`,
+          texte: `$${texNombre(arrondi(a * b * 100))}$`,
           statut: false,
           feedback: 'Compte le nombre de zéros dans chaque facteur',
         },

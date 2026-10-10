@@ -1,95 +1,265 @@
-import { choice } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { reduireAxPlusB } from '../../lib/outils/ecritures'
-import { numAlpha } from '../../lib/outils/outilString'
+import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
+import { bleuMathalea } from '../../lib/colors'
+import { createList } from '../../lib/format/lists'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { toutPourUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { tableauDeVariation } from '../../lib/mathFonctions/etudeFonction'
+import { combinaisonListes } from '../../lib/outils/arrayOutils'
+import {
+  ecritureAlgebriqueSauf0,
+  ecritureParentheseSiMoins,
+  reduireAxPlusB,
+} from '../../lib/outils/ecritures'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
+import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre =
-  'Étudier les limites aux bornes du domaine de définition d\'une fonction rationnelle'
-export const dateDePublication = '08/08/2026'
-export const interactifReady = false
+export const titre = 'Déterminer les limites à gauche et à droite en un réel'
+export const dateDePublication = '08/10/2026'
+export const dateDeModifImportante = '09/10/2026'
 
-export const uuid = '34375'
+export const uuid = 'a19fb'
+export const interactifReady = true
 export const refs = {
   'fr-fr': ['TSA2-32', 'TCA2-32'],
   'fr-ch': [],
 }
 
-type PuissanceDenominateur = 1 | 2
-
-function limiteSelonSigne(signe: number): '+\\infty' | '-\\infty' {
-  return signe > 0 ? '+\\infty' : '-\\infty'
-}
-
-/**
- * Limite en un réel de b/(cx+d) ou de b/(cx+d)^2 et asymptote verticale.
- * @author Stéphane Guyon
- */
-export default class LimiteEtAsymptoteVerticale extends Exercice {
+/** @author Stéphane Guyon */
+export default class LimitesEnUnReel extends Exercice {
   constructor() {
     super()
-    this.nbQuestions = 1
+    this.nbQuestions = 3
+    this.sup = 5
+    this.besoinFormulaireNumerique = [
+      'Type de fonction',
+      5,
+      '1 : 1/(x-a)\n2 : 1/(x-a)²\n3 : (bx+c)/(x-a)\n4 : (bx+c)/(x²-a²), en a et -a\n5 : Mélange des quatre types',
+    ]
   }
 
   nouvelleVersion(): void {
-    const puissance = choice([1, 2] as PuissanceDenominateur[])
-    const a = randint(-5, 5)
-    const b = randint(-9, 9, 0)
-    const c = randint(-6, 6, 0)
-    const d = -c * a
-    const affine = reduireAxPlusB(c, d)
-    const denominateur =
-      puissance === 1 ? affine : `\\left(${affine}\\right)^2`
-    const expression = `\\dfrac{${b}}{${denominateur}}`
-    const asymptote = `x=${a}`
+    this.consigne = this.interactif
+      ? this.nbQuestions === 1
+        ? 'Déterminer les limites demandées.'
+        : 'Déterminer les limites demandées pour chaque fonction.'
+      : ''
+    const selectedType = Number(this.sup)
+    const questionTypes = combinaisonListes(
+      [1, 2, 3, 4].includes(selectedType) ? [selectedType] : [1, 2, 3, 4],
+      this.nbQuestions,
+    )
+    for (
+      let i = 0, attempts = 0;
+      i < this.nbQuestions && attempts < 50;
+      attempts++
+    ) {
+      const questionType = questionTypes[i]
+      const drawnPoint = randint(-6, 6)
+      const quadratic = questionType === 4
+      const point = quadratic
+        ? -Math.abs(drawnPoint || 1)
+        : questionType === 2 && drawnPoint === 0
+          ? 1
+          : drawnPoint
+      const root = Math.abs(point)
+      const affineNumerator = questionType === 3 || quadratic
+      const coefficient = randint(-5, 5, 0)
+      const constant = randint(
+        -9,
+        9,
+        quadratic
+          ? [-coefficient * point, coefficient * point]
+          : -coefficient * point,
+      )
+      const pointTex = texNombre(point)
+      const affineDenominator = reduireAxPlusB(1, -point)
+      const squared = questionType === 2
+      const denominator = squared
+        ? `(${affineDenominator})^2`
+        : quadratic
+          ? `x^2-${texNombre(root ** 2)}`
+          : affineDenominator
+      const numerator = affineNumerator
+        ? reduireAxPlusB(coefficient, constant)
+        : '1'
+      const numeratorLimit = affineNumerator
+        ? coefficient * point + constant
+        : 1
+      const expression = `\\dfrac{${numerator}}{${denominator}}`
+      if (!this.questionJamaisPosee(i, expression, point)) continue
 
-    const texte = `Soit $f$ la fonction définie sur $D_f=]-\\infty;${a}[\\cup]${a};+\\infty[$ par $f(x)=${expression}$.<br>
-    On note $\\mathcal C_f$ sa courbe représentative.<br><br>
-    ${numAlpha(0)} Calculer $\\displaystyle \\lim_{x\\to-\\infty}f(x)$, $\\displaystyle \\lim_{x\\to ${a}^-}f(x)$, $\\displaystyle \\lim_{x\\to ${a}^+}f(x)$ et $\\displaystyle \\lim_{x\\to+\\infty}f(x)$.<br><br>
-    ${numAlpha(1)} Interpréter graphiquement les résultats.`
+      const denominatorRightSign = quadratic && point < 0 ? -1 : 1
+      const quotientRightSign = numeratorLimit * denominatorRightSign
+      const leftLimit =
+        squared || quotientRightSign < 0 ? '+\\infty' : '-\\infty'
+      const rightLimit =
+        squared || quotientRightSign > 0 ? '+\\infty' : '-\\infty'
+      const otherPoint = -point
+      const otherPointTex = texNombre(otherPoint)
+      const otherNumeratorLimit = coefficient * otherPoint + constant
+      const otherQuotientRightSign = otherNumeratorLimit * -denominatorRightSign
+      const otherLeftLimit =
+        otherQuotientRightSign < 0 ? '+\\infty' : '-\\infty'
+      const otherRightLimit =
+        otherQuotientRightSign > 0 ? '+\\infty' : '-\\infty'
+      const limit = (side: '-' | '+', at = pointTex) =>
+        `\\displaystyle\\lim_{x\\to ${at}^{${side}}}f(x)`
+      const answerFields = this.interactif
+        ? addMultiMathfield(this, i, {
+            dataTemplate: `$${limit('-')}=$%{field0} et $${limit('+')}=$%{field1}${quadratic ? `<br>$${limit('-', otherPointTex)}=$%{field2} et $${limit('+', otherPointTex)}=$%{field3}` : ''}`,
+            dataOptions: {
+              field0: {
+                keyboard: KeyboardType.clavierLimitesSimple,
+                ldots: true,
+              },
+              field1: {
+                keyboard: KeyboardType.clavierLimitesSimple,
+                ldots: true,
+              },
+              ...(quadratic
+                ? {
+                    field2: {
+                      keyboard: KeyboardType.clavierLimitesSimple,
+                      ldots: true,
+                    },
+                    field3: {
+                      keyboard: KeyboardType.clavierLimitesSimple,
+                      ldots: true,
+                    },
+                  }
+                : {}),
+            },
+          })
+        : quadratic
+          ? `Calculer les limites à gauche et à droite de $f$ en $${pointTex}$ et en $${otherPointTex}$.`
+          : `Calculer les limites à gauche et à droite de $f$ en $${pointTex}$.`
+      this.listeQuestions[i] =
+        `Soit $f$ la fonction définie sur $\\mathbb R\\setminus\\{${quadratic ? `${texNombre(-root)};${texNombre(root)}` : pointTex}\\}$ par $f(x)=${expression}$.<br>${answerFields}`
 
-    let correctionLimite: string
-    let limitesEnA: string
-    if (puissance === 1) {
-      const signeZeroGauche = c > 0 ? -1 : 1
-      const signeZeroDroite = -signeZeroGauche
-      const zeroGauche = signeZeroGauche > 0 ? '0^+' : '0^-'
-      const zeroDroite = signeZeroDroite > 0 ? '0^+' : '0^-'
-      const limiteGauche = limiteSelonSigne(b * signeZeroGauche)
-      const limiteDroite = limiteSelonSigne(b * signeZeroDroite)
-      limitesEnA = `$\\displaystyle \\lim_{x\\to ${a}^-}f(x)=${miseEnEvidence(limiteGauche)}$ et $\\displaystyle \\lim_{x\\to ${a}^+}f(x)=${miseEnEvidence(limiteDroite)}$`
-
-      correctionLimite = `${numAlpha(0)} Chercher les limites aux bornes de $D_f$ revient à chercher les limites en $-\\infty$, en $${a}$ et en $+\\infty$.<br><br>
-      $\\bullet$ En $-\\infty$ et en $+\\infty$ :<br>
-      Comme $\\displaystyle \\lim_{x\\to-\\infty}(${affine})=${c > 0 ? '-\\infty' : '+\\infty'}$ et $\\displaystyle \\lim_{x\\to+\\infty}(${affine})=${c > 0 ? '+\\infty' : '-\\infty'}$, on obtient par quotient :<br>
-      $\\displaystyle \\lim_{x\\to-\\infty}f(x)=0$ et $\\displaystyle \\lim_{x\\to+\\infty}f(x)=0$.<br>
-      <br>$\\bullet$ En $${a}$ :<br>
-      On a $\\displaystyle \\lim_{x\\to ${a}^-}(${affine})=${zeroGauche}$ et $\\displaystyle \\lim_{x\\to ${a}^+}(${affine})=${zeroDroite}$.<br>
-      Enfin, $\\displaystyle \\lim_{x\\to ${a}}${b}=${b}$.<br>
-      Par quotient :<br>
-      $\\displaystyle \\lim_{x\\to ${a}^-}f(x)=${miseEnEvidence(limiteGauche)}$ et $\\displaystyle \\lim_{x\\to ${a}^+}f(x)=${miseEnEvidence(limiteDroite)}$.<br>
-      Les limites à gauche et à droite étant différentes, la limite de $f$ en $${a}$ n'existe pas.`
-    } else {
-      const limite = limiteSelonSigne(b)
-      limitesEnA = `$\\displaystyle \\lim_{x\\to ${a}^-}f(x)=${miseEnEvidence(limite)}$ et $\\displaystyle \\lim_{x\\to ${a}^+}f(x)=${miseEnEvidence(limite)}$`
-      correctionLimite = `${numAlpha(0)} Chercher les limites aux bornes de $D_f$ revient à chercher les limites en $-\\infty$, en $${a}$ et en $+\\infty$.<br><br>
-      $\\bullet$ En $-\\infty$ et en $+\\infty$ :<br>
-      Comme $\\displaystyle \\lim_{x\\to-\\infty}(${affine})^2=+\\infty$ et $\\displaystyle \\lim_{x\\to+\\infty}(${affine})^2=+\\infty$, on obtient par quotient :<br>
-      $\\displaystyle \\lim_{x\\to-\\infty}f(x)=0$ et $\\displaystyle \\lim_{x\\to+\\infty}f(x)=0$.<br>
-      <br>$\\bullet$ En $${a}$ :<br>
-      On a $\\displaystyle \\lim_{x\\to ${a}^-}(${affine})^2=0^+$ et $\\displaystyle \\lim_{x\\to ${a}^+}(${affine})^2=0^+$.<br>
-      Enfin, $\\displaystyle \\lim_{x\\to ${a}}${b}=${b}$.<br>
-      Par quotient :<br>
-      $\\displaystyle \\lim_{x\\to ${a}^-}f(x)=${miseEnEvidence(limite)}$ et $\\displaystyle \\lim_{x\\to ${a}^+}f(x)=${miseEnEvidence(limite)}$.<br>
-      On en déduit que $\\displaystyle \\lim_{x\\to ${a}}f(x)=${miseEnEvidence(limite)}$.`
+      const numeratorExplanation = affineNumerator
+        ? `$\\displaystyle\\lim_{x\\to ${pointTex}}(${numerator})=${texNombre(coefficient)}\\times${ecritureParentheseSiMoins(point)}${ecritureAlgebriqueSauf0(constant)}=${texNombre(numeratorLimit)}$<br>`
+        : 'Le numérateur est constant, égal à $1$, et strictement positif.<br>'
+      const signTable = squared
+        ? ''
+        : tableauDeVariation({
+            tabInit: [
+              [
+                ['$x$', 1.5, 10],
+                [`$${denominator}$`, 1.5, 30],
+              ],
+              quadratic
+                ? [
+                    '$-\\infty$',
+                    20,
+                    `$${texNombre(-root)}$`,
+                    20,
+                    `$${texNombre(root)}$`,
+                    20,
+                    '$+\\infty$',
+                    20,
+                  ]
+                : ['$-\\infty$', 20, `$${pointTex}$`, 20, '$+\\infty$', 20],
+            ],
+            tabLines: [
+              quadratic
+                ? [
+                    'Line',
+                    30,
+                    '',
+                    0,
+                    '+',
+                    20,
+                    'z',
+                    10,
+                    '-',
+                    20,
+                    'z',
+                    10,
+                    '+',
+                    20,
+                    '',
+                    0,
+                  ]
+                : ['Line', 30, '', 0, '-', 20, 'z', 10, '+', 20, '', 0],
+            ],
+            espcl: quadratic ? 4 : 2.5,
+            lgt: quadratic ? 3 : 2,
+          })
+      const signExplanation = squared
+        ? ''
+        : quadratic
+          ? `Soit $x\\in \\mathbb{R}$.<br>On factorise le dénominateur :<br>$${denominator}=(${reduireAxPlusB(1, -root)})(${reduireAxPlusB(1, root)})$<br>Le produit est positif à l’extérieur des racines et négatif entre les racines.<br>On en déduit le tableau de signes de $${denominator}$.<br>${signTable}<br>`
+          : `Soit $x\\in \\mathbb{R}$.<br>On résout $${affineDenominator}>0\\iff x>${pointTex}$.<br>
+      On en déduit le tableau de signes de $${affineDenominator}$ :<br>${signTable}<br>`
+      const denominatorExplanation = squared
+        ? `Pour tout $x\\neq ${pointTex}$, on a $(${affineDenominator})^2>0$, donc<br>
+          $\\displaystyle\\lim_{x\\to ${pointTex}^{-}}(${affineDenominator})^2=0^+$ et $\\displaystyle\\lim_{x\\to ${pointTex}^{+}}(${affineDenominator})^2=0^+$.<br>`
+        : `Pour $x\\lt ${pointTex}$, on a $${affineDenominator}\\lt0$, donc $\\displaystyle\\lim_{x\\to ${pointTex}^{-}}(${affineDenominator})=0^-$.<br>
+          Pour $x>${pointTex}$, on a $${affineDenominator}>0$, donc $\\displaystyle\\lim_{x\\to ${pointTex}^{+}}(${affineDenominator})=0^+$.<br>`
+      this.listeCorrections[i] =
+        `${numeratorExplanation}${signExplanation}${denominatorExplanation}
+      ${affineNumerator ? 'Par quotient,' : 'Comme $1>0$, par quotient,'} $${limit('-')}=${miseEnEvidence(leftLimit)}$ et $${limit('+')}=${miseEnEvidence(rightLimit)}$.`
+      if (quadratic) {
+        const numeratorAt = (at: number) =>
+          `$\\displaystyle\\lim_{x\\to ${texNombre(at)}}(${numerator})=${texNombre(coefficient)}\\times${ecritureParentheseSiMoins(at)}${ecritureAlgebriqueSauf0(constant)}=${texNombre(coefficient * at + constant)}$`
+        const denominatorAt = (at: number) => {
+          const atTex = texNombre(at)
+          return `D’après le tableau de signes précédent, au voisinage de $${atTex}$, le dénominateur est ${at > 0 ? 'négatif à gauche et positif à droite' : 'positif à gauche et négatif à droite'}.<br>
+          Donc $\\displaystyle\\lim_{x\\to ${atTex}^{-}}(${denominator})=0^{${at > 0 ? '-' : '+'}}$ et $\\displaystyle\\lim_{x\\to ${atTex}^{+}}(${denominator})=0^{${at > 0 ? '+' : '-'}}$`
+        }
+        this.listeCorrections[i] = createList({
+          style: 'none',
+          items: [
+            {
+              description: texteEnCouleurEtGras(
+                'Étude du signe du dénominateur',
+                bleuMathalea,
+              ),
+              text: `<br>${signExplanation}`,
+            },
+            {
+              description: texteEnCouleurEtGras(
+                `Limites en $${pointTex}$`,
+                bleuMathalea,
+              ),
+              text: `<br>${numeratorAt(point)}<br>${denominatorAt(point)}<br>
+              Par quotient, $${limit('-')}=${miseEnEvidence(leftLimit)}$ et $${limit('+')}=${miseEnEvidence(rightLimit)}$.`,
+            },
+            {
+              description: texteEnCouleurEtGras(
+                `Limites en $${otherPointTex}$`,
+                bleuMathalea,
+              ),
+              text: `<br>${numeratorAt(otherPoint)}<br>${denominatorAt(otherPoint)}<br>
+              Par quotient, $${limit('-', otherPointTex)}=${miseEnEvidence(otherLeftLimit)}$ et $${limit('+', otherPointTex)}=${miseEnEvidence(otherRightLimit)}$.`,
+            },
+          ],
+        })
+      }
+      handleAnswers(
+        this,
+        i,
+        {
+          bareme: toutPourUnPoint,
+          field0: { value: leftLimit },
+          field1: { value: rightLimit },
+          ...(quadratic
+            ? {
+                field2: { value: otherLeftLimit },
+                field3: { value: otherRightLimit },
+              }
+            : {}),
+        },
+        { formatInteractif: 'multi-mathfield' },
+      )
+      i++
     }
-
-    const correctionGraphique = `${numAlpha(1)} On a ${limitesEnA}. La courbe $\\mathcal C_f$ admet donc une asymptote verticale d'équation $${miseEnEvidence(asymptote)}$.<br>
-    De plus, $\\displaystyle \\lim_{x\\to-\\infty}f(x)=0$ et $\\displaystyle \\lim_{x\\to+\\infty}f(x)=0$. La courbe $\\mathcal C_f$ admet donc une asymptote horizontale d'équation $${miseEnEvidence('y=0')}$.`
-
-    this.listeQuestions[0] = texte
-    this.listeCorrections[0] = `${correctionLimite}<br><br>${correctionGraphique}`
     listeQuestionsToContenu(this)
   }
 }

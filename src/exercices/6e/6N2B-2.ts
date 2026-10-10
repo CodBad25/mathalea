@@ -4,7 +4,7 @@ import { choice } from '../../lib/outils/arrayOutils'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
-import { texNombre, texNombre2 } from '../../lib/outils/texNombre'
+import { texNombre } from '../../lib/outils/texNombre'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
@@ -120,7 +120,7 @@ export default class MultiplierPar001 extends Exercice {
 
         case 3:
           texte = `$${texNombre(nombre, 6)} \\times \\ldots\\ldots\\ldots${sp(2)}=${sp(2)}${texNombre(resultat, 9)}$`
-          texteCorr = `Quand on multiplie par $${texNombre2(10 ** coef)}=${texFractionFromString(1, 10 ** -coef)}$, chaque chiffre prend une valeur $${texNombre2(10 ** -coef)}$ fois plus petite.<br>`
+          texteCorr = `Quand on multiplie par $${texNombre(10 ** coef)}=${texFractionFromString(1, 10 ** -coef)}$, chaque chiffre prend une valeur $${texNombre(10 ** -coef)}$ fois plus petite.<br>`
           texteCorr += `Le chiffre des unités se positionne donc dans les ${rang[3 + coef]} :<br>`
           texteCorr += `$${texNombre(nombre, 6)} \\times ${miseEnEvidence(texNombre(10 ** coef, 3))}${sp(2)}=${sp(2)}${texNombre(resultat, 9)}$`
           this.autoCorrection[i] = {}

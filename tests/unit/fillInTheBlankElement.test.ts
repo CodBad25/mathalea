@@ -1,5 +1,7 @@
 import type { MathfieldElement } from 'mathlive'
 import { beforeEach, describe, expect, it } from 'vitest'
+import { KeyboardType } from '../../src/lib/interactif/claviers/keyboard'
+import { remplisLesBlancs } from '../../src/lib/interactif/questionMathLive'
 import Exercice from '../../src/exercices/Exercice'
 import { handleAnswers } from '../../src/lib/interactif/gestionInteractif'
 import { verifyFillInTheBlankMathLive } from '../../src/lib/interactif/mathLiveVerifications'
@@ -9,6 +11,29 @@ describe('FillInTheBlankElement', () => {
   beforeEach(() => {
     setOutputHtml()
     document.body.innerHTML = ''
+  })
+
+  it('transmet les touches personnalisées au champ interne sans ajouter de bloc standard', () => {
+    const exercice = new Exercice()
+    exercice.interactif = true
+    const dataKeys = [
+      ['0', '1', ','],
+      ['+', '-', '\\times', 'u_n'],
+    ]
+    const template = document.createElement('template')
+    template.innerHTML = remplisLesBlancs(
+      exercice,
+      0,
+      'u_{n+1}=%{champ1}',
+      KeyboardType.clavierEntierementPersonnalisable,
+      '\\ldots',
+      { dataKeys },
+    )
+    const wrapper = template.content.querySelector('fill-in-the-blank')!
+    const mathfield = wrapper.querySelector('math-field')!
+    expect(JSON.parse(wrapper.getAttribute('data-keys')!)).toEqual(dataKeys)
+    expect(JSON.parse(mathfield.getAttribute('data-keys')!)).toEqual(dataKeys)
+    expect(mathfield.getAttribute('data-keyboard')).toBe('')
   })
 
   it('verrouille le mathfield interne apres verification', () => {
@@ -61,7 +86,8 @@ describe('FillInTheBlankElement', () => {
     mathfield.id = 'champTexteEx4Q0'
     mathfield.getPrompts = () => ['champ1', 'champ2']
     mathfield.getPromptValue = (id: string) => (id === 'champ1' ? '5' : '9')
-    mathfield.getValue = () => '\\placeholder[champ1]{5}\\placeholder[champ2]{9}'
+    mathfield.getValue = () =>
+      '\\placeholder[champ1]{5}\\placeholder[champ2]{9}'
     mathfield.setPromptState = () => {}
     mathfield.readOnly = false
 

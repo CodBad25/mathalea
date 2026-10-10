@@ -31,6 +31,21 @@ En mode mathématique (à l'intérieur des `$…$`) :
 (`'#216D9A'`) ou une constante de `src/lib/colors.ts`. Pour du gras noir en
 mode mathématique : `miseEnEvidence(texte, 'black')`.
 
+## Nombres
+
+Dans `src/lib/outils/texNombre.ts`, utiliser `texNombre(nombre)` entre `$…$`
+pour séparer les classes de trois chiffres avec des espaces LaTeX.
+Hors mode mathématique, utiliser `stringNombre(nombre)`.
+
+`texNombre(nombre, precision = 8, completerZeros = false,
+aussiCompleterEntiers = false)` accepte les nombres natifs, les `Decimal`,
+les fractions et les complexes. Les paramètres permettent de choisir le nombre
+de décimales et de conserver les zéros finaux si nécessaire.
+
+`stringNombre()` insère déjà les séparateurs de classes dans les parties
+entière et décimale. Ne pas ajouter un second regroupement de chiffres à sa
+sortie : les espaces existants décaleraient les positions des séparateurs.
+
 ## Couleurs de la charte
 
 Importer les constantes plutôt que recopier les codes :

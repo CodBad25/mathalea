@@ -2627,9 +2627,7 @@ describe('correction minimale (minimalCorrections)', () => {
     )
     expect(code).not.toContain('Le PGCD est')
     // les deux réponses se suivent, séparées par un cadratin
-    expect(code).toContain(
-      '$text(fill: #rgb("#F15929"), stroke: #stroke(paint: rgb("#F15929"), thickness: 0.025em), bold(6))$\u2003$text(fill: #rgb("#F15929"), stroke: #stroke(paint: rgb("#F15929"), thickness: 0.025em), bold(60))$',
-    )
+    expect(code).toContain('$evidence(6)$\u2003$evidence(60)$')
   })
 
   it('laisse intacte une correction sans mise en évidence orange', () => {
@@ -2752,7 +2750,27 @@ describe('préambule d’une banque externe (extraPreamble)', () => {
   })
 })
 
-describe('exportMode (fichier .typ téléchargé, bouton copier)', () => {
+describe('exportMode (génération autonome depuis les exercices)', () => {
+  it('retire aussi les repères du QR-code global et des sujets supplémentaires', () => {
+    const inputs = [
+      exercise({
+        questions: ['$1+1$'],
+        url: 'https://coopmaths.fr/alea/?uuid=19ca2',
+      }),
+    ]
+    const code = buildTypstDocument(
+      inputs,
+      { ...defaultTypstDocumentOptions, showQrCodeFiche: true, nbVersions: 2 },
+      {},
+      [inputs],
+      { exportMode: true },
+    )
+    expect(code).not.toContain('mathalea-anchor')
+    expect(code).not.toContain('mathalea:')
+    expect(code).toContain('#qrcode(qr-code-global-url')
+    expect(code).toContain('Sujet B')
+  })
+
   it('inline les colonnes/espacement des tasks, sans variables exN-colonnes/exN-gutter', () => {
     const code = buildTypstDocument(
       [

@@ -106,6 +106,18 @@ si. Les nombres sont normalisés (`3,50` et `3.5` donnent la même empreinte,
 comme `12-4` et `12 - 4`), ce qui laisse passer un changement de formatage. Le
 signe fait partie du nombre : passer de `-7` à `7` est une dérive.
 
+Une correction de séparateurs de classes mal placés peut modifier l'empreinte
+`nb` sans modifier les valeurs tirées : l'extracteur peut avoir lu plusieurs
+nombres dans l'ancien affichage. Vérifier les valeurs pour une même graine et
+les paramètres concernés avant de mettre à jour les empreintes ciblées. Une
+correction uniquement typographique ne nécessite pas d'archivage.
+
+Le passage d'étiquettes SVG `<text>` à des mesures rendues par KaTeX peut aussi
+modifier l'empreinte : le HTML de KaTeX contient plusieurs représentations d'une
+même valeur (MathML, annotation LaTeX et rendu visuel). Comparer les mesures
+visibles et les réponses avec la version publiée, pour les mêmes graines et
+paramètres, avant de mettre à jour uniquement les empreintes concernées.
+
 Conditions du tirage : mode non interactif, trois questions, une graine dérivée
 de l'`uuid`.
 

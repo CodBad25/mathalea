@@ -37,14 +37,14 @@ export default class CoordonneesVecteur2 extends ExerciceSimple {
       Quelles sont les coordonnées du vecteur $\\vec{u}$ dans ce repère ?<br><br>`
       this.optionsChampTexte = { texteAvant: '$\\vec{u}$ a pour coordonnées :' }
       this.correction = `$\\vec{u}=${a}(\\vec \\imath+${b}\\vec \\jmath\\big)=${a}\\vec \\imath+${ecritureParentheseSiNegatif(a * b)}\\vec \\jmath$.<br>
-      Les coordonnées du vecteur $\\vec{u}$ sont donc $${miseEnEvidence('(')} ${miseEnEvidence(`${a}`)}\\,${miseEnEvidence(';')}\\,${miseEnEvidence(`${a * b}`)} ${miseEnEvidence(')')}$.`
+      Les coordonnées du vecteur $\\vec{u}$ sont donc $\\vec{u}\\begin{pmatrix}${miseEnEvidence(`${a}`)} \\\\ ${miseEnEvidence(`${a * b}`)}\\end{pmatrix}$.`
       this.reponse = `(${a};${a * b})`
     } else {
       this.question = `Dans un repère orthonormé $\\big(O\\,;\\,\\vec \\imath,\\,\\vec \\jmath\\big)$, on a : $\\vec{u}=${a}(\\vec \\jmath+${b}\\vec \\imath)$.<br>
       Quelles sont les coordonnées du vecteur $\\vec{u}$ dans ce repère ?<br><br>`
       this.optionsChampTexte = { texteAvant: '$\\vec{u}$ a pour coordonnées :' }
       this.correction = `$\\vec{u}=${a}(\\vec \\jmath+${b}\\vec \\imath)=${a}\\vec \\jmath+${ecritureParentheseSiNegatif(a * b)}\\vec \\imath$.<br>
-      Les coordonnées du vecteur $\\vec{u}$ sont donc $${miseEnEvidence('(')} ${miseEnEvidence(`${a * b}`)}\\,${miseEnEvidence(';')}\\,${miseEnEvidence(`${a}`)} ${miseEnEvidence(')')}$.`
+      Les coordonnées du vecteur $\\vec{u}$ sont donc $\\vec{u}\\begin{pmatrix}${miseEnEvidence(`${a * b}`)} \\\\ ${miseEnEvidence(`${a}`)}\\end{pmatrix}$.`
       this.reponse = `(${a * b};${a})`
     }
   }

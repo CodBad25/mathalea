@@ -1,11 +1,30 @@
 <script lang="ts">
+  import {
+    exercicesParams,
+    interactiviteParExercice,
+  } from '../../../../../../../lib/stores/generalStore'
   import { globalOptions } from '../../../../../../../lib/stores/globalOptions'
 
   export let setAllInteractive: (isAllInteractive: boolean) => void
 
-  // L'état est lu dans le store, alimenté par l'URL (`numerique=1`) ou, pour
-  // une nouvelle visite, par le dernier choix mémorisé.
-  $: isDigital = $globalOptions.setInteractive === '1'
+  // Sans exercice, l'état est lu dans le store, alimenté par l'URL
+  // (`numerique=1`) ou, pour une nouvelle visite, par le dernier choix
+  // mémorisé. Sinon il reflète l'interactivité réelle des exercices : `null`
+  // (état neutre) dès que l'un n'est pas interactif, y compris faute de
+  // version interactive. Les exercices toujours interactifs sont ignorés car
+  // ils ne dépendent pas du choix.
+  $: interactifs = $exercicesParams.flatMap((params, i) => {
+    const info = $interactiviteParExercice[i]
+    if (info?.interactifObligatoire) return []
+    return [params.interactif === '1' && info?.interactifReady !== false]
+  })
+  $: isDigital = interactifs.length
+    ? interactifs.every(Boolean)
+      ? true
+      : interactifs.some(Boolean)
+        ? null
+        : false
+    : $globalOptions.setInteractive === '1'
 
   const options = [
     {
@@ -31,7 +50,10 @@
     bg-coopmaths-canvas-darkest dark:bg-coopmathsdark-canvas-dark"
 >
   {#each options as option (option.label)}
-    <div class="tooltip tooltip-bottom tooltip-neutral" data-tip={option.tooltip}>
+    <div
+      class="tooltip tooltip-bottom tooltip-neutral"
+      data-tip={option.tooltip}
+    >
       <button
         type="button"
         role="radio"

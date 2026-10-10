@@ -46,6 +46,7 @@
     changes,
     exercicesParams,
     pointsMaxParExercice,
+    interactiviteParExercice,
     resultsByExercice,
   } from '../../../../../lib/stores/generalStore'
   import { globalOptions } from '../../../../../lib/stores/globalOptions'
@@ -268,6 +269,34 @@
     })
   }
 
+  /**
+   * Signale ce que l'exercice permet en matière d'interactivité, pour que le
+   * sélecteur Papier / Numérique et la modale des exercices sans version
+   * interactive s'appuient dessus.
+   */
+  function refreshInteractivite() {
+    const nouvelleInfo = {
+      id: exercise.id ?? '',
+      titre: exercise.titre,
+      interactifReady: Boolean(exercise.interactifReady),
+      interactifObligatoire: Boolean(exercise.interactifObligatoire),
+    }
+    interactiviteParExercice.update((liste) => {
+      const info = liste[exerciseIndex]
+      if (
+        info &&
+        info.id === nouvelleInfo.id &&
+        info.titre === nouvelleInfo.titre &&
+        info.interactifReady === nouvelleInfo.interactifReady &&
+        info.interactifObligatoire === nouvelleInfo.interactifObligatoire
+      )
+        return liste
+      const nouvelleListe = [...liste]
+      nouvelleListe[exerciseIndex] = nouvelleInfo
+      return nouvelleListe
+    })
+  }
+
   beforeUpdate(async () => {
     invalidateRendering()
     log('beforeUpdate:' + exercise.id)
@@ -275,6 +304,7 @@
       numberOfAnswerFields = countMathField(exercise)
     }
     refreshPointsMax()
+    refreshInteractivite()
     if (get(exercicesParams)[exerciseIndex] !== interfaceParams) {
       // interface à changer car un exercice a été supprimé au dessus...
       interfaceParams = get(exercicesParams)[exerciseIndex]

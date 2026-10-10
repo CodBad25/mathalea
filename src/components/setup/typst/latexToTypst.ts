@@ -898,6 +898,12 @@ function preprocessTex(tex: string): string {
     /\\text\s*\{([^{}]*[a-zA-ZàâäéèêëîïôöùûüÿçœæÀÂÄÉÈÊËÎÏÔÖÙÛÜŸÇŒÆ][^{}]*)\}/g,
     `\\text{${TXT_MARK_OPEN}$1${TXT_MARK_CLOSE}}`,
   )
+  // sp() produit &nbsp; en contexte HTML, y compris pour l'export Typst.
+  // Après décodage, tex2typst refuse U+00A0 en mode maths : utiliser ~ pour
+  // conserver l'espace insécable. Dans \text{…}, elle reste littérale.
+  output = output.replace(/\\text\s*\{[^{}]*\}|\u00a0/g, (match) =>
+    match === '\u00a0' ? '~' : match,
+  )
   return output
 }
 
@@ -2118,14 +2124,6 @@ export function latexMathToTypst(tex: string): string {
   try {
     return convert(preprocessed)
   } catch {
-    //   (espace insécable du HTML) échoue en mode math : on remplace par espace
-    if (preprocessed.includes(' ')) {
-      try {
-        return convert(preprocessed.replaceAll(' ', ' '))
-      } catch {
-        /* fall through to literal */
-      }
-    }
     return `"${preprocessed.replaceAll('\\', '\\\\').replaceAll('"', '\\"')}"`
   }
 }

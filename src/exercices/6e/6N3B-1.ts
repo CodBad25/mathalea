@@ -3,7 +3,7 @@ import { choice } from '../../lib/outils/arrayOutils'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
-import { texNombre2 } from '../../lib/outils/texNombre'
+import { texNombre } from '../../lib/outils/texNombre'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { fraction } from '../../modules/fractions'
 import {
@@ -173,11 +173,11 @@ export default class SensDeLaFraction extends Exercice {
           }
           f = fraction(a, b)
 
-          texte = `Le nombre $${texNombre2(arrondi(a / b))}$ peut s'écrire en écriture fractionnaire : $${texFractionFromString(
+          texte = `Le nombre $${texNombre(arrondi(a / b))}$ peut s'écrire en écriture fractionnaire : $${texFractionFromString(
             '\\dots',
             '\\dots',
           )}$`
-          texteCorr = `Le nombre $${texNombre2(arrondi(a / b))}$ peut s'écrire  $${miseEnEvidence(f.fractionDecimale().texFraction)}$`
+          texteCorr = `Le nombre $${texNombre(arrondi(a / b))}$ peut s'écrire  $${miseEnEvidence(f.fractionDecimale().texFraction)}$`
           if (f.fractionDecimale().texFraction !== f.texFractionSimplifiee) {
             texteCorr += ` ou $${miseEnEvidence(f.texFractionSimplifiee)}$.`
           } else texte += '.'

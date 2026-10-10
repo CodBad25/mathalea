@@ -31,7 +31,44 @@ L'éditeur est CodeMirror 6, configuré par `editor/typstEditorSetup.ts` (`typst
 
 ## Réponses mises en évidence (orange et gras)
 
-`miseEnEvidence()` produit `{\color{#F15929}\boldsymbol{…}}`, converti en `text(fill: …, bold(…))`. `bold()` ne met en gras que les lettres et les chiffres : la police de maths n'a pas de variante grasse pour les opérateurs, parenthèses et radicaux (`\boldsymbol` LaTeX les épaissit tous). `latexToTypst.ts` ajoute donc à ces formules un contour de la couleur du texte (`stroke: #stroke(paint: …, thickness: 0.025em)`), ce qui donne un gras homogène avec n'importe quelle police de maths.
+`miseEnEvidence()` produit `{\color{#F15929}\boldsymbol{…}}`. Le convertisseur
+`latexToTypst.ts` restitue la couleur, le gras et un léger contour qui épaissit
+également les opérateurs, parenthèses et radicaux (sans variante grasse dans
+certaines polices de maths).
+
+`typstHighlights.ts` factorise ce style lors de l’assemblage de la fiche et
+des exercices autonomes : `$evidence(x = 2)$` remplace les longs appels
+à `text(fill: …, stroke: …)`. La fonction `evidence` est définie une seule
+fois dans le préambule, uniquement quand le contenu l’utilise. L’orange
+`#F15929` est sa couleur par défaut ; les autres couleurs restent explicites,
+par exemple `$evidence(couleur: #rgb("#216D9A"), x)$`. Cette fonction
+utilise uniquement Typst et conserve le même rendu.
+
+## Copier et télécharger un code Typst propre
+
+Dans les modes **Code** et **Côte à côte**, **Copier le code Typst propre**
+copie toute la fiche avec son préambule. **Télécharger le .typ** utilise le
+même code ; si des images externes sont nécessaires, le téléchargement
+fournit une archive ZIP contenant le `.typ` et ses images.
+
+`buildExportCode` nettoie le texte actuel de l’éditeur avec
+`cleanTypstExport` (`typstExport.ts`), sans reconstruire la fiche depuis les
+exercices. Les retouches libres du préambule, des énoncés, des corrections et
+des blocs de rendu sont donc conservées, ainsi que tous les sujets, quel que
+soit celui montré dans l’aperçu.
+
+Le nettoyage retire la définition et les appels des repères invisibles
+`mathalea-anchor`, ainsi que les commentaires réservés `// mathalea:…`.
+Les chaînes, exemples de code brut et commentaires personnels sont protégés.
+Les variables de mise en page et les fonctions nécessaires au rendu restent
+dans le préambule : ce sont des réglages Typst ordinaires, utilisables et
+modifiables dans un autre éditeur. Elles ne sont pas remplacées par des
+valeurs littérales pour respecter les expressions personnalisées et leurs
+dépendances.
+
+`buildTypstDocument(..., { exportMode: true })` reste disponible pour les
+exports reconstruits depuis les données des exercices : il émet directement
+des valeurs littérales de colonnes et d’espacements, sans repères de palette.
 
 ## Réglages numériques de mise en page
 
@@ -189,7 +226,46 @@ FREE_EXERCISE_UUID`) : l'énoncé « généré » auquel il reviendrait n'est qu
   sans effet sur l'énoncé affiché) plutôt que masqués comme pour un exercice
   statique, ce qui aurait aussi masqué le crayon d'édition indispensable ici
   (`nonEditableStaticExercises` se fonde sur l'absence de fichier `.typ` du
-  référentiel, que ce vaisseau n'a pas).
+  référentiel, que ce vaisseau n'a pas) ;
+- sur une fiche à plusieurs sujets, `texte` est posé comme surcharge dans
+  **chaque** sujet : il ne dépend d'aucune graine.
+
+## Modifications de code et plusieurs sujets
+
+Une surcharge de code (crayon de la palette) remplace tout l'énoncé ou toute
+la correction d'un exercice, **nombres compris**, et ne vaut que pour le sujet
+où elle a été saisie (`carryOver.versions[n]`) : la recopier telle quelle dans
+un autre sujet lui donnerait les valeurs du premier. Pour qu'un professeur
+n'ait pas à refaire ses retouches dans chaque sujet, elles sont reportées sous
+forme de **différence** (`src/components/setup/typst/codePatch.ts`) :
+
+- `createCodePatch(avant, après)` découpe les deux textes en mots, nombres,
+  blancs et symboles, les compare (algorithme de Myers) et retient chaque
+  passage modifié avec quelques mots de contexte de part et d'autre ;
+- `applyCodePatch(cible, patch)` rejoue ces remplacements sur le code d'un
+  autre sujet. Dans le **contexte**, un nombre correspond à n'importe quel
+  nombre (les valeurs tirées diffèrent d'un sujet à l'autre) ; le passage
+  **remplacé** doit en revanche figurer à l'identique. Le contexte est
+  raccourci au besoin, et le report échoue (`null`) si le passage est
+  introuvable ou désigne plusieurs endroits : jamais d'approximation qui
+  recopierait les nombres d'un autre sujet.
+
+Deux points d'entrée dans `Typst.svelte` :
+
+- la modale d'édition propose, à partir de deux sujets, la case « Reporter la
+  modification sur les autres sujets » (cochée par défaut,
+  `codeEditApplyToAll`). `propagateExerciseCode` calcule la différence entre
+  le code précédent du sujet affiché (surcharge, sinon code généré) et le
+  brouillon, puis la rejoue sur le code actuel de chaque autre sujet, qui
+  garde ainsi ses propres retouches. « Restaurer le code d'origine » retire la
+  surcharge de tous les sujets ;
+- l'ajout de sujets (`applyDocumentOptions`, nombre de versions supérieur à
+  celui du code affiché) : `propagateOverridesToNewVersions` rejoue sur chaque
+  nouveau sujet la différence entre le code généré du Sujet A et sa surcharge.
+
+Une surcharge identique au code généré n'est pas enregistrée. Les sujets où le
+report a échoué sont signalés par une alerte : le professeur les modifie à
+part.
 
 ## Lignes de réponse (« Lignes pour écrire »)
 
@@ -828,6 +904,7 @@ Particularités de la conversion des formules (`latexMathToTypst`) :
 - virgule décimale française rendue sans espace (`3,5` → `3","5`) ;
 - `\num`/`\numprint` dépliés en conservant les espaces fines (`\,`) ;
 - espaces LaTeX explicites (`\thinspace`, `\medspace`, `\thickspace`) normalisées vers les espaces mathématiques Typst ;
+- espaces insécables HTML (`&nbsp;`, entités numériques ou caractère U+00A0, notamment issus de `sp()`) converties en `~` LaTeX puis en `space.nobreak` Typst dans les formules ; à l'intérieur de `\text{…}`, elles restent des caractères littéraux ;
 - les espaces sources qui bordent une chaîne de texte (`#txt("…")`, `" "`) sont supprimées : contrairement à LaTeX, Typst rend en mode maths l'espace qui précède ou suit une chaîne, elle s'ajouterait donc à celle contenue dans le `\text{…}` (`5\text{ cm}`) ou à l'espace insécable qui précède (`5~\text{cm}`) et afficherait une double espace ;
 - la mise en évidence `{\color{...}\boldsymbol{...}}` de `miseEnEvidence` est convertie en `#text(fill: rgb("..."))` ; `\boldsymbol` devient `bold(...)` (gras **italique**, comme en LaTeX) et non `upright(bold(...))`, qui redresserait les variables des réponses en orange ;
 - les crochets mathématiques sont convertis en glyphes `bracket.l`/`bracket.r`, y compris autour d'un contenu uniquement en minuscules (`[x]`, `K[x]`) et lorsqu'un crochet isolé est mis en évidence ; les bornes intérieures des réunions, intersections et différences d'intervalles en notation française sont reconnues avant cette conversion afin de ne pas être confondues avec la paire ambiguë `[union]`, `[inter]` ou `[without]` produite par `tex2typst` ; ces transformations de structure, ainsi que l'équilibrage des parenthèses, ignorent les chaînes Typst afin de conserver littéralement les délimiteurs de `\text{…}` ;
@@ -1149,6 +1226,20 @@ de composer le texte avec les réglages du document.
 
 #### Outil « Découper l’image »
 
+Lorsqu'un énoncé ou un corrigé d'annale en image dépasse réellement la page, un
+encart au-dessus de l'aperçu explique comment répartir une image trop haute
+sur plusieurs pages sans réduire le texte. « Choisir une image à découper »
+donne accès à chaque énoncé et corrigé concerné, même lorsque la palette est
+masquée. Les corrigés sont proposés seulement si leur affichage est activé,
+et cet encart n'apparaît pas en présentation « Course aux nombres ».
+Une croix permet de le masquer jusqu'au prochain chargement de la vue.
+`imageOverflow.ts` instrumente uniquement la source de l'aperçu : Typst
+publie la position et les dimensions finales de chaque image ou fragment,
+après ajustement de largeur et zoom. `overflowingImages` compare ces mesures
+aux limites des pages, avec une tolérance de 0,5 pt. Les images qui tiennent
+dans la page ne sont pas proposées. Les repères de mesure ne figurent ni
+dans le code de l'éditeur ni dans les exports.
+
 La palette de mise en page propose un bouton ciseaux pour les énoncés et
 les corrections statiques sans source Typst, hors présentation « Course aux
 nombres ». `TypstImageCutModal.svelte` affiche chaque image originale :
@@ -1182,6 +1273,13 @@ sources d’annales publiées restent inchangées.
 ## Compilation dans le navigateur
 
 `typstCompiler.ts` s'appuie sur `@myriaddreamin/typst.ts` : le compilateur WASM (~28 Mo) et le moteur de rendu sont chargés à la première compilation (import dynamique, URL des `.wasm` résolues par Vite). L'aperçu est un rendu SVG du document ; le bouton « Télécharger le PDF » compile en vrai PDF côté client, sans serveur.
+
+Les noms des fichiers téléchargés sont dérivés du titre du document : les
+accents sont retirés (`é` devient `e`), seuls les lettres ASCII, chiffres,
+espaces, tirets et underscores sont conservés, puis les espaces deviennent
+des underscores. Un titre vide après nettoyage utilise `fiche`. Cette règle
+s'applique aux PDF, aux fichiers `.typ` et aux archives `.zip` ; les PDF
+séparés ajoutent les suffixes `_enonce.pdf` et `_corrige.pdf`.
 
 ### Coût de démarrage
 
@@ -1277,7 +1375,7 @@ Le découpage se fait côté `Typst.svelte` (`previewCode`), pas dans le documen
 - le sélecteur « Aperçu » de la barre d'outils n'apparaît qu'à partir de deux
   sujets. Il ne touche ni au code de l'éditeur ni aux exports : « Télécharger
   le PDF » compile `currentCode()`, qui porte tous les sujets, et le `.typ`
-  est reconstruit par `buildExportCode`.
+  est nettoyé depuis le texte actuel de l’éditeur par `buildExportCode`.
 
 Chaque sujet porte les mêmes repères `mathalea-anchor` et propose la palette
 complète : édition des énoncés et corrections, insertions, fusions, lignes de
@@ -1324,6 +1422,8 @@ nombre de sujets tronque la liste (`applyDocumentOptions`).
 ## Tests
 
 - `src/components/setup/typst/latexToTypst.test.ts` : conversion des formules et du HTML ;
+- `src/components/setup/typst/typstHighlights.test.ts` : factorisation de la mise en évidence et comparaison du rendu SVG avec le CLI Typst ;
+- `src/components/setup/typst/typstExport.test.ts` : conservation des retouches libres, nettoyage des repères et comparaison du rendu SVG de plusieurs sujets ;
 - `src/components/setup/typst/imageCuts.test.ts` : découpage des images, conservation par sujet et partie, export et compilation des fragments sur plusieurs pages ;
 - `src/components/setup/typst/typstDiagnostics.test.ts` : lecture du format « unix » et traduction des messages ;
 - `src/components/setup/typst/buildTypstDocument.test.ts` : structure du document généré. Les cas qui lancent le binaire externe `typst compile` sont exécutés en local quand le CLI `typst` est installé, ignorés en CI par défaut, et réactivables avec `TYPST_CLI_TESTS=1` pour un job dédié ;

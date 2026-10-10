@@ -8,7 +8,6 @@
   import { globalOptions } from '../../../../../lib/stores/globalOptions'
   import MobileMenuAction from '../../../../setup/mobile/MobileMenuAction.svelte'
   import MobileOverlay from '../../../../setup/mobile/MobileOverlay.svelte'
-  import InteractivityIcon from '../../../icons/TwoStatesIcon.svelte'
   import BugReportModal from '../BugReportModal.svelte'
   import BoutonDescendre from './BoutonDescendre.svelte'
   import BoutonMonter from './BoutonMonter.svelte'
@@ -340,9 +339,16 @@
                 ? "Désactiver l'interactivité"
                 : 'Rendre interactif'}
               type="button"
+              aria-label={isInteractif
+                ? "Désactiver l'interactivité"
+                : 'Rendre interactif'}
               on:click={switchInteractif}
             >
-              <InteractivityIcon isOnStateActive={isInteractif} />
+              <i
+                class="bx {isInteractif
+                  ? 'bx-laptop'
+                  : 'bx-file'} text-2xl text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest"
+              ></i>
             </button>
           {/if}
           <button

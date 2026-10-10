@@ -16,6 +16,8 @@ Un exercice peut définir `interactifObligatoire = true` lorsqu'il ne possède p
 
 Le sélecteur Papier / Numérique de la barre d'outils (`FormatToggle.svelte`) appelle `setAllInteractive()` de `Start.svelte` : il fixe `globalOptions.setInteractive` (`'1'` en numérique, `'0'` en papier) et rend interactifs, ou non, tous les exercices de la liste ainsi que ceux ajoutés ensuite.
 
+Une fois la liste non vide, le sélecteur reflète l'interactivité réelle des exercices (`exercicesParams[i].interactif`). `interactiviteParExercice`, alimenté par `ExerciceMathaleaVueProf`, indique pour chacun s'il a une version interactive (`interactifReady`) ou s'il est toujours interactif (`interactifObligatoire`, ignoré par le sélecteur). Dès qu'un exercice n'est pas interactif, y compris faute de version interactive, le sélecteur est neutre (aucun bouton sélectionné). Un clic sur Numérique rend interactifs tous les exercices qui le peuvent ; si certains n'ont pas de version interactive, `Start.svelte` ouvre une modale qui les liste (référence et titre) et le sélecteur reste neutre. Sous Capytale (`recorder=capytale`), le sélecteur est absent et le mode numérique est implicite : la même modale s'ouvre, une fois par exercice, pour prévenir qu'un exercice sans version interactive peut rester dans l'activité mais ne donnera lieu à aucune note. Le bouton de bascule de chaque exercice utilise les mêmes icônes : ordinateur (`bx-laptop`) en interactif, feuille (`bx-file`) sinon.
+
 Le choix numérique est porté dans l'URL de la vue prof par `numerique=1` (hors vues élève, où `es` porte déjà `setInteractive`, et hors intégrations `recorder`). Il est aussi mémorisé dans le `localStorage` (clé `mathalea-format-numerique`, `src/lib/stores/storage.ts`) : une nouvelle visite sans exercice dans l'URL reprend le dernier choix, alors qu'un lien avec des exercices fait foi.
 
 ## Interactivité dans la vue Course aux nombres
@@ -478,6 +480,21 @@ dans `<apigeom-figure legacy-mount>`, enregistre une callback qui appelle
 remonte les réponses du sous-exercice vers l'exercice affiché. Ces questions ne
 nécessitent donc plus l'ancre de secours `<meta-custom>` lorsqu'elles sont
 réhébergées.
+
+Au montage, `figureApigeom()` et `ApigeomFigureElement` installent
+`enableFigureUiRecovery()` (`src/lib/apigeom/recoverFigureUi.ts`). Si une action
+apiGeom met la machine XState en état `error`, le prochain clic sur un outil
+recrée uniquement la machine avant d'envoyer l'action choisie. Les éléments
+construits et les piles annuler/rétablir sont conservés ; les éléments
+temporaires et la sélection en cours sont abandonnés. L'erreur initiale est
+signalée dans la console. Une machine active n'est pas remplacée.
+
+Ce mécanisme utilise la machine interne `apigeom/src/uiMachine` et une
+dépendance directe à `xstate`. Vérifier cette intégration lors d'une mise à jour
+d'apiGeom, notamment l'action `setupKeyboardRename`, désactivée à la reprise
+pour ne pas doubler les raccourcis clavier. Le test
+`tests/unit/apigeom9795.test.ts` simule une erreur pendant une construction et
+vérifie la reprise ainsi que l'historique.
 
 Un cas particulier subsiste :
 

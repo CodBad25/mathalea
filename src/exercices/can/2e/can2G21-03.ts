@@ -44,9 +44,9 @@ export default class CoordonneesVecteur1 extends ExerciceSimple {
     this.optionsChampTexte = {
       texteAvant: '$\\overrightarrow{AB}$ a pour coordonnées :',
     }
-    this.correction = `On sait d'après le cours, que si $A(x_A${sp(1)} ; ${sp(1)}y_A)$ et $B(x_B${sp(1)} ; ${sp(1)} y_B)$ sont deux points dans un repère, alors on a : $\\overrightarrow{AB}(x_B-x_A  ${sp(1)} ; ${sp(1)} y_B-y_A)$.<br>
-    En appliquant aux données de l'énoncé, on obtient  : $\\overrightarrow{AB}(${xB}-${ecritureParentheseSiNegatif(xA)} ${sp(1)} ; ${sp(1)} ${yB}-${ecritureParentheseSiNegatif(yA)})$.<br>
-    Les coordonnées du vecteur $\\overrightarrow{AB}$ sont donc $${miseEnEvidence('(')} ${miseEnEvidence(`${xB - xA}`)}\\,${miseEnEvidence(';')}\\,${miseEnEvidence(`${yB - yA}`)} ${miseEnEvidence(')')}$.`
+    this.correction = `On sait d'après le cours, que si $A(x_A${sp(1)} ; ${sp(1)}y_A)$ et $B(x_B${sp(1)} ; ${sp(1)} y_B)$ sont deux points dans un repère, alors on a : $\\overrightarrow{AB}\\begin{pmatrix}x_B-x_A \\\\ y_B-y_A\\end{pmatrix}$.<br>
+    En appliquant aux données de l'énoncé, on obtient  : $\\overrightarrow{AB}\\begin{pmatrix}${xB}-${ecritureParentheseSiNegatif(xA)} \\\\ ${yB}-${ecritureParentheseSiNegatif(yA)}\\end{pmatrix}$.<br>
+    Les coordonnées du vecteur $\\overrightarrow{AB}$ sont donc $\\overrightarrow{AB}\\begin{pmatrix}${miseEnEvidence(`${xB - xA}`)} \\\\ ${miseEnEvidence(`${yB - yA}`)}\\end{pmatrix}$.`
     this.reponse = `(${xB - xA};${yB - yA})`
   }
 }

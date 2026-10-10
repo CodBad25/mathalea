@@ -28,6 +28,7 @@ import {
 import { LOGO_CAN_VIRTUAL_PATH } from './mathaleaLogo'
 import { minimalCorrection } from './minimalCorrection'
 import { typstImport } from './typstPackages'
+import { simplifyTypstHighlights, withTypstHighlights } from './typstHighlights'
 
 /**
  * Rend le QR-code en SVG côté mathalea (fond blanc explicite) plutôt que de
@@ -119,12 +120,12 @@ function qrCodeGlobalVariableName(version: number): string {
  */
 const FICHE_QRCODE_OFFSET_TOP = '-0.5cm'
 
-function ficheQrCodeLines(version: number): string[] {
+function ficheQrCodeLines(version: number, exportMode = false): string[] {
   const urlVariable = qrCodeGlobalVariableName(version)
   return [
     `#place(top + right, dy: ${FICHE_QRCODE_OFFSET_TOP}, context [`,
     '  #if here().page() == 1 [',
-    `    #mathalea-anchor("qr-code", ${version})#box(width: ${FICHE_QRCODE_SIZE}, fill: white, inset: 2pt)[#qrcode(${urlVariable}, width: 100%)]`,
+    `    ${exportMode ? '' : `#mathalea-anchor("qr-code", ${version})`}#box(width: ${FICHE_QRCODE_SIZE}, fill: white, inset: 2pt)[#qrcode(${urlVariable}, width: 100%)]`,
     '  ]',
     '])',
   ]
@@ -2717,7 +2718,7 @@ export function getGeneratedExerciseCode(
     false,
     true,
   )
-  return generated[num - 1]?.enonce ?? ''
+  return simplifyTypstHighlights(generated[num - 1]?.enonce ?? '')
 }
 
 /**
@@ -2741,7 +2742,7 @@ export function getGeneratedCorrectionCode(
     false,
     true,
   )
-  return generated[num - 1]?.correction ?? ''
+  return simplifyTypstHighlights(generated[num - 1]?.correction ?? '')
 }
 
 /**
@@ -2862,7 +2863,7 @@ export function buildStandaloneExerciseCode(
     lines.push('')
   }
   lines.push(code)
-  return lines.join('\n')
+  return withTypstHighlights(lines.join('\n'))
 }
 
 /**
@@ -3691,7 +3692,7 @@ export function buildTypstDocument(
     : []
   const hasGlobalQrCode = globalQrCodeUrls.some((url) => url != null)
   const usesAnchors =
-    hasGlobalQrCode ||
+    (!exportMode && hasGlobalQrCode) ||
     allLines.some((line) => line.includes('#mathalea-anchor('))
   const usesQrCode = allLines.some((line) => /^\s*qr: /.test(line))
   const usesSchema = allLines.some((line) =>
@@ -4144,14 +4145,16 @@ export function buildTypstDocument(
       lines.push(`// mathalea:worked(${num})`)
     }
   }
-  if (totalVersions > 1) lines.push('// mathalea:banque(0)')
+  if (!exportMode && totalVersions > 1) lines.push('// mathalea:banque(0)')
   lines.push(...primary.bankLines)
   for (const [i, version] of extra.entries()) {
-    lines.push(`// mathalea:banque(${i + 1})`)
-    lines.push(`// mathalea:figures-offset(${figureOffsets[i]})`)
+    if (!exportMode) {
+      lines.push(`// mathalea:banque(${i + 1})`)
+      lines.push(`// mathalea:figures-offset(${figureOffsets[i]})`)
+    }
     lines.push(...version.bankLines)
   }
-  if (totalVersions > 1) lines.push('// mathalea:banque-fin')
+  if (!exportMode && totalVersions > 1) lines.push('// mathalea:banque-fin')
   lines.push('')
   // Repère de début de sujet : l'aperçu ne compile que le sujet montré (voir
   // `previewCode` dans `Typst.svelte`). La mise en page est l'essentiel du
@@ -4159,7 +4162,7 @@ export function buildTypstDocument(
   // à deux sujets, n'en compiler qu'un fait plus que diviser l'attente par
   // deux. C'est un commentaire : le document reste identique pour l'export et
   // la compilation CLI.
-  if (totalVersions > 1) lines.push(subjectMarker(0))
+  if (!exportMode && totalVersions > 1) lines.push(subjectMarker(0))
   if (primaryCoverLines.length > 0) {
     // repère du bloc de couverture : la palette de l'aperçu propose d'y
     // modifier titre, session, matière, durée et consignes (sans objet en
@@ -4189,12 +4192,12 @@ export function buildTypstDocument(
     // lignes sont ajoutées à la page dans l'ordre du document, un `#place`
     // plus tardif se peint donc par-dessus le contenu qui précède plutôt
     // que l'inverse (sans quoi la ligne du titre traverse le QR-code)
-    lines.push(...ficheQrCodeLines(0))
+    lines.push(...ficheQrCodeLines(0, exportMode))
   }
   lines.push('')
   lines.push(...primary.renderLines)
   for (const [i, version] of extra.entries()) {
-    lines.push(subjectMarker(i + 1))
+    if (!exportMode) lines.push(subjectMarker(i + 1))
     lines.push(sectionPageBreak(options))
     // chaque sujet recommence sa propre pagination et sa numérotation
     // d'exercices (compteur global du paquet exercise-bank)
@@ -4230,13 +4233,13 @@ export function buildTypstDocument(
       globalQrCodeUrls[i + 1] != null &&
       !(options.canMode && coverTemplate === 'can')
     ) {
-      lines.push(...ficheQrCodeLines(i + 1))
+      lines.push(...ficheQrCodeLines(i + 1, exportMode))
     }
     lines.push('')
     lines.push(...version.renderLines)
   }
 
-  return lines.join('\n')
+  return withTypstHighlights(lines.join('\n'))
 }
 
 /**

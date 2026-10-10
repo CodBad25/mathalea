@@ -295,6 +295,22 @@ describe('latexMathToTypst', () => {
     )
   })
 
+  it('conserve les espaces insécables HTML dans les formules', () => {
+    // 5G3B-3 : sp() émet &nbsp; même lors de la génération Typst.
+    for (const space of ['&nbsp;', '&#160;', '&#xA0;', '\u00a0']) {
+      expect(latexMathToTypst(`AB=4${space}\\text{cm}`)).toBe(
+        'A B = 4 space.nobreak#txt("cm")',
+      )
+      expect(htmlToTypst(`$AB=4${space}\\text{cm}$`)).toBe(
+        '$A B = 4 space.nobreak#txt("cm")$',
+      )
+      expect(latexMathToTypst(`1${space}200`)).toBe('1 space.nobreak 200')
+      expect(latexMathToTypst(`\\text{Donc${space}: }x=2`)).toBe(
+        '#txt("Donc\u00a0: ")x = 2',
+      )
+    }
+  })
+
   it('ne double pas les espaces autour du texte inclus', () => {
     // Typst rend les espaces sources qui bordent une chaîne en mode maths :
     // celles que tex2typst ajoute comme séparateurs de jetons s'ajouteraient
@@ -738,8 +754,8 @@ describe('htmlToTypst', () => {
       '$\\begin{array}{|c|c|c|}\\hline \\text{Remise} & 10&nbsp;\\% & 20&nbsp;\\% \\\\ \\hline\\end{array}$',
     )
     expect(result).toContain('columns: 3')
-    expect(result).toContain('[$10 %$]')
-    expect(result).toContain('[$20 %$]')
+    expect(result).toContain('[$10 space.nobreak %$]')
+    expect(result).toContain('[$20 space.nobreak %$]')
     expect(result).not.toContain('nbsp')
   })
 

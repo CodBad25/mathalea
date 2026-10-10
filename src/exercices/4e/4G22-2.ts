@@ -172,10 +172,10 @@ function calculeGeneratrice(
   $${nomHypotenuse}^2 = ${texNombre(rayon * rayon, 2)} + ${texNombre(hauteur * hauteur, 0)}$<br>
   $${nomHypotenuse}^2 = ${texNombre(rayon * rayon + hauteur * hauteur, 2)}$<br>
   Donc :<br>
-  $${nomHypotenuse}=\\sqrt{${texNombre(rayon * rayon + hauteur * hauteur, 2)}}${
+  $${nomHypotenuse}=${
     typeDeReponse.includes('exacte')
-      ? '\\text{ cm}'
-      : `${egalOuApprox(Math.sqrt(hauteur * hauteur + rayon * rayon), 1)}${miseEnEvidence(texNombre(Math.sqrt(hauteur * hauteur + rayon * rayon), 1))}\\text{ cm}`
+      ? `${miseEnEvidence(`\\sqrt{${texNombre(rayon * rayon + hauteur * hauteur, 2)}}`)}\\text{ cm}`
+      : `\\sqrt{${texNombre(rayon * rayon + hauteur * hauteur, 2)}}${egalOuApprox(Math.sqrt(hauteur * hauteur + rayon * rayon), 1)}${miseEnEvidence(texNombre(Math.sqrt(hauteur * hauteur + rayon * rayon), 1))}\\text{ cm}`
   }$<br>
  `
 
@@ -316,7 +316,7 @@ export default class CalculeDansCone extends Exercice {
                 typeInteractivite: 'mathlive',
               }) + (this.sup3 ? `<br>${figures.figureEnonce}<br><br>` : '')
 
-            correction = `${this.sup4 ? `${figures.figureCorrection}<br><br>` : ''}${calculeHauteurCone(rayon, hauteur, noms, typeDeReponse)}`
+            correction = `${this.sup4 ? `${figures.figureCorrection}<br><br>` : ''}${calculeGeneratrice(rayon, hauteur, noms, typeDeReponse)}`
           }
           break
       }

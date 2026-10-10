@@ -5,6 +5,12 @@ exercice et comprendre les paramètres des commandes. Lancer les commandes
 depuis la racine du dépôt, après `pnpm install`. Les commandes ci-dessous
 utilisent la syntaxe d'un shell Unix (`VARIABLE=valeur pnpm ...`).
 
+Dans un clone ou un worktree neuf, lancer `pnpm makeJson` avant les tests
+unitaires et `pnpm check`. Ces commandes importent des catalogues générés
+(`src/json/uuidsToUrlFR.json`, `exercicesFR.json`, `referentielStaticCH.json`,
+etc.) mais ne les créent pas elles-mêmes. `pnpm dev` et `pnpm build` exécutent
+déjà `makeJson` avant de démarrer.
+
 ## Choisir le test
 
 | Besoin                                                 | Commande                        | Ce qui est vérifié                                                                                                                                           | Serveur Vite                     |
