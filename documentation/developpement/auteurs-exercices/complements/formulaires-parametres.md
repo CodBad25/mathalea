@@ -262,3 +262,20 @@ et deux `case` (décimaux, fractions dans la correction). Il est instancié par
 Les tests correspondants sont dans `tests/unit/formulaireComplexe.test.ts` et
 `tests/unit/conversionsParametrable.test.ts`. La conversion des formulaires texte en
 liste pondérée est testée dans `tests/unit/formulaireTexteListe.test.ts`.
+
+## Contraindre une liste de paramètres texte
+
+Les listes issues de `besoinFormulaireTexte` peuvent imposer un nombre minimal
+de cases cochées et masquer les poids d'apparition avec `textFormOptions`.
+La clé correspond à l'indice du paramètre (`1` pour `sup`, `2` pour `sup2`, etc.).
+
+```ts
+this.textFormOptions = { 2: { minSelections: 2, weighted: false } }
+```
+
+Avec trois choix, cette configuration permet d'en décocher au maximum un.
+Lorsque le minimum est atteint, les cases cochées sont désactivées ; les cases
+non cochées restent disponibles. Les autres exercices conservent leur interface
+habituelle. L'exercice doit aussi normaliser les paramètres lus depuis une URL
+pour respecter ce minimum pendant la génération. Le `2N12-10` utilise ce réglage
+pour afficher deux ou trois colonnes et adapter les réponses attendues au tableau.
