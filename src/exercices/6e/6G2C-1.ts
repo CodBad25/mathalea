@@ -196,7 +196,7 @@ export default class RegionsDuPlan extends Exercice {
             })
             const rayon2 = segment(C, D2)
             // Étiquette horizontale au milieu de la partie du rayon dans la couronne.
-            const P1 = pointSurCercle(c1, 60)
+            const P1 = pointSurCercle(c1, 60, '')
             const longRayon2 = placeLatexSurSegment(r2Tex, P1, D2, {
               horizontal: true,
               distance: 0.35,
