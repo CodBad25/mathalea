@@ -132,7 +132,10 @@ export default class ExploiterRepresentationGraphique extends Exercice {
               dataTemplate: `a) Au bout de combien de temps le projectile retombe-t-il au sol ? %{champ1}\n
               b) Quelle est la hauteur maximale atteinte par le projectile ? %{champ2}`,
               dataOptions: {
-                champ1: { keyboard: KeyboardType.clavierHms },
+                champ1: {
+                  keyboard: KeyboardType.clavierHms,
+                  texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
+                },
                 champ2: {
                   keyboard: KeyboardType.longueur,
                   texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
@@ -431,7 +434,10 @@ ${mathalea2d(
 b) Pendant combien de temps, ${fille}, a-t-elle fait réellement du vélo ? %{champ2}\n
 c) Quelle distance a-t-elle parcourue au total ? %{champ3}`,
               dataOptions: {
-                champ2: { keyboard: KeyboardType.clavierHms },
+                champ2: {
+                  keyboard: KeyboardType.clavierHms,
+                  texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
+                },
                 champ3: {
                   keyboard: KeyboardType.longueur,
                   texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
@@ -602,8 +608,14 @@ c) Quelle distance a-t-elle parcourue au total ? %{champ3}`,
                   keyboard: KeyboardType.nombresEtDegreCelsius,
                   texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
                 },
-                champ3: { keyboard: KeyboardType.clavierHms },
-                champ4: { keyboard: KeyboardType.clavierHms },
+                champ3: {
+                  keyboard: KeyboardType.clavierHms,
+                  texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
+                },
+                champ4: {
+                  keyboard: KeyboardType.clavierHms,
+                  texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
+                },
               },
             })
             handleAnswers(
@@ -633,8 +645,8 @@ c) Quelle distance a-t-elle parcourue au total ? %{champ3}`,
 
             texteCorr = `${numAlpha(0)} La température la plus basse est $${miseEnEvidence(`${tmin}^\\circ\\text{C}`)}$.<br>
             ${numAlpha(1)} La température la plus élevée est $${miseEnEvidence(`${tmax}^\\circ\\text{C}`)}$.<br>`
-            texteCorr += `${numAlpha(2)} La température la plus basse est $${miseEnEvidence(`${tmin}^\\circ\\text{C}`)}$.<br>
-            ${numAlpha(3)} La température la plus élevée est $${miseEnEvidence(`${tmax}^\\circ\\text{C}`)}$.`
+            texteCorr += `${numAlpha(2)} Il fait le plus chaud à $${miseEnEvidence(`${hmax}\\text{ h}`)}$.<br>
+            ${numAlpha(3)} Il fait le plus froid à $${miseEnEvidence(`${hmin}\\text{ h}`)}$.`
 
             if (context.isAmc) {
               enonceAMC = introAMC
