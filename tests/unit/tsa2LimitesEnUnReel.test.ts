@@ -48,7 +48,7 @@ it.each([
   },
 )
 
-it('demande la limite en un réel sans côtés ni pointillés hors interactivité', () => {
+it('demande les limites à gauche et à droite sans champs ni pointillés hors interactivité', () => {
   vi.spyOn(outils, 'randint')
     .mockReturnValueOnce(6)
     .mockReturnValueOnce(2)
@@ -59,7 +59,7 @@ it('demande la limite en un réel sans côtés ni pointillés hors interactivit�
   exercise.sup = 1
   exercise.nouvelleVersion()
   expect(exercise.listeQuestions[0]).toContain(
-    'Calculer la limite de $f$ en $6$.',
+    'Calculer les limites à gauche et à droite de $f$ en $6$.',
   )
   expect(exercise.listeQuestions[0]).not.toMatch(
     /\\ldots|\\dot|\^\{-\}|\^\{\+\}|multi-mathfield/,

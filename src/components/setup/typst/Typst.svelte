@@ -82,6 +82,11 @@
   import TypstAddExerciseModal from './addExercise/TypstAddExerciseModal.svelte'
   import TypstImageCutModal from './TypstImageCutModal.svelte'
   import type { ExerciseImageCuts } from './imageCuts'
+  import {
+    overflowingImages,
+    withImageGeometry,
+    type ImageGeometry,
+  } from './imageOverflow'
   import TypstLayoutOverlay, {
     type OverlayWidget,
     type TasksLayoutValue,
@@ -1410,6 +1415,17 @@
             getStaticExerciceCorTypUrl(exercise.uuid) == null),
       ]),
     ) as Record<number, boolean>,
+  )
+
+  let imageGeometries: ImageGeometry[] = $state([])
+  let isImageCutHintDismissed = $state(false)
+  /** Accès à la découpe des seules images qui dépassent réellement la page. */
+  const imageCutTargets = $derived(
+    overflowingImages(imageGeometries, previewPages).filter(({ num, part }) =>
+      part === 'enonce'
+        ? nonEditableStaticExercises[num]
+        : documentOptions.showCorrections && nonEditableCorrections[num],
+    ),
   )
 
   /**
@@ -3736,7 +3752,7 @@
   }
 
   async function compile(code: string) {
-    const source = previewCode(code)
+    const source = withImageGeometry(previewCode(code))
     if (source === lastCompiledCode) {
       if (!isCompiling) isPreviewBusy = false
       return
@@ -3764,6 +3780,7 @@
         previewPages = separated.pages
         previewViewBox = separated.viewBox
         anchors = result.anchors ?? []
+        imageGeometries = result.imageGeometries ?? []
         // point de retour : ce code produit bien un document
         lastGoodCode = code
         lastGoodAt = new Date()
@@ -5268,6 +5285,54 @@
                 ? 'w-1/2'
                 : 'hidden'} relative min-h-0 flex flex-col"
         >
+          {#if !isImageCutHintDismissed && !isPreviewBusy && !isCompiling && !documentOptions.canMode && imageCutTargets.length > 0}
+            <aside
+              aria-label="Découper les images d’annales"
+              class="relative shrink-0 border-b border-coopmaths-action/30 bg-coopmaths-action/10 py-3 pl-4 pr-12 text-sm text-coopmaths-corpus dark:border-coopmathsdark-action/30 dark:bg-coopmathsdark-action/10 dark:text-coopmathsdark-corpus"
+            >
+              <button
+                type="button"
+                class="absolute right-3 top-3 rounded p-1 hover:bg-coopmaths-action/10 dark:hover:bg-coopmathsdark-action/10"
+                aria-label="Fermer le message sur la découpe des images"
+                onclick={() => (isImageCutHintDismissed = true)}
+              >
+                <i class="bx bx-x text-xl" aria-hidden="true"></i>
+              </button>
+              <p class="flex items-center gap-2 font-semibold">
+                <i class="bx bx-cut text-lg" aria-hidden="true"></i>
+                Une image d’annale dépasse la page.
+              </p>
+              <p class="mt-1">
+                Découper l’image entre deux questions pour répartir les
+                fragments sur plusieurs pages, sans réduire la taille du texte.
+              </p>
+              <details class="mt-2">
+                <summary class="cursor-pointer font-semibold">
+                  Choisir une image à découper
+                </summary>
+                <div class="mt-2 flex flex-wrap gap-2">
+                  {#each imageCutTargets as target (`${target.num}-${target.part}`)}
+                    <button
+                      type="button"
+                      class="rounded border border-coopmaths-action px-3 py-1 hover:bg-coopmaths-action/10 disabled:cursor-wait disabled:opacity-50 dark:border-coopmathsdark-action dark:hover:bg-coopmathsdark-action/10"
+                      disabled={isPreviewBusy}
+                      onclick={() => openImageCuts(target.num, target.part)}
+                    >
+                      Découper {target.part === 'enonce'
+                        ? 'l’énoncé'
+                        : 'le corrigé'}
+                      de l’exercice {target.num}
+                    </button>
+                  {/each}
+                </div>
+                <p class="mt-2 text-xs">
+                  Cliquer sur l’image pour placer les coupures, puis sur «
+                  Appliquer ». L’outil est aussi accessible par les ciseaux dans
+                  les outils de mise en page de l’aperçu.
+                </p>
+              </details>
+            </aside>
+          {/if}
           <!-- `isolate` : les pastilles de la palette de mise en page portent
                des z-index (jusqu'à z-30) qui, sans contexte d'empilement ici,
                les placeraient au-dessus des voisins de l'aperçu (panneau de
