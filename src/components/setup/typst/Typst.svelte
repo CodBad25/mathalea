@@ -75,6 +75,7 @@
     type WritingLinesSetting,
     type WritingLinesStyle,
   } from './buildTypstDocument'
+  import { cleanTypstExport } from './typstExport'
   import { formatCoverDate } from './coverDate'
   import CoverDateField from './CoverDateField.svelte'
   import { defaultCoverPoints } from './coverBareme'
@@ -3662,7 +3663,8 @@
    * sujets, seul le sujet affiché est conservé. Compiler les autres coûte
    * leur mise en page entière (l'essentiel du temps d'attente) pour un
    * contenu qu'on ne regarde pas ; ils restent dans l'éditeur et dans les
-   * exports (PDF, .typ), qui compilent `currentCode()` tel quel.
+   * exports : le PDF compile `currentCode()` tel quel et le .typ nettoie
+   * uniquement ses repères et marqueurs internes.
    *
    * Les lignes écartées sont remplacées par des lignes vides plutôt que
    * supprimées : les diagnostics du compilateur gardent ainsi les numéros de
@@ -4332,24 +4334,11 @@
 
   /**
    * Code Typst « propre » pour la réutilisation hors de l'appli (fichier
-   * .typ téléchargé) : sans les repères `mathalea-anchor` ni les variables
-   * de mise en page des questions (`exN-colonnes`...), propres à la palette
-   * de l'éditeur intégré et sans effet une fois le code sorti de l'appli.
+   * .typ téléchargé) : retirer les repères et marqueurs de l’interface du
+   * texte actuel de l’éditeur pour conserver toutes les retouches libres.
    */
   function buildExportCode(): string {
-    const carryOver = editorView != null ? harvestCarryOver(currentCode()) : {}
-    const [primary, ...extraVersions] = buildAllVersionInputs()
-    return buildTypstDocument(
-      primary,
-      documentOptions,
-      carryOver,
-      extraVersions,
-      {
-        exportMode: true,
-        sourceUrl: currentUrl(),
-        extraPreamble: extraPreamble(),
-      },
-    )
+    return cleanTypstExport(currentCode())
   }
 
   /**
@@ -4529,6 +4518,18 @@
 
       {#if displayMode === 'code' || displayMode === 'split'}
         <ButtonTextAction
+          text="Copier le code Typst propre"
+          icon="bx-copy"
+          inverted={true}
+          class="rounded-lg py-1 px-2"
+          title="Copier la fiche avec son préambule, sans les repères de l’interface MathALÉA"
+          on:click={() =>
+            copyToClipboard(buildExportCode(), 'Le code Typst propre')}
+        />
+        {#if codeCopyStatus !== ''}
+          <span class="text-sm" role="status">{codeCopyStatus}</span>
+        {/if}
+        <ButtonTextAction
           text={requiredImageAssets.size > 0
             ? 'Télécharger le .typ (.zip)'
             : 'Télécharger le .typ'}
@@ -4537,7 +4538,7 @@
           class="rounded-lg py-1 px-2"
           title={requiredImageAssets.size > 0
             ? 'Archive ZIP contenant le .typ et les images dont il a besoin'
-            : ''}
+            : 'Code Typst propre, sans les repères de l’interface MathALÉA'}
           on:click={downloadTyp}
         />
       {/if}
