@@ -21,6 +21,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import {
   contraindreValeur,
   egal,
+  gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
@@ -56,10 +57,9 @@ export default class PavageEtDemiTour2D extends Exercice {
       ' 1 : Taille modeste\n 2 : Grande taille',
     ]
     this.besoinFormulaire2CaseACocher = ['Montrer les centres']
-    this.besoinFormulaire3Numerique = [
+    this.besoinFormulaire3Texte = [
       'Choix du pavage',
-      8,
-      "1 : Triangles équilatéraux\n2 : Carrés\n3 : Hexagones réguliers\n4 : Carrés et triangles équilatéraux\n5 : Octogones et carrés\n 6 : Losanges (pavage hexagonal d'écolier)\n7 : Hexagones et triangles équilatéraux\n8 : Un des sept pavages au hasard",
+      "Nombres séparés par des tirets :\n1 : Triangles équilatéraux\n2 : Carrés\n3 : Hexagones réguliers\n4 : Carrés et triangles équilatéraux\n5 : Octogones et carrés\n6 : Losanges (pavage hexagonal d'écolier)\n7 : Hexagones et triangles équilatéraux\n8 : Mélange",
     ]
 
     this.nbQuestions = 3
@@ -69,14 +69,29 @@ export default class PavageEtDemiTour2D extends Exercice {
 
     this.sup = 1 // 1 pour des pavages modestes, 2 pour des plus grands.
     this.sup2 = false // On cache les barycentres par défaut.
-    this.sup3 = 7
+    this.sup3 = '7'
     this.spacingCorr = context.isHtml ? 2.5 : 1.5
   }
 
   nouvelleVersion() {
     this.sup = contraindreValeur(1, 2, this.sup, randint(1, 2))
-    this.sup3 = contraindreValeur(1, 8, this.sup3, 8)
-    if (this.sup3 === 8) this.sup3 = randint(1, 7)
+    // Un seul pavage est tiré pour l'ensemble de l'exercice.
+    let typeDePavage: number
+    if (/-/.test(String(this.sup3))) {
+      // Choix pondéré : probabilité proportionnelle au nombre de fois où le pavage est saisi.
+      typeDePavage = gestionnaireFormulaireTexte({
+        saisie: this.sup3,
+        min: 1,
+        max: 7,
+        melange: 8,
+        defaut: 7,
+        nbQuestions: 1,
+      })[0] as number
+    } else {
+      // Un seul numéro saisi : tirage historique conservé pour que les liens déjà partagés restent valables.
+      typeDePavage = contraindreValeur(1, 8, Number(this.sup3), 8)
+      if (typeDePavage === 8) typeDePavage = randint(1, 7)
+    }
     const videcouples = function (
       tableau: [number, number][],
     ): [number, number][] {
@@ -198,7 +213,7 @@ export default class PavageEtDemiTour2D extends Exercice {
     let fenetreMathalea2d
     let texte = ''
     let texteCorr = ''
-    let typeDePavage = this.sup3
+    const changePavageSiEchec = typeDePavage === 7
     let nombreTentatives
     let nombrePavageTestes = 1
     while (couples.length < this.nbQuestions && nombrePavageTestes < 6) {
@@ -226,7 +241,7 @@ export default class PavageEtDemiTour2D extends Exercice {
       ]
       Nx = tailles[taillePavage - 1][typeDePavage - 1][0]
       Ny = tailles[taillePavage - 1][typeDePavage - 1][1]
-      monpavage.construit(typeDePavage, Nx, Ny, 3) // On initialise toutes les propriétés de l'objet.
+      monpavage.construit(typeDePavage as 1 | 2 | 3 | 4 | 5 | 6 | 7, Nx, Ny, 3) // On initialise toutes les propriétés de l'objet.
       fenetreMathalea2d = monpavage.fenetre
       context.fenetreMathalea2d = [
         fenetreMathalea2d.xmin,
@@ -288,7 +303,7 @@ export default class PavageEtDemiTour2D extends Exercice {
         nombreTentatives++
       }
       if (couples.length < this.nbQuestions) {
-        if (this.sup3 === 7) {
+        if (changePavageSiEchec) {
           typeDePavage = ((typeDePavage + 1) % 5) + 1
         }
         nombrePavageTestes++
