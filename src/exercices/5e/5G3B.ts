@@ -23,6 +23,7 @@ import { vecteur } from '../../lib/2d/Vecteur'
 import { orangeMathalea } from '../../lib/colors'
 import ListeDeroulanteElement from '../../lib/customElements/ListeDeroulanteElement'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
@@ -346,6 +347,7 @@ export default class ConservationTransformation extends Exercice {
         this,
         i,
         {
+          bareme: toutAUnPoint,
           field0: {
             value: (
               180 -
