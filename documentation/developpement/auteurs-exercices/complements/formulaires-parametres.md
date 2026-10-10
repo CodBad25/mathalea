@@ -70,6 +70,16 @@ cocher ordinaire, ce qui produit la même génération, sans le raccourci.
 Pour un nouvel exercice, préférez cependant `besoinFormulaireComplexe` : les cas y sont
 déclarés explicitement, avec leurs libellés, au lieu d'être devinés depuis une aide.
 
+### Exemple : choisir un pavage
+
+Dans [5G3A-10](../../../../src/exercices/5e/5G3A-10.ts), le formulaire `sup2`
+énumère les huit pavages et réserve `9` au mélange. Le générateur lit cette
+sélection avec `gestionnaireFormulaireTexte()` : `1-1-1-8` donne au pavage carré
+un poids trois fois supérieur à celui des losanges. Un seul pavage est tiré pour
+l'ensemble de la question. Le réglage `sup3` choisit de un à trois centres de
+symétrie ; les réponses sont regroupées avec un barème `troisPointsProportionnels`
+pour conserver un maximum de trois points.
+
 Ces formulaires conviennent tant que l'exercice reste à cinq réglages indépendants.
 Au-delà, on finit par encoder plusieurs dimensions dans un seul menu déroulant
 (« 1 : multiplications / 2 : divisions / 3 : les deux / 4 : octets / 5 : mélange »),
