@@ -10,6 +10,7 @@ import type { IExercice } from '../lib/types'
 import { context } from '../modules/context'
 import { exercicesParams } from './stores/generalStore'
 import { globalOptions } from './stores/globalOptions'
+import { enableFigureUiRecovery } from './apigeom/recoverFigureUi'
 
 /**
  * Identifiant de la figure évaluée de chaque question (indice de question
@@ -219,6 +220,7 @@ export default function figureApigeom({
     container.innerHTML = ''
     try {
       figure.setContainer(container)
+      enableFigureUiRecovery(figure)
     } catch (e) {
       window.notify(
         `figureApigeom: erreur lors du setContainer de la figure ${idApigeom}`,
