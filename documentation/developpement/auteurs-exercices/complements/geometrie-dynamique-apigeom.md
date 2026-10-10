@@ -51,6 +51,15 @@ texte += figureApigeom({ exercice: this, i, figure, defaultAction: 'POINT' })
 - Utiliser des couleurs simples (`'blue'`) plutôt que les constantes
   `bleuMathalea`… dans les options apiGeom.
 
+## Nommer les points dans la figure interactive
+
+Une lettre saisie au clavier nomme le premier point sans nom, ou renomme le
+dernier point si tous sont déjà nommés. Une apostrophe complète le nom qui
+vient d'être saisi : taper `C` puis `'` donne `C'`, même si d'autres points
+attendent un nom. Un clic dans la figure ou la perte du focus termine cette
+saisie. Supprimer uniquement le label efface le nom et permet de nommer à
+nouveau le point, sans supprimer ses constructions.
+
 ## Vérifier la construction de l'élève
 
 La correction se fait dans `correctionInteractive(i)`, en indexant tout par `i`
