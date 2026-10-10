@@ -7370,7 +7370,7 @@ export const dictionnaireDNB = {
     mois: 'Juillet',
     numeroInitial: '1',
     typeExercice: 'dnb',
-    tags: [''],
+    tags: ['Arithmétique', 'Lecture graphique', 'Probabilités', 'Statistiques'],
   },
   dnb_2026_07_polynesie_2: {
     annee: '2026',
@@ -7378,7 +7378,7 @@ export const dictionnaireDNB = {
     mois: 'Juillet',
     numeroInitial: '2',
     typeExercice: 'dnb',
-    tags: [''],
+    tags: ['Transformations', 'Géométrie plane', 'Pythagore', 'Thalès'],
   },
   dnb_2026_07_polynesie_3: {
     annee: '2026',
@@ -7386,7 +7386,7 @@ export const dictionnaireDNB = {
     mois: 'Juillet',
     numeroInitial: '3',
     typeExercice: 'dnb',
-    tags: [''],
+    tags: ['Statistiques', 'Pourcentages', 'Tableur', 'Algorithmique-programmation', 'Équations'],
   },
   dnb_2026_07_polynesie_4: {
     annee: '2026',
@@ -7394,7 +7394,7 @@ export const dictionnaireDNB = {
     mois: 'Juillet',
     numeroInitial: '4',
     typeExercice: 'dnb',
-    tags: [''],
+    tags: ['Vitesses', 'Transformations', "Recherche d'informations"],
   },
   dnb_2026_07_polynesie_automatismes: {
     annee: '2026',
@@ -7402,7 +7402,7 @@ export const dictionnaireDNB = {
     mois: 'Juillet',
     numeroInitial: 'automatismes',
     typeExercice: 'dnb',
-    tags: [''],
+    tags: ['Calcul littéral', 'Pourcentages', 'Statistiques', 'Trigonométrie', 'Géométrie plane', 'Arithmétique', 'Aires et périmètres' ],
   },
   dnb_2026_09_metropole_1: {
     annee: '2026',
@@ -7410,7 +7410,7 @@ export const dictionnaireDNB = {
     mois: 'Septembre',
     numeroInitial: '1',
     typeExercice: 'dnb',
-    tags: [''],
+    tags: ['Statistiques', 'Pourcentages', 'Trigonométrie', 'Vitesses'],
   },
   dnb_2026_09_metropole_2: {
     annee: '2026',
@@ -7418,7 +7418,7 @@ export const dictionnaireDNB = {
     mois: 'Septembre',
     numeroInitial: '2',
     typeExercice: 'dnb',
-    tags: [''],
+    tags: ['Géométrie plane', 'Pythagore', 'Aires et périmètres'],
   },
   dnb_2026_09_metropole_3: {
     annee: '2026',
@@ -7426,7 +7426,7 @@ export const dictionnaireDNB = {
     mois: 'Septembre',
     numeroInitial: '3',
     typeExercice: 'dnb',
-    tags: [''],
+    tags: ['Programme de calculs', 'Tableur', 'Fonctions', 'Lecture graphique', 'Équations', 'Calcul littéral'],
   },
   dnb_2026_09_metropole_automatismes: {
     annee: '2026',
@@ -7434,6 +7434,6 @@ export const dictionnaireDNB = {
     mois: 'Septembre',
     numeroInitial: 'automatismes',
     typeExercice: 'dnb',
-    tags: [''],
+    tags: ['Lecture graphique', 'Calcul littéral', 'Probabilités', 'Durées', 'Pourcentages', 'Arithmétique', 'Géométrie plane', 'Fractions' ],
   },
 }
