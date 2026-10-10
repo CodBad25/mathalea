@@ -24,6 +24,7 @@
     loadTbiLocalLayout,
     reconcileTbiCards,
     reorderTbiCard,
+    moveTbiCardInColumns,
     saveTbiLocalLayout,
     shuffleTbiCards,
     tbiIsShuffling,
@@ -140,8 +141,12 @@
   }
 
   /** Déplace un exercice (sémantique splice) et réaligne items sur le nouvel ordre */
-  function applyReorder(from: number, to: number) {
-    if (!reorderTbiCard(from, to)) return
+  function applyReorder(from: number, to: number, groups?: number[][]) {
+    if (groups) {
+      const destination = moveTbiCardInColumns(from, groups)
+      if (destination === null) return
+      to = destination
+    } else if (!reorderTbiCard(from, to)) return
     items.splice(to, 0, items.splice(from, 1)[0])
     items = items.map((item, i) => {
       item.paramsIndex = i

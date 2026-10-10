@@ -125,6 +125,8 @@ export interface TbiCardState {
   tab: number
   /** Saut de colonne avant cet exercice (dispositions en colonnes) */
   colBreak: boolean
+  /** Colonne explicite après glisser-déposer (absente dans les anciens liens). */
+  column?: number
   /** Espacement vertical entre deux questions, par pas de 0,5 rem */
   questionSpacing: number
   /** Mode d'affichage de la correction de l'exercice */
@@ -562,8 +564,7 @@ export function moveCardToTab(paramsIndex: number, targetCompactTab: number) {
  * Répartit équitablement (par nombre d'exercices) les sauts de colonne sur
  * `paramsIndices` (ordre d'affichage) pour `nbColumns` colonnes : écrase les
  * sauts existants sur ces indices par la répartition par défaut. Le
- * professeur peut ensuite désactiver individuellement un saut (bouton sur la
- * carte).
+ * professeur peut ensuite ajuster la répartition par glisser-déposer.
  */
 export function balanceColumnBreaks(
   paramsIndices: number[],
@@ -578,7 +579,10 @@ export function balanceColumnBreaks(
   tbiState.update((state) => {
     paramsIndices.forEach((paramsIndex, position) => {
       const card = state.cards[paramsIndex]
-      if (card) card.colBreak = breakPositions.has(position)
+      if (card) {
+        card.colBreak = breakPositions.has(position)
+        delete card.column
+      }
     })
     return state
   })
@@ -603,11 +607,63 @@ export function reorderTbiCard(from: number, to: number): boolean {
   return true
 }
 
+/** Répartition compatible avec les anciens liens portant seulement des sauts. */
+export function getTbiColumnGroups(
+  indices: number[],
+  cards: TbiCardState[],
+  nbColumns: number,
+): number[][] {
+  const groups: number[][] = Array.from({ length: nbColumns }, () => [])
+  let legacyColumn = 0
+  for (const index of indices) {
+    const card = cards[index]
+    if (card?.colBreak && legacyColumn < nbColumns - 1) legacyColumn++
+    groups[Math.min(card?.column ?? legacyColumn, nbColumns - 1)].push(index)
+  }
+  return groups
+}
+
+/** Applique une destination de dépôt, y compris les colonnes vides, et renvoie le nouvel indice canonique. */
+export function moveTbiCardInColumns(
+  from: number,
+  groups: number[][],
+): number | null {
+  if (groups.length < 1 || groups.length > 4) return null
+  const order = groups.flat()
+  const position = order.indexOf(from)
+  const state = get(tbiState)
+  if (
+    position < 0 ||
+    new Set(order).size !== order.length ||
+    order.some((index) => !state.cards[index])
+  )
+    return null
+  const next = order[position + 1]
+  const previous = order[position - 1]
+  const to =
+    next !== undefined
+      ? next - (from < next ? 1 : 0)
+      : previous !== undefined
+        ? previous + (from > previous ? 1 : 0)
+        : from
+  tbiState.update((current) => {
+    groups.forEach((group, column) =>
+      group.forEach((index, i) => {
+        current.cards[index].column = column
+        current.cards[index].colBreak = column > 0 && i === 0
+      }),
+    )
+    return current
+  })
+  reorderTbiCard(from, to)
+  return to
+}
+
 /**
  * Actif brièvement pendant un mélange aléatoire de l'ordre des exercices.
  * Les dispositions ne déclenchent l'animation de glissement des cartes
  * (FLIP) que lorsqu'il est vrai, pour garder le glisser-déposer et les
- * flèches de réordonnancement instantanés.
+ * réordonnancements instantanés.
  */
 export const tbiIsShuffling = writable(false)
 
@@ -718,6 +774,7 @@ export interface TbiSharedState {
   singleColumnAlign: TbiSingleColumnAlign
   tabs: number[]
   breaks: number[]
+  columns?: (number | null)[]
   tabConfigs: TbiTabConfig[]
   /** Indice compact de l'onglet affiché (mode onglets) */
   activeTab: number
@@ -753,6 +810,7 @@ export function getTbiSharedState(state: TbiState): TbiSharedState {
     singleColumnAlign: state.singleColumnAlign,
     tabs: state.cards.map((card) => card.tab),
     breaks: state.cards.flatMap((card, i) => (card.colBreak ? [i] : [])),
+    columns: state.cards.map((card) => card.column ?? null),
     tabConfigs: state.tabConfigs.map((config) => ({ ...config })),
     activeTab: state.activeTab,
     widgetVisible: state.widget.visible,
@@ -862,6 +920,11 @@ export function encodeTbiParam(shared: TbiSharedState): string {
   if (shared.breaks.length > 0) {
     fields.push(`b-${shared.breaks.join(TBI_PARAM_LIST_SEP)}`)
   }
+  if (shared.columns?.some((column) => column !== null)) {
+    fields.push(
+      `p-${shared.columns.map((column) => column ?? 'x').join(TBI_PARAM_LIST_SEP)}`,
+    )
+  }
   if (!isDefaultTabConfigs(shared.tabConfigs)) {
     fields.push(
       `g-${shared.tabConfigs
@@ -954,6 +1017,17 @@ export function decodeTbiParam(param: string): Partial<TbiSharedState> {
           .split(TBI_PARAM_LIST_SEP)
           .map(Number)
           .filter((n) => !Number.isNaN(n))
+        break
+      case 'p':
+        shared.columns = value.split(TBI_PARAM_LIST_SEP).map((entry) => {
+          const column = Number(entry)
+          return entry !== '' &&
+            Number.isInteger(column) &&
+            column >= 0 &&
+            column < 4
+            ? column
+            : null
+        })
         break
       case 'g':
         // format : layout-nbColumns[-singleColumnAlign] ; le 3e segment est
@@ -1100,6 +1174,19 @@ export function applyTbiSharedState(shared: Partial<TbiSharedState>) {
     if (Array.isArray(shared.breaks)) {
       state.cards.forEach((card, i) => {
         card.colBreak = shared.breaks!.includes(i)
+      })
+    }
+    if (Array.isArray(shared.columns) || Array.isArray(shared.breaks)) {
+      state.cards.forEach((card, i) => {
+        const column = shared.columns?.[i]
+        if (
+          typeof column === 'number' &&
+          Number.isInteger(column) &&
+          column >= 0 &&
+          column < 4
+        )
+          card.column = column
+        else delete card.column
       })
     }
     if (Array.isArray(shared.tabConfigs)) {

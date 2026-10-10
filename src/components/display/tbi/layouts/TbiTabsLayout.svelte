@@ -12,7 +12,7 @@
   interface Props {
     items: TbiItem[]
     /** Réordonnancement : déplace l'exercice de la position from à la position to */
-    onMove?: (from: number, to: number) => void
+    onMove?: (from: number, to: number, groups?: number[][]) => void
     /** Sauvegarde des positions (localStorage), pour la disposition libre d'un onglet */
     persistLayout?: () => void
     onDelete?: (paramsIndex: number) => void
@@ -43,7 +43,9 @@
   $effect(() => {
     if (activeTab >= tabsCount) setTbiActiveTab(Math.max(0, tabsCount - 1))
   })
-  let activeItems = $derived(items.filter((_, i) => compactTabs[i] === activeTab))
+  let activeItems = $derived(
+    items.filter((_, i) => compactTabs[i] === activeTab),
+  )
   // Dérivés séparés (plutôt qu'un objet activeConfig) : tabConfigs[i] est
   // muté en place par setTbiTabLayout/setTbiTabNbColumns, donc un $derived
   // qui renverrait cet objet ne se recalculerait pas pour ses consommateurs
@@ -52,7 +54,8 @@
     $tbiState.tabConfigs[activeTab]?.layout ?? defaultTbiTabConfig().layout,
   )
   let activeNbColumns = $derived(
-    $tbiState.tabConfigs[activeTab]?.nbColumns ?? defaultTbiTabConfig().nbColumns,
+    $tbiState.tabConfigs[activeTab]?.nbColumns ??
+      defaultTbiTabConfig().nbColumns,
   )
   let activeSingleColumnAlign = $derived(
     $tbiState.tabConfigs[activeTab]?.singleColumnAlign ??

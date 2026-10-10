@@ -27,16 +27,7 @@
     tabsCount?: number
     /** Indice compact de l'onglet courant (mode onglets) */
     currentTab?: number
-    /** Flèches de réordonnancement (dispositions liste et colonnes) */
-    showReorder?: boolean
-    canMoveUp?: boolean
-    canMoveDown?: boolean
-    /** Bouton de saut de colonne (dispositions en colonnes) */
-    showColumnBreak?: boolean
-    /** Nombre maximal de sauts de colonne atteint : désactive l'ajout (pas le retrait) */
-    columnBreakDisabled?: boolean
-    /** Demande de réordonnancement, traitée par la vue TBI */
-    onReorder?: (paramsIndex: number, delta: -1 | 1) => void
+    showDelete?: boolean
     /** Demande de suppression, traitée par la vue TBI */
     onDelete?: (paramsIndex: number) => void
   }
@@ -47,12 +38,7 @@
     showMoveToTab = false,
     tabsCount = 0,
     currentTab = 0,
-    showReorder = false,
-    canMoveUp = false,
-    canMoveDown = false,
-    showColumnBreak = false,
-    columnBreakDisabled = false,
-    onReorder = () => {},
+    showDelete = false,
     onDelete = () => {},
   }: Props = $props()
 
@@ -66,7 +52,6 @@
   let modalZoom = $state(1.2)
 
   let zoom = $derived($tbiState.cards[paramsIndex]?.zoom ?? 1)
-  let colBreakActive = $derived($tbiState.cards[paramsIndex]?.colBreak ?? false)
 
   let hasCorrection = $derived(content.pngCor.length > 0)
 
@@ -112,15 +97,6 @@
       TBI_MAX_ZOOM,
       Math.max(TBI_MIN_ZOOM, modalZoom + delta),
     )
-  }
-
-  function toggleColBreak() {
-    if (!colBreakActive && columnBreakDisabled) return
-    tbiState.update((state) => {
-      const cardState = state.cards[paramsIndex]
-      if (cardState) cardState.colBreak = !cardState.colBreak
-      return state
-    })
   }
 
   function openDialog(node: HTMLDialogElement) {
@@ -194,18 +170,10 @@
       {showMoveToTab}
       {tabsCount}
       {currentTab}
-      {showReorder}
-      {canMoveUp}
-      {canMoveDown}
-      {showColumnBreak}
-      {columnBreakDisabled}
-      {colBreakActive}
+      {showDelete}
       onZoomIn={() => zoomBy(0.1)}
       onZoomOut={() => zoomBy(-0.1)}
       onMoveToTab={(tab) => moveCardToTab(paramsIndex, tab)}
-      onMoveUp={() => onReorder(paramsIndex, -1)}
-      onMoveDown={() => onReorder(paramsIndex, 1)}
-      onToggleColBreak={toggleColBreak}
       onDelete={() => onDelete(paramsIndex)}
     />
     {#if hasCorrection}

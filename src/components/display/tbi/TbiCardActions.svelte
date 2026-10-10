@@ -5,15 +5,7 @@
     showMoveToTab?: boolean
     tabsCount?: number
     currentTab?: number
-    /** Flèches de réordonnancement (dispositions liste et colonnes) */
-    showReorder?: boolean
-    canMoveUp?: boolean
-    canMoveDown?: boolean
-    /** Bouton de saut de colonne (dispositions en colonnes) */
-    showColumnBreak?: boolean
-    colBreakActive?: boolean
-    /** Nombre maximal de sauts de colonne atteint : désactive l'ajout (pas le retrait) */
-    columnBreakDisabled?: boolean
+    showDelete?: boolean
     /** Contrôle du nombre de colonnes internes (sans objet pour une image statique) */
     showCols?: boolean
     /** Nombre de colonnes de la liste de questions de cet exercice */
@@ -29,9 +21,6 @@
     onQuestionSpacingInc?: () => void
     onQuestionSpacingDec?: () => void
     onMoveToTab?: (tab: number) => void
-    onMoveUp?: () => void
-    onMoveDown?: () => void
-    onToggleColBreak?: () => void
     onDelete?: () => void
   }
 
@@ -41,12 +30,7 @@
     showMoveToTab = false,
     tabsCount = 0,
     currentTab = 0,
-    showReorder = false,
-    canMoveUp = false,
-    canMoveDown = false,
-    showColumnBreak = false,
-    colBreakActive = false,
-    columnBreakDisabled = false,
+    showDelete = false,
     showCols = true,
     cols = 1,
     questionSpacing = 1,
@@ -59,9 +43,6 @@
     onQuestionSpacingInc = () => {},
     onQuestionSpacingDec = () => {},
     onMoveToTab = () => {},
-    onMoveUp = () => {},
-    onMoveDown = () => {},
-    onToggleColBreak = () => {},
     onDelete = () => {},
   }: Props = $props()
 
@@ -70,11 +51,6 @@
     'text-coopmaths-canvas dark:text-coopmathsdark-canvas ' +
     'bg-coopmaths-action hover:bg-coopmaths-action-darkest ' +
     'dark:bg-coopmathsdark-action dark:hover:bg-coopmathsdark-action-darkest'
-  const activeButtonClass =
-    'flex items-center justify-center w-8 h-8 rounded-full ' +
-    'text-coopmaths-canvas dark:text-coopmathsdark-canvas ' +
-    'bg-coopmaths-warn-dark hover:bg-coopmaths-warn-darkest ' +
-    'dark:bg-coopmathsdark-warn-dark dark:hover:bg-coopmathsdark-warn-darkest'
 </script>
 
 <div
@@ -181,32 +157,7 @@
       <i class="bx bx-plus"></i>
     </button>
   {/if}
-  {#if showReorder}
-    <div
-      class="w-px h-5 mx-1 bg-coopmaths-struct-light dark:bg-coopmathsdark-struct-light"
-    ></div>
-    <button
-      type="button"
-      class={buttonClass}
-      disabled={!canMoveUp}
-      class:opacity-40={!canMoveUp}
-      title="Déplacer vers le haut"
-      aria-label="Déplacer vers le haut"
-      onclick={onMoveUp}
-    >
-      <i class="bx bx-up-arrow-alt"></i>
-    </button>
-    <button
-      type="button"
-      class={buttonClass}
-      disabled={!canMoveDown}
-      class:opacity-40={!canMoveDown}
-      title="Déplacer vers le bas"
-      aria-label="Déplacer vers le bas"
-      onclick={onMoveDown}
-    >
-      <i class="bx bx-down-arrow-alt"></i>
-    </button>
+  {#if showDelete}
     <button
       type="button"
       class={buttonClass}
@@ -215,27 +166,6 @@
       onclick={onDelete}
     >
       <i class="bx bx-trash"></i>
-    </button>
-  {/if}
-  {#if showColumnBreak}
-    <button
-      type="button"
-      class={colBreakActive ? activeButtonClass : buttonClass}
-      disabled={!colBreakActive && columnBreakDisabled}
-      class:opacity-40={!colBreakActive && columnBreakDisabled}
-      title={colBreakActive
-        ? 'Retirer le saut de colonne avant cet exercice'
-        : columnBreakDisabled
-          ? 'Nombre maximal de sauts de colonne atteint'
-          : 'Ajouter un saut de colonne avant cet exercice'}
-      aria-label={colBreakActive
-        ? 'Retirer le saut de colonne avant cet exercice'
-        : columnBreakDisabled
-          ? 'Nombre maximal de sauts de colonne atteint'
-          : 'Ajouter un saut de colonne avant cet exercice'}
-      onclick={onToggleColBreak}
-    >
-      <i class="bx bx-carousel"></i>
     </button>
   {/if}
   {#if showMoveToTab}
