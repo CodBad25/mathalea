@@ -24,9 +24,19 @@
     onAddExercise: () => void
     /** Mélange aléatoirement l'ordre des exercices (traité par `Tbi.svelte`) */
     onShuffle: () => void
+    /** Télécharge les réglages de la vue dans un fichier JSON (traité par `Tbi.svelte`) */
+    onSaveSettings: () => void
+    /** Charge les réglages de la vue depuis un fichier JSON (traité par `Tbi.svelte`) */
+    onLoadSettings: () => void
   }
 
-  const { items, onAddExercise, onShuffle }: Props = $props()
+  const {
+    items,
+    onAddExercise,
+    onShuffle,
+    onSaveSettings,
+    onLoadSettings,
+  }: Props = $props()
 
   const modes: { value: TbiMode; label: string; icon: string }[] = [
     { value: 'columns', label: 'Colonnes', icon: 'bx-columns' },
@@ -443,6 +453,24 @@
       onclick={toggleLyceeCalculator}
     >
       <i class="bx bx-calculator text-xl"></i>
+    </button>
+    <button
+      type="button"
+      class={actionButtonClass}
+      title="Sauvegarder les réglages de la vue TBI (fichier JSON)"
+      aria-label="Sauvegarder les réglages de la vue TBI"
+      onclick={onSaveSettings}
+    >
+      <i class="bx bx-download text-xl"></i>
+    </button>
+    <button
+      type="button"
+      class={actionButtonClass}
+      title="Charger des réglages de la vue TBI (fichier JSON)"
+      aria-label="Charger des réglages de la vue TBI"
+      onclick={onLoadSettings}
+    >
+      <i class="bx bx-upload text-xl"></i>
     </button>
     <button
       type="button"

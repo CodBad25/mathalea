@@ -59,7 +59,7 @@ export const dateDeModifImportante = '10/10/2026'
  * Ajout de la symétrie centrale par Guillaume Valmont le 13/11/2025
  */
 
-export const uuid = '65bd8'
+export const uuid = '64099'
 
 export const refs = {
   'fr-fr': ['5G3B-2'],
@@ -142,13 +142,46 @@ const segmentPasCentreSurD = (d: IDroite, noms: string[]) => {
   return [A, B] as [PointAbstrait, PointAbstrait]
 }
 
+// Angles aux sommets (en degrés) : trop aigus, ils ne laissent pas la place d'écrire leur mesure.
+const anglesDuTriangle = (sommets: PointAbstrait[]) => {
+  const [A, B, C] = sommets
+  return [angle(B, A, C), angle(A, B, C), angle(A, C, B)]
+}
+
+// Un triangle à cheval sur l'axe se mélange à son symétrique et rend les mesures illisibles.
+const memeCoteDeD = (sommets: PointAbstrait[], d: IDroite) => {
+  const cotes = sommets.map((P) => Math.sign(d.a * P.x + d.b * P.y + d.c))
+  return cotes.every((cote) => cote === cotes[0])
+}
+
+// Place le centre de l'étiquette sur la bissectrice de l'angle, à l'intérieur de l'arc de repère.
+const positionMesureAngle = (
+  P1: PointAbstrait,
+  sommet: PointAbstrait,
+  P2: PointAbstrait,
+) => {
+  const ouverture = angleOriente(P1, sommet, P2)
+  const rayonArc = 0.2 * longueur(P1, sommet)
+  const distance = Math.max(
+    rayonArc + 0.8,
+    0.6 / Math.sin((Math.abs(ouverture) * Math.PI) / 360),
+  )
+  const centre = rotation(
+    homothetie(P1, sommet, distance / longueur(P1, sommet)),
+    sommet,
+    ouverture / 2,
+  )
+  centre.positionLabel = 'center'
+  return centre
+}
+
 const triangleLoinDeD = (d: IDroite, noms: string[]) => {
   let pol: IPolygone
   let Ad: number
   let Bd: number
   let Cd: number
   let GH: number
-  do {
+  while (true) {
     const A = pointAbstrait(
       arrondi(randint(20, 80, 0) / 10),
       arrondi(randint(20, 80, 0) / 10),
@@ -165,6 +198,10 @@ const triangleLoinDeD = (d: IDroite, noms: string[]) => {
       r2 =
         randint(Math.floor(AB * 0.5), Math.ceil(AB * 0.9)) + randint(3, 9) / 10
     } while (r1 + r2 <= AB || Math.abs(r1 - r2) >= AB)
+    // La longueur arrondie peut accepter deux cercles presque tangents qui ne se coupent pas.
+    // Rejeter ce triangle sans consommer de tirage supplémentaire ni signaler une erreur.
+    const distanceAB = Math.sqrt((B.x - A.x) ** 2 + (B.y - A.y) ** 2)
+    if (distanceAB > r1 + r2 || distanceAB < Math.abs(r1 - r2)) continue
     const c1 = cercle(A, r1)
     const c2 = cercle(B, r2)
     const C = pointIntersectionCC(c1, c2, noms[2])
@@ -180,18 +217,22 @@ const triangleLoinDeD = (d: IDroite, noms: string[]) => {
     Bd = longueur(B, Hb)
     Cd = longueur(orientation < 0 ? C : D, Hc)
     GH = longueur(G, H)
-  } while (
-    Number(aireTriangle(pol)) < 10 ||
-    Ad < 1 ||
-    Bd < 1 ||
-    Cd < 1 ||
-    Ad > 5 ||
-    Bd > 5 ||
-    Cd > 5 ||
-    GH < 2 ||
-    GH > 5
-  )
-  return pol.listePoints as [PointAbstrait, PointAbstrait, PointAbstrait]
+    if (
+      Number(aireTriangle(pol)) < 10 ||
+      Ad < 1 ||
+      Bd < 1 ||
+      Cd < 1 ||
+      Ad > 5 ||
+      Bd > 5 ||
+      Cd > 5 ||
+      GH < 2 ||
+      GH > 5 ||
+      !memeCoteDeD(pol.listePoints, d) ||
+      Math.min(...anglesDuTriangle(pol.listePoints)) < 40
+    )
+      continue
+    return pol.listePoints as [PointAbstrait, PointAbstrait, PointAbstrait]
+  }
 }
 
 export default class SymetrieProprietes extends Exercice {
@@ -291,7 +332,7 @@ export default class SymetrieProprietes extends Exercice {
             segmentAvecExtremites(A, B),
             nommePolygone(polygone([A, B]), A.nom + B.nom),
             placeLatexSurSegment(
-              `${texNombre(longueur(A, B, 1))} \\text{cm}`,
+              `${texNombre(longueur(A, B, 1))}~\\text{cm}`,
               A,
               B,
               { letterSize: 'small' },
@@ -493,16 +534,10 @@ export default class SymetrieProprietes extends Exercice {
               ),
             )
           }
-          // Réserver trois lignes sous les figures : les mesures restent lisibles,
-          // même pour un triangle très aplati ou des triangles qui se chevauchent.
-          const figureBounds = fixeBordures(objetsEnonce)
-          const legendX = (figureBounds.xmin + figureBounds.xmax) / 2
-          const legendY = figureBounds.ymin - 0.8
           ptRef1 = longueur(A, B) < longueur(C, B) ? A : C
           ptRef2 = longueur(A, B) < longueur(C, B) ? C : A
           Barc = homothetie(ptRef1, B, 2 / 10)
-          BLabel = pointAbstrait(legendX, legendY)
-          BLabel.positionLabel = 'center'
+          BLabel = positionMesureAngle(ptRef1, B, ptRef2)
           objetsEnonce.push(
             arc(
               Barc,
@@ -513,7 +548,7 @@ export default class SymetrieProprietes extends Exercice {
               'green',
             ),
             latexParPoint(
-              `\\widehat{${A.nom}${B.nom}${C.nom}}=${angle(ptRef1, B, ptRef2, 0)}^\\circ`,
+              `${angle(ptRef1, B, ptRef2, 0)}^\\circ`,
               BLabel,
               'green',
               12,
@@ -524,8 +559,7 @@ export default class SymetrieProprietes extends Exercice {
           ptRef1 = longueur(A, C) < longueur(C, B) ? A : B
           ptRef2 = longueur(A, C) < longueur(C, B) ? B : A
           Carc = homothetie(ptRef1, C, 2 / 10)
-          CLabel = pointAbstrait(legendX, legendY - 1)
-          CLabel.positionLabel = 'center'
+          CLabel = positionMesureAngle(ptRef1, C, ptRef2)
           objetsEnonce.push(
             arc(
               Carc,
@@ -536,7 +570,7 @@ export default class SymetrieProprietes extends Exercice {
               'green',
             ),
             latexParPoint(
-              `\\widehat{${A.nom}${C.nom}${B.nom}}=${angle(ptRef1, C, ptRef2, 0)}^\\circ`,
+              `${angle(ptRef1, C, ptRef2, 0)}^\\circ`,
               CLabel,
               'green',
               12,
@@ -547,8 +581,7 @@ export default class SymetrieProprietes extends Exercice {
           ptRef1 = longueur(A, C) < longueur(A, B) ? C : B
           ptRef2 = longueur(A, C) < longueur(A, B) ? B : C
           Aarc = homothetie(ptRef1, A, 2 / 10)
-          ALabel = pointAbstrait(legendX, legendY - 2)
-          ALabel.positionLabel = 'center'
+          ALabel = positionMesureAngle(ptRef1, A, ptRef2)
           objetsEnonce.push(
             arc(
               Aarc,
@@ -559,7 +592,7 @@ export default class SymetrieProprietes extends Exercice {
               'green',
             ),
             latexParPoint(
-              `\\widehat{${B.nom}${A.nom}${C.nom}}=${180 - angle(A, ptRef2, ptRef1, 0) - angle(A, ptRef1, ptRef2, 0)}^\\circ`,
+              `${180 - angle(A, ptRef2, ptRef1, 0) - angle(A, ptRef1, ptRef2, 0)}^\\circ`,
               ALabel,
               'green',
               12,

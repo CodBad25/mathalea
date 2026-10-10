@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import ExpressionExponentielleGraphique from '../../src/exercices/TT/TTE-12'
+import ExpressionExponentielleGraphique from '../../src/exercices/TT/TTE-13'
 import { fonctionComparaison } from '../../src/lib/interactif/comparisonFunctions'
 import { context } from '../../src/modules/context'
 import * as outils from '../../src/modules/outils'
@@ -10,7 +10,7 @@ afterEach(() => {
   vi.restoreAllMocks()
 })
 
-describe('TTE-12', () => {
+describe('TTE-13', () => {
   it.each([
     [1, 2],
     [1, 3],

@@ -5,7 +5,7 @@ import {
   type Forme,
 } from '../../lib/2d/figures2d/listeFigures2d'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { Segment } from '../../lib/2d/segmentsVecteurs'
+import { Segment, segment } from '../../lib/2d/segmentsVecteurs'
 import { texteParPosition } from '../../lib/2d/textes'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
@@ -117,6 +117,7 @@ export default class NbAxesDeSymetrie extends Exercice {
         : `Tracer le ou les axes de symétrie d${nbFigures > 1 ? 'es ' : 'e la'} figure${nbFigures > 1 ? 's' : ''} suivante${nbFigures > 1 ? 's' : ''} lorsqu'il y en a.<br>`
       const formes: Figure2D[] = []
       const scale = nbFigures === 1 ? 1 : nbFigures === 2 ? 0.9 : 0.8
+      const ecart = 6.5 * factor * scale
       for (let j = 0; j < nbFigures; j++) {
         const alpha = randint(-30, 30, 0)
         const figure = figures[j]
@@ -124,17 +125,31 @@ export default class NbAxesDeSymetrie extends Exercice {
         const forme = figure
           .figure2d(options)
           .dilate(factor)
-          .translate(j * 6.5 * factor * scale, 0)
+          .translate(j * ecart, 0)
         forme.name = figure.name.replace(/ /g, '_')
         if (this.sup3) forme.rotate(alpha)
         formes.push(forme)
 
         const formeTexte = texteParPosition(
           `figure ${j + 1}`,
-          j * 6.5 * factor * scale,
+          j * ecart,
           2.8 * factor,
         )
         objets.push(forme, formeTexte)
+        if (j > 0) {
+          // Séparateur entre deux figures consécutives
+          const separateur = segment(
+            (j - 0.5) * ecart,
+            -2.8 * factor,
+            (j - 0.5) * ecart,
+            3.4 * factor,
+            'gray',
+          )
+          separateur.pointilles = 2
+          separateur.epaisseur = 1
+          objets.push(separateur)
+          objetsCorr.push(separateur)
+        }
         let axes: Segment[] = []
         if (forme.nbAxes !== 0) {
           const formeBis = forme.copy(forme.name + 'Bis')

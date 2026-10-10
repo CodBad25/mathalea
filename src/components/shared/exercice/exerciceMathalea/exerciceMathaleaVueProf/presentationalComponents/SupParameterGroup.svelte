@@ -72,6 +72,9 @@
     itemsTexte = itemsFormulaireTexte(casTexte, supValue)
   }
 
+  $: textOptions = exercice.textFormOptions?.[supIndex]
+  $: minimumSelections = textOptions?.minSelections ?? 0
+  $: weighted = textOptions?.weighted !== false
   $: nombreCasCoches = itemsTexte.filter((item) => item.poids > 0).length
 
   /**
@@ -87,6 +90,7 @@
   }
 
   function basculeCasTexte(index: number, actif: boolean) {
+    if (!actif && nombreCasCoches <= minimumSelections) return
     const item = itemsTexte[index]
     itemsTexte[index] = { ...item, poids: actif ? Math.max(1, item.poids) : 0 }
     itemsTexte = [...itemsTexte]
@@ -270,7 +274,11 @@
       <div
         class="w-full pl-4 pb-1 text-[80%] text-coopmaths-struct-light leading-tight"
       >
-        Cochez les cas voulus et réglez leur poids d'apparition.
+        {#if weighted}
+          Cochez les cas voulus et réglez leur poids d'apparition.
+        {:else}
+          Cocher les choix à conserver. Conserver au moins {minimumSelections} choix.
+        {/if}
         <button
           id="settings-formTextTout{supIndex}-{exerciceIndex}"
           type="button"
@@ -283,7 +291,8 @@
         items={itemsTexte}
         idItem={(item) =>
           `settings-formTextListe${supIndex}-${exerciceIndex}-${item.nom}`}
-        poidsMax={POIDS_MAX_DEFAUT}
+        poidsMax={weighted ? POIDS_MAX_DEFAUT : 0}
+        minSelections={minimumSelections}
         on:bascule={(e) => basculeCasTexte(e.detail.index, e.detail.actif)}
         on:poids={(e) => changePoidsCasTexte(e.detail.index, e.detail.poids)}
       />

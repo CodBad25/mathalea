@@ -101,6 +101,7 @@ class ConstructionsSymetrieCentraleFigures extends Exercice {
   )[]
 
   nbPoints!: number[]
+  formulations!: (string | number)[]
   exoCustomResultat: boolean
   // declare : typage seul (champ hérité de Exercice), sans réémettre le champ.
   // Sans cette redéclaration, le champ de base étant optionnel, il serait
@@ -157,7 +158,7 @@ class ConstructionsSymetrieCentraleFigures extends Exercice {
       defaut: 6,
       listeOfCase: ['segment', 'droite', 'demidroite', 'cercle', 'triangle'],
     }) as typeof this.typesDeQuestions
-    const formulations = gestionnaireFormulaireTexte({
+    this.formulations = gestionnaireFormulaireTexte({
       nbQuestions: this.nbQuestions,
       saisie: this.sup3,
       min: 1,
@@ -190,7 +191,7 @@ class ConstructionsSymetrieCentraleFigures extends Exercice {
         true,
       )[0]
       let enonce =
-        formulations[i] === 1
+        this.formulations[i] === 1
           ? "Construire l'image "
           : 'Construire le symétrique '
       // Les antécédents sont des points nommés
@@ -313,7 +314,7 @@ class ConstructionsSymetrieCentraleFigures extends Exercice {
           throw new Error('Type de question inconnu')
       }
       enonce +=
-        formulations[i] === 1
+        this.formulations[i] === 1
           ? ` par la symétrie de centre $${labelCentre}$.`
           : ` par rapport au point $${labelCentre}$.`
       // On rend visible les points nécessaires à la figure.
@@ -619,6 +620,11 @@ class ConstructionsSymetrieCentraleFigures extends Exercice {
     let resultat4: boolean
     const results = ['KO', 'KO']
     const feedbacks: string[] = []
+    // Le feedback reprend le vocabulaire de la question (image ou symétrique).
+    const messagePointIncorrect = (label: string) =>
+      this.formulations[i] === 1
+        ? `L'image du point $${label}$ n'est pas correcte.`
+        : `Le symétrique du point $${label}$ n'est pas correct.`
     switch (typefigure) {
       case 'segment':
         resultat = checkSegment({
@@ -644,10 +650,10 @@ class ConstructionsSymetrieCentraleFigures extends Exercice {
           checkOnlyAbscissa: false,
         }).isValid
         if (!resultat2) {
-          feedbacks.push(`L'image du point $${label1}$ n'est pas correcte.`)
+          feedbacks.push(messagePointIncorrect(label1))
         }
         if (!resultat3) {
-          feedbacks.push(`L'image du point $${label2}$ n'est pas correcte.`)
+          feedbacks.push(messagePointIncorrect(label2))
         }
         if (resultat2 && resultat3) results[1] = 'OK'
         break
@@ -674,10 +680,10 @@ class ConstructionsSymetrieCentraleFigures extends Exercice {
           checkOnlyAbscissa: false,
         }).isValid
         if (!resultat2) {
-          feedbacks.push(`L'image du point $${label1}$ n'est pas correcte.`)
+          feedbacks.push(messagePointIncorrect(label1))
         }
         if (!resultat3) {
-          feedbacks.push(`L'image du point $${label2}$ n'est pas correcte.`)
+          feedbacks.push(messagePointIncorrect(label2))
         }
         if (resultat2 && resultat3) results[1] = 'OK'
         break
@@ -705,10 +711,10 @@ class ConstructionsSymetrieCentraleFigures extends Exercice {
         }).isValid
         if (resultat2 && resultat3) results[1] = 'OK'
         if (!resultat2) {
-          feedbacks.push(`L'image du point $${label1}$ n'est pas correcte.`)
+          feedbacks.push(messagePointIncorrect(label1))
         }
         if (!resultat3) {
-          feedbacks.push(`L'image du point $${label2}$ n'est pas correcte.`)
+          feedbacks.push(messagePointIncorrect(label2))
         }
         break
 
@@ -738,10 +744,10 @@ class ConstructionsSymetrieCentraleFigures extends Exercice {
         }).isValid
         if (resultat2 && resultat3) results[1] = 'OK'
         if (!resultat2) {
-          feedbacks.push(`L'image du point $${label1}$ n'est pas correcte.`)
+          feedbacks.push(messagePointIncorrect(label1))
         }
         if (!resultat3) {
-          feedbacks.push(`L'image du point $${label2}$ n'est pas correcte.`)
+          feedbacks.push(messagePointIncorrect(label2))
         }
 
         break
@@ -774,13 +780,13 @@ class ConstructionsSymetrieCentraleFigures extends Exercice {
           checkOnlyAbscissa: false,
         }).isValid
         if (!resultat2) {
-          feedbacks.push(`L'image du point $${label1}$ n'est pas correcte.`)
+          feedbacks.push(messagePointIncorrect(label1))
         }
         if (!resultat3) {
-          feedbacks.push(`L'image du point $${label2}$ n'est pas correcte.`)
+          feedbacks.push(messagePointIncorrect(label2))
         }
         if (!resultat4) {
-          feedbacks.push(`L'image du point $${label3}$ n'est pas correcte.`)
+          feedbacks.push(messagePointIncorrect(label3))
         }
         if (resultat2 && resultat3 && resultat4) results[1] = 'OK'
         break
