@@ -12,6 +12,8 @@ export const titre =
 export const dateDePublication = '08/08/2026'
 export const interactifReady = true
 
+export const dateDeModifImportante = '10/10/2026'
+
 export const uuid = 'a7c42'
 export const refs = {
   'fr-fr': ['TSA2-42'],
@@ -20,6 +22,7 @@ export const refs = {
 
 type TypeQuestion =
   | 'exponentielleSurPuissance'
+  | 'puissanceSurExponentielle'
   | 'puissanceFoisExponentielle'
   | 'exponentielleMoinsPolynome'
   | 'exponentielleComposeeSurPuissance'
@@ -30,6 +33,7 @@ const typesSansChangementDeVariable: TypeQuestion[] = [
   'exponentielleSurPuissance',
   'puissanceFoisExponentielle',
   'exponentielleMoinsPolynome',
+  'puissanceSurExponentielle',
 ]
 
 const typesAvecChangementDeVariable: TypeQuestion[] = [
@@ -92,6 +96,16 @@ export default class CroissancesComparees extends Exercice {
       let correction: string
 
       switch (type) {
+        case 'puissanceSurExponentielle': {
+          expression = `\\dfrac{${coefficientFois(coefficient, puissanceDeX)}}{\\mathrm{e}^{x}}`
+          sens = '+'
+          reponse = '0'
+          correction = `D’après le théorème des croissances comparées, pour tout entier naturel $n$,<br>
+          $\\displaystyle \\lim_{x\\to+\\infty}\\dfrac{x^n}{\\mathrm{e}^{x}}=0$.<br>
+          On a donc $\\displaystyle \\lim_{x\\to+\\infty}\\dfrac{${puissanceDeX}}{\\mathrm{e}^{x}}=0$, puis<br>
+          $\\displaystyle \\lim_{x\\to+\\infty}f(x)=${miseEnEvidence(reponse)}$.`
+          break
+        }
         case 'exponentielleSurPuissance': {
           expression = `\\dfrac{${coefficientFois(coefficient, '\\mathrm{e}^{x}')}}{${puissanceDeX}}`
           sens = '+'
