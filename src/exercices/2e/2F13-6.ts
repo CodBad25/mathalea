@@ -112,8 +112,10 @@ export default class ImagesEnFonctionDeN extends Exercice {
         'n',
       )
       const brackets = `\\left(${argument}\\right)`
+      const linearArgument = b === 0 ? argument : brackets
+      const quadraticCoefficient = p === 1 ? '' : `${p}\\times `
       const substitution =
-        `${quadratic ? `${p}\\times ${brackets}^2+` : ''}${q}\\times ${brackets}${ecritureAlgebrique(r)}`.replace(
+        `${quadratic ? `${quadraticCoefficient}${brackets}^2+` : ''}${q}\\times ${linearArgument}${ecritureAlgebrique(r)}`.replace(
           '+-',
           '-',
         )
@@ -122,7 +124,11 @@ export default class ImagesEnFonctionDeN extends Exercice {
       if (quadratic) {
         const square = reduirePolynomeDegre3(0, a * a, 2 * a * b, b * b, 'n')
         const linearPart = reduireAxPlusB(q * a, q * b, 'n')
-        correction += `&=${p}\\times\\left(${square}\\right)+\\left(${linearPart}\\right)${ecritureAlgebrique(r)}\\\\`
+        const squareFactor =
+          b === 0 || p === 1 ? square : `\\left(${square}\\right)`
+        correction += `&=${quadraticCoefficient}${squareFactor}${q > 0 ? '+' : ''}${linearPart}${ecritureAlgebrique(r)}\\\\`
+      } else if (b !== 0) {
+        correction += `&=${reduireAxPlusB(q * a, q * b, 'n')}${ecritureAlgebrique(r)}\\\\`
       }
       correction += `&=${miseEnEvidence(answer)}\\end{aligned}$`
 
