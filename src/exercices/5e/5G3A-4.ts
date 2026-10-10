@@ -53,6 +53,41 @@ function checkDistance(points: { x: number; y: number }[]) {
   return true
 }
 
+/** Vérifier la position de l'origine par rapport au cercle ou au triangle. */
+function checkCenterPosition(
+  points: { x: number; y: number }[],
+  figureType: string,
+  position: number,
+) {
+  // Le réglage par défaut conserve exactement les tirages déjà publiés.
+  if (![1, 2, 3].includes(position)) return true
+  const [a, b, c] = points
+  if (figureType === 'cercle') {
+    const distanceSquared = a.x ** 2 + a.y ** 2
+    const radiusSquared = (b.x - a.x) ** 2 + (b.y - a.y) ** 2
+    return position === 1
+      ? distanceSquared > radiusSquared
+      : position === 2
+        ? distanceSquared === radiusSquared
+        : distanceSquared < radiusSquared
+  }
+  if (figureType === 'triangle') {
+    const sides = [
+      a.x * b.y - a.y * b.x,
+      b.x * c.y - b.y * c.x,
+      c.x * a.y - c.y * a.x,
+    ]
+    const outside =
+      sides.some((side) => side < 0) && sides.some((side) => side > 0)
+    return position === 1
+      ? outside
+      : position === 2
+        ? !outside && sides.includes(0)
+        : !outside && !sides.includes(0)
+  }
+  return true
+}
+
 /**
  * Construction interactive de symétriques de points
  * @author Jean-claude Lhote
@@ -89,9 +124,15 @@ class ConstructionsSymetrieCentraleFigures extends Exercice {
       'Formulation des questions',
       "1 : Construire l'image de ... par la symétrie de centre ...\n2 : Construire le symétrique de ... par rapport au point ...",
     ]
+    this.besoinFormulaire4Numerique = [
+      'Position du centre de symétrie (cercles et triangles)',
+      4,
+      "1 : À l'extérieur\n2 : Sur le contour\n3 : À l'intérieur\n4 : Aléatoire",
+    ]
     this.sup = 1
     this.sup2 = '6'
     this.sup3 = '1'
+    this.sup4 = 4
   }
 
   nouvelleVersion() {
@@ -135,7 +176,10 @@ class ConstructionsSymetrieCentraleFigures extends Exercice {
           if (x !== 0) nuage.push({ y: (randint(2, 8) + 1) * (-1) ** x, x })
         }
         nuage = shuffle(nuage)
-      } while (!checkDistance(nuage))
+      } while (
+        !checkDistance(nuage) ||
+        !checkCenterPosition(nuage, this.typesDeQuestions[i], Number(this.sup4))
+      )
       nuage = nuage.slice(0, 3)
       this.labels[i] = Array.from(
         choisitLettresDifferentes(nuage.length, 'Q', true),
