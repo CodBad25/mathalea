@@ -19,7 +19,7 @@ export const titre = 'Identifier une limite déterminable par comparaison'
 export const dateDePublication = '09/10/2026'
 export const interactifReady = true
 export const uuid = '5ade2'
-export const refs = { 'fr-fr': ['TSA2-36', 'TCA2-36'], 'fr-ch': [] }
+export const refs = { 'fr-fr': ['TSA2-41', 'TCA2-41'], 'fr-ch': [] }
 
 /** @author Stéphane Guyon */
 export default class LimitesDeterminablesParComparaison extends Exercice {
@@ -90,8 +90,8 @@ export default class LimitesDeterminablesParComparaison extends Exercice {
         const finiteBound = coefficient * finitePoint + constant
         correction = `On sait que $\\displaystyle\\lim_{x\\to${direction}\\infty}(${bound})=${value}$.<br>
         Comme $${inequality}$ pour tout réel $x$, le théorème de comparaison permet de conclure que $${limit(`${direction}\\infty`)}=${miseEnEvidence(value)}$.<br>
-        À l’autre infini, on a $\\displaystyle\\lim_{x\\to${otherDirection}\\infty}(${bound})=${otherValue}$.<br>
-        ${lowerBound ? '' : 'La fonction est donc inférieure, pour tout $x$, à une fonction qui tend vers $+\\infty$.<br>'}
+        On a $\\displaystyle\\lim_{x\\to${otherDirection}\\infty}(${bound})=${otherValue}$.<br>
+        ${lowerBound ? '' : `La fonction $f$ est donc majorée sur $\\mathbb R$ par la fonction affine $x\\mapsto ${bound}$, qui tend vers $+\\infty$ lorsque $x$ tend vers $${otherDirection}\\infty$.<br>`}
         On ne peut donc pas déterminer $${limit(`${otherDirection}\\infty`)}$ avec cette comparaison.<br><br>
         En $${finitePoint}$, on a $\\displaystyle\\lim_{x\\to${finitePoint}}(${bound})=${finiteBound}$. On ne peut rien déduire sur une limite éventuelle de $f$ avec la seule inégalité donnée.<br>
         On ne peut donc pas non plus déterminer $${limit(String(finitePoint))}$.`
