@@ -474,7 +474,7 @@ export default class ConstruireParSymetrie extends Exercice {
             sEC,
           )
           objetsEnonce.push(tracePoint(C, D, E), labelPoint(C, D, E), d)
-          if (context.isHtml) {
+          if (context.isHtml && !context.isTypst) {
             numQuestion = 0
             enonce =
               numAlpha(numQuestion) + ' Reproduire la figure ci-dessous.<br>'
@@ -559,7 +559,7 @@ export default class ConstruireParSymetrie extends Exercice {
             sEC,
           )
           objetsEnonce.push(tracePoint(C, D, E), labelPoint(C, D, E), d)
-          if (context.isHtml) {
+          if (context.isHtml && !context.isTypst) {
             numQuestion = 0
             enonce =
               numAlpha(numQuestion) + ' Reproduire la figure ci-dessous.<br>'
@@ -644,7 +644,7 @@ export default class ConstruireParSymetrie extends Exercice {
             sEC,
           )
           objetsEnonce.push(tracePoint(C, D, E), labelPoint(C, D, E), d)
-          if (context.isHtml) {
+          if (context.isHtml && !context.isTypst) {
             numQuestion = 0
             enonce =
               numAlpha(numQuestion) + ' Reproduire la figure ci-dessous.<br>'
@@ -756,7 +756,7 @@ export default class ConstruireParSymetrie extends Exercice {
             sED,
           )
           objetsEnonce.push(CC, p1, d)
-          if (context.isHtml) {
+          if (context.isHtml && !context.isTypst) {
             numQuestion = 0
             enonce =
               numAlpha(numQuestion) + ' Reproduire la figure ci-dessous.<br>'
@@ -902,7 +902,7 @@ export default class ConstruireParSymetrie extends Exercice {
             sED,
           )
           objetsEnonce.push(CC, p1, d)
-          if (context.isHtml) {
+          if (context.isHtml && !context.isTypst) {
             numQuestion = 0
             enonce =
               numAlpha(numQuestion) + ' Reproduire la figure ci-dessous.<br>'
@@ -1043,7 +1043,7 @@ export default class ConstruireParSymetrie extends Exercice {
             sED,
           )
           objetsEnonce.push(CC, p1, d)
-          if (context.isHtml) {
+          if (context.isHtml && !context.isTypst) {
             numQuestion = 0
             enonce =
               numAlpha(numQuestion) + ' Reproduire la figure ci-dessous.<br>'
@@ -1179,7 +1179,7 @@ export default class ConstruireParSymetrie extends Exercice {
             tracePoint(B, ...pointsSymetrie),
             labelPoint(B, ...pointsSymetrie),
           )
-          if (context.isHtml) {
+          if (context.isHtml && !context.isTypst) {
             numQuestion = 0
             enonce =
               numAlpha(numQuestion) + ' Reproduire la figure ci-dessous.<br>'
@@ -1272,7 +1272,7 @@ export default class ConstruireParSymetrie extends Exercice {
             p2,
           )
           objetsEnonce.push(tracePoint(B), labelPoint(B), CC, p1)
-          if (context.isHtml) {
+          if (context.isHtml && !context.isTypst) {
             numQuestion = 0
             enonce =
               numAlpha(numQuestion) + ' Reproduire la figure ci-dessous.<br>'

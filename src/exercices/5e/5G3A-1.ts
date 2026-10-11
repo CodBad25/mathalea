@@ -164,7 +164,7 @@ export default class SymetrieCentralePoint extends ConstruireParSymetrie {
     const instructions = points
       .map(
         (point, index) =>
-          `${numAlpha(index)} Construire le point $${point.nom}'$, symétrique de $${point.nom}$ par rapport au point $${center.nom}$.`,
+          `${points.length > 1 ? numAlpha(index) + ' ' : ''}Construire le point $${point.nom}'$, symétrique de $${point.nom}$ par rapport au point $${center.nom}$.`,
       )
       .join('<br>')
     return (
