@@ -1,6 +1,7 @@
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { amcConvert } from '../../lib/amc/amcBuilders'
-import { propositionsQcm } from '../../lib/interactif/qcm'
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { sp } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -50,9 +51,13 @@ export default class ComparerDecimaux extends Exercice {
   }
 
   nouvelleVersion() {
-    this.consigne = this.interactif
-      ? 'Choisir la bonne égalité ou inégalité.'
-      : 'Compléter avec le signe <, > ou =.'
+    this.consigne = 'Compléter avec le signe <, > ou =.'
+    const choixSignes = [
+      { label: 'Choisir', value: '' },
+      { latex: '<', value: '<' },
+      { latex: '=', value: '=' },
+      { latex: '>', value: '>' },
+    ]
     const typesDeQuestionsDisponibles = [choice([1, 4, 5]), 2, 2, 3, 6, 7, 8, 9] // une seule question du type inversion de chiffres (1,4,5)
     const listeTypeDeQuestions = combinaisonListes(
       typesDeQuestionsDisponibles,
@@ -141,53 +146,19 @@ export default class ComparerDecimaux extends Exercice {
           }
           break
       }
-      let signe = '>'
-      let prop1, prop2, prop3
-      texte = `$${texNombre(x, 6)}${sp(3)}\\ldots\\ldots${sp(3)}${texNombre(y, 6)}$`
-      prop1 = `$${texNombre(x, 6)} > ${texNombre(y, 6)}$`
-      prop2 = `$${texNombre(x, 6)} < ${texNombre(y, 6)}$`
-      prop3 = `$${texNombre(x, 6)} = ${texNombre(y, 6)}$`
-      if (x > y) {
-        texteCorr = `$${texNombre(x, 6)} ${miseEnEvidence('>')} ${texNombre(y, 6)}$`
-      } else if (x < y) {
-        signe = '<'
-        texteCorr = `$${texNombre(x, 6)} ${miseEnEvidence('<')} ${texNombre(y, 6)}$`
-      } else {
-        signe = '='
-        texteCorr = `$${texNombre(x, 6)} ${miseEnEvidence('=')} ${texNombre(y, 6)}$`
-      }
-
+      let gauche = texNombre(x, 6)
+      let droite = texNombre(y, 6)
       if (zeroInutile) {
         if (randint(1, 2) === 1) {
-          texte = `$${texNombre(x, 2, true)}${sp(3)}\\ldots\\ldots${sp(3)}${texNombre(y, 6)}$`
-          prop1 = `$${texNombre(x, 2, true)} > ${texNombre(y, 6)}$`
-          prop2 = `$${texNombre(x, 2, true)} < ${texNombre(y, 6)}$`
-          prop3 = `$${texNombre(x, 2, true)} = ${texNombre(y, 6)}$`
-          if (x > y) {
-            texteCorr = `$${texNombre(x, 2, true)} ${miseEnEvidence('>')} ${texNombre(y, 6)}$`
-          } else if (x < y) {
-            signe = '<'
-            texteCorr = `$${texNombre(x, 2, true)} ${miseEnEvidence('<')} ${texNombre(y, 6)}$`
-          } else {
-            signe = '='
-            texteCorr = `$${texNombre(x, 2, true)} ${miseEnEvidence('=')} ${texNombre(y, 6)}$`
-          }
+          gauche = texNombre(x, 2, true)
         } else {
-          texte = `$${texNombre(x, 6)}${sp(3)}\\ldots\\ldots${sp(3)}${texNombre(y, 2, true)}$`
-          prop1 = `$${texNombre(x, 6)} > ${texNombre(y, 2, true)}$`
-          prop2 = `$${texNombre(x, 6)} < ${texNombre(y, 2, true)}$`
-          prop3 = `$${texNombre(x, 6)} = ${texNombre(y, 2, true)}$`
-          if (x > y) {
-            texteCorr = `$${texNombre(x, 6)} ${miseEnEvidence('>')} ${texNombre(y, 2, true)}$`
-          } else if (x < y) {
-            texteCorr = `$${texNombre(x, 6)} ${miseEnEvidence('<')} ${texNombre(y, 2, true)}$`
-            signe = '<'
-          } else {
-            texteCorr = `$${texNombre(x, 6)} ${miseEnEvidence('=')} ${texNombre(y, 2, true)}$`
-            signe = '='
-          }
+          droite = texNombre(y, 2, true)
         }
       }
+      const signe = x > y ? '>' : x < y ? '<' : '='
+      texte = `$${gauche}${sp(3)}\\ldots\\ldots${sp(3)}${droite}$`
+      texteCorr = `$${gauche} ${miseEnEvidence(signe)} ${droite}$`
+
       if (context.isAmc) {
         this.autoCorrectionAMC[i] = {
           enonce: texte,
@@ -196,30 +167,14 @@ export default class ComparerDecimaux extends Exercice {
           ],
         }
         this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
-      } else if (this.interactif) {
-        this.autoCorrection[i] = {
-          enonce: texte,
-          propositions: [
-            {
-              texte: prop1,
-              statut: signe === '>',
-            },
-            {
-              texte: prop2,
-              statut: signe === '<',
-            },
-            {
-              texte: prop3,
-              statut: signe === '=',
-            },
-          ],
-          options: {
-            ordered: true,
-          },
-        }
-        const monQcm = propositionsQcm(this, i)
-        texte += monQcm.texte
-        texteCorr += monQcm.texteCorr
+      } else if (this.interactif && context.isHtml) {
+        texte = `$${gauche}$${choixDeroulant(this, i, { choices: choixSignes })}$${droite}$`
+        handleAnswers(
+          this,
+          i,
+          { reponse: { value: signe } },
+          { formatInteractif: 'liste-deroulante' },
+        )
       }
       if (this.questionJamaisPosee(i, x, y)) {
         // Si la question n'a jamais été posée, on en crée une autre
