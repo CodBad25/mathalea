@@ -2604,6 +2604,48 @@
       "annee": "2026",
       "lieu": "Groupement 1",
       "typeExercice": "crpe"
+    },
+    "eam_specialite_2026_04_polynesie": {
+      "typeExercice": "eam",
+      "annee": "2026",
+      "lieu": "Spécialité Polynésie",
+      "mois": "Avril",
+      "filiere": "Specialite"
+    },
+    "eam_specialite_2026_09_antilles": {
+      "typeExercice": "eam",
+      "annee": "2026",
+      "lieu": "Spécialité Antilles",
+      "mois": "Septembre",
+      "filiere": "Specialite"
+    },
+    "eam_specialite_2026_09_metropole": {
+      "typeExercice": "eam",
+      "annee": "2026",
+      "lieu": "Spécialité Métropole",
+      "mois": "Septembre",
+      "filiere": "Specialite"
+    },
+    "eam_specifique_2026_04_polynesie": {
+      "typeExercice": "eam",
+      "annee": "2026",
+      "lieu": "Spécifique Polynésie",
+      "mois": "Avril",
+      "filiere": "Specifique"
+    },
+    "eam_specifique_2026_09_antilles": {
+      "typeExercice": "eam",
+      "annee": "2026",
+      "lieu": "Spécifique Antilles",
+      "mois": "Septembre",
+      "filiere": "Specifique"
+    },
+    "eam_specifique_2026_09_metropole": {
+      "typeExercice": "eam",
+      "annee": "2026",
+      "lieu": "Spécifique Métropole",
+      "mois": "Septembre",
+      "filiere": "Specifique"
     }
   },
   "numeroOverrides": {
