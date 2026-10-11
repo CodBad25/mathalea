@@ -42,6 +42,7 @@
         <BlockOfKeyCaps {block} {isInLine} {innerWidth} {clickKeycap} />
       {/each}
     </div>
+    <slot />
   {:else}
     <div class={unitsBlocks.length > 1 && !isInLine ? 'flex' : 'hidden'}>
       <BlockOfKeycapsWithPagination
@@ -59,6 +60,7 @@
         <BlockOfKeyCaps {block} {isInLine} {innerWidth} {clickKeycap} />
       {/each}
     </div>
+    <slot />
   {/if}
 </div>
 
