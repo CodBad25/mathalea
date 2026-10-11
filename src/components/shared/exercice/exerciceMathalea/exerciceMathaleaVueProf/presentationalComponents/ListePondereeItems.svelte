@@ -11,6 +11,10 @@
   /** Affiche les flèches de réordonnancement. */
   export let avecFleches: boolean = false
 
+  /** Nombre minimal d'items à conserver cochés. */
+  export let minSelections = 0
+  $: selectedCount = items.filter((item) => item.poids > 0).length
+
   const dispatch = createEventDispatcher<{
     bascule: { index: number; actif: boolean }
     poids: { index: number; poids: number }
@@ -35,6 +39,7 @@
         border-coopmaths-action dark:border-coopmathsdark-action cursor-pointer
         checked:bg-coopmaths-action dark:checked:bg-coopmathsdark-action
         focus:ring-3 focus:ring-coopmaths-action dark:focus:ring-coopmathsdark-action"
+      disabled={item.poids > 0 && selectedCount <= minSelections}
       checked={item.poids > 0}
       on:change={(e) =>
         dispatch('bascule', { index, actif: e.currentTarget.checked })}
@@ -67,8 +72,8 @@
             disabled:pointer-events-none disabled:opacity-40"
           disabled={item.poids <= 1}
           aria-label="Diminuer le poids d'apparition de {item.label}"
-          on:click={() =>
-            dispatch('poids', { index, poids: item.poids - 1 })}>−</button
+          on:click={() => dispatch('poids', { index, poids: item.poids - 1 })}
+          >−</button
         >
         <span
           id="{idItem(item)}-poids"
@@ -84,13 +89,15 @@
             disabled:pointer-events-none disabled:opacity-40"
           disabled={item.poids === 0 || item.poids >= poidsMax}
           aria-label="Augmenter le poids d'apparition de {item.label}"
-          on:click={() =>
-            dispatch('poids', { index, poids: item.poids + 1 })}>+</button
+          on:click={() => dispatch('poids', { index, poids: item.poids + 1 })}
+          >+</button
         >
       </span>
     {/if}
     {#if avecFleches}
-      <span class="inline-flex flex-col shrink-0 {poidsMax > 0 ? '' : 'ml-auto'}">
+      <span
+        class="inline-flex flex-col shrink-0 {poidsMax > 0 ? '' : 'ml-auto'}"
+      >
         <button
           type="button"
           aria-label="Déplacer {item.label} vers le haut"

@@ -221,7 +221,8 @@ if (
         const angle = config.symmetryAngles[currentSymmetry]
         animateSymmetry(angle, () => {
           currentSymmetry = (currentSymmetry + 1) % config.symmetryAngles.length
-          this.timeoutId = window.setTimeout(next, 500)
+          // Pause pour laisser le temps de regarder la figure initiale
+          this.timeoutId = window.setTimeout(next, 2500)
         })
       }
 

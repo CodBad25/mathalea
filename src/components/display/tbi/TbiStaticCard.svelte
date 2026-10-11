@@ -6,6 +6,7 @@
     TBI_MAX_ZOOM,
     TBI_MIN_ZOOM,
     moveCardToTab,
+    setTbiCardCorrectionMode,
     tbiState,
   } from '../../../lib/stores/tbiStore'
   import TbiCardActions from './TbiCardActions.svelte'
@@ -26,16 +27,7 @@
     tabsCount?: number
     /** Indice compact de l'onglet courant (mode onglets) */
     currentTab?: number
-    /** Flèches de réordonnancement (dispositions liste et colonnes) */
-    showReorder?: boolean
-    canMoveUp?: boolean
-    canMoveDown?: boolean
-    /** Bouton de saut de colonne (dispositions en colonnes) */
-    showColumnBreak?: boolean
-    /** Nombre maximal de sauts de colonne atteint : désactive l'ajout (pas le retrait) */
-    columnBreakDisabled?: boolean
-    /** Demande de réordonnancement, traitée par la vue TBI */
-    onReorder?: (paramsIndex: number, delta: -1 | 1) => void
+    showDelete?: boolean
     /** Demande de suppression, traitée par la vue TBI */
     onDelete?: (paramsIndex: number) => void
   }
@@ -46,21 +38,20 @@
     showMoveToTab = false,
     tabsCount = 0,
     currentTab = 0,
-    showReorder = false,
-    canMoveUp = false,
-    canMoveDown = false,
-    showColumnBreak = false,
-    columnBreakDisabled = false,
-    onReorder = () => {},
+    showDelete = false,
     onDelete = () => {},
   }: Props = $props()
 
-  let correctionMode: StaticCorrectionMode = $state('hidden')
+  // Réglage porté par tbiState (partagé dans l'URL et le fichier de réglages).
+  // « Après chaque question » n'existe pas pour une image : traité comme « sous l'énoncé ».
+  let correctionMode: StaticCorrectionMode = $derived.by(() => {
+    const mode = $tbiState.cards[paramsIndex]?.correctionMode ?? 'hidden'
+    return mode === 'perQuestion' ? 'below' : mode
+  })
   /** Zoom propre à la correction en plein écran, indépendant du zoom de la carte */
   let modalZoom = $state(1.2)
 
   let zoom = $derived($tbiState.cards[paramsIndex]?.zoom ?? 1)
-  let colBreakActive = $derived($tbiState.cards[paramsIndex]?.colBreak ?? false)
 
   let hasCorrection = $derived(content.pngCor.length > 0)
 
@@ -74,9 +65,7 @@
   ]
 
   function setCorrectionMode(mode: StaticCorrectionMode) {
-    correctionMode = mode
-    // une seule correction en plein écran à la fois sur l'ensemble des cartes
-    activeTbiModalCard.set(mode === 'modal' ? paramsIndex : null)
+    setTbiCardCorrectionMode(paramsIndex, mode)
     if (mode === 'modal') modalZoom = Math.max(zoom, 1.2)
   }
 
@@ -86,7 +75,7 @@
 
   $effect(() => {
     if (correctionMode === 'modal' && $activeTbiModalCard !== paramsIndex) {
-      correctionMode = 'hidden'
+      setTbiCardCorrectionMode(paramsIndex, 'hidden')
     }
   })
 
@@ -104,16 +93,10 @@
   }
 
   function zoomModalBy(delta: number) {
-    modalZoom = Math.min(TBI_MAX_ZOOM, Math.max(TBI_MIN_ZOOM, modalZoom + delta))
-  }
-
-  function toggleColBreak() {
-    if (!colBreakActive && columnBreakDisabled) return
-    tbiState.update((state) => {
-      const cardState = state.cards[paramsIndex]
-      if (cardState) cardState.colBreak = !cardState.colBreak
-      return state
-    })
+    modalZoom = Math.min(
+      TBI_MAX_ZOOM,
+      Math.max(TBI_MIN_ZOOM, modalZoom + delta),
+    )
   }
 
   function openDialog(node: HTMLDialogElement) {
@@ -187,18 +170,10 @@
       {showMoveToTab}
       {tabsCount}
       {currentTab}
-      {showReorder}
-      {canMoveUp}
-      {canMoveDown}
-      {showColumnBreak}
-      {columnBreakDisabled}
-      {colBreakActive}
+      {showDelete}
       onZoomIn={() => zoomBy(0.1)}
       onZoomOut={() => zoomBy(-0.1)}
       onMoveToTab={(tab) => moveCardToTab(paramsIndex, tab)}
-      onMoveUp={() => onReorder(paramsIndex, -1)}
-      onMoveDown={() => onReorder(paramsIndex, 1)}
-      onToggleColBreak={toggleColBreak}
       onDelete={() => onDelete(paramsIndex)}
     />
     {#if hasCorrection}

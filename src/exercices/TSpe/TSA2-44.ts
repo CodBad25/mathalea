@@ -11,6 +11,8 @@ export const titre =
   'Calculer une limite à partir d’une comparaison ou d’un encadrement'
 export const dateDePublication = '09/10/2026'
 export const interactifReady = true
+export const dateDeModifImportante = '10/10/2026'
+
 export const uuid = 'ea25d'
 export const refs = {
   'fr-fr': ['TSA2-44', 'TCA2-44'],
@@ -36,10 +38,10 @@ export default class LimitsByComparisonOrSqueeze extends Exercice {
   nouvelleVersion(): void {
     const types = combinaisonListes(
       this.sup === 1
-        ? ['comparison']
+        ? ['comparison', 'doubleComparison']
         : this.sup === 2
           ? ['squeeze']
-          : ['comparison', 'squeeze'],
+          : ['comparison', 'doubleComparison', 'squeeze'],
       this.nbQuestions,
     )
     const signs = combinaisonListes([1, -1], this.nbQuestions)
@@ -94,20 +96,36 @@ export default class LimitsByComparisonOrSqueeze extends Exercice {
         coeffs: [intercept, slope],
         letter: 'x',
       }).toString()
+      const doubleComparison = types[i] === 'doubleComparison'
+      const otherIntercept = intercept + (slope > 0 ? 1 : -1) * randint(1, 6)
+      const otherBound = new Polynome({
+        coeffs: [otherIntercept, slope],
+        letter: 'x',
+      }).toString()
+      const lower = slope > 0 ? bound : otherBound
+      const upper = slope > 0 ? otherBound : bound
       const inequality = slope > 0 ? '>' : '<'
+      const usefulInequality =
+        slope > 0 ? `${bound}\\leqslant f(x)` : `f(x)\\leqslant ${bound}`
       const answer = slope > 0 ? '+\\infty' : '-\\infty'
       let statement =
         'Soit $f$ une fonction définie sur $[0;+\\infty[$.<br><br>'
-      statement += `Pour tout $x\\geqslant 0$, on a $f(x)${inequality}${bound}$.<br><br>`
+      statement += doubleComparison
+        ? `Pour tout $x\\geqslant 0$, on a $${lower}\\leqslant f(x)\\leqslant ${upper}$.<br><br>`
+        : `Pour tout $x\\geqslant 0$, on a $f(x)${inequality}${bound}$.<br><br>`
       if (this.interactif) {
         statement += `$\\displaystyle \\lim_{x\\to+\\infty}f(x)=$${ajouteChampTexteMathLive(this, i, KeyboardType.clavierLimitesSimple)}`
       } else {
         statement += 'Calculer $\\displaystyle \\lim_{x\\to+\\infty}f(x)$.'
       }
       let correction = `On a $\\displaystyle \\lim_{x\\to+\\infty}(${bound})=${answer}$.<br>`
-      correction += `Pour tout $x\\geqslant 0$, on a $f(x)${inequality}${bound}$.<br>`
+      correction += doubleComparison
+        ? `L'encadrement donne en particulier $${usefulInequality}$ pour tout $x\\geqslant 0$. Cette seule inégalité suffit pour conclure.<br>`
+        : `Pour tout $x\\geqslant 0$, on a $f(x)${inequality}${bound}$.<br>`
       correction += `D'après le théorème de comparaison, $\\displaystyle \\lim_{x\\to+\\infty}f(x)=${miseEnEvidence(answer)}$.`
-      if (this.questionJamaisPosee(i, slope, intercept)) {
+      if (
+        this.questionJamaisPosee(i, types[i], slope, intercept, otherIntercept)
+      ) {
         handleAnswers(this, i, { reponse: { value: answer } })
         this.listeQuestions[i] = statement
         this.listeCorrections[i] = correction

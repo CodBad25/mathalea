@@ -17,6 +17,8 @@
     TBI_MIN_QUESTION_SPACING,
     TBI_MIN_ZOOM,
     moveCardToTab,
+    setTbiCardCorrectionDetail,
+    setTbiCardCorrectionMode,
     tbiState,
   } from '../../../lib/stores/tbiStore'
   import type { IExercice } from '../../../lib/types'
@@ -35,16 +37,7 @@
     tabsCount?: number
     /** Indice compact de l'onglet courant (mode onglets) */
     currentTab?: number
-    /** Flèches de réordonnancement (dispositions liste et colonnes) */
-    showReorder?: boolean
-    canMoveUp?: boolean
-    canMoveDown?: boolean
-    /** Bouton de saut de colonne (dispositions en colonnes) */
-    showColumnBreak?: boolean
-    /** Nombre maximal de sauts de colonne atteint : désactive l'ajout (pas le retrait) */
-    columnBreakDisabled?: boolean
-    /** Demande de réordonnancement, traitée par la vue TBI */
-    onReorder?: (paramsIndex: number, delta: -1 | 1) => void
+    showDelete?: boolean
     /** Demande de suppression, traitée par la vue TBI */
     onDelete?: (paramsIndex: number) => void
   }
@@ -55,26 +48,24 @@
     showMoveToTab = false,
     tabsCount = 0,
     currentTab = 0,
-    showReorder = false,
-    canMoveUp = false,
-    canMoveDown = false,
-    showColumnBreak = false,
-    columnBreakDisabled = false,
-    onReorder = () => {},
+    showDelete = false,
     onDelete = () => {},
   }: Props = $props()
 
-  let correctionMode: TbiCorrectionMode = $state('hidden')
-  let correctionDetail: TbiCorrectionDetail = $state('full')
+  // Réglages de correction portés par tbiState (et non par la carte) pour
+  // être partagés dans l'URL et conservés dans le fichier de réglages.
+  let correctionMode: TbiCorrectionMode = $derived(
+    $tbiState.cards[paramsIndex]?.correctionMode ?? 'hidden',
+  )
+  let correctionDetail: TbiCorrectionDetail = $derived(
+    $tbiState.cards[paramsIndex]?.correctionDetail ?? 'full',
+  )
   let isSettingsModalDisplayed = $state(false)
   /** Zoom propre à la correction en plein écran, indépendant du zoom de la carte */
   let modalZoom = $state(1.2)
 
   function setCorrectionMode(mode: TbiCorrectionMode) {
-    correctionMode = mode
-    // une seule correction en plein écran à la fois, même si le mode est
-    // propre à chaque carte : ouvrir celle-ci ferme celle d'une autre carte
-    activeTbiModalCard.set(mode === 'modal' ? paramsIndex : null)
+    setTbiCardCorrectionMode(paramsIndex, mode)
     if (mode === 'modal') modalZoom = Math.max(zoom, 1.2)
   }
 
@@ -97,16 +88,16 @@
     )
   }
 
+  // ouvrir la correction en plein écran d'une autre carte ferme celle-ci
   $effect(() => {
     if (correctionMode === 'modal' && $activeTbiModalCard !== paramsIndex) {
-      correctionMode = 'hidden'
+      setTbiCardCorrectionMode(paramsIndex, 'hidden')
     }
   })
   /** Incrémenté à chaque régénération pour ré-injecter le HTML */
   let version = $state(0)
 
   let zoom = $derived($tbiState.cards[paramsIndex]?.zoom ?? 1)
-  let colBreakActive = $derived($tbiState.cards[paramsIndex]?.colBreak ?? false)
   /**
    * Nombre de colonnes de la liste de questions de cet exercice (réparties en
    * colonnes CSS à l'intérieur de la carte). Même réglage que le bouton
@@ -301,17 +292,6 @@
     }
   }
 
-  function toggleColBreak() {
-    // garde-fou défensif : l'ajout est déjà désactivé côté bouton
-    // (columnBreakDisabled) une fois le nombre maximal de sauts atteint
-    if (!colBreakActive && columnBreakDisabled) return
-    tbiState.update((state) => {
-      const cardState = state.cards[paramsIndex]
-      if (cardState) cardState.colBreak = !cardState.colBreak
-      return state
-    })
-  }
-
   function zoomBy(delta: number) {
     tbiState.update((state) => {
       const cardState = state.cards[paramsIndex]
@@ -397,12 +377,7 @@
         {showMoveToTab}
         {tabsCount}
         {currentTab}
-        {showReorder}
-        {canMoveUp}
-        {canMoveDown}
-        {showColumnBreak}
-        {columnBreakDisabled}
-        {colBreakActive}
+        {showDelete}
         {cols}
         {questionSpacing}
         onNewData={newData}
@@ -414,9 +389,6 @@
         onQuestionSpacingInc={() => setQuestionSpacing(questionSpacing + 1)}
         onQuestionSpacingDec={() => setQuestionSpacing(questionSpacing - 1)}
         onMoveToTab={(tab) => moveCardToTab(paramsIndex, tab)}
-        onMoveUp={() => onReorder(paramsIndex, -1)}
-        onMoveDown={() => onReorder(paramsIndex, 1)}
-        onToggleColBreak={toggleColBreak}
         onDelete={() => onDelete(paramsIndex)}
       />
       {#if exercise.listeCorrections.length > 0}
@@ -424,7 +396,7 @@
           {correctionMode}
           {correctionDetail}
           onCorrection={setCorrectionMode}
-          onDetail={(detail) => (correctionDetail = detail)}
+          onDetail={(detail) => setTbiCardCorrectionDetail(paramsIndex, detail)}
         />
       {/if}
     </div>
@@ -578,8 +550,10 @@
               ? 'Afficher la correction entière'
               : "Quand une correction met sa réponse en évidence (en orange), n'afficher que cette réponse"}
             onclick={() =>
-              (correctionDetail =
-                correctionDetail === 'minimal' ? 'full' : 'minimal')}
+              setTbiCardCorrectionDetail(
+                paramsIndex,
+                correctionDetail === 'minimal' ? 'full' : 'minimal',
+              )}
           >
             {correctionDetail === 'minimal' ? 'Complète' : 'Minimale'}
           </button>

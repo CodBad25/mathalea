@@ -16,15 +16,14 @@
   import ButtonTextAction from '../../shared/forms/ButtonTextAction.svelte'
   import NavBar from '../../shared/header/NavBar.svelte'
   import ExportViewLinks from '../shared/ExportViewLinks.svelte'
-  import { MATH_FONTS, TEXT_FONTS } from '../typst/buildTypstDocument'
-  import { minimalCorrection } from '../typst/minimalCorrection'
-  import type { TypstAnchor } from '../typst/typstCompiler'
-  import { memotestQuestionSpeech } from './memotestSpeech'
   import {
     anchorPosition,
     separatePages,
     type PreviewPageGeometry,
   } from '../shared/typstPreview'
+  import { MATH_FONTS, TEXT_FONTS } from '../typst/buildTypstDocument'
+  import { minimalCorrection } from '../typst/minimalCorrection'
+  import type { TypstAnchor } from '../typst/typstCompiler'
   import {
     buildFlashcardsDocument,
     defaultFlashcardsDocumentOptions,
@@ -537,9 +536,9 @@
   function exportToMemotest() {
     const cards = buildCards().map(({ front, back }) => ({
       question: `${front}<div style="font-size: 0.6em; font-style: italic; color: ${orangeMathalea}; margin-top: 0.5em;">Généré par Mathaléa</div>`,
-      questionSpeech: memotestQuestionSpeech(front),
+      questionSpeech: '',
       answer: back,
-      answerSpeech: memotestQuestionSpeech(back),
+      answerSpeech: '',
     }))
 
     if (cards.length === 0) {

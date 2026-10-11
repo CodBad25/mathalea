@@ -348,15 +348,21 @@ export default class TableauProportion extends Exercice {
                 den: effectifSexe,
               },
             ]
-            texte += addMultiMathfield(this, i, {
-              dataTemplate: `Donner les réponses sous la forme de fractions irréductibles.
+            if (context.isHtml) {
+              texte += addMultiMathfield(this, i, {
+                dataTemplate: `Donner les réponses sous la forme de fractions irréductibles.
   ${proportions.map((p, k) => `${String.fromCharCode(97 + k)}) ${p.question}${this.interactif ? '\n  ' : ' '}%{champ${k + 1}}`).join('\n  ')}`,
-              dataOptions: {
-                champ1: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
-                champ2: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
-                champ3: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
-              },
-            })
+                dataOptions: {
+                  champ1: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
+                  champ2: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
+                  champ3: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
+                },
+              })
+            } else {
+              // En LaTeX, les retours à la ligne du dataTemplate sont perdus
+              texte += `<br>Donner les réponses sous la forme de fractions irréductibles.<br>
+              ${proportions.map((p, k) => `${numAlpha(k)}${p.question}`).join('<br>')}`
+            }
             const reponses = proportions.map((p) =>
               new FractionEtendue(effectif, p.den).simplifie(),
             )
@@ -390,8 +396,24 @@ export default class TableauProportion extends Exercice {
               .join('<br>')
             break
           }
-          texte += addMultiMathfield(this, i, {
-            dataTemplate: `a) Quelle est la proportion de ${choix ? 'filles' : 'garçons'} en première technologique parmi les élèves de ce lycée ?
+          if (!context.isHtml) {
+            // En LaTeX, les retours à la ligne du dataTemplate sont perdus
+            const eleves = choix ? 'filles' : 'garçons'
+            texte += `<br>${[
+              'parmi les élèves de ce lycée',
+              'parmi les élèves en première technologique',
+              `parmi les ${eleves}`,
+            ]
+              .map(
+                (parmi, k) =>
+                  `${numAlpha(k)}Quelle est la proportion de ${eleves} en première technologique ${parmi} ?<br>
+              Sous la forme d'une fraction :<br>
+              Sous la forme d'un pourcentage (arrondir à l'unité si besoin) :`,
+              )
+              .join('<br>')}`
+          } else {
+            texte += addMultiMathfield(this, i, {
+              dataTemplate: `a) Quelle est la proportion de ${choix ? 'filles' : 'garçons'} en première technologique parmi les élèves de ce lycée ?
   Sous la forme d'une fraction : %{champ1}
   Sous la forme d'un pourcentage (arrondir à l'unité si besoin) : %{champ2}
   
@@ -402,30 +424,31 @@ export default class TableauProportion extends Exercice {
   c) Quelle est la proportion de ${choix ? 'filles' : 'garçons'} en première technologique parmi les ${choix ? 'filles' : 'garçons'} ?
   Sous la forme d'une fraction : %{champ5}
   Sous la forme d'un pourcentage (arrondir à l'unité si besoin) : %{champ6}`,
-            dataOptions: {
-              champ1: {
-                keyboard: KeyboardType.clavierDeBaseAvecFraction,
+              dataOptions: {
+                champ1: {
+                  keyboard: KeyboardType.clavierDeBaseAvecFraction,
+                },
+                champ2: {
+                  keyboard: KeyboardType.clavierNumbers,
+                  texteApres: this.interactif ? '$\\%$' : undefined,
+                },
+                champ3: {
+                  keyboard: KeyboardType.clavierDeBaseAvecFraction,
+                },
+                champ4: {
+                  keyboard: KeyboardType.clavierNumbers,
+                  texteApres: this.interactif ? '$\\%$' : undefined,
+                },
+                champ5: {
+                  keyboard: KeyboardType.clavierDeBaseAvecFraction,
+                },
+                champ6: {
+                  keyboard: KeyboardType.clavierNumbers,
+                  texteApres: this.interactif ? '$\\%$' : undefined,
+                },
               },
-              champ2: {
-                keyboard: KeyboardType.clavierNumbers,
-                texteApres: this.interactif ? '$\\%$' : undefined,
-              },
-              champ3: {
-                keyboard: KeyboardType.clavierDeBaseAvecFraction,
-              },
-              champ4: {
-                keyboard: KeyboardType.clavierNumbers,
-                texteApres: this.interactif ? '$\\%$' : undefined,
-              },
-              champ5: {
-                keyboard: KeyboardType.clavierDeBaseAvecFraction,
-              },
-              champ6: {
-                keyboard: KeyboardType.clavierNumbers,
-                texteApres: this.interactif ? '$\\%$' : undefined,
-              },
-            },
-          })
+            })
+          }
           handleAnswers(
             this,
             i,

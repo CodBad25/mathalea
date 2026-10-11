@@ -12,7 +12,9 @@ export const refs = {
   'fr-2016': ['5P14-1'],
   'fr-ch': ['NR'],
 }
-export const uuid = '542be'
+export const dateDeModifImportante = '10/10/2026'
+
+export const uuid = 'b57c6'
 export default class ExercicePourcentage5e2 extends Proportions {
   constructor() {
     super()

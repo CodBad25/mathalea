@@ -1,4 +1,8 @@
 import type { MathfieldElement } from 'mathlive'
+import {
+  compteChampsDeReponse,
+  pointsMaxDuBareme,
+} from '../interactif/baremeExercice'
 import type { CompareResult } from '../interactif/checks/types'
 import { fonctionComparaison } from '../interactif/comparisonFunctions'
 import { toutPourUnPoint } from '../interactif/fonctionsBaremes'
@@ -31,7 +35,12 @@ export class MetaInteractif2dElement extends MathaleaCustomElement {
     const elementId =
       id ??
       `${MetaInteractif2dElement.elementTag}Ex${numeroExercice}Q${questionIndex}field${fieldIndex}`
-    return `<${MetaInteractif2dElement.elementTag} id="${elementId}" numero-exercice="${numeroExercice}" question-index="${questionIndex}" field-index="${fieldIndex}" interactivity-on="${interactivityOn ? 'true' : 'false'}">${innerHtml}</${MetaInteractif2dElement.elementTag}>`
+    return `<${MetaInteractif2dElement.elementTag} id="${elementId}" numero-exercice="${numeroExercice}" question-index="${questionIndex}" field-index="${fieldIndex}" interactivity-on="${interactivityOn ? 'true' : 'false'}" style="display: inline-flex; position: relative; align-items: center;">${innerHtml}<span id="resultatCheckEx${numeroExercice}Q${questionIndex}field${fieldIndex}" style="position: absolute; left: 100%; top: 50%; transform: translateY(-50%); margin-left: 4px;"></span></${MetaInteractif2dElement.elementTag}>`
+  }
+
+  static pointsMaxQuestion(exercice: IExercice, i: number): number {
+    const valeur = exercice.autoCorrection?.[i]?.valeur
+    return pointsMaxDuBareme(valeur?.bareme, compteChampsDeReponse(valeur))
   }
 
   static verifQuestion(
@@ -122,7 +131,7 @@ export class MetaInteractif2dElement extends MathaleaCustomElement {
         if (choix === '') {
           compteurSaisiesVides++
           points.push(0)
-          if (smiley != null) smiley.innerHTML = '❌'
+          if (smiley != null) smiley.innerHTML = '☹️'
           continue
         }
         saisies[`liste-deroulanteEx${exercice.numeroExercice}Q${i}${field}`] =
@@ -130,17 +139,21 @@ export class MetaInteractif2dElement extends MathaleaCustomElement {
         const estJuste = choix === String(reponse.value)
         if (estJuste) compteurBonnesReponses++
         points.push(estJuste ? 1 : 0)
-        if (smiley != null) smiley.innerHTML = estJuste ? '✅' : '❌'
+        if (smiley != null) smiley.innerHTML = estJuste ? '😎' : '☹️'
         continue
       }
       const mf = document.querySelector(
         `#MetaInteractif2dEx${exercice.numeroExercice}Q${i}field${index}`,
       ) as MathfieldElement
+      const smiley = document.getElementById(
+        `resultatCheckEx${exercice.numeroExercice}Q${i}field${index}`,
+      )
       const saisie = mf.getPromptValue('champ1')
       if (saisie === '') {
         compteurSaisiesVides++
         mf.classList.add('corrected')
         points.push(0)
+        if (smiley != null) smiley.innerHTML = '☹️'
         continue
       }
       saisies[`MetaInteractif2dEx${exercice.numeroExercice}Q${i}${field}`] =
@@ -173,6 +186,7 @@ export class MetaInteractif2dElement extends MathaleaCustomElement {
         }
       }
       mf.classList.add('corrected')
+      if (smiley != null) smiley.innerHTML = result.isOk ? '😎' : '☹️'
       if (result.feedback != null) feedback += result.feedback
     }
 

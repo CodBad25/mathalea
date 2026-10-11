@@ -32,6 +32,9 @@ import { vecteur } from '../../lib/2d/Vecteur'
 import { vide2d, type Vide2d } from '../../lib/2d/Vide2d'
 import { amcConvert } from '../../lib/amc/amcBuilders'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
+import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
+import { troisPointsProportionnels } from '../../lib/interactif/fonctionsBaremes'
+import type { Valeur } from '../../lib/types'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -68,6 +71,8 @@ export const amcType = 'AMCHybride'
  */
 export default class PavagesEtTransformations extends Exercice {
   level: number
+  protected centralSymmetryCount = 3
+  protected groupCentralSymmetryAnswers = false
   constructor() {
     super()
     this.nbQuestions = 1
@@ -86,6 +91,24 @@ export default class PavagesEtTransformations extends Exercice {
     // this.sup = 1 // 1 pour symétrie axiale, 2 pour symétrie centrale, 3 pour translations, et 4 pour rotations ; paramètre fixé par les variantes respectives.
     this.sup = 1
     this.level = 6
+  }
+
+  protected chooseTiling(): number {
+    switch (this.sup) {
+      case 2:
+      case 3:
+        return randint(0, 7)
+      default:
+        return 0
+    }
+  }
+
+  protected centralSymmetryField(index: number): string {
+    return this.groupCentralSymmetryAnswers
+      ? context.isAmc
+        ? ''
+        : `%{champ${index + 1}}`
+      : ajouteChampTexteMathLive(this, index, KeyboardType.clavierNumbers)
   }
 
   nouvelleVersion(numeroExercice: number) {
@@ -161,22 +184,7 @@ export default class PavagesEtTransformations extends Exercice {
     const tabfigC = []
     const tabfigD = []
     let pave = []
-    let choixPave
-    switch (this.sup) {
-      case 1:
-        choixPave = 0 // pavages adaptés à symétrie axiale (carrés)
-        break
-      case 2:
-        choixPave = randint(0, 7) // pavages adaptés à symétrie centrale (tous)
-        break
-      case 3:
-        choixPave = randint(0, 7) // pavages adaptés à translation (tous)
-        break
-      case 4:
-      default:
-        choixPave = 0 // pavages adaptés à rotation (carrés)
-        break
-    }
+    const choixPave = this.chooseTiling()
     pave = paves[choixPave]
     let B, C, D
     const nx = pave[0]
@@ -1008,16 +1016,18 @@ export default class PavagesEtTransformations extends Exercice {
         texteAMC1 =
           numAlpha(0) +
           texteEnCouleurEtGras(
-            ` Quel est le numéro de la figure symétrique de la figure ${numA} dans la symétrie de centre ${s0} ?`,
+            this.groupCentralSymmetryAnswers
+              ? ` Donner le numéro de la figure symétrique de la figure ${numA} dans la symétrie de centre ${s0}.`
+              : ` Quel est le numéro de la figure symétrique de la figure ${numA} dans la symétrie de centre ${s0} ?`,
             context.isAmc ? 'black' : 'green',
           ) +
-          ajouteChampTexteMathLive(this, 0, KeyboardType.clavierNumbers) +
+          this.centralSymmetryField(0) +
           '<br>'
         texte += texteAMC1
         texteCorr =
           numAlpha(0) +
           texteEnCouleurEtGras(
-            ` La figure symétrique de la figure ${numA} dans la symétrie de centre ${s0} porte le numéro ${texteEnCouleurEtGras(String(num1))}.<br>`,
+            ` La figure symétrique de la figure ${numA} dans la symétrie de centre ${s0} porte le numéro ${this.groupCentralSymmetryAnswers ? `$${miseEnEvidence(String(num1))}$` : texteEnCouleurEtGras(String(num1))}.<br>`,
             context.isAmc ? 'black' : 'green',
           )
         // Deuxième question : une figure dans tabfigD, une symétrie par rapport au milieu d'un [C'D'], le résultat est une figure dans tabfigA et C' est l'image de D !
@@ -1066,21 +1076,25 @@ export default class PavagesEtTransformations extends Exercice {
             )
           }
         }
-        texteAMC2 =
-          numAlpha(1) +
-          texteEnCouleurEtGras(
-            ` Quel est le numéro de la figure symétrique de la figure ${numD} dans la symétrie de centre ${s1} ?`,
-            context.isAmc ? 'black' : 'red',
-          ) +
-          ajouteChampTexteMathLive(this, 1, KeyboardType.clavierNumbers) +
-          '<br>'
-        texte += '<br>' + texteAMC2
-        texteCorr +=
-          numAlpha(1) +
-          texteEnCouleurEtGras(
-            ` La figure symétrique de la figure ${numD} dans la symétrie de centre ${s1} porte le numéro ${texteEnCouleurEtGras(String(num2))}.<br>`,
-            context.isAmc ? 'black' : 'red',
-          )
+        if (this.centralSymmetryCount >= 2) {
+          texteAMC2 =
+            numAlpha(1) +
+            texteEnCouleurEtGras(
+              this.groupCentralSymmetryAnswers
+                ? ` Donner le numéro de la figure symétrique de la figure ${numD} dans la symétrie de centre ${s1}.`
+                : ` Quel est le numéro de la figure symétrique de la figure ${numD} dans la symétrie de centre ${s1} ?`,
+              context.isAmc ? 'black' : 'red',
+            ) +
+            this.centralSymmetryField(1) +
+            '<br>'
+          texte += '<br>' + texteAMC2
+          texteCorr +=
+            numAlpha(1) +
+            texteEnCouleurEtGras(
+              ` La figure symétrique de la figure ${numD} dans la symétrie de centre ${s1} porte le numéro ${this.groupCentralSymmetryAnswers ? `$${miseEnEvidence(String(num2))}$` : texteEnCouleurEtGras(String(num2))}.<br>`,
+              context.isAmc ? 'black' : 'red',
+            )
+        }
         // troisième question : une figure dans tabfigC, une symétrie par rapport au symétrique du milieu de [A'D'] par rapport au milieu de [C'D']... pas très clair
         // le résultat est une figure dans tabfigD et le point (C'+ vecteur AC) a pour image D' !
         indexC = randint(0, nx * ny - 1)
@@ -1139,21 +1153,25 @@ export default class PavagesEtTransformations extends Exercice {
             'centre1, centre2 ou centre3 ou num1, num2 ou num3 est null',
           )
         }
-        texteAMC3 =
-          numAlpha(2) +
-          texteEnCouleurEtGras(
-            ` Quel est le numéro de la figure symétrique de la figure ${numC} dans la symétrie de centre ${s2} ?`,
-            context.isAmc ? 'black' : bleuMathalea,
-          ) +
-          ajouteChampTexteMathLive(this, 2, KeyboardType.clavierNumbers) +
-          '<br>'
-        texte += '<br>' + texteAMC3
-        texteCorr +=
-          numAlpha(2) +
-          texteEnCouleurEtGras(
-            ` La figure symétrique de la figure ${numC} dans la symétrie de centre ${s2} porte le numéro ${texteEnCouleurEtGras(String(num3))}.<br>`,
-            context.isAmc ? 'black' : bleuMathalea,
-          )
+        if (this.centralSymmetryCount >= 3) {
+          texteAMC3 =
+            numAlpha(2) +
+            texteEnCouleurEtGras(
+              this.groupCentralSymmetryAnswers
+                ? ` Donner le numéro de la figure symétrique de la figure ${numC} dans la symétrie de centre ${s2}.`
+                : ` Quel est le numéro de la figure symétrique de la figure ${numC} dans la symétrie de centre ${s2} ?`,
+              context.isAmc ? 'black' : bleuMathalea,
+            ) +
+            this.centralSymmetryField(2) +
+            '<br>'
+          texte += '<br>' + texteAMC3
+          texteCorr +=
+            numAlpha(2) +
+            texteEnCouleurEtGras(
+              ` La figure symétrique de la figure ${numC} dans la symétrie de centre ${s2} porte le numéro ${this.groupCentralSymmetryAnswers ? `$${miseEnEvidence(String(num3))}$` : texteEnCouleurEtGras(String(num3))}.<br>`,
+              context.isAmc ? 'black' : bleuMathalea,
+            )
+        }
         labelCentre1 = tracePoint(centre1, 'red')
         labelCentre1.epaisseur = 2
         labelCentre1.taille = 2
@@ -1164,43 +1182,42 @@ export default class PavagesEtTransformations extends Exercice {
         labelCentre3.epaisseur = 2
         labelCentre3.taille = 2
 
-        objetsEnonce.push(
-          labelCentre1,
-          labelCentre2,
-          labelCentre3,
-          labelPoint(centre1, 'red'),
-          labelPoint(centre2, 'red'),
-          labelPoint(centre3, 'red'),
+        // Les tirages restent identiques pour les variantes publiées.
+        if (this.centralSymmetryCount < 2) {
+          quad[numD].opaciteDeRemplissage = 0
+        }
+        if (this.centralSymmetryCount < 3) {
+          quad[numC].opaciteDeRemplissage = 0
+        }
+        const centreTraces = [labelCentre1, labelCentre2, labelCentre3].slice(
+          0,
+          this.centralSymmetryCount,
         )
-        objetsCorrection.push(
-          labelCentre1,
-          labelCentre2,
-          labelCentre3,
-          labelPoint(centre1, 'red'),
-          labelPoint(centre2, 'red'),
-          labelPoint(centre3, 'red'),
-        )
-        if (context.isHtml)
-          objetsCorrection.push(
-            rotationAnimee(
-              quad[numA],
-              centre1,
-              180,
-              `id="anim${numeroExercice}A" dur ="2s" repeatcount="1"`,
-            ),
-            rotationAnimee(
-              quad[numD],
-              centre2,
-              180,
-              `id="anim${numeroExercice}B" dur="2s" repeatcount="1"`,
-            ),
-            rotationAnimee(
-              quad[numC],
-              centre3,
-              180,
-              `id="anim${numeroExercice}C" dur="2s" repeatcount="1"`,
-            ),
-          )
+        const centreLabels = [centre1, centre2, centre3]
+          .slice(0, this.centralSymmetryCount)
+          .map((centre) => labelPoint(centre, 'red'))
+        objetsEnonce.push(...centreTraces, ...centreLabels)
+        objetsCorrection.push(...centreTraces, ...centreLabels)
+        if (context.isHtml) {
+          const figures = [numA, numD, numC]
+          const centres = [centre1, centre2, centre3]
+          for (let i = 0; i < this.centralSymmetryCount; i++) {
+            objetsCorrection.push(
+              rotationAnimee(
+                quad[figures[i]],
+                centres[i],
+                180,
+                `id="anim${numeroExercice}${'ABC'[i]}" dur="2s" repeatcount="1"`,
+              ),
+            )
+          }
+        }
+        if (this.groupCentralSymmetryAnswers) {
+          texte = addMultiMathfield(this, 0, {
+            dataTemplate: texte,
+            dataOptions: {},
+          })
+        }
 
         consigneAMC = mathalea2d(
           Object.assign(
@@ -1273,19 +1290,14 @@ export default class PavagesEtTransformations extends Exercice {
         rayon31.pointilles = 2
         rayon32.pointilles = 2
         arc3.pointilles = 2
+        const count = this.centralSymmetryCount
         objetsCorrection.push(
-          quad1,
-          quad2,
-          quad3,
-          arc1,
-          arc2,
-          arc3,
-          rayon11,
-          rayon12,
-          rayon21,
-          rayon22,
-          rayon31,
-          rayon32,
+          ...[quad1, quad2, quad3].slice(0, count),
+          ...[arc1, arc2, arc3].slice(0, count),
+          ...[rayon11, rayon12, rayon21, rayon22, rayon31, rayon32].slice(
+            0,
+            2 * count,
+          ),
         )
         texteCorr += mathalea2d(
           {
@@ -2050,14 +2062,30 @@ export default class PavagesEtTransformations extends Exercice {
         )
         break
     }
-    handleAnswers(this, 0, { reponse: { value: String(num1) } })
-    handleAnswers(this, 1, { reponse: { value: String(num2) } })
-    handleAnswers(this, 2, { reponse: { value: String(num3) } })
+    if (this.groupCentralSymmetryAnswers) {
+      const answers: Valeur = { bareme: troisPointsProportionnels }
+      for (const [i, value] of [num1, num2, num3]
+        .slice(0, this.centralSymmetryCount)
+        .entries()) {
+        answers[(['champ1', 'champ2', 'champ3'] as const)[i]] = {
+          value: String(value),
+        }
+      }
+      handleAnswers(this, 0, answers, { formatInteractif: 'multi-mathfield' })
+    } else {
+      handleAnswers(this, 0, { reponse: { value: String(num1) } })
+      handleAnswers(this, 1, { reponse: { value: String(num2) } })
+      handleAnswers(this, 2, { reponse: { value: String(num3) } })
+    }
     if (context.isHtml) {
       texteCorr += '<br>'
       texteCorr += `<button class="btn ui labeled icon button"  style="margin:10px" onclick="document.getElementById('anim${numeroExercice}A').beginElement()"><i class="redo circle icon"></i>Relancer l'animation verte</button>`
-      texteCorr += `<button class="btn ui labeled icon button"  style="margin:10px" onclick="document.getElementById('anim${numeroExercice}B').beginElement()"><i class="redo circle icon"></i>Relancer l'animation rouge</button>`
-      texteCorr += `<button class="btn ui labeled icon button"  style="margin:10px" onclick="document.getElementById('anim${numeroExercice}C').beginElement()"><i class="redo circle icon"></i>Relancer l'animation bleue</button>`
+      if (this.centralSymmetryCount >= 2) {
+        texteCorr += `<button class="btn ui labeled icon button"  style="margin:10px" onclick="document.getElementById('anim${numeroExercice}B').beginElement()"><i class="redo circle icon"></i>Relancer l'animation rouge</button>`
+      }
+      if (this.centralSymmetryCount >= 3) {
+        texteCorr += `<button class="btn ui labeled icon button"  style="margin:10px" onclick="document.getElementById('anim${numeroExercice}C').beginElement()"><i class="redo circle icon"></i>Relancer l'animation bleue</button>`
+      }
     }
     this.listeQuestions.push(texte)
     this.listeCorrections.push(texteCorr)
@@ -2129,6 +2157,13 @@ export default class PavagesEtTransformations extends Exercice {
             ],
           },
         ],
+      }
+      if (this.groupCentralSymmetryAnswers) {
+        this.autoCorrectionAMC[0].propositions =
+          this.autoCorrectionAMC[0].propositions?.slice(
+            0,
+            this.centralSymmetryCount,
+          )
       }
       this.questionsAMC[0] = amcConvert(this.autoCorrectionAMC[0])
     }

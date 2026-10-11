@@ -1119,6 +1119,17 @@ handleAnswers(
 
 `mathalea2d()` injecte les custom elements `meta-interactif-2d` autour des champs. Les réponses s'appellent `field0`, `field1`, etc., selon l'`index` des inputs.
 
+Chaque champ affiche le smiley habituel 😎 ou ☹️ après vérification. Une
+question peut aussi inclure des listes déroulantes hors de la figure, avec les
+identifiants `liste-deroulanteEx{numeroExercice}Q{i}field{index}` et les réponses
+`field{index}` correspondantes.
+
+Le barème par défaut est `toutPourUnPoint`. Pour attribuer un point à chaque
+champ, ajouter `bareme: toutAUnPoint` aux réponses de `handleAnswers()` ; le
+maximum annoncé aux plateformes prend aussi ce barème en compte. Le nombre de
+champs doit alors rester fixe quel que soit le tirage, conformément à la
+[règle du barème fixe](../interactivite-simple.md#règle-impérative--un-nombre-de-points-fixe-par-question).
+
 ## Demi-droite interactive
 
 À utiliser pour placer un ou plusieurs points sur une demi-droite graduée (qui peut se transformer en droite avec l'option showNegative)

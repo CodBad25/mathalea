@@ -1,3 +1,6 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid 65bd8 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import { distancePointDroite, droite } from '../../lib/2d/droites'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { pointAbstrait, PointAbstrait } from '../../lib/2d/PointAbstrait'
@@ -62,9 +65,9 @@ export const dateDeModifImportante = '10/10/2026'
 export const uuid = '65bd8'
 
 export const refs = {
-  'fr-fr': ['5G3B-3'],
-  'fr-2016': ['6G32', '5G10-3'],
-  'fr-ch': ['10ES3A-4'],
+  'fr-fr': [],
+  'fr-2016': [],
+  'fr-ch': ['NR'],
 }
 export const interactifReady = true
 
@@ -194,13 +197,9 @@ const triangleLoinDeD = (d: IDroite, noms: string[]) => {
   return pol.listePoints as [PointAbstrait, PointAbstrait, PointAbstrait]
 }
 
-export default class SymetrieProprietes extends Exercice {
+export default class SymetrieProprietesOld extends Exercice {
   constructor() {
     super()
-    this.consigne = texteEnCouleurEtGras(
-      'Dans cet exercice, les mesures sont à donner avec la bonne unité.',
-      'black',
-    )
     this.besoinFormulaireTexte = [
       'Type de questions',
       "Nombres séparés par des tirets :\n1 : Longueur d'un seul segment\n2 : Longueur d'un segment parmi d'autres\n3 : Alignement de points\n4 : Angle\n5 : Mélange",
@@ -228,6 +227,9 @@ export default class SymetrieProprietes extends Exercice {
       melange: 5,
       saisie: this.sup,
     }).map(Number)
+    this.consigne = typesDeQuestionsDisponibles.some((type) => type !== 3)
+      ? texteEnCouleurEtGras('Donner les mesures avec la bonne unité.', 'black')
+      : ''
     const typesDeTransformations = gestionnaireFormulaireTexte({
       min: 2,
       max: 3,
@@ -292,7 +294,7 @@ export default class SymetrieProprietes extends Exercice {
             segmentAvecExtremites(A, B),
             nommePolygone(polygone([A, B]), A.nom + B.nom),
             placeLatexSurSegment(
-              `${texNombre(longueur(A, B, 1))} \\text{cm}`,
+              `${texNombre(longueur(A, B, 1))}~\\text{cm}`,
               A,
               B,
               { letterSize: 'small' },
@@ -601,7 +603,10 @@ export default class SymetrieProprietes extends Exercice {
         if (this.interactif) {
           handleAnswers(this, i, objetReponse)
           texte += ajouteChampTexteMathLive(this, i, optionKeyboard, {
-            texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
+            texteApres:
+              typesDeQuestionsDisponibles[i] === 3
+                ? ''
+                : '<em class="ml-2">(Une unité est attendue.)</em>',
           })
         }
         this.listeQuestions[i] = texte

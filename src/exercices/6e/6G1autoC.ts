@@ -5,16 +5,13 @@ import {
   type Forme,
 } from '../../lib/2d/figures2d/listeFigures2d'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { pointAbstrait } from '../../lib/2d/PointAbstrait'
-import { Segment } from '../../lib/2d/segmentsVecteurs'
+import { Segment, segment } from '../../lib/2d/segmentsVecteurs'
 import { texteParPosition } from '../../lib/2d/textes'
-import { homothetie, translation } from '../../lib/2d/transformations'
-import { vecteur } from '../../lib/2d/Vecteur'
-import { orangeMathalea } from '../../lib/colors'
-import { propositionsQcm } from '../../lib/interactif/qcm'
+import { bleuMathalea, orangeMathalea } from '../../lib/colors'
+import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { sp } from '../../lib/outils/outilString'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
@@ -116,10 +113,11 @@ export default class NbAxesDeSymetrie extends Exercice {
         figures.push(figure)
       }
       texte += this.interactif
-        ? `Combien d'axes de symétrie possède${nbFigures > 1 ? 'nt' : ' '}l${nbFigures > 1 ? 'es' : 'a'} figure${nbFigures > 1 ? 's' : ''} suivante${nbFigures > 1 ? 's' : ''} ?<br>`
+        ? `Combien d'axes de symétrie ${nbFigures > 1 ? 'possèdent les figures suivantes' : 'possède la figure suivante'} ?<br>`
         : `Tracer le ou les axes de symétrie d${nbFigures > 1 ? 'es ' : 'e la'} figure${nbFigures > 1 ? 's' : ''} suivante${nbFigures > 1 ? 's' : ''} lorsqu'il y en a.<br>`
       const formes: Figure2D[] = []
       const scale = nbFigures === 1 ? 1 : nbFigures === 2 ? 0.9 : 0.8
+      const ecart = 6.5 * factor * scale
       for (let j = 0; j < nbFigures; j++) {
         const alpha = randint(-30, 30, 0)
         const figure = figures[j]
@@ -127,17 +125,31 @@ export default class NbAxesDeSymetrie extends Exercice {
         const forme = figure
           .figure2d(options)
           .dilate(factor)
-          .translate(j * 6.5 * factor * scale, 0)
+          .translate(j * ecart, 0)
         forme.name = figure.name.replace(/ /g, '_')
         if (this.sup3) forme.rotate(alpha)
         formes.push(forme)
 
         const formeTexte = texteParPosition(
           `figure ${j + 1}`,
-          j * 6.5 * factor * scale,
+          j * ecart,
           2.8 * factor,
         )
         objets.push(forme, formeTexte)
+        if (j > 0) {
+          // Séparateur entre deux figures consécutives
+          const separateur = segment(
+            (j - 0.5) * ecart,
+            -2.8 * factor,
+            (j - 0.5) * ecart,
+            3.4 * factor,
+            'gray',
+          )
+          separateur.pointilles = 2
+          separateur.epaisseur = 1
+          objets.push(separateur)
+          objetsCorr.push(separateur)
+        }
         let axes: Segment[] = []
         if (forme.nbAxes !== 0) {
           const formeBis = forme.copy(forme.name + 'Bis')
@@ -147,9 +159,8 @@ export default class NbAxesDeSymetrie extends Exercice {
             forme.x,
             forme.y,
           )
-          axes = forme.Axes.map((el) =>
-            factor > 1 ? homothetie(el, pointAbstrait(0, 0), factor) : el,
-          )
+          // Les axes ont déjà suivi la dilatation et la translation de la figure
+          axes = forme.Axes
           objetsCorr.push(formeBis, formeCorr, formeTexte)
         } else {
           if (forme.nonAxe) {
@@ -160,31 +171,13 @@ export default class NbAxesDeSymetrie extends Exercice {
               forme.x,
               forme.y,
             )
+            // Droite testée, pointillée pour ne pas la confondre avec un axe
             const axe = formeCorr.nonAxe
             if (axe) {
-              const seg = translation(axe, vecteur(j * 6.5 * factor * scale, 0))
-              seg.epaisseur = 1.5
-              seg.color = colorToLatexOrHTML(orangeMathalea)
-              objetsCorr.push(
-                formeBis,
-                formeCorr,
-                formeTexte,
-                seg,
-                texteParPosition(
-                  `Il n'y a pas d'axe ${sp(2)} de symétrie ici !`,
-                  j * 6.5 * factor * scale,
-                  0,
-                  45,
-                  'red',
-                ),
-                texteParPosition(
-                  `Il n'y a pas d'axe ${sp(2)} de symétrie ici !`,
-                  j * 6.5 * factor * scale,
-                  0,
-                  -45,
-                  'red',
-                ),
-              )
+              axe.epaisseur = 1
+              axe.pointilles = 2
+              axe.color = colorToLatexOrHTML(bleuMathalea)
+              objetsCorr.push(formeBis, formeCorr, formeTexte, axe)
             } else {
               objetsCorr.push(forme, formeTexte)
             }
@@ -194,10 +187,7 @@ export default class NbAxesDeSymetrie extends Exercice {
         }
         if (axes.length > 0) {
           for (let k = 0; k < axes.length; k++) {
-            const seg = translation(
-              axes[k],
-              vecteur(j * 6.5 * factor * scale, 0),
-            )
+            const seg = axes[k]
             seg.epaisseur = 1.5
             seg.color = colorToLatexOrHTML(orangeMathalea)
             objetsCorr.push(seg)
@@ -212,32 +202,37 @@ export default class NbAxesDeSymetrie extends Exercice {
         objets,
       )
       if (this.interactif) {
+        // Une seule question (donc une seule correction) pour toutes les figures
+        const choix = [
+          { label: 'aucun', value: 'aucun' },
+          ...[1, 2, 3, 4, 5, 6].map((n) => ({
+            label: String(n),
+            value: String(n),
+          })),
+          { label: 'une infinité', value: 'infini' },
+        ]
+        const dataOptions: Record<string, { qcm: typeof choix }> = {}
+        const reponses: Record<string, { value: string }> = {}
+        const lignes: string[] = []
         for (let j = 0; j < nbFigures; j++) {
-          this.autoCorrection[i * nbFigures + j] = {
-            propositions: [
-              { texte: 'aucun', statut: formes[j].nbAxes === 0 },
-              { texte: '1', statut: formes[j].nbAxes === 1 },
-              { texte: '2', statut: formes[j].nbAxes === 2 },
-              { texte: '3', statut: formes[j].nbAxes === 3 },
-              { texte: '4', statut: formes[j].nbAxes === 4 },
-              { texte: '5', statut: formes[j].nbAxes === 5 },
-              { texte: '6', statut: formes[j].nbAxes === 6 },
-              {
-                texte: 'une infinité',
-                statut: Number.isFinite(formes[j].nbAxes) === false,
-              },
-            ],
-            options: {
-              ordered: true,
-            },
+          const nbAxes = formes[j].nbAxes
+          dataOptions[`champ${j + 1}`] = { qcm: choix }
+          reponses[`champ${j + 1}`] = {
+            value: !Number.isFinite(nbAxes)
+              ? 'infini'
+              : nbAxes === 0
+                ? 'aucun'
+                : String(nbAxes),
           }
-          // const monQcm = propositionsQcm(this, i * nbFigures + j, { style: 'inline-block', format: 'case', radio: true })
-          const monQcm = propositionsQcm(this, i * nbFigures + j, {
-            style: 'inline-block',
-            format: 'case',
-          })
-          texte += `figure ${j + 1} : ${monQcm.texte}`
+          lignes.push(`figure ${j + 1} : %{champ${j + 1}}`)
         }
+        texte += addMultiMathfield(this, i, {
+          dataTemplate: lignes.join('\n'),
+          dataOptions,
+        })
+        handleAnswers(this, i, reponses, {
+          formatInteractif: 'multi-mathfield',
+        })
       }
 
       texteCorr += mathalea2d(

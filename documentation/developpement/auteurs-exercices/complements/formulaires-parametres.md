@@ -70,6 +70,16 @@ cocher ordinaire, ce qui produit la même génération, sans le raccourci.
 Pour un nouvel exercice, préférez cependant `besoinFormulaireComplexe` : les cas y sont
 déclarés explicitement, avec leurs libellés, au lieu d'être devinés depuis une aide.
 
+### Exemple : choisir un pavage
+
+Dans [5G3A-10](../../../../src/exercices/5e/5G3A-10.ts), le formulaire `sup2`
+énumère les huit pavages et réserve `9` au mélange. Le générateur lit cette
+sélection avec `gestionnaireFormulaireTexte()` : `1-1-1-8` donne au pavage carré
+un poids trois fois supérieur à celui des losanges. Un seul pavage est tiré pour
+l'ensemble de la question. Le réglage `sup3` choisit de un à trois centres de
+symétrie ; les réponses sont regroupées avec un barème `troisPointsProportionnels`
+pour conserver un maximum de trois points.
+
 Ces formulaires conviennent tant que l'exercice reste à cinq réglages indépendants.
 Au-delà, on finit par encoder plusieurs dimensions dans un seul menu déroulant
 (« 1 : multiplications / 2 : divisions / 3 : les deux / 4 : octets / 5 : mélange »),
@@ -252,3 +262,20 @@ et deux `case` (décimaux, fractions dans la correction). Il est instancié par
 Les tests correspondants sont dans `tests/unit/formulaireComplexe.test.ts` et
 `tests/unit/conversionsParametrable.test.ts`. La conversion des formulaires texte en
 liste pondérée est testée dans `tests/unit/formulaireTexteListe.test.ts`.
+
+## Contraindre une liste de paramètres texte
+
+Les listes issues de `besoinFormulaireTexte` peuvent imposer un nombre minimal
+de cases cochées et masquer les poids d'apparition avec `textFormOptions`.
+La clé correspond à l'indice du paramètre (`1` pour `sup`, `2` pour `sup2`, etc.).
+
+```ts
+this.textFormOptions = { 2: { minSelections: 2, weighted: false } }
+```
+
+Avec trois choix, cette configuration permet d'en décocher au maximum un.
+Lorsque le minimum est atteint, les cases cochées sont désactivées ; les cases
+non cochées restent disponibles. Les autres exercices conservent leur interface
+habituelle. L'exercice doit aussi normaliser les paramètres lus depuis une URL
+pour respecter ce minimum pendant la génération. Le `2N12-10` utilise ce réglage
+pour afficher deux ou trois colonnes et adapter les réponses attendues au tableau.

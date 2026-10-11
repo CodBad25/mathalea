@@ -8,13 +8,7 @@
     showMoveToTab?: boolean
     tabsCount?: number
     currentTab?: number
-    showReorder?: boolean
-    canMoveUp?: boolean
-    canMoveDown?: boolean
-    showColumnBreak?: boolean
-    /** Nombre maximal de sauts de colonne atteint : désactive l'ajout (pas le retrait) */
-    columnBreakDisabled?: boolean
-    onReorder?: (paramsIndex: number, delta: -1 | 1) => void
+    showDelete?: boolean
     onDelete?: (paramsIndex: number) => void
   }
 
@@ -23,12 +17,7 @@
     showMoveToTab = false,
     tabsCount = 0,
     currentTab = 0,
-    showReorder = false,
-    canMoveUp = false,
-    canMoveDown = false,
-    showColumnBreak = false,
-    columnBreakDisabled = false,
-    onReorder = () => {},
+    showDelete = false,
     onDelete = () => {},
   }: Props = $props()
 </script>
@@ -40,12 +29,7 @@
     {showMoveToTab}
     {tabsCount}
     {currentTab}
-    {showReorder}
-    {canMoveUp}
-    {canMoveDown}
-    {showColumnBreak}
-    {columnBreakDisabled}
-    {onReorder}
+    {showDelete}
     {onDelete}
   />
 {:else if item.staticContent}
@@ -55,12 +39,7 @@
     {showMoveToTab}
     {tabsCount}
     {currentTab}
-    {showReorder}
-    {canMoveUp}
-    {canMoveDown}
-    {showColumnBreak}
-    {columnBreakDisabled}
-    {onReorder}
+    {showDelete}
     {onDelete}
   />
 {:else}
@@ -69,8 +48,8 @@
   >
     <i class="bx bx-error-circle text-2xl"></i>
     <p class="text-sm">
-      L'exercice <span class="font-bold">{item.id}</span> n'est pas pris en
-      charge dans la vue TBI.
+      L'exercice <span class="font-bold">{item.id}</span> n'est pas pris en charge
+      dans la vue TBI.
     </p>
   </section>
 {/if}

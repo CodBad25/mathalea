@@ -1,6 +1,7 @@
 import { get, writable } from 'svelte/store'
 import { exercicesParams, moveExercice } from './generalStore'
 import { isLocalStorageAvailable } from './storage'
+import type { InterfaceParams } from '../types'
 
 /**
  * État de la vue TBI (vidéoprojection).
@@ -25,6 +26,26 @@ export type TbiTabLayout = 'columns' | 'free'
  * gauche ou droite de l'écran, ou étalée sur toute la largeur.
  */
 export type TbiSingleColumnAlign = 'center' | 'left' | 'right' | 'full'
+
+/** Mode d'affichage de la correction d'une carte TBI */
+export type TbiCorrectionMode =
+  'hidden' | 'below' | 'perQuestion' | 'replace' | 'modal'
+
+/**
+ * Niveau de détail de la correction affichée dans une carte TBI :
+ * la correction entière, ou réduite à ses réponses mises en évidence
+ * (même réglage que « Correction minimale » de la vue Typst).
+ */
+export type TbiCorrectionDetail = 'full' | 'minimal'
+
+const TBI_CORRECTION_MODES: TbiCorrectionMode[] = [
+  'hidden',
+  'below',
+  'perQuestion',
+  'replace',
+  'modal',
+]
+const TBI_CORRECTION_DETAILS: TbiCorrectionDetail[] = ['full', 'minimal']
 
 export const TBI_BASE_WIDTH = 600
 export const TBI_MIN_ZOOM = 0.4
@@ -104,11 +125,18 @@ export interface TbiCardState {
   tab: number
   /** Saut de colonne avant cet exercice (dispositions en colonnes) */
   colBreak: boolean
+  /** Colonne explicite après glisser-déposer (absente dans les anciens liens). */
+  column?: number
   /** Espacement vertical entre deux questions, par pas de 0,5 rem */
   questionSpacing: number
+  /** Mode d'affichage de la correction de l'exercice */
+  correctionMode: TbiCorrectionMode
+  /** Correction entière ou réduite aux réponses mises en évidence */
+  correctionDetail: TbiCorrectionDetail
   /**
    * Exercice replié : seul son bandeau bleu reste affiché (disposition libre).
-   * État de présentation propre à la session, non sérialisé dans l'URL.
+   * État de présentation propre à la session, non sérialisé dans l'URL
+   * (mais conservé dans le fichier de réglages).
    */
   collapsed?: boolean
   /** uuid de l'exercice actuellement affiché à cet indice, pour détecter un remplacement */
@@ -183,6 +211,8 @@ export function defaultTbiCardState(index: number): TbiCardState {
     tab: index,
     colBreak: false,
     questionSpacing: TBI_DEFAULT_QUESTION_SPACING,
+    correctionMode: 'hidden',
+    correctionDetail: 'full',
   }
 }
 
@@ -345,6 +375,39 @@ export function setTrafficLightActive(color: TbiTrafficLightColor) {
   })
 }
 
+/**
+ * Change le mode d'affichage de la correction d'une carte. Une seule
+ * correction en plein écran à la fois, même si le mode est propre à chaque
+ * carte : ouvrir celle-ci ferme celle d'une autre carte.
+ */
+export function setTbiCardCorrectionMode(
+  paramsIndex: number,
+  mode: TbiCorrectionMode,
+) {
+  tbiState.update((state) => {
+    const card = state.cards[paramsIndex]
+    if (card) card.correctionMode = mode
+    return state
+  })
+  if (mode === 'modal') {
+    activeTbiModalCard.set(paramsIndex)
+  } else if (get(activeTbiModalCard) === paramsIndex) {
+    activeTbiModalCard.set(null)
+  }
+}
+
+/** Change le niveau de détail de la correction d'une carte */
+export function setTbiCardCorrectionDetail(
+  paramsIndex: number,
+  detail: TbiCorrectionDetail,
+) {
+  tbiState.update((state) => {
+    const card = state.cards[paramsIndex]
+    if (card) card.correctionDetail = detail
+    return state
+  })
+}
+
 /** Complète tabConfigs pour couvrir tous les onglets utilisés */
 function ensureTabConfigs(state: TbiState) {
   const tabsCount = new Set(state.cards.map((card) => card.tab)).size
@@ -501,8 +564,7 @@ export function moveCardToTab(paramsIndex: number, targetCompactTab: number) {
  * Répartit équitablement (par nombre d'exercices) les sauts de colonne sur
  * `paramsIndices` (ordre d'affichage) pour `nbColumns` colonnes : écrase les
  * sauts existants sur ces indices par la répartition par défaut. Le
- * professeur peut ensuite désactiver individuellement un saut (bouton sur la
- * carte).
+ * professeur peut ensuite ajuster la répartition par glisser-déposer.
  */
 export function balanceColumnBreaks(
   paramsIndices: number[],
@@ -517,7 +579,10 @@ export function balanceColumnBreaks(
   tbiState.update((state) => {
     paramsIndices.forEach((paramsIndex, position) => {
       const card = state.cards[paramsIndex]
-      if (card) card.colBreak = breakPositions.has(position)
+      if (card) {
+        card.colBreak = breakPositions.has(position)
+        delete card.column
+      }
     })
     return state
   })
@@ -542,11 +607,63 @@ export function reorderTbiCard(from: number, to: number): boolean {
   return true
 }
 
+/** Répartition compatible avec les anciens liens portant seulement des sauts. */
+export function getTbiColumnGroups(
+  indices: number[],
+  cards: TbiCardState[],
+  nbColumns: number,
+): number[][] {
+  const groups: number[][] = Array.from({ length: nbColumns }, () => [])
+  let legacyColumn = 0
+  for (const index of indices) {
+    const card = cards[index]
+    if (card?.colBreak && legacyColumn < nbColumns - 1) legacyColumn++
+    groups[Math.min(card?.column ?? legacyColumn, nbColumns - 1)].push(index)
+  }
+  return groups
+}
+
+/** Applique une destination de dépôt, y compris les colonnes vides, et renvoie le nouvel indice canonique. */
+export function moveTbiCardInColumns(
+  from: number,
+  groups: number[][],
+): number | null {
+  if (groups.length < 1 || groups.length > 4) return null
+  const order = groups.flat()
+  const position = order.indexOf(from)
+  const state = get(tbiState)
+  if (
+    position < 0 ||
+    new Set(order).size !== order.length ||
+    order.some((index) => !state.cards[index])
+  )
+    return null
+  const next = order[position + 1]
+  const previous = order[position - 1]
+  const to =
+    next !== undefined
+      ? next - (from < next ? 1 : 0)
+      : previous !== undefined
+        ? previous + (from > previous ? 1 : 0)
+        : from
+  tbiState.update((current) => {
+    groups.forEach((group, column) =>
+      group.forEach((index, i) => {
+        current.cards[index].column = column
+        current.cards[index].colBreak = column > 0 && i === 0
+      }),
+    )
+    return current
+  })
+  reorderTbiCard(from, to)
+  return to
+}
+
 /**
  * Actif brièvement pendant un mélange aléatoire de l'ordre des exercices.
  * Les dispositions ne déclenchent l'animation de glissement des cartes
  * (FLIP) que lorsqu'il est vrai, pour garder le glisser-déposer et les
- * flèches de réordonnancement instantanés.
+ * réordonnancements instantanés.
  */
 export const tbiIsShuffling = writable(false)
 
@@ -657,6 +774,7 @@ export interface TbiSharedState {
   singleColumnAlign: TbiSingleColumnAlign
   tabs: number[]
   breaks: number[]
+  columns?: (number | null)[]
   tabConfigs: TbiTabConfig[]
   /** Indice compact de l'onglet affiché (mode onglets) */
   activeTab: number
@@ -669,6 +787,10 @@ export interface TbiSharedState {
   zooms: number[]
   /** Espacement des questions de chaque exercice, aligné sur exercicesParams */
   questionSpacings: number[]
+  /** Mode d'affichage de la correction de chaque exercice, aligné sur exercicesParams */
+  corrections: TbiCorrectionMode[]
+  /** Niveau de détail de la correction de chaque exercice, aligné sur exercicesParams */
+  correctionDetails: TbiCorrectionDetail[]
   widgetX: number
   widgetY: number
   trafficLightX: number
@@ -688,6 +810,7 @@ export function getTbiSharedState(state: TbiState): TbiSharedState {
     singleColumnAlign: state.singleColumnAlign,
     tabs: state.cards.map((card) => card.tab),
     breaks: state.cards.flatMap((card, i) => (card.colBreak ? [i] : [])),
+    columns: state.cards.map((card) => card.column ?? null),
     tabConfigs: state.tabConfigs.map((config) => ({ ...config })),
     activeTab: state.activeTab,
     widgetVisible: state.widget.visible,
@@ -697,6 +820,8 @@ export function getTbiSharedState(state: TbiState): TbiSharedState {
     calculetteVisible: state.calculette.visible,
     zooms: state.cards.map((card) => card.zoom),
     questionSpacings: state.cards.map((card) => card.questionSpacing),
+    corrections: state.cards.map((card) => card.correctionMode),
+    correctionDetails: state.cards.map((card) => card.correctionDetail),
     widgetX: state.widget.x,
     widgetY: state.widget.y,
     trafficLightX: state.trafficLight.x,
@@ -751,6 +876,27 @@ function isDefaultQuestionSpacings(spacings: number[]): boolean {
   return spacings.every((spacing) => spacing === TBI_DEFAULT_QUESTION_SPACING)
 }
 
+/** Codes d'une lettre des modes et niveaux de correction dans tbiParam */
+const TBI_CORRECTION_MODE_CODES: Record<TbiCorrectionMode, string> = {
+  hidden: 'h',
+  below: 'b',
+  perQuestion: 'p',
+  replace: 'r',
+  modal: 'm',
+}
+const TBI_CORRECTION_DETAIL_CODES: Record<TbiCorrectionDetail, string> = {
+  full: 'f',
+  minimal: 'm',
+}
+
+function isDefaultCorrections(corrections: TbiCorrectionMode[]): boolean {
+  return corrections.every((mode) => mode === 'hidden')
+}
+
+function isDefaultCorrectionDetails(details: TbiCorrectionDetail[]): boolean {
+  return details.every((detail) => detail === 'full')
+}
+
 function encodePosition(x: number, y: number): string {
   return `${Math.round(x)}${TBI_PARAM_LIST_SEP}${Math.round(y)}`
 }
@@ -773,6 +919,11 @@ export function encodeTbiParam(shared: TbiSharedState): string {
   }
   if (shared.breaks.length > 0) {
     fields.push(`b-${shared.breaks.join(TBI_PARAM_LIST_SEP)}`)
+  }
+  if (shared.columns?.some((column) => column !== null)) {
+    fields.push(
+      `p-${shared.columns.map((column) => column ?? 'x').join(TBI_PARAM_LIST_SEP)}`,
+    )
   }
   if (!isDefaultTabConfigs(shared.tabConfigs)) {
     fields.push(
@@ -797,6 +948,20 @@ export function encodeTbiParam(shared: TbiSharedState): string {
   if (!isDefaultQuestionSpacings(shared.questionSpacings)) {
     fields.push(`qs-${shared.questionSpacings.join(TBI_PARAM_LIST_SEP)}`)
   }
+  if (!isDefaultCorrections(shared.corrections)) {
+    fields.push(
+      `co-${shared.corrections
+        .map((mode) => TBI_CORRECTION_MODE_CODES[mode])
+        .join(TBI_PARAM_LIST_SEP)}`,
+    )
+  }
+  if (!isDefaultCorrectionDetails(shared.correctionDetails)) {
+    fields.push(
+      `cd-${shared.correctionDetails
+        .map((detail) => TBI_CORRECTION_DETAIL_CODES[detail])
+        .join(TBI_PARAM_LIST_SEP)}`,
+    )
+  }
   if (shared.widgetX !== 0 || shared.widgetY !== 0) {
     fields.push(`wp-${encodePosition(shared.widgetX, shared.widgetY)}`)
   }
@@ -816,9 +981,7 @@ export function encodeTbiParam(shared: TbiSharedState): string {
     )
   }
   if (shared.calculetteX !== 0 || shared.calculetteY !== 0) {
-    fields.push(
-      `ctp-${encodePosition(shared.calculetteX, shared.calculetteY)}`,
-    )
+    fields.push(`ctp-${encodePosition(shared.calculetteX, shared.calculetteY)}`)
   }
   return fields.join(TBI_PARAM_FIELD_SEP)
 }
@@ -854,6 +1017,17 @@ export function decodeTbiParam(param: string): Partial<TbiSharedState> {
           .split(TBI_PARAM_LIST_SEP)
           .map(Number)
           .filter((n) => !Number.isNaN(n))
+        break
+      case 'p':
+        shared.columns = value.split(TBI_PARAM_LIST_SEP).map((entry) => {
+          const column = Number(entry)
+          return entry !== '' &&
+            Number.isInteger(column) &&
+            column >= 0 &&
+            column < 4
+            ? column
+            : null
+        })
         break
       case 'g':
         // format : layout-nbColumns[-singleColumnAlign] ; le 3e segment est
@@ -900,6 +1074,32 @@ export function decodeTbiParam(param: string): Partial<TbiSharedState> {
           .split(TBI_PARAM_LIST_SEP)
           .map(Number)
           .filter((n) => !Number.isNaN(n))
+        break
+      case 'co':
+        // un code inconnu donne 'hidden' : la liste reste alignée par indice
+        shared.corrections = value
+          .split(TBI_PARAM_LIST_SEP)
+          .map(
+            (code) =>
+              (
+                Object.keys(TBI_CORRECTION_MODE_CODES) as TbiCorrectionMode[]
+              ).find((mode) => TBI_CORRECTION_MODE_CODES[mode] === code) ??
+              'hidden',
+          )
+        break
+      case 'cd':
+        shared.correctionDetails = value
+          .split(TBI_PARAM_LIST_SEP)
+          .map(
+            (code) =>
+              (
+                Object.keys(
+                  TBI_CORRECTION_DETAIL_CODES,
+                ) as TbiCorrectionDetail[]
+              ).find(
+                (detail) => TBI_CORRECTION_DETAIL_CODES[detail] === code,
+              ) ?? 'full',
+          )
         break
       case 'wp': {
         const position = decodePosition(value)
@@ -976,6 +1176,19 @@ export function applyTbiSharedState(shared: Partial<TbiSharedState>) {
         card.colBreak = shared.breaks!.includes(i)
       })
     }
+    if (Array.isArray(shared.columns) || Array.isArray(shared.breaks)) {
+      state.cards.forEach((card, i) => {
+        const column = shared.columns?.[i]
+        if (
+          typeof column === 'number' &&
+          Number.isInteger(column) &&
+          column >= 0 &&
+          column < 4
+        )
+          card.column = column
+        else delete card.column
+      })
+    }
     if (Array.isArray(shared.tabConfigs)) {
       state.tabConfigs = shared.tabConfigs.map((config) => ({
         layout: TBI_TAB_LAYOUTS.includes(config?.layout)
@@ -1029,6 +1242,20 @@ export function applyTbiSharedState(shared: Partial<TbiSharedState>) {
         }
       })
     }
+    if (Array.isArray(shared.corrections)) {
+      shared.corrections.forEach((mode, i) => {
+        if (state.cards[i] && TBI_CORRECTION_MODES.includes(mode)) {
+          state.cards[i].correctionMode = mode
+        }
+      })
+    }
+    if (Array.isArray(shared.correctionDetails)) {
+      shared.correctionDetails.forEach((detail, i) => {
+        if (state.cards[i] && TBI_CORRECTION_DETAILS.includes(detail)) {
+          state.cards[i].correctionDetail = detail
+        }
+      })
+    }
     if (
       typeof shared.widgetX === 'number' &&
       typeof shared.widgetY === 'number'
@@ -1067,6 +1294,21 @@ export function applyTbiSharedState(shared: Partial<TbiSharedState>) {
     ensureTabConfigs(state)
     return state
   })
+  // une seule correction en plein écran à la fois : on garde la première
+  const modalIndex = get(tbiState).cards.findIndex(
+    (card) => card.correctionMode === 'modal',
+  )
+  if (modalIndex !== -1) {
+    tbiState.update((state) => {
+      state.cards.forEach((card, i) => {
+        if (i !== modalIndex && card.correctionMode === 'modal') {
+          card.correctionMode = 'hidden'
+        }
+      })
+      return state
+    })
+    activeTbiModalCard.set(modalIndex)
+  }
 }
 
 /** Partie locale de l'état (positions dépendantes de l'écran, en localStorage) */
@@ -1089,10 +1331,8 @@ function tbiStorageKey(uuids: string[]): string {
   return `tbiLayout:${uuids.join(',')}`
 }
 
-export function saveTbiLocalLayout(uuids: string[]) {
-  if (!isLocalStorageAvailable()) return
-  const state = get(tbiState)
-  const layout: TbiLocalLayout = {
+function buildTbiLocalLayout(state: TbiState): TbiLocalLayout {
+  return {
     cards: state.cards.map(({ x, y, w, zoom }) => ({ x, y, w, zoom })),
     widget: { x: state.widget.x, y: state.widget.y, zoom: state.widget.zoom },
     trafficLight: {
@@ -1121,6 +1361,11 @@ export function saveTbiLocalLayout(uuids: string[]) {
       h: state.calculette.h,
     },
   }
+}
+
+export function saveTbiLocalLayout(uuids: string[]) {
+  if (!isLocalStorageAvailable()) return
+  const layout = buildTbiLocalLayout(get(tbiState))
   try {
     window.localStorage.setItem(tbiStorageKey(uuids), JSON.stringify(layout))
   } catch {
@@ -1138,6 +1383,10 @@ export function loadTbiLocalLayout(uuids: string[]) {
   } catch {
     return
   }
+  applyTbiLocalLayout(layout)
+}
+
+function applyTbiLocalLayout(layout: TbiLocalLayout) {
   tbiState.update((state) => {
     if (Array.isArray(layout.cards)) {
       layout.cards.forEach((card, i) => {
@@ -1216,4 +1465,96 @@ export function loadTbiLocalLayout(uuids: string[]) {
     }
     return state
   })
+}
+
+/**
+ * Fichier de réglages de la vue TBI (boutons Sauvegarder / Charger) : tous les
+ * réglages d'affichage — la partie partageable (URL), la partie dépendante de
+ * l'écran (localStorage) et les états de présentation propres à la session
+ * (repli des cartes, mode de l'horloge, colonnes internes de chaque exercice)
+ * ainsi que la liste des exercices (paramètres compris). Les réglages sont
+ * appliqués par indice aux exercices affichés.
+ */
+export interface TbiSettingsFile {
+  type: typeof TBI_SETTINGS_FILE_TYPE
+  version: number
+  shared: Partial<TbiSharedState>
+  layout: TbiLocalLayout
+  collapsed: boolean[]
+  widgetMode: TbiWidgetState['mode']
+  /** Nombre de colonnes de questions de chaque exercice (1 = défaut) */
+  cols: number[]
+  /** Exercices affichés, avec leurs paramètres (graine, nombre de questions…) */
+  exercices: InterfaceParams[]
+}
+
+export const TBI_SETTINGS_FILE_TYPE = 'mathalea-tbi'
+export const TBI_SETTINGS_FILE_VERSION = 1
+const TBI_WIDGET_MODES: TbiWidgetState['mode'][] = [
+  'clock',
+  'timer',
+  'stopwatch',
+]
+
+export function exportTbiSettings(): TbiSettingsFile {
+  const state = get(tbiState)
+  return {
+    type: TBI_SETTINGS_FILE_TYPE,
+    version: TBI_SETTINGS_FILE_VERSION,
+    shared: getTbiSharedState(state),
+    layout: buildTbiLocalLayout(state),
+    collapsed: state.cards.map((card) => Boolean(card.collapsed)),
+    widgetMode: state.widget.mode,
+    cols: get(exercicesParams).map((params) => params.cols ?? 1),
+    exercices: get(exercicesParams).map((params) => ({ ...params })),
+  }
+}
+
+export function isTbiSettingsFile(data: unknown): data is TbiSettingsFile {
+  return (
+    typeof data === 'object' &&
+    data !== null &&
+    (data as TbiSettingsFile).type === TBI_SETTINGS_FILE_TYPE
+  )
+}
+
+/**
+ * Applique un fichier de réglages (déjà passé par JSON.parse) à la vue TBI.
+ * @returns false si le contenu n'est pas un fichier de réglages TBI
+ */
+export function importTbiSettings(data: unknown): boolean {
+  if (!isTbiSettingsFile(data)) return false
+  const file = data as Partial<TbiSettingsFile>
+  // même ordre qu'au chargement de la vue : positions locales puis partage
+  if (typeof file.layout === 'object' && file.layout !== null) {
+    applyTbiLocalLayout(file.layout)
+  }
+  if (typeof file.shared === 'object' && file.shared !== null) {
+    applyTbiSharedState(file.shared)
+  }
+  tbiState.update((state) => {
+    if (Array.isArray(file.collapsed)) {
+      file.collapsed.forEach((collapsed, i) => {
+        if (state.cards[i]) state.cards[i].collapsed = collapsed === true
+      })
+    }
+    if (file.widgetMode && TBI_WIDGET_MODES.includes(file.widgetMode)) {
+      state.widget.mode = file.widgetMode
+    }
+    return state
+  })
+  if (Array.isArray(file.cols)) {
+    const cols = file.cols
+    exercicesParams.update((list) => {
+      list.forEach((params, i) => {
+        const n = cols[i]
+        if (typeof n === 'number') {
+          const clamped = Math.min(4, Math.max(1, Math.round(n)))
+          params.cols = clamped === 1 ? undefined : clamped
+        }
+      })
+      return list
+    })
+  }
+  return true
 }

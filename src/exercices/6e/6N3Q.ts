@@ -35,6 +35,9 @@ export const refs = {
   'fr-ch': ['9NO3E-3', '10FA2B-5'],
 }
 export default class PourcentageDunNombre extends Exercice {
+  // Cas ajoutés après « Mélange » (numérotés à partir de 11), exclus du mélange
+  protected pourcentagesHorsMelange: number[] = []
+
   constructor() {
     super()
     this.nbQuestions = 5
@@ -67,11 +70,24 @@ export default class PourcentageDunNombre extends Exercice {
     const pourcentages = gestionnaireFormulaireTexte({
       saisie: this.sup2,
       min: 1,
-      max: 9,
+      max: 10 + this.pourcentagesHorsMelange.length,
       defaut: 10,
       melange: 10,
+      melangeMax: 9,
       nbQuestions: this.nbQuestions,
-      listeOfCase: [10, 20, 25, 30, 40, 50, 60, 75, 90],
+      listeOfCase: [
+        10,
+        20,
+        25,
+        30,
+        40,
+        50,
+        60,
+        75,
+        90,
+        0,
+        ...this.pourcentagesHorsMelange,
+      ],
     }).map(Number)
     for (
       let i = 0, texte, texteCorr, cpt = 0;
