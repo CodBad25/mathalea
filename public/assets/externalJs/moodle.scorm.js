@@ -60,6 +60,14 @@ function buildSuspendData(seed, encodedAnswers, duration) {
   return seedPart + '|' + encodedAnswers
 }
 
+/*
+  Graine de l'élève quand l'export SCORM d'une Course aux nombres donne à chaque
+  exercice une graine suffixée de son rang (`alea=-1-rang`) : c'est elle, et non
+  celle du premier exercice, qui doit être enregistrée avec les réponses. Les
+  autres SCO gardent la graine renvoyée par MathALÉA.
+*/
+let studentSeed
+
 window.onload = function () {
   const style = document.createElement('style')
   style.innerHTML = 'body, html { margin: 0px; padding: 0px; height: 100%; overflow: auto; }'
@@ -82,6 +90,7 @@ window.onload = function () {
       // On sauvegarde immédiatement la graine pour éviter la triche
       scorm.set('cmi.suspend_data', seed)
     }
+    if (/&alea=-1-\d/.test(exo)) studentSeed = seed
     // Il faut remplacer tous les alea aux cas où on est dans une CAN
     if (exo.includes('&alea=-1')) {
       exo = exo.replaceAll('&alea=-1', '&alea=' + seed)
@@ -92,7 +101,9 @@ window.onload = function () {
   let src = 'https://coopmaths.fr/alea/?'
   src += exo
   if (!exo.includes('&v=can')) {
-    src += '&i=1&v=eleve&title=&es=011010'
+    src += '&i=1&v=eleve&title='
+    // Réglages de la vue élève par défaut, sauf si l'export SCORM les fixe (titre masqué…)
+    if (!/(^|&)es=/.test(exo)) src += '&es=011010'
   }
   src += '&recorder=moodle'
   if (answers !== '') {
@@ -171,7 +182,7 @@ window.addEventListener('message', async (event) => {
       setPseudoFullscreen(event.data.value === true)
     }
     if (event.data.action === 'mathalea:score') {
-      const seed = event.data.resultsByExercice[0].alea
+      const seed = studentSeed ?? event.data.resultsByExercice[0].alea
       let points = 0
       let max = 0
       for (let result of event.data.resultsByExercice) {
@@ -194,7 +205,9 @@ window.addEventListener('message', async (event) => {
       const duration = event.data.duration
       scorm.set('cmi.suspend_data', buildSuspendData(seed, encodedAnswers, duration))
       let copieEleveUrl = document.getElementsByTagName('iframe')[0].src
-      copieEleveUrl = copieEleveUrl.replace(/&alea=[^&]+/, '&alea=' + seed) // On remplace la seed au cas où qu'elle ait changé
+      if (studentSeed === undefined) {
+        copieEleveUrl = copieEleveUrl.replace(/&alea=[^&]+/, '&alea=' + seed) // On remplace la seed au cas où qu'elle ait changé
+      }
       copieEleveUrl += '&done=1&answers=' + answersForUrl(encodedAnswers)
       if (Number.isFinite(duration)) {
         copieEleveUrl += '&duration=' + duration
