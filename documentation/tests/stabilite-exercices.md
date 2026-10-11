@@ -283,6 +283,13 @@ version courante), `pnpm review:archives`, `pnpm check` (une archive figée à u
 révision ancienne peut demander un ajustement d'annotation de type — c'est le
 comportement au tirage qui est gelé, pas les types), puis relecture du diff.
 
+Si un parent a été renommé depuis la bonne révision, vérifier aussi les imports
+de l'archive : le script peut ne pas retrouver une dépendance dont l'ancien
+chemin a disparu. Dans ce cas, figer manuellement ce parent à la bonne révision,
+vider ses références, lui attribuer un uuid neuf et faire pointer l'archive vers
+cette copie. Vérifier ensuite l'empreinte de l'uuid publié avec
+`STABILITY_UUIDS='<uuid publié>' pnpm stability:check`.
+
 ## Le fichier d'empreintes
 
 `tests/e2e/tests/stability/empreintes-exercices.json` tient une ligne par
