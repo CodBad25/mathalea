@@ -1,7 +1,7 @@
 // Version archivée : conservée pour que les liens (sujets et corrigés)
 // déjà partagés avec l'uuid c3c84 continuent d'afficher les mêmes
 // valeurs. Ne plus la modifier : toute correction va dans la version courante.
-import ppcmEngrenages from '../3e/3A12'
+import ppcmEngrenages from '../3e/3A12-old'
 export const titre = 'Utiliser des multiples appliqués aux engrenages'
 export const interactifReady = false
 export const dateDeModifImportante = '14/11/2021'

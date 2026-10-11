@@ -1,3 +1,6 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid 6b370 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import { engrenages } from '../../lib/2d/engrenage'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { bleuMathalea } from '../../lib/colors'
@@ -33,11 +36,11 @@ export const dateDeModifImportante = '17/01/2024'
 export const uuid = '6b370'
 
 export const refs = {
-  'fr-fr': ['3A12-0'],
-  'fr-ch': ['10NO1A-13'],
+  'fr-fr': [],
+  'fr-ch': ['NR'],
 }
 
-const replayAnimationAction = '3A12-0:replay-animation'
+const replayAnimationAction = '3A12-0-old2:replay-animation'
 let replayAnimationRegistered = false
 type AnimationSvgElement = Element & {
   beginElement: () => void
@@ -57,7 +60,7 @@ type RemiseAZero = (
   intervallesId: IntervallesAnimation,
 ) => void
 
-export default class EngrenagesAnimes extends Exercice {
+export default class EngrenagesAnimesOld2 extends Exercice {
   declare sup: number
   declare sup2: boolean
 
@@ -342,8 +345,7 @@ export default class EngrenagesAnimes extends Exercice {
             nbToursA === 1 ||
             nbToursB === 1
           ) // au moins une des deux roues fait moins de 5 tours
-          texte +=
-            `La roue dentée de gauche possède $${nbDentsRoueA}$ dents et la roue de droite en possède $${nbDentsRoueB}$.<br>`
+          texte += `La roue dentée de gauche possède $${nbDentsRoueA}$ dents et la roue de droite en possède $${nbDentsRoueB}$.<br>`
           texte += `La roue de gauche tourne de $${nbToursA * nbDentsRoueA}$ dents.<br>Pendant ce temps, combien la roue de droite effectue-t-elle de tours ?`
           texte += ajouteChampTexteMathLive(
             this,
