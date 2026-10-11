@@ -3,6 +3,10 @@
   import { get } from 'svelte/store'
   import { tick } from 'svelte'
   import { fly } from 'svelte/transition'
+  import {
+    appliqueToucheAuChampTexte,
+    estChampTexteAvecClavier,
+  } from '../../lib/interactif/champTexteClavier'
   import { renderKatex } from '../../lib/latex/renderKatex'
   import { resizeContent } from '../../lib/components/sizeTools'
   import { globalOptions } from '../../lib/stores/globalOptions'
@@ -235,6 +239,20 @@
       }
     } else {
       if (event.currentTarget instanceof HTMLButtonElement) {
+        const champTexte = document.getElementById($keyboardState.idMathField)
+        if (estChampTexteAvecClavier(champTexte)) {
+          champTexte.focus()
+          if (key.command === 'closeKeyboard') {
+            keyboardState.update((value) => {
+              value.isVisible = false
+              value.idMathField = ''
+              return value
+            })
+          } else {
+            appliqueToucheAuChampTexte(champTexte, key)
+          }
+          return
+        }
         const mf = mathfieldActif()
         if (mf != null) {
           mf.focus()
