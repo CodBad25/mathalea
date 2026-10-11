@@ -805,6 +805,11 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
       }
       const checkSpan = document.createElement('span')
       checkSpan.id = 'check-' + (this.id || 'multi-mathfield') + '-' + name
+      // Les classes Tailwind (mx-2) ne s'appliquent pas dans le shadow DOM :
+      // on espace le smiley du dernier choix du QCM.
+      if (Array.isArray(fieldOptions.qcm) && fieldOptions.qcm.length > 0) {
+        checkSpan.style.marginLeft = '0.5em'
+      }
       fieldContent.appendChild(checkSpan)
       placeholder.replaceWith(fieldContent)
     }
