@@ -230,6 +230,18 @@ FREE_EXERCISE_UUID`) : l'énoncé « généré » auquel il reviendrait n'est qu
 - sur une fiche à plusieurs sujets, `texte` est posé comme surcharge dans
   **chaque** sujet : il ne dépend d'aucune graine.
 
+## Déplacer un exercice avec ses figures
+
+Les zooms et alignements des figures suivent l'exercice déplacé, y compris
+les figures de sa correction. `swapExerciseFigures` (`buildTypstDocument.ts`)
+recalcule les blocs de numéros de figures de chaque exercice à partir des
+contenus des sujets, puis renumérote `figureZoom`, `figureAlign` et les
+références `fig-N` des surcharges de code. Les sujets supplémentaires sont
+traités indépendamment : leurs tirages peuvent produire des nombres de
+figures différents, et leurs surcharges utilisent des numéros locaux.
+`swapCarryOver` (`typstCarryOver.ts`) échange ensuite les réglages indexés
+par exercice en conservant les réglages des figures renumérotés.
+
 ## Modifications de code et plusieurs sujets
 
 Une surcharge de code (crayon de la palette) remplace tout l'énoncé ou toute
@@ -1168,7 +1180,7 @@ ce réglage.
 
 Les figures SVG (mathalea2d) sont **embarquées dans le document** : chaque figure est déclarée en tête de fichier (`#let fig-N = image(bytes("<svg...>"), format: "svg", width: ...pt)`) et référencée dans le corps. Le document reste autonome (il compile aussi avec le CLI `typst`). La largeur reprend celle de la figure (96 px CSS = 72 pt). `sanitizeSvg` corrige au passage le SVG pour le parseur XML strict de Typst (point-virgule parasite entre attributs généré par `lib/2d/textes.ts`, entités HTML indéfinies en XML, attributs dupliqués).
 
-Pour les figures mathalea2d qui contiennent des labels KaTeX (`divLatex`), seul le tracé géométrique part dans le SVG. Les labels sont extraits depuis l'annotation TeX KaTeX, convertis en Typst, puis placés par les helpers `mathalea-label` et `mathalea-figure`. Le code généré reste donc éditable côté Typst sans réinjecter le HTML visible de KaTeX.
+Pour les figures mathalea2d qui contiennent des labels KaTeX (`divLatex`), seul le tracé géométrique part dans le SVG. Les labels sont extraits depuis l'annotation TeX KaTeX, convertis en Typst, puis placés par les helpers `mathalea-label` et `mathalea-figure`. Le code généré reste donc éditable côté Typst sans réinjecter le HTML visible de KaTeX. Les blancs à compléter posés par `MetaInteractif2d` en mode non interactif (`$\ldots ^\circ$`) ne sont pas encore rendus par KaTeX : leur formule est lue directement entre les `$`, et le `\ldots` devient des pointillés de réponse, moitié moins larges (2,5 em) que dans le texte pour ne pas masquer le tracé.
 
 ### Tableaux
 

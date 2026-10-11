@@ -17,10 +17,14 @@
     decodeTbiParam,
     deleteTbiCard,
     encodeTbiParam,
+    exportTbiSettings,
     getTbiSharedState,
+    importTbiSettings,
+    isTbiSettingsFile,
     loadTbiLocalLayout,
     reconcileTbiCards,
     reorderTbiCard,
+    moveTbiCardInColumns,
     saveTbiLocalLayout,
     shuffleTbiCards,
     tbiIsShuffling,
@@ -137,8 +141,12 @@
   }
 
   /** Déplace un exercice (sémantique splice) et réaligne items sur le nouvel ordre */
-  function applyReorder(from: number, to: number) {
-    if (!reorderTbiCard(from, to)) return
+  function applyReorder(from: number, to: number, groups?: number[][]) {
+    if (groups) {
+      const destination = moveTbiCardInColumns(from, groups)
+      if (destination === null) return
+      to = destination
+    } else if (!reorderTbiCard(from, to)) return
     items.splice(to, 0, items.splice(from, 1)[0])
     items = items.map((item, i) => {
       item.paramsIndex = i
@@ -159,6 +167,71 @@
       return item
     })
     uuids = items.map((item) => item.uuid)
+    persistLayout()
+  }
+
+  /** Fichier de réglages : sauvegarde (téléchargement) et chargement (JSON) */
+  let settingsFileInput: HTMLInputElement | undefined = $state()
+
+  function saveSettings() {
+    const blob = new Blob([JSON.stringify(exportTbiSettings(), null, 2)], {
+      type: 'application/json',
+    })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = 'reglages-tbi.json'
+    link.click()
+    URL.revokeObjectURL(url)
+  }
+
+  function loadSettings() {
+    settingsFileInput?.click()
+  }
+
+  async function onSettingsFileChosen(event: Event) {
+    const input = event.currentTarget as HTMLInputElement
+    const file = input.files?.[0]
+    // permet de recharger deux fois de suite le même fichier
+    input.value = ''
+    if (!file) return
+    let data: unknown
+    try {
+      data = JSON.parse(await file.text())
+    } catch {
+      data = null
+    }
+    if (!isTbiSettingsFile(data)) {
+      window.alert("Ce fichier n'est pas un fichier de réglages de la vue TBI.")
+      return
+    }
+    // le fichier embarque la liste des exercices (avec leurs paramètres) :
+    // elle remplace la sélection actuelle, après confirmation s'il y en a une
+    const exercices = data.exercices
+    if (Array.isArray(exercices) && exercices.length > 0) {
+      if (
+        get(exercicesParams).length > 0 &&
+        !window.confirm(
+          'Remplacer les exercices actuels par ceux du fichier de réglages ?',
+        )
+      ) {
+        return
+      }
+      exercicesParams.set(structuredClone(exercices))
+      await loadItems()
+      // cartes remises à zéro : le fichier décrit tout l'état de la vue
+      tbiState.update((state) => ({ ...state, cards: [], tabConfigs: [] }))
+      reconcileTbiCards(uuids)
+    } else if (get(exercicesParams).length === 0) {
+      // fichier d'une ancienne version : sans exercice à régler, rien ne
+      // serait appliqué et le chargement semblerait ne rien faire
+      window.alert(
+        "Ce fichier ne contient pas la liste des exercices (il a été sauvegardé avec une ancienne version). Ajoutez d'abord des exercices, ou sauvegardez à nouveau vos réglages.",
+      )
+      return
+    }
+    importTbiSettings(data)
+    mathaleaUpdateUrlFromExercicesParams()
     persistLayout()
   }
 
@@ -210,19 +283,19 @@
     {items}
     onAddExercise={openAddExercise}
     onShuffle={applyShuffle}
+    onSaveSettings={saveSettings}
+    onLoadSettings={loadSettings}
   />
-  {#if isReady}
-    {#if items.length === 0}
-      <div
-        class="flex flex-col items-center justify-center min-h-screen gap-4 text-coopmaths-corpus dark:text-coopmathsdark-corpus"
-      >
-        <i class="bx bx-chalkboard text-6xl"></i>
-        <p>
-          Aucun exercice à afficher. Cliquez sur le + en bas à droite pour en
-          ajouter.
-        </p>
-      </div>
-    {:else if $tbiState.mode === 'columns'}
+  <input
+    bind:this={settingsFileInput}
+    type="file"
+    accept=".json,application/json"
+    class="hidden"
+    onchange={onSettingsFileChosen}
+  />
+  <!-- sans exercice, la page reste vide : l'ajout se fait depuis la barre d'outils -->
+  {#if isReady && items.length > 0}
+    {#if $tbiState.mode === 'columns'}
       <TbiColumnsLayout
         {items}
         nbColumns={$tbiState.nbColumns}

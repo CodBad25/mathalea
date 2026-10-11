@@ -131,6 +131,16 @@ export default class Exercice implements IExercice {
     | [titre: string, max: number, tooltip: string]
     | [titre: string, max: number]
 
+  /** Contraintes de sélection des listes de paramètres texte, par indice de sup. */
+  textFormOptions?: Partial<
+    Record<
+      1 | 2 | 3 | 4 | 5,
+      {
+        minSelections?: number
+        weighted?: boolean
+      }
+    >
+  >
   besoinFormulaireTexte: boolean | [string, string]
   besoinFormulaireCaseACocher: boolean | [string] | [string, boolean]
   besoinFormulaire2Numerique:

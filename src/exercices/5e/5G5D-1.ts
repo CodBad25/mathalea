@@ -1,7 +1,7 @@
 import { afficheCoteSegment } from '../../lib/2d/AfficheCoteSegment'
-import { afficheLongueurSegment } from '../../lib/2d/afficheLongueurSegment'
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
+import { placeLatexSurSegment } from '../../lib/2d/placeLatexSurSegment'
 import { polygoneAvecNom } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { rotation } from '../../lib/2d/transformations'
@@ -19,7 +19,7 @@ import {
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
 import { creerNomDePolygone } from '../../lib/outils/outilString'
-import { stringNombre, texNombre } from '../../lib/outils/texNombre'
+import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import Grandeur from '../../modules/Grandeur'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -150,10 +150,29 @@ export default class AireDeTriangles extends Exercice {
         polynom[0],
         polynom[1],
         hauteurpoly,
-        afficheCoteSegment(segment(B, A), longueur(B, A).toString() + ' cm', 1),
-        afficheLongueurSegment(A, C, 'black', 0.5),
-        afficheLongueurSegment(C, B, 'black', 0.5),
-        afficheLongueurSegment(C, H, 'black', 0.3),
+        afficheCoteSegment(
+          segment(B, A),
+          `${texNombre(longueur(B, A), 0)}\\,\\text{cm}`,
+          1,
+        ),
+        placeLatexSurSegment(
+          `${texNombre(segment(A, C).longueur, 1)}\\,\\text{cm}`,
+          A,
+          C,
+        ),
+        placeLatexSurSegment(
+          `${texNombre(segment(C, B).longueur, 1)}\\,\\text{cm}`,
+          C,
+          B,
+        ),
+        placeLatexSurSegment(
+          `${texNombre(segment(C, H).longueur, 1)}\\,\\text{cm}`,
+          C,
+          H,
+          {
+            distance: 0.3,
+          },
+        ),
         codageAngleDroit(A, H, C),
       )
       objetsCorrection.push(
@@ -162,10 +181,17 @@ export default class AireDeTriangles extends Exercice {
         hauteurpoly,
         afficheCoteSegment(
           segment(B, A),
-          stringNombre(longueur(B, A), 0) + ' cm',
+          `${texNombre(longueur(B, A), 0)}\\,\\text{cm}`,
           1,
         ),
-        afficheLongueurSegment(C, H, 'black', 0.3),
+        placeLatexSurSegment(
+          `${texNombre(segment(C, H).longueur, 1)}\\,\\text{cm}`,
+          C,
+          H,
+          {
+            distance: 0.3,
+          },
+        ),
         codageAngleDroit(A, H, C),
       )
       texte = `Calculer l'aire du triangle ${A.nom}${B.nom}${C.nom}.<br>`

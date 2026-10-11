@@ -1,3 +1,6 @@
+// Version archivée : conservée pour que les liens (sujets et corrigés)
+// déjà partagés avec l'uuid 65bd8 continuent d'afficher les mêmes
+// valeurs. Ne plus la modifier : toute correction va dans la version courante.
 import { distancePointDroite, droite } from '../../lib/2d/droites'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { pointAbstrait, PointAbstrait } from '../../lib/2d/PointAbstrait'
@@ -51,7 +54,7 @@ export const titre = 'Utiliser les propriétés de conservation de la symétrie'
 
 // Gestion de la date de publication initiale
 export const dateDePublication = '25/01/2023'
-export const dateDeModifImportante = '13/11/2025'
+export const dateDeModifImportante = '10/10/2026'
 
 /**
  * Utiliser les propriétés de la symétrie pour répondre à des questions
@@ -62,9 +65,9 @@ export const dateDeModifImportante = '13/11/2025'
 export const uuid = '65bd8'
 
 export const refs = {
-  'fr-fr': ['5G3B-3'],
-  'fr-2016': ['6G32', '5G10-3'],
-  'fr-ch': ['10ES3A-4'],
+  'fr-fr': [],
+  'fr-2016': [],
+  'fr-ch': ['NR'],
 }
 export const interactifReady = true
 
@@ -194,13 +197,9 @@ const triangleLoinDeD = (d: IDroite, noms: string[]) => {
   return pol.listePoints as [PointAbstrait, PointAbstrait, PointAbstrait]
 }
 
-export default class SymetrieProprietes extends Exercice {
+export default class SymetrieProprietesOld extends Exercice {
   constructor() {
     super()
-    this.consigne = texteEnCouleurEtGras(
-      'Dans cet exercice, les mesures sont à donner avec la bonne unité.',
-      'black',
-    )
     this.besoinFormulaireTexte = [
       'Type de questions',
       "Nombres séparés par des tirets :\n1 : Longueur d'un seul segment\n2 : Longueur d'un segment parmi d'autres\n3 : Alignement de points\n4 : Angle\n5 : Mélange",
@@ -228,6 +227,9 @@ export default class SymetrieProprietes extends Exercice {
       melange: 5,
       saisie: this.sup,
     }).map(Number)
+    this.consigne = typesDeQuestionsDisponibles.some((type) => type !== 3)
+      ? texteEnCouleurEtGras('Donner les mesures avec la bonne unité.', 'black')
+      : ''
     const typesDeTransformations = gestionnaireFormulaireTexte({
       min: 2,
       max: 3,
@@ -292,7 +294,7 @@ export default class SymetrieProprietes extends Exercice {
             segmentAvecExtremites(A, B),
             nommePolygone(polygone([A, B]), A.nom + B.nom),
             placeLatexSurSegment(
-              `${texNombre(longueur(A, B, 1))} \\text{cm}`,
+              `${texNombre(longueur(A, B, 1))}~\\text{cm}`,
               A,
               B,
               { letterSize: 'small' },
@@ -494,14 +496,15 @@ export default class SymetrieProprietes extends Exercice {
               ),
             )
           }
+          // Réserver trois lignes sous les figures : les mesures restent lisibles,
+          // même pour un triangle très aplati ou des triangles qui se chevauchent.
+          const figureBounds = fixeBordures(objetsEnonce)
+          const legendX = (figureBounds.xmin + figureBounds.xmax) / 2
+          const legendY = figureBounds.ymin - 0.8
           ptRef1 = longueur(A, B) < longueur(C, B) ? A : C
           ptRef2 = longueur(A, B) < longueur(C, B) ? C : A
           Barc = homothetie(ptRef1, B, 2 / 10)
-          BLabel = rotation(
-            homothetie(ptRef1, B, 2 / 10 + 1 / longueur(ptRef1, B)),
-            B,
-            angleOriente(ptRef1, B, ptRef2) / 3,
-          )
+          BLabel = pointAbstrait(legendX, legendY)
           BLabel.positionLabel = 'center'
           objetsEnonce.push(
             arc(
@@ -513,7 +516,7 @@ export default class SymetrieProprietes extends Exercice {
               'green',
             ),
             latexParPoint(
-              `${angle(ptRef1, B, ptRef2, 0)}^\\circ`,
+              `\\widehat{${A.nom}${B.nom}${C.nom}}=${angle(ptRef1, B, ptRef2, 0)}^\\circ`,
               BLabel,
               'green',
               12,
@@ -524,11 +527,7 @@ export default class SymetrieProprietes extends Exercice {
           ptRef1 = longueur(A, C) < longueur(C, B) ? A : B
           ptRef2 = longueur(A, C) < longueur(C, B) ? B : A
           Carc = homothetie(ptRef1, C, 2 / 10)
-          CLabel = rotation(
-            homothetie(ptRef1, C, 2 / 10 + 1 / longueur(ptRef1, C)),
-            C,
-            angleOriente(ptRef1, C, ptRef2) / 3,
-          )
+          CLabel = pointAbstrait(legendX, legendY - 1)
           CLabel.positionLabel = 'center'
           objetsEnonce.push(
             arc(
@@ -540,7 +539,7 @@ export default class SymetrieProprietes extends Exercice {
               'green',
             ),
             latexParPoint(
-              `${angle(ptRef1, C, ptRef2, 0)}^\\circ`,
+              `\\widehat{${A.nom}${C.nom}${B.nom}}=${angle(ptRef1, C, ptRef2, 0)}^\\circ`,
               CLabel,
               'green',
               12,
@@ -551,11 +550,7 @@ export default class SymetrieProprietes extends Exercice {
           ptRef1 = longueur(A, C) < longueur(A, B) ? C : B
           ptRef2 = longueur(A, C) < longueur(A, B) ? B : C
           Aarc = homothetie(ptRef1, A, 2 / 10)
-          ALabel = rotation(
-            homothetie(ptRef1, A, 2 / 10 + 1 / longueur(A, ptRef1)),
-            A,
-            angleOriente(ptRef1, A, ptRef2) / 3,
-          )
+          ALabel = pointAbstrait(legendX, legendY - 2)
           ALabel.positionLabel = 'center'
           objetsEnonce.push(
             arc(
@@ -567,7 +562,7 @@ export default class SymetrieProprietes extends Exercice {
               'green',
             ),
             latexParPoint(
-              `${180 - angle(A, ptRef2, ptRef1, 0) - angle(A, ptRef1, ptRef2, 0)}^\\circ`,
+              `\\widehat{${B.nom}${A.nom}${C.nom}}=${180 - angle(A, ptRef2, ptRef1, 0) - angle(A, ptRef1, ptRef2, 0)}^\\circ`,
               ALabel,
               'green',
               12,
@@ -608,7 +603,10 @@ export default class SymetrieProprietes extends Exercice {
         if (this.interactif) {
           handleAnswers(this, i, objetReponse)
           texte += ajouteChampTexteMathLive(this, i, optionKeyboard, {
-            texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
+            texteApres:
+              typesDeQuestionsDisponibles[i] === 3
+                ? ''
+                : '<em class="ml-2">(Une unité est attendue.)</em>',
           })
         }
         this.listeQuestions[i] = texte

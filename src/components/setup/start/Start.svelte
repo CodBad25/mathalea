@@ -39,6 +39,7 @@
   import {
     darkMode,
     exercicesParams,
+    interactiviteParExercice,
     previousView,
   } from '../../../lib/stores/generalStore'
   import { globalOptions } from '../../../lib/stores/globalOptions'
@@ -289,6 +290,54 @@
     document.dispatchEvent(event)
     saveFormatNumerique(isAllInteractive)
     mathaleaUpdateUrlFromExercicesParams()
+    if (isAllInteractive) {
+      const sansVersionInteractive = listeExercicesSansVersionInteractive()
+      if (sansVersionInteractive.length > 0) {
+        modeModaleSansVersionInteractive = 'numerique'
+        exercicesSansVersionInteractive = sansVersionInteractive
+        showSansVersionInteractiveModal = true
+      }
+    }
+  }
+
+  /**
+   * Modale prévenant que des exercices n'ont pas de version interactive :
+   * ils restent en version papier (bascule Numérique) ou ne donnent lieu à
+   * aucune note (Capytale, toujours en mode numérique).
+   */
+  let showSansVersionInteractiveModal = false
+  let modeModaleSansVersionInteractive: 'numerique' | 'capytale' = 'numerique'
+  let exercicesSansVersionInteractive: { id: string; titre: string }[] = []
+  const exercicesSansNoteDejaSignales = new Set<string>()
+
+  function listeExercicesSansVersionInteractive() {
+    const parId = new Map<string, string>()
+    $exercicesParams.forEach((_, i) => {
+      const info = $interactiviteParExercice[i]
+      if (info && !info.interactifReady) parId.set(info.id, info.titre)
+    })
+    return [...parId].map(([id, titre]) => ({ id, titre }))
+  }
+
+  /**
+   * Sous Capytale, ouvre la modale quand un exercice non noté apparaît (une
+   * seule fois par exercice) et y liste tous ceux de l'activité.
+   */
+  function signaleExercicesSansNote() {
+    const sansNote = listeExercicesSansVersionInteractive()
+    const nouveaux = sansNote.filter(
+      ({ id }) => !exercicesSansNoteDejaSignales.has(id),
+    )
+    if (nouveaux.length === 0) return
+    nouveaux.forEach(({ id }) => exercicesSansNoteDejaSignales.add(id))
+    exercicesSansVersionInteractive = sansNote
+    modeModaleSansVersionInteractive = 'capytale'
+    showSansVersionInteractiveModal = true
+  }
+  $: if ($globalOptions.recorder === 'capytale') {
+    // dépendances explicites : la liste et ses capacités interactives
+    void [$exercicesParams, $interactiviteParExercice]
+    signaleExercicesSansNote()
   }
 
   function newDataForAll() {
@@ -633,6 +682,49 @@
     />
   {/if}
 {/if}
+
+<BasicClassicModal
+  bind:isDisplayed={showSansVersionInteractiveModal}
+  icon="bx-error"
+>
+  <span slot="header"
+    >{exercicesSansVersionInteractive.length > 1
+      ? 'Exercices sans version interactive'
+      : 'Exercice sans version interactive'}</span
+  >
+  <div slot="content" class="text-left">
+    <p class="mb-2">
+      {#if exercicesSansVersionInteractive.length > 1}
+        {#if modeModaleSansVersionInteractive === 'capytale'}
+          Les exercices suivants n'ont pas de version interactive. Vous pouvez
+          les conserver dans l'activité, mais ils ne donneront lieu à aucune
+          note :
+        {:else}
+          Les exercices suivants n'ont pas de version interactive et resteront
+          en version papier :
+        {/if}
+      {:else if modeModaleSansVersionInteractive === 'capytale'}
+        L'exercice suivant n'a pas de version interactive. Vous pouvez le
+        conserver dans l'activité, mais il ne donnera lieu à aucune note :
+      {:else}
+        L'exercice suivant n'a pas de version interactive et restera en version
+        papier :
+      {/if}
+    </p>
+    <ul class="list-disc pl-6">
+      {#each exercicesSansVersionInteractive as exercice (exercice.id)}
+        <li><strong>{exercice.id}</strong> – {exercice.titre}</li>
+      {/each}
+    </ul>
+  </div>
+  <div slot="footer" class="flex justify-center">
+    <button
+      type="button"
+      class="btn btn-primary"
+      on:click={() => (showSansVersionInteractiveModal = false)}>Compris</button
+    >
+  </div>
+</BasicClassicModal>
 
 <BasicClassicModal bind:isDisplayed={showQcmCamExportModal}>
   <span slot="header">Exporter vers QCM Cam</span>

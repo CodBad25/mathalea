@@ -12,10 +12,17 @@ import {
   defaultTbiState,
   deleteTbiCard,
   encodeTbiParam,
+  exportTbiSettings,
   getTbiSharedState,
+  getTbiColumnGroups,
+  moveTbiCardInColumns,
+  importTbiSettings,
   moveCardToTab,
   reconcileTbiCards,
+  activeTbiModalCard,
   reorderTbiCard,
+  setTbiCardCorrectionDetail,
+  setTbiCardCorrectionMode,
   shuffleTbiCards,
   tbiState,
   toggleTbiCardCollapsed,
@@ -95,6 +102,87 @@ describe('tbiStore', () => {
     expect(get(exercicesParams).map((p) => p.uuid)).toEqual(['c', 'a', 'b'])
     expect(get(tbiState).cards[0].zoom).toBe(2)
     expect(reorderTbiCard(0, 5)).toBe(false)
+  })
+
+  it('déplace entre colonnes en conservant une colonne vide et les réglages', () => {
+    exercicesParams.set([{ uuid: 'a' }, { uuid: 'b' }, { uuid: 'c' }])
+    reconcileTbiCards(['a', 'b', 'c'])
+    balanceColumnBreaks([0, 1, 2], 3)
+    tbiState.update((state) => {
+      state.cards[1].zoom = 2
+      return state
+    })
+    expect(moveTbiCardInColumns(1, [[0], [], [1, 2]])).toBe(1)
+    expect(getTbiColumnGroups([0, 1, 2], get(tbiState).cards, 3)).toEqual([
+      [0],
+      [],
+      [1, 2],
+    ])
+    expect(get(tbiState).cards[1].zoom).toBe(2)
+    applyTbiSharedState({ widgetVisible: true })
+    expect(get(tbiState).cards[1].column).toBe(2)
+    const encoded = encodeTbiParam(getTbiSharedState(get(tbiState)))
+    tbiState.set(defaultTbiState())
+    reconcileTbiCards(['a', 'b', 'c'])
+    applyTbiSharedState(decodeTbiParam(encoded)!)
+    expect(getTbiColumnGroups([0, 1, 2], get(tbiState).cards, 3)).toEqual([
+      [0],
+      [],
+      [1, 2],
+    ])
+    expect(importTbiSettings(exportTbiSettings())).toBeTruthy()
+    expect(getTbiColumnGroups([0, 1, 2], get(tbiState).cards, 3)).toEqual([
+      [0],
+      [],
+      [1, 2],
+    ])
+    balanceColumnBreaks([0, 1, 2], 2)
+    expect(get(tbiState).cards.every((card) => card.column === undefined)).toBe(
+      true,
+    )
+  })
+
+  it('réordonne dans un onglet aux indices non contigus sans déplacer les autres cartes entre elles', () => {
+    exercicesParams.set(['a', 'b', 'c', 'd', 'e'].map((uuid) => ({ uuid })))
+    reconcileTbiCards(['a', 'b', 'c', 'd', 'e'])
+    expect(moveTbiCardInColumns(4, [[4, 0], [2]])).toBe(0)
+    expect(get(exercicesParams).map((p) => p.uuid)).toEqual([
+      'e',
+      'a',
+      'b',
+      'c',
+      'd',
+    ])
+    expect(getTbiColumnGroups([0, 1, 3], get(tbiState).cards, 2)).toEqual([
+      [0, 1],
+      [3],
+    ])
+    expect(moveTbiCardInColumns(0, [[1], [3, 0]])).toBe(3)
+    expect(get(exercicesParams).map((p) => p.uuid)).toEqual([
+      'a',
+      'b',
+      'c',
+      'e',
+      'd',
+    ])
+    expect(getTbiColumnGroups([0, 2, 3], get(tbiState).cards, 2)).toEqual([
+      [0],
+      [2, 3],
+    ])
+  })
+
+  it('lit les anciens sauts et refuse une destination invalide', () => {
+    exercicesParams.set([{ uuid: 'a' }, { uuid: 'b' }, { uuid: 'c' }])
+    reconcileTbiCards(['a', 'b', 'c'])
+    applyTbiSharedState(decodeTbiParam('c-3_b-1.2')!)
+    expect(getTbiColumnGroups([0, 1, 2], get(tbiState).cards, 3)).toEqual([
+      [0],
+      [1],
+      [2],
+    ])
+    expect(moveTbiCardInColumns(0, [[0, 0], [2]])).toBeNull()
+    expect(moveTbiCardInColumns(0, [[1], [2]])).toBeNull()
+    expect(get(exercicesParams).map((p) => p.uuid)).toEqual(['a', 'b', 'c'])
   })
 
   it('shuffleTbiCards applique la même permutation à exercicesParams et aux cartes', () => {
@@ -346,6 +434,9 @@ describe('tbiStore', () => {
       state.cards[1].colBreak = true
       state.cards[0].zoom = 1.5
       state.cards[1].questionSpacing = 12
+      state.cards[0].correctionMode = 'perQuestion'
+      state.cards[2].correctionMode = 'below'
+      state.cards[2].correctionDetail = 'minimal'
       state.tabConfigs = [
         { layout: 'columns', nbColumns: 3, singleColumnAlign: 'right' },
         { layout: 'free', nbColumns: 2, singleColumnAlign: 'center' },
@@ -375,6 +466,7 @@ describe('tbiStore', () => {
       singleColumnAlign: 'center',
       tabs: [0, 1, 0],
       breaks: [1],
+      columns: [null, null, null],
       tabConfigs: [
         { layout: 'columns', nbColumns: 3, singleColumnAlign: 'right' },
         { layout: 'free', nbColumns: 2, singleColumnAlign: 'center' },
@@ -387,6 +479,8 @@ describe('tbiStore', () => {
       calculetteVisible: true,
       zooms: [1.5, 1, 1],
       questionSpacings: [1, 12, 1],
+      corrections: ['perQuestion', 'hidden', 'below'],
+      correctionDetails: ['full', 'full', 'minimal'],
       widgetX: 120,
       widgetY: 80,
       trafficLightX: 200,
@@ -422,6 +516,16 @@ describe('tbiStore', () => {
     expect(state.trafficLight.visible).toBe(true)
     expect(state.cards.map((c) => c.zoom)).toEqual([1.5, 1, 1])
     expect(state.cards.map((c) => c.questionSpacing)).toEqual([1, 12, 1])
+    expect(state.cards.map((c) => c.correctionMode)).toEqual([
+      'perQuestion',
+      'hidden',
+      'below',
+    ])
+    expect(state.cards.map((c) => c.correctionDetail)).toEqual([
+      'full',
+      'full',
+      'minimal',
+    ])
     expect(state.widget.x).toBe(120)
     expect(state.widget.y).toBe(80)
     expect(state.trafficLight.x).toBe(200)
@@ -470,6 +574,8 @@ describe('tbiStore', () => {
       calculetteVisible: false,
       zooms: [1.5, 0.8],
       questionSpacings: [1, 3],
+      corrections: [],
+      correctionDetails: [],
       widgetX: 0,
       widgetY: 0,
       trafficLightX: 0,
@@ -505,6 +611,8 @@ describe('tbiStore', () => {
         calculetteVisible: false,
         zooms: [1, 1],
         questionSpacings: [1, 1],
+        corrections: [],
+        correctionDetails: [],
         widgetX: 0,
         widgetY: 0,
         trafficLightX: 0,
@@ -534,6 +642,8 @@ describe('tbiStore', () => {
       calculetteVisible: false,
       zooms: [],
       questionSpacings: [],
+      corrections: [],
+      correctionDetails: [],
       widgetX: 0,
       widgetY: 0,
       trafficLightX: 0,
@@ -578,6 +688,8 @@ describe('tbiStore', () => {
       calculetteVisible: true,
       zooms: [],
       questionSpacings: [],
+      corrections: [],
+      correctionDetails: [],
       widgetX: 0,
       widgetY: 0,
       trafficLightX: 0,
@@ -619,6 +731,8 @@ describe('tbiStore', () => {
       calculetteVisible: false,
       zooms: [],
       questionSpacings: [],
+      corrections: [],
+      correctionDetails: [],
       widgetX: 120,
       widgetY: -40,
       trafficLightX: -15,
@@ -658,5 +772,123 @@ describe('tbiStore', () => {
       nbColumns: 1,
       singleColumnAlign: 'center',
     })
+  })
+
+  it('encodeTbiParam / decodeTbiParam gèrent la correction de chaque exercice', () => {
+    reconcileTbiCards(['e1', 'e2', 'e3'])
+    expect(encodeTbiParam(getTbiSharedState(get(tbiState)))).toBe('')
+    setTbiCardCorrectionMode(0, 'modal')
+    setTbiCardCorrectionMode(2, 'replace')
+    setTbiCardCorrectionDetail(2, 'minimal')
+    const encoded = encodeTbiParam(getTbiSharedState(get(tbiState)))
+    expect(encoded).toBe('co-m.h.r_cd-f.f.m')
+
+    tbiState.set(defaultTbiState())
+    activeTbiModalCard.set(null)
+    reconcileTbiCards(['e1', 'e2', 'e3'])
+    applyTbiSharedState(decodeTbiParam(encoded))
+    const state = get(tbiState)
+    expect(state.cards.map((c) => c.correctionMode)).toEqual([
+      'modal',
+      'hidden',
+      'replace',
+    ])
+    expect(state.cards.map((c) => c.correctionDetail)).toEqual([
+      'full',
+      'full',
+      'minimal',
+    ])
+    // la correction en plein écran restaurée est la correction active
+    expect(get(activeTbiModalCard)).toBe(0)
+  })
+
+  it('une seule correction en plein écran à la fois', () => {
+    reconcileTbiCards(['e1', 'e2'])
+    setTbiCardCorrectionMode(0, 'modal')
+    expect(get(activeTbiModalCard)).toBe(0)
+    setTbiCardCorrectionMode(1, 'modal')
+    expect(get(activeTbiModalCard)).toBe(1)
+    // fermer la carte 0 (déjà inactive) ne ferme pas celle de la carte 1
+    setTbiCardCorrectionMode(0, 'hidden')
+    expect(get(activeTbiModalCard)).toBe(1)
+    setTbiCardCorrectionMode(1, 'hidden')
+    expect(get(activeTbiModalCard)).toBeNull()
+    // plusieurs corrections en plein écran dans un lien : seule la première reste
+    applyTbiSharedState({ corrections: ['modal', 'modal'] })
+    expect(get(tbiState).cards.map((c) => c.correctionMode)).toEqual([
+      'modal',
+      'hidden',
+    ])
+  })
+
+  it('exportTbiSettings / importTbiSettings font un aller-retour de tous les réglages', () => {
+    exercicesParams.set([
+      { uuid: 'e1', id: 'e1' },
+      { uuid: 'e2', id: 'e2', cols: 3 },
+    ])
+    reconcileTbiCards(['e1', 'e2'])
+    tbiState.update((state) => {
+      state.mode = 'free'
+      state.cards[0].x = 300
+      state.cards[0].y = 120
+      state.cards[0].w = 800
+      state.cards[0].zoom = 1.4
+      state.cards[0].collapsed = true
+      state.cards[1].correctionMode = 'below'
+      state.cards[1].correctionDetail = 'minimal'
+      state.widget.visible = true
+      state.widget.mode = 'timer'
+      state.widget.zoom = 1.5
+      state.trafficLight.w = 200
+      state.trafficLight.active = 'green'
+      state.collegeCalculator.w = 300
+      return state
+    })
+    // le fichier doit survivre à une sérialisation JSON
+    const file = JSON.parse(JSON.stringify(exportTbiSettings()))
+    // la liste des exercices fait partie du fichier
+    expect(file.exercices).toEqual([
+      { uuid: 'e1', id: 'e1' },
+      { uuid: 'e2', id: 'e2', cols: 3 },
+    ])
+
+    tbiState.set(defaultTbiState())
+    exercicesParams.set([
+      { uuid: 'e1', id: 'e1' },
+      { uuid: 'e2', id: 'e2' },
+    ])
+    reconcileTbiCards(['e1', 'e2'])
+    expect(importTbiSettings(file)).toBe(true)
+
+    const state = get(tbiState)
+    expect(state.mode).toBe('free')
+    expect(state.cards[0]).toMatchObject({
+      x: 300,
+      y: 120,
+      w: 800,
+      zoom: 1.4,
+      collapsed: true,
+    })
+    expect(state.cards[1].collapsed).toBe(false)
+    expect(state.cards[1].correctionMode).toBe('below')
+    expect(state.cards[1].correctionDetail).toBe('minimal')
+    expect(state.widget).toMatchObject({
+      visible: true,
+      mode: 'timer',
+      zoom: 1.5,
+    })
+    expect(state.trafficLight).toMatchObject({ w: 200, active: 'green' })
+    expect(state.collegeCalculator.w).toBe(300)
+    expect(get(exercicesParams)[0].cols).toBeUndefined()
+    expect(get(exercicesParams)[1].cols).toBe(3)
+  })
+
+  it("importTbiSettings refuse un fichier qui n'est pas un fichier de réglages TBI", () => {
+    reconcileTbiCards(['e1'])
+    const before = JSON.stringify(get(tbiState))
+    expect(importTbiSettings(null)).toBe(false)
+    expect(importTbiSettings({ mode: 'free' })).toBe(false)
+    expect(importTbiSettings({ type: 'autre' })).toBe(false)
+    expect(JSON.stringify(get(tbiState))).toBe(before)
   })
 })

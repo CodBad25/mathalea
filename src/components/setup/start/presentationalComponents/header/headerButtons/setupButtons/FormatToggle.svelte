@@ -1,7 +1,7 @@
 <script lang="ts">
   import {
     exercicesParams,
-    interactiviteBasculableParExercice,
+    interactiviteParExercice,
   } from '../../../../../../../lib/stores/generalStore'
   import { globalOptions } from '../../../../../../../lib/stores/globalOptions'
 
@@ -9,11 +9,15 @@
 
   // Sans exercice, l'état est lu dans le store, alimenté par l'URL
   // (`numerique=1`) ou, pour une nouvelle visite, par le dernier choix
-  // mémorisé. Sinon il reflète les exercices dont l'interactivité peut être
-  // basculée : `null` (état neutre) quand ils sont mixtes.
-  $: interactifs = $exercicesParams
-    .filter((_, i) => $interactiviteBasculableParExercice[i] !== false)
-    .map((params) => params.interactif === '1')
+  // mémorisé. Sinon il reflète l'interactivité réelle des exercices : `null`
+  // (état neutre) dès que l'un n'est pas interactif, y compris faute de
+  // version interactive. Les exercices toujours interactifs sont ignorés car
+  // ils ne dépendent pas du choix.
+  $: interactifs = $exercicesParams.flatMap((params, i) => {
+    const info = $interactiviteParExercice[i]
+    if (info?.interactifObligatoire) return []
+    return [params.interactif === '1' && info?.interactifReady !== false]
+  })
   $: isDigital = interactifs.length
     ? interactifs.every(Boolean)
       ? true

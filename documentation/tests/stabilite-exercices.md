@@ -112,6 +112,12 @@ nombres dans l'ancien affichage. Vérifier les valeurs pour une même graine et
 les paramètres concernés avant de mettre à jour les empreintes ciblées. Une
 correction uniquement typographique ne nécessite pas d'archivage.
 
+Le passage d'étiquettes SVG `<text>` à des mesures rendues par KaTeX peut aussi
+modifier l'empreinte : le HTML de KaTeX contient plusieurs représentations d'une
+même valeur (MathML, annotation LaTeX et rendu visuel). Comparer les mesures
+visibles et les réponses avec la version publiée, pour les mêmes graines et
+paramètres, avant de mettre à jour uniquement les empreintes concernées.
+
 Conditions du tirage : mode non interactif, trois questions, une graine dérivée
 de l'`uuid`.
 
@@ -276,6 +282,13 @@ Ensuite, comme pour `pnpm archive` : `pnpm stability:update` (enregistre la
 version courante), `pnpm review:archives`, `pnpm check` (une archive figée à une
 révision ancienne peut demander un ajustement d'annotation de type — c'est le
 comportement au tirage qui est gelé, pas les types), puis relecture du diff.
+
+Si un parent a été renommé depuis la bonne révision, vérifier aussi les imports
+de l'archive : le script peut ne pas retrouver une dépendance dont l'ancien
+chemin a disparu. Dans ce cas, figer manuellement ce parent à la bonne révision,
+vider ses références, lui attribuer un uuid neuf et faire pointer l'archive vers
+cette copie. Vérifier ensuite l'empreinte de l'uuid publié avec
+`STABILITY_UUIDS='<uuid publié>' pnpm stability:check`.
 
 ## Le fichier d'empreintes
 

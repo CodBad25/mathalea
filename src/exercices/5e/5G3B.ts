@@ -1,4 +1,3 @@
-import { afficheLongueurSegment } from '../../lib/2d/afficheLongueurSegment'
 import { afficheMesureAngle } from '../../lib/2d/AfficheMesureAngle'
 import { droite } from '../../lib/2d/droites'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
@@ -23,6 +22,7 @@ import { vecteur } from '../../lib/2d/Vecteur'
 import { orangeMathalea } from '../../lib/colors'
 import ListeDeroulanteElement from '../../lib/customElements/ListeDeroulanteElement'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
@@ -97,6 +97,8 @@ export default class ConservationTransformation extends Exercice {
       ],
     })
 
+    // Figure illustrative (pas de mesure à reporter) : réduite en sortie PDF
+    const echelleFigure = 0.6
     let objetsEnonceEtCorr, objetsEnonceOnly, objetsCorrectionOnly
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const typeDeTransfo = listeTypeDeQuestions[i]
@@ -226,11 +228,21 @@ export default class ConservationTransformation extends Exercice {
 
       objetsEnonceEtCorr.push(segment(A, C), segment(B, C))
       objetsEnonceEtCorr.push()
+      // Longueurs en LaTeX, de même taille que les mesures d'angles (scriptsize)
+      const longueurSurCote = (P: PointAbstrait, Q: PointAbstrait) =>
+        placeLatexSurSegment(
+          `${texNombre(longueur(P, Q, 1), 1)}\\text{ cm}`,
+          P,
+          Q,
+          {
+            letterSize: 'scriptsize',
+          },
+        )
       objetsEnonceEtCorr.push(
         segment(A, B),
-        afficheLongueurSegment(B, A),
-        afficheLongueurSegment(C, B),
-        afficheLongueurSegment(A, C),
+        longueurSurCote(B, A),
+        longueurSurCote(C, B),
+        longueurSurCote(A, C),
         poly[1],
       )
       objetsEnonceEtCorr.push(
@@ -268,11 +280,14 @@ export default class ConservationTransformation extends Exercice {
         : `Les points $${A.nom}'$, $${B.nom}'$, $${C.nom}'$ sont les images respectives de $${A.nom}$, $${B.nom}$, $${C.nom}$ ${enonceTransformation}.<br>`
       figure = `du triangle $${A.nom + B.nom + C.nom}$`
       texteCorr = texte
+      const mesureAngleC =
+        180 - Math.round(angle(A, B, C)) - Math.round(angle(B, A, C))
+      texteCorr += `L'angle $\\widehat{${A.nom}${C.nom}${B.nom}}$ mesure $${texNombre(mesureAngleC)}$ °.<br>`
       texteCorr += `Or, la ${transformation} conserve les angles.<br>`
-      texteCorr += `Donc l'angle $\\widehat{${A.nom}'${B.nom}'${C.nom}'}$ mesure lui aussi $${miseEnEvidence(texNombre(Math.round(angle(A, B, C))))}$ °.<br><br>`
-      texteCorr += `Le segment [$${B.nom + C.nom}$] mesure $${texNombre(longueur(B, C, 1))}\\text{ cm}$.<br>`
+      texteCorr += `Donc l'angle $\\widehat{${A.nom}'${C.nom}'${B.nom}'}$ mesure lui aussi $${miseEnEvidence(texNombre(mesureAngleC))}$ °.<br><br>`
+      texteCorr += `Le segment [$${A.nom + B.nom}$] mesure $${texNombre(longueur(A, B, 1))}\\text{ cm}$.<br>`
       texteCorr += `Or, la ${transformation} conserve les longueurs.<br>`
-      texteCorr += `Donc le segment [$${B.nom}'${C.nom}'$] mesure lui aussi $${miseEnEvidence(texNombre(longueur(B, C, 1)))}\\text{ cm}$.<br>`
+      texteCorr += `Donc le segment [$${A.nom}'${B.nom}'$] mesure lui aussi $${miseEnEvidence(texNombre(longueur(A, B, 1)))}\\text{ cm}$.<br>`
       texte += `Compléter l'image ${figure} ${enonceTransformation} en utilisant les propriétés de conservation de la ${transformation}`
       texte += ' et en justifiant ses démarches.<br>'
       if (this.interactif) {
@@ -310,7 +325,7 @@ export default class ConservationTransformation extends Exercice {
         `${texNombre(longueur(B, A, 1), 1)}\\text{ cm}`,
         imageB,
         imageA,
-        { color: orangeMathalea, letterSize: 'small', opacity: 1 },
+        { color: orangeMathalea, letterSize: 'scriptsize', opacity: 1 },
       )
       objetsEnonceOnly.push(
         new MetaInteractif2d(
@@ -346,6 +361,7 @@ export default class ConservationTransformation extends Exercice {
         this,
         i,
         {
+          bareme: toutAUnPoint,
           field0: {
             value: (
               180 -
@@ -391,7 +407,7 @@ export default class ConservationTransformation extends Exercice {
       texte +=
         mathalea2d(
           Object.assign(
-            {},
+            { scale: echelleFigure },
             fixeBordures([objetsEnonceOnly, objetsEnonceEtCorr]),
           ),
           objetsEnonceOnly,
@@ -403,7 +419,7 @@ export default class ConservationTransformation extends Exercice {
       // On ajoute au texte de la correction, la figure de la correction
       texteCorr += mathalea2d(
         Object.assign(
-          {},
+          { scale: echelleFigure },
           fixeBordures([objetsCorrectionOnly, objetsEnonceEtCorr]),
         ),
         objetsCorrectionOnly,

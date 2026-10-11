@@ -10,6 +10,7 @@ import MathaleaCustomElement, {
   registerMathaleaCustomElement,
 } from '../customElements/MathaleaCustomElement'
 import { setupFractionFigureIfNeeded } from './setupFractionFigure'
+import { enableFigureUiRecovery } from './recoverFigureUi'
 
 export type ApigeomVerificationResult = {
   isOk: boolean
@@ -155,6 +156,7 @@ export class ApigeomFigureElement extends MathaleaCustomElement {
     if (!container) return
 
     this.figure.setContainer(container)
+    enableFigureUiRecovery(this.figure)
 
     const defaultAction = this.getAttribute('default-action')
     if (defaultAction) {

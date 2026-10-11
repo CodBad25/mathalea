@@ -88,7 +88,7 @@ export default class LimitesQuantiteConjuguee extends Exercice {
           domain = `]-\\infty;-${root}]\\cup[${root};+\\infty[`
         }
       }
-      let correction = `On a par composition, $\\displaystyle\\lim_{${index}}\\sqrt{${first}}=+\\infty$ et $\\displaystyle\\lim_{${index}}\\sqrt{${second}}=+\\infty$.<br>`
+      let correction = `Par calcul de limite d’une fonction composée, $\\displaystyle\\lim_{${index}}\\sqrt{${first}}=+\\infty$ et $\\displaystyle\\lim_{${index}}\\sqrt{${second}}=+\\infty$.<br>`
       if (operation === '+') {
         correction += 'Par somme, la limite vaut donc $+\\infty$.<br>'
       } else {
@@ -104,7 +104,7 @@ export default class LimitesQuantiteConjuguee extends Exercice {
         &=\\dfrac{${numerator}}{${sum}}.
         \\end{aligned}$<br>`
         correction += `On a $\\displaystyle\\lim_{${index}}\\sqrt{${first}}=+\\infty$ et $\\displaystyle\\lim_{${index}}\\sqrt{${second}}=+\\infty$.<br>Par somme, $\\displaystyle\\lim_{${index}}\\left(${sum}\\right)=+\\infty$.<br>`
-        correction += `Le numérateur est constant, donc $\\displaystyle\\lim_{${index}}${b - d}=${b - d}$. Par quotient, $\\displaystyle\\lim_{${index}}\\dfrac{${b - d}}{${sum}}=0$.<br>`
+        correction += `Le numérateur est constant. Par quotient, $\\displaystyle\\lim_{${index}}\\dfrac{${b - d}}{${sum}}=0$.<br>`
       }
 
       correction += `Ainsi, $\\displaystyle\\lim_{${index}}f(x)=${miseEnEvidence(answer)}$.`

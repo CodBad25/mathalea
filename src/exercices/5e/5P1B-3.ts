@@ -18,8 +18,25 @@ export const refs = {
   'fr-ch': ['NR'],
 }
 export default class AppliquerPourcentage1 extends AppliquerPourcentage {
+  protected pourcentagesHorsMelange = [80]
+
   constructor() {
     super()
     this.sup = 1
+    this.besoinFormulaire2Texte = [
+      'Choix des pourcentages',
+      `Nombres séparés par des tirets
+1 : 10%
+2 : 20%
+3 : 25%
+4 : 30%
+5 : 40%
+6 : 50%
+7 : 60%
+8 : 75%
+9 : 90%
+10 : Mélange (sans le 80%)
+11 : 80%`,
+    ]
   }
 }

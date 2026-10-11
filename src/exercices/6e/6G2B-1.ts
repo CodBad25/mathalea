@@ -384,6 +384,7 @@ function arcsTracesDansFigure(figure: Figure): string[] {
 export const titre = 'Reproduire une forme avec des arcs de cercles'
 export const uuid = 'ebaef'
 export const dateDePublication = '20/08/2026'
+export const dateDeModifImportante = '10/10/2026'
 
 export const refs = {
   'fr-fr': ['6G2B-1'],
@@ -392,6 +393,7 @@ export const refs = {
 }
 /**
  * @author Jean-Claude Lhote
+ * Rémi Angot pour les modifications de l'interactivité
  */
 export default class FormeDansLeCarreATracer extends Exercice {
   arcsAttendus: string[][] = []

@@ -195,8 +195,11 @@ export default class RegionsDuPlan extends Exercice {
               letterSize: 'scriptsize',
             })
             const rayon2 = segment(C, D2)
-            const longRayon2 = placeLatexSurSegment(r2Tex, C, D2, {
-              distance: 0.5,
+            // Étiquette horizontale au milieu de la partie du rayon dans la couronne.
+            const P1 = pointSurCercle(c1, 60, '')
+            const longRayon2 = placeLatexSurSegment(r2Tex, P1, D2, {
+              horizontal: true,
+              distance: 0.35,
               letterSize: 'scriptsize',
             })
 
