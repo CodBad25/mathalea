@@ -3,6 +3,7 @@ import type Point from 'apigeom/src/elements/points/Point'
 import { figureAnswerJson } from '../../lib/apigeom/figureAnswer'
 import figureApigeom from '../../lib/figureApigeom'
 import { numAlpha } from '../../lib/outils/outilString'
+import { contraindreValeur } from '../../modules/outils'
 import ConstruireParSymetrie, {
   type CentralSymmetryQuestion,
 } from '../6e/_Construire_par_symetrie'
@@ -30,9 +31,12 @@ export default class SymetrieCentralePoint extends ConstruireParSymetrie {
     this.version = 5
     this.besoinFormulaireNumerique = false
     this.besoinFormulaire3Texte = false
+    this.besoinFormulaire5Numerique = ['Nombre de points à construire', 5]
+    this.sup5 = 3
   }
 
   nouvelleVersion() {
+    this.nbPointsSymetrieCentrale = contraindreValeur(1, 5, this.sup5, 3)
     this.figuresApiGeom = []
     this.goodAnswers = []
     super.nouvelleVersion()

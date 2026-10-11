@@ -106,6 +106,41 @@ function choisiPointDuBonCote(d: Droite, lieu = 'dessus') {
   }
 }
 
+const couleursCodageCentrale = ['red', bleuMathalea, 'green', 'purple', 'brown']
+const marquesCodageCentrale = ['|', '||', '|||', 'X', 'O']
+
+/**
+ * Choisit un point supplémentaire pour une symétrie centrale de centre `centre` :
+ * ni aligné horizontalement ou verticalement avec les autres points, et à
+ * distance suffisante du centre pour que le symétrique reste lisible.
+ */
+function choisiPointSupplementaire(
+  centre: PointAbstrait,
+  autres: PointAbstrait[],
+  nom: string,
+) {
+  const tous = [centre, ...autres]
+  let P = pointAbstrait(randint(-8, 8), randint(-8, 8), nom, 'above')
+  for (let essai = 0; essai < 100; essai++) {
+    P = pointAbstrait(
+      randint(
+        -8,
+        8,
+        tous.map((Q) => Math.round(Q.x)),
+      ),
+      randint(
+        -8,
+        8,
+        tous.map((Q) => Math.round(Q.y)),
+      ),
+      nom,
+      'above',
+    )
+    if (longueur(P, centre) >= 3) break
+  }
+  return P
+}
+
 function choisi3Points(d: Droite, lieu = ['dessus', 'dessous', 'sur']) {
   let A, B, C
   let pA, pB, pC
@@ -198,6 +233,8 @@ function choisi3Points(d: Droite, lieu = ['dessus', 'dessous', 'sur']) {
 export default class ConstruireParSymetrie extends Exercice {
   figure: boolean
   version: number
+  /** Nombre de points à construire pour la symétrie centrale de points */
+  protected nbPointsSymetrieCentrale = 3
   protected centralSymmetryInteractive?: (
     question: CentralSymmetryQuestion,
   ) => string
@@ -311,7 +348,7 @@ export default class ConstruireParSymetrie extends Exercice {
     let AA
     let cA
     let sA
-    let B
+    let B: PointAbstrait
     let C
     let CC
     let cC
@@ -329,7 +366,7 @@ export default class ConstruireParSymetrie extends Exercice {
     let sED
     let sEC
     let d
-    let enonce
+    let enonce: string
     let correction
     let g
     let carreaux
@@ -339,8 +376,12 @@ export default class ConstruireParSymetrie extends Exercice {
     const objetsCorrection = []
     let p1
     let p2
-    let p1nom
-    for (let i = 0, cpt = 0, numQuestion; i < this.nbQuestions && cpt < 50;) {
+    let p1nom: string
+    let pointsSymetrie: PointAbstrait[] = []
+    for (
+      let i = 0, cpt = 0, numQuestion: number;
+      i < this.nbQuestions && cpt < 50;
+    ) {
       const choixLieux = [
         choice([
           ['dessus', 'dessus', 'dessus'],
@@ -1074,8 +1115,13 @@ export default class ConstruireParSymetrie extends Exercice {
           // correction = 'Contrôler la figure en vérifiant que les segments en pointillés se coupent bien sur la droite $(d)$.<br><br>'
           // correction = 'Contrôler votre figure en vérifiant qu\'elle "ressemble" à la figure ci-dessous.<br><br>'
           break
-        case 6: // 3 symétries centrales de points
-          p1nom = creerNomDePolygone(5, listeDeNomsDePolygones)
+        case 6: {
+          // symétries centrales de points (3 par défaut)
+          const nbPoints = this.nbPointsSymetrieCentrale
+          p1nom = creerNomDePolygone(
+            Math.max(5, nbPoints + 1),
+            listeDeNomsDePolygones,
+          )
           listeDeNomsDePolygones.push(p1nom)
           B = pointAbstrait(
             randint(-8, 8),
@@ -1092,32 +1138,47 @@ export default class ConstruireParSymetrie extends Exercice {
             ]),
           )
           A.nom = p1nom[0]
-          A.positionLabel = 'above'
           C.nom = p1nom[2]
-          C.positionLabel = 'above'
           D.nom = p1nom[3]
-          D.positionLabel = 'above'
-          CC = rotation(C, B, 180, `${p1nom[2]}'`, 'above')
-          DD = rotation(D, B, 180, `${p1nom[3]}'`, 'above')
-          AA = rotation(A, B, 180, `${p1nom[0]}'`, 'above')
-          cC = codageMilieu(C, CC, 'red', '|', false)
-          cD = codageMilieu(D, DD, bleuMathalea, '||', false)
-          cA = codageMilieu(A, AA, 'green', '|||', false)
-          sC = segment(C, CC)
-          sD = segment(D, DD)
-          sA = segment(A, AA)
-
-          objetsCorrection.push(
-            tracePoint(A, B, C, D, CC, DD, AA),
-            labelPoint(A, B, C, D, CC, DD, AA),
-            cC,
-            cD,
-            cA,
-            sC,
-            sD,
-            sA,
+          pointsSymetrie = [C, D, A].slice(0, nbPoints)
+          // Au-delà de trois points, on en ajoute (sans toucher au tirage des trois premiers)
+          while (pointsSymetrie.length < nbPoints) {
+            pointsSymetrie.push(
+              choisiPointSupplementaire(
+                B,
+                pointsSymetrie,
+                [p1nom[4], p1nom[5]][pointsSymetrie.length - 3],
+              ),
+            )
+          }
+          const imagesSymetrie = pointsSymetrie.map((P) =>
+            rotation(P, B, 180, `${P.nom}'`, 'above'),
           )
-          objetsEnonce.push(tracePoint(A, B, C, D), labelPoint(A, B, C, D))
+          pointsSymetrie.forEach((P) => {
+            P.positionLabel = 'above'
+          })
+          const codagesMilieu = pointsSymetrie.map((P, index) =>
+            codageMilieu(
+              P,
+              imagesSymetrie[index],
+              couleursCodageCentrale[index],
+              marquesCodageCentrale[index],
+              false,
+            ),
+          )
+          const segmentsSymetrie = pointsSymetrie.map((P, index) =>
+            segment(P, imagesSymetrie[index]),
+          )
+          objetsCorrection.push(
+            tracePoint(B, ...pointsSymetrie, ...imagesSymetrie),
+            labelPoint(B, ...pointsSymetrie, ...imagesSymetrie),
+            ...codagesMilieu,
+            ...segmentsSymetrie,
+          )
+          objetsEnonce.push(
+            tracePoint(B, ...pointsSymetrie),
+            labelPoint(B, ...pointsSymetrie),
+          )
           if (context.isHtml) {
             numQuestion = 0
             enonce =
@@ -1126,21 +1187,20 @@ export default class ConstruireParSymetrie extends Exercice {
             numQuestion = -1
             enonce = ''
           }
+          pointsSymetrie.forEach((P, index) => {
+            enonce +=
+              numAlpha(numQuestion + 1 + index) +
+              ` Construire le point $${P.nom}'$ symétrique de $${P.nom}$ par rapport au point $${p1nom[1]}$.<br>`
+          })
           enonce +=
-            numAlpha(numQuestion + 1) +
-            ` Construire le point $${p1nom[2]}'$ symétrique de $${p1nom[2]}$ par rapport au point $${p1nom[1]}$.<br>`
-          enonce +=
-            numAlpha(numQuestion + 2) +
-            ` Construire le point $${p1nom[3]}'$ symétrique de $${p1nom[3]}$ par rapport au point $${p1nom[1]}$.<br>`
-          enonce +=
-            numAlpha(numQuestion + 3) +
-            ` Construire le point $${p1nom[0]}'$ symétrique de $${p1nom[0]}$ par rapport au point $${p1nom[1]}$.<br>`
-          enonce += numAlpha(numQuestion + 4) + ' Coder la figure.<br><br>'
-          Xmin = Math.floor(Math.min(A.x, B.x, C.x, D.x, AA.x, CC.x, DD.x) - 1)
-          Xmax = Math.ceil(Math.max(A.x, B.x, C.x, D.x, AA.x, CC.x, DD.x) + 1)
-          Ymin = Math.floor(Math.min(A.y, B.y, C.y, D.y, AA.y, CC.y, DD.y) - 1)
-          Ymax = Math.ceil(Math.max(A.y, B.y, C.y, D.y, AA.y, CC.y, DD.y) + 1)
+            numAlpha(numQuestion + 1 + nbPoints) + ' Coder la figure.<br><br>'
+          const tousLesPoints = [B, ...pointsSymetrie, ...imagesSymetrie]
+          Xmin = Math.floor(Math.min(...tousLesPoints.map((P) => P.x)) - 1)
+          Xmax = Math.ceil(Math.max(...tousLesPoints.map((P) => P.x)) + 1)
+          Ymin = Math.floor(Math.min(...tousLesPoints.map((P) => P.y)) - 1)
+          Ymax = Math.ceil(Math.max(...tousLesPoints.map((P) => P.y)) + 1)
           break
+        }
         case 7: // Symétrie centrale de triangle
         default:
           p1nom = creerNomDePolygone(5, listeDeNomsDePolygones)
@@ -1391,7 +1451,7 @@ export default class ConstruireParSymetrie extends Exercice {
         ) {
           enonce = this.centralSymmetryInteractive({
             i,
-            points: [C, D, A],
+            points: pointsSymetrie,
             center: B,
             bounds: params,
           })
