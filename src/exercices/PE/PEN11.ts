@@ -1,6 +1,10 @@
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import Exercice from '../Exercice'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import {
+  gestionnaireFormulaireTexte,
+  listeQuestionsToContenu,
+  randint,
+} from '../../modules/outils'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import FractionEtendue from '../../modules/FractionEtendue'
 import {
@@ -36,9 +40,37 @@ export default class IsDecimal extends Exercice {
       'numX/2^m5^nX',
     ]
     this.nbQuestions = 3
+    this.besoinFormulaireTexte = [
+      'Choix des facteurs premiers utilisés au dénominateur (autres que 2 et 5)',
+      'Nombres séparés par des tirets.\nChoisir valeur(s) parmi 3, 7, 11, 13, 17, 19 et 23.',
+    ]
+    this.sup = '3-7-11-13'
   }
 
   nouvelleVersion() {
+    const facteursPremiers = gestionnaireFormulaireTexte({
+      saisie: this.sup,
+      min: 2,
+      max: 23,
+      defaut: 3,
+      melange: 24,
+      nbQuestions: 0,
+      shuffle: false,
+      enleveDoublons: true,
+      exclus: [2, 4, 5, 6, 8, 9, 10, 12, 14, 15, 16, 18, 20, 21, 22],
+    }).map(Number)
+    // Facteur X du dénominateur : un nombre premier, son carré ou son cube,
+    // ou un produit de deux nombres premiers distincts (si le choix le permet)
+    const choisirX = () => {
+      let x = choice(facteursPremiers)
+      const situation = randint(1, 3)
+      if (situation === 1) {
+        x = x ** randint(2, 3)
+      } else if (situation === 2 && facteursPremiers.length > 1) {
+        x = x * choice(facteursPremiers, [x]) ** randint(1, 3)
+      }
+      return x
+    }
     const listeTypeQuestions = combinaisonListes(
       this.typeQuestionsDisponibles,
       this.nbQuestions,
@@ -88,13 +120,7 @@ export default class IsDecimal extends Exercice {
           while (!isDecimal(f) && cpt < 10) {
             const n = randint(2, 6)
             const m = randint(2, 4, [n])
-            let x = choice([3, 7, 11, 13])
-            const situation = randint(1, 3)
-            if (situation === 1) {
-              x = x ** randint(2, 3)
-            } else if (situation === 2) {
-              x = x * choice([3, 7, 11, 13], [x]) ** randint(1, 3)
-            }
+            const x = choisirX()
             num = randint(50, 200)
             den = 2 ** n * 5 ** m * x
             f = new FractionEtendue(num, den)
@@ -118,13 +144,7 @@ export default class IsDecimal extends Exercice {
         case 'numX/2^m5^nX': {
           const n = randint(2, 6)
           const m = randint(2, 4, [n])
-          let x = choice([3, 7, 11, 13])
-          const situation = randint(1, 3)
-          if (situation === 1) {
-            x = x ** randint(2, 3)
-          } else if (situation === 2) {
-            x = x * choice([3, 7, 11, 13], [x]) ** randint(1, 3)
-          }
+          const x = choisirX()
           const num = randint(50, 200) * x
           const den = 2 ** n * 5 ** m * x
           const f = new FractionEtendue(num, den)
