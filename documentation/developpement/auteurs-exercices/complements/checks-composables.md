@@ -424,6 +424,13 @@ Exactement un signe `=` : `2x+1=5` est accepté, `2x+1` et `x=2=3` refusés.
 `2x=6` pour `x=3` et `4x-2=10` pour `2x-1=5` sont acceptés ; `x=4` est refusé
 pour `x=3`.
 
+Option `complexes: true` : `i` est l'unité imaginaire et les autres lettres sont
+des inconnues complexes (`\overline{z}` est accepté). Deux équations sont
+équivalentes lorsque leurs différences « gauche - droite » sont proportionnelles
+par un complexe non nul. `(2+3i)z=-1+i` est alors acceptée pour
+`z=\frac{1+5i}{13}` ; `z=\frac{2+5i}{13}` est refusée. Sans l'option, `i` est
+une lettre comme une autre.
+
 #### `hasZeroMember`
 
 Un membre est nul : `2x-6=0` et `0=x+1` sont acceptés ; `2x=6` refusé.

@@ -1,6 +1,17 @@
 import { compile, ComputeEngine } from '@cortex-js/compute-engine'
 import type { Check, CheckOverrides } from './types'
 import {
+  complexDivide,
+  complexEvaluationPoints,
+  complexModulus,
+  complexSubtract,
+  complexVariables,
+  evaluateComplexExpression,
+  toleranceComplexe,
+  type NombreComplexe,
+  type PointComplexe,
+} from './complexArithmetic'
+import {
   insertImplicitProducts,
   normalizeLatexArithmetic,
 } from './latexArithmetic'
@@ -49,7 +60,10 @@ function variablesInEquations(equations: Equation[]): string[] {
   ].sort()
 }
 
-function valueAt(expression: string, point: EvaluationPoint): number | undefined {
+function valueAt(
+  expression: string,
+  point: EvaluationPoint,
+): number | undefined {
   const compiled = compile(expression)
   if (compiled == null || compiled.run == null) return undefined
   let value: unknown
@@ -186,6 +200,54 @@ function haveSameFiniteUnivariateSolutions(
   })
 }
 
+/**
+ * Équivalence de deux équations dans C : `i` est l'unité imaginaire et les
+ * autres lettres sont des inconnues complexes. Les équations sont équivalentes
+ * lorsque leurs différences « membre de gauche - membre de droite » sont
+ * proportionnelles (par un complexe non nul) en tout point testé.
+ */
+function areEquivalentComplexEquations(
+  input: Equation,
+  answer: Equation,
+): boolean {
+  const variables = complexVariables(
+    `${input.left}${input.right}${answer.left}${answer.right}`,
+  )
+  const difference = (
+    equation: Equation,
+    point: PointComplexe,
+  ): NombreComplexe | undefined => {
+    const left = evaluateComplexExpression(equation.left, point)
+    const right = evaluateComplexExpression(equation.right, point)
+    return left == null || right == null
+      ? undefined
+      : complexSubtract(left, right)
+  }
+  let ratio: NombreComplexe | undefined
+  for (const point of complexEvaluationPoints(variables)) {
+    const inputValue = difference(input, point)
+    const answerValue = difference(answer, point)
+    if (inputValue === undefined || answerValue === undefined) return false
+    if (
+      complexModulus(answerValue) <= toleranceComplexe(answerValue, inputValue)
+    ) {
+      if (
+        complexModulus(inputValue) > toleranceComplexe(answerValue, inputValue)
+      )
+        return false
+      continue
+    }
+    const currentRatio = complexDivide(inputValue, answerValue)
+    if (ratio === undefined) ratio = currentRatio
+    else if (
+      complexModulus(complexSubtract(currentRatio, ratio)) >
+      toleranceComplexe(currentRatio, ratio)
+    )
+      return false
+  }
+  return ratio !== undefined && complexModulus(ratio) > TOLERANCE
+}
+
 export function isEquation(options: CheckOverrides = {}): Check {
   return {
     name: options.name ?? 'isEquation',
@@ -198,26 +260,24 @@ export function isEquation(options: CheckOverrides = {}): Check {
         passed,
         feedbackKo:
           options.feedbackKo ??
-          "La réponse doit être une équation avec un seul signe =.",
+          'La réponse doit être une équation avec un seul signe =.',
         feedbackOk: options.feedbackOk ?? 'La réponse est bien une équation.',
       }
     },
   }
 }
 
-export function isEquivalentEquation(options: CheckOverrides = {}): Check {
+export function isEquivalentEquation(
+  options: CheckOverrides & { complexes?: boolean } = {},
+): Check {
   return {
     name: options.name ?? 'isEquivalentEquation',
     weight: options.weight,
     feedbackEnabled: options.feedbackEnabled,
     run: (saisie, answer) => {
-      const inputEquation = splitEquation(saisie)
-      const answerEquation = splitEquation(answer)
-      const passed =
-        inputEquation !== undefined &&
-        answerEquation !== undefined &&
-        (areEquivalentEquations(inputEquation, answerEquation) ||
-          haveSameFiniteUnivariateSolutions(inputEquation, answerEquation))
+      const passed = options.complexes
+        ? areEquivalentComplexEquationStrings(saisie, answer)
+        : areEquivalentRealEquationStrings(saisie, answer)
 
       return {
         passed,
@@ -230,6 +290,36 @@ export function isEquivalentEquation(options: CheckOverrides = {}): Check {
       }
     },
   }
+}
+
+function areEquivalentRealEquationStrings(
+  saisie: string,
+  answer: string,
+): boolean {
+  const inputEquation = splitEquation(saisie)
+  const answerEquation = splitEquation(answer)
+  return (
+    inputEquation !== undefined &&
+    answerEquation !== undefined &&
+    (areEquivalentEquations(inputEquation, answerEquation) ||
+      haveSameFiniteUnivariateSolutions(inputEquation, answerEquation))
+  )
+}
+
+function areEquivalentComplexEquationStrings(
+  saisie: string,
+  answer: string,
+): boolean {
+  const inputParts = saisie.split('=')
+  const answerParts = answer.split('=')
+  return (
+    inputParts.length === 2 &&
+    answerParts.length === 2 &&
+    areEquivalentComplexEquations(
+      { left: inputParts[0], right: inputParts[1] },
+      { left: answerParts[0], right: answerParts[1] },
+    )
+  )
 }
 
 export function hasZeroMember(options: CheckOverrides = {}): Check {

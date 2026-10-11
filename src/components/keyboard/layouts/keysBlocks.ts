@@ -383,6 +383,10 @@ const basicOperationCaps2: CompleteKeysList = {
   inline: ['ADD', 'SUB', 'MULT', 'DIV', '=', 'FRAC', '(', ')'],
   block: ['ADD', 'SUB', 'MULT', 'DIV', '=', 'FRAC', '(', ')'],
 }
+const basicOperationComplexesCaps: CompleteKeysList = {
+  inline: ['ADD', 'SUB', 'MULT', 'DIV', '=', 'FRAC', '(', ')', 'iComplex'],
+  block: ['ADD', 'SUB', 'MULT', 'DIV', '=', 'FRAC', '(', ')', 'iComplex'],
+}
 const fullOperationCaps: CompleteKeysList = {
   inline: [
     'ADD',
@@ -1146,6 +1150,13 @@ export const basicOperations2: KeyboardBlock = {
   isUnits: false,
 }
 
+export const basicOperationsComplexes: KeyboardBlock = {
+  keycaps: basicOperationComplexesCaps,
+  cols: 3,
+  title: 'Opérations de base et i',
+  isUnits: false,
+}
+
 export const basicOperationsPlus: KeyboardBlock = {
   keycaps: basicOperationPlusCaps,
   cols: 3,
@@ -1377,6 +1388,7 @@ export const keyboardBlocks: {
   areas,
   basicOperations,
   basicOperations2,
+  basicOperationsComplexes,
   basicOperationsPlus,
   capacities,
   compare,

@@ -1352,6 +1352,41 @@ Un exercice qui mélange des questions avec solveur et d'autres questions doit
 garder le même total pour chaque question quel que soit le tirage : voir
 `3L15-3`, où les questions sans solveur sont doublées avec le barème sur 2 points.
 
+### Résolution dans C
+
+`complex: true` (équations uniquement, avec `variable: 'z'` en général) fait
+résoudre l'équation dans $\mathbb{C}$ :
+
+- `i` est l'unité imaginaire (`i`, `\mathrm{i}` et `\imaginaryI` sont
+  équivalents) et le clavier propose la touche `i` (bloc
+  `basicOperationsComplexes`) ;
+- l'équivalence des étapes est contrôlée sur les complexes, par
+  `isEquivalentEquation({ complexes: true })` (voir
+  `checks-composables.md`) : multiplier ou diviser les deux membres par un
+  complexe non nul, développer, ou écrire une fraction de complexes
+  (`z=\dfrac{-1+i}{2+3i}`) est accepté ;
+- la forme résolue est la forme algébrique `a+bi` : `a` et `b` sont des entiers,
+  des décimaux ou des fractions (`\dfrac{1}{13}+\dfrac{5}{13}i` ou
+  `\dfrac{1}{13}+\dfrac{5i}{13}`), et aucun des deux termes n'est nul quand
+  l'écriture en comporte deux. Contrairement aux équations dans R, les
+  fractions n'ont pas besoin d'être irréductibles : `z=\dfrac{2}{4}+i` rapporte
+  les points. `z=\dfrac{1+5i}{13}` ou `z=\dfrac{-1+i}{2+3i}` sont équivalents
+  mais pas encore résolus ;
+- la valeur attendue de `handleAnswers()` peut être écrite avec
+  `Complexe.tex()` (`z=${solution.tex()}`) : elle est comparée numériquement à
+  la dernière ligne.
+
+```ts
+texte += addMathaleaSolveur(this, i, {
+  initial: '(2+3i)z+1-i=0',
+  variable: 'z',
+  complex: true,
+  ...optionsSolveur(this.interactif, this.sup, this.sup2),
+})
+```
+
+Voir `TEC1-41`.
+
 Pour une inéquation résolue sous la forme `x<...`, `x\\leqslant...`, `x>...` ou
 `x\\geqslant...`, `showInterval: true` ajoute une représentation en lecture
 seule avec `IntervalleDroiteElement`. Les options `intervalMin` et
