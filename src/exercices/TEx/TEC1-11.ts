@@ -209,7 +209,7 @@ export default class PartiesReelleEtImaginaire extends Exercice {
           this,
           i,
           '\\operatorname{Re}(z)=%{champ1}\\quad;\\quad\\operatorname{Im}(z)=%{champ2}',
-          `${KeyboardType.clavierDeBaseAvecFraction} ${KeyboardType.complexes}`,
+          KeyboardType.complexes,
         )}`
       }
 

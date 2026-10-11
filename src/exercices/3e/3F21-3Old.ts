@@ -213,7 +213,7 @@ export default class PenteEtOrdonneeOrigineDroite extends Exercice {
       question3 += ajouteChampTexteMathLive(
         this,
         (vocabulaire === 'affine' ? 2 : 1) + questionInteractif,
-        `${KeyboardType.clavierDeBaseAvecX} ${KeyboardType.clavierFullOperations}`,
+        KeyboardType.clavierFullOperations,
         { texteAvant: `$${sp(10)}${nomFonction} : x \\mapsto $` },
       )
       correction3 =

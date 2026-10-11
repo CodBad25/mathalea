@@ -198,12 +198,9 @@ export default class EquationsAvecConjugue extends Exercice {
         La solution de l'équation est donc le nombre complexe $${miseEnEvidence(`z=${solution.tex()}`)}$.`
 
         if (this.interactif) {
-          texte += ajouteChampTexteMathLive(
-            this,
-            i,
-            `${KeyboardType.clavierDeBase} ${KeyboardType.complexes}`,
-            { texteAvant: '<br>$z=$' },
-          )
+          texte += ajouteChampTexteMathLive(this, i, KeyboardType.complexes, {
+            texteAvant: '<br>$z=$',
+          })
         }
         handleAnswers(this, i, { reponse: { value: solution.tex() } })
 
@@ -269,7 +266,7 @@ export default class EquationsAvecConjugue extends Exercice {
             this,
             i,
             'z_1=%{champ1}\\quad\\text{et}\\quad z_2=%{champ2}',
-            `${KeyboardType.clavierDeBase} ${KeyboardType.complexes}`,
+            KeyboardType.complexes,
           )}`
         }
         handleAnswers(

@@ -3,7 +3,11 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { Complexe } from '../../lib/mathFonctions/Complexe'
-import { miseEnEvidence, texteEnCouleur, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleur,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
@@ -232,7 +236,7 @@ export default class RealiteQuotientComplexes extends Exercice {
         \\overline{Z}&=%{champ1}\\\\
         ${formatReponsePartie2},\\quad z\\neq %{champ3}.
         \\end{aligned}`,
-          `${KeyboardType.clavierDeBase} ${KeyboardType.complexes} ${KeyboardType.clavierDeBaseAvecVariable}`,
+          KeyboardType.complexesAvecVariable,
         )}`
       }
 
@@ -258,7 +262,7 @@ export default class RealiteQuotientComplexes extends Exercice {
     ${calculConditionReelle}
     ${explicationSimplification}Par conséquent, on a $Z\\in\\mathbb{R}$ si et seulement si $${equationDroite}=0$, avec $z\\neq${valeurInterdite.tex()}$.<br>
     ${conclusionContrainte}<br>
-    ${texteEnCouleurEtGras('Remarque :',bleuMathalea)} <br>il était possible de résoudre cette question en posant dès le départ $z=x+\\mathrm{i}y$, avec $x\\in \\mathbb{R}$ et $y\\in \\mathbb{R}$.`
+    ${texteEnCouleurEtGras('Remarque :', bleuMathalea)} <br>il était possible de résoudre cette question en posant dès le départ $z=x+\\mathrm{i}y$, avec $x\\in \\mathbb{R}$ et $y\\in \\mathbb{R}$.`
 
       const texteCorr = createList({
         items: [correctionPartie1, correctionPartie2],

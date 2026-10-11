@@ -171,7 +171,7 @@ export default class EquationsProduitNulExponentielles extends Exercice {
       texte += ajouteChampTexteMathLive(
         this,
         i,
-        `${KeyboardType.clavierFonctionsTerminales} ${KeyboardType.clavierEnsemble}`,
+        KeyboardType.clavierFonctionsTerminalesEnsemble,
         { texteAvant: '<br>$S=$' },
       )
       texteCorr += `<br><br>Donc $S=${miseEnEvidence(value)}$.`

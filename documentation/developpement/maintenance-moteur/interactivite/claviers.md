@@ -36,6 +36,8 @@ Quelques types courants :
 | `clavierDeBase`                       | nombres et opérations                                                          |
 | `clavierDeBaseAvecFraction`           | nombres, opérations, fractions                                                 |
 | `clavierDeBaseAvecVariable`           | idem avec des lettres                                                          |
+| `complexes`                           | nombres complexes (chiffres, `i`, fraction, puissance, trigonométrie)          |
+| `complexesAvecVariable`               | idem avec des lettres (`x`, `y`, `z`…)                                         |
 | `clavierMatrice`                      | coefficients usuels du lycée et insertion d'une matrice de dimensions choisies |
 | `lycee`, `lyceeClassique`             | fonctions et opérations du lycée                                               |
 | `grecTrigo`                           | lettres grecques et fonctions trigonométriques                                 |
@@ -43,6 +45,14 @@ Quelques types courants :
 | `clavierEnsemble`                     | ensembles et intervalles                                                       |
 | `longueur`, `aire`, `volume`, `masse` | grandeurs avec unités                                                          |
 | `alphanumeric`                        | clavier alphanumérique                                                         |
+
+Certains types (`complexes`, `clavierDeBase`, `clavierDeBaseAvecX`…) contiennent
+déjà les chiffres : ne pas les combiner avec un autre clavier de nombres, les
+chiffres s'afficheraient en double. Utiliser `complexes` seul (ou
+`complexesAvecVariable` pour avoir aussi des lettres), ou un type qui réunit déjà
+les blocs voulus (`clavierDeBaseAvecXEtEgal`, `clavierDeBaseAvecEgalEtVariable`,
+`clavierFonctionsTerminalesEnsemble`, `clavierFonctionsTerminalesTrigo`). Le test
+`keyboard.test.ts` repère les combinaisons fautives dans les exercices.
 
 La liste complète est `KEYBOARD_CATEGORIES` dans
 `src/lib/interactif/claviers/keyboard.ts`.

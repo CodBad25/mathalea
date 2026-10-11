@@ -38,7 +38,7 @@ export function coureur4(decimal = true): Probleme {
 
   // probleme.styleChampTexteMathlive = KeyboardType.clavierDeBase
   probleme.reponse = `${texNombre(Math.abs(nb2 - nb1), 3)}${unite}`
-  probleme.styleChampTexteMathlive = `${KeyboardType.longueur} ${KeyboardType.clavierDeBase}`
+  probleme.styleChampTexteMathlive = `${KeyboardType.longueur} ${KeyboardType.clavierDeBaseAvecFraction}`
   probleme.optionsComparaison = { unite: true }
   return probleme
 }

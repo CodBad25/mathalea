@@ -391,7 +391,7 @@ export default class InequationsProduitExponentielles extends Exercice {
       texte += ajouteChampTexteMathLive(
         this,
         i,
-        `${KeyboardType.clavierFonctionsTerminales} ${KeyboardType.clavierEnsemble}`,
+        KeyboardType.clavierFonctionsTerminalesEnsemble,
         { texteAvant: '<br>$S=$' },
       )
 

@@ -164,7 +164,7 @@ export default class EquationSecondDegreComplexe extends Exercice {
           this,
           i,
           modeleReponse,
-          `${KeyboardType.clavierDeBase} ${KeyboardType.complexes}`,
+          KeyboardType.complexes,
         )}`
       }
 
