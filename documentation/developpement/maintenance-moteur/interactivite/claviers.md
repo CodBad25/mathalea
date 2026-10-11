@@ -87,3 +87,21 @@ est fournie par `KeyboardType.clavierMatrice` avec les nombres, fractions,
 racines, puissances et opérations usuelles.
 
 Vérifier le résultat sur la page de test `?uuid=clavier`.
+
+## Affichage réduit ou agrandi
+
+Le clavier a deux affichages : **réduit** (touches sur une ligne, réparties
+en pages si elles ne tiennent pas) et **agrandi** (blocs en grille, toutes les
+touches visibles). Des pages passent facilement inaperçues : à l'ouverture
+d'un champ, `choisitClavierReduit()` (`src/components/keyboard/lib/modeClavier.ts`)
+choisit l'affichage ainsi :
+
+1. le dernier choix de l'élève (touche agrandir / réduire, à côté des touches
+   spéciales), mémorisé dans `localStorage` (`mathaleaClavierReduit`), prime ;
+2. si toutes les touches tiennent sur une ligne, le clavier est réduit ;
+3. sinon il est agrandi, sauf s'il est plus large que l'écran ou, hors écran
+   tactile, s'il dépasse 40 % de la hauteur de la fenêtre : on garde alors les
+   pages.
+
+En affichage réduit, les blocs d'unités suivent le premier bloc du clavier
+(souvent les chiffres) pour ne pas être relégués en dernière page.
