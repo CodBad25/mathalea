@@ -81,7 +81,7 @@ export default class AsymptoteDepuisLimite extends Exercice {
                 },
                 field1: { choices },
                 field2: {
-                  keyboard: `${KeyboardType.clavierDeBaseAvecEgal} ${KeyboardType.clavierDeBaseAvecVariable}`,
+                  keyboard: KeyboardType.clavierDeBaseAvecEgalEtVariable,
                 },
               },
             })

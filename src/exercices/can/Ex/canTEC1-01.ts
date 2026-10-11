@@ -39,10 +39,7 @@ export default class SommeDeComplexes extends ExerciceSimple {
 
     this.nbQuestions = 1
     this.typeExercice = 'simple'
-    this.formatChampTexte = {
-      clavierDeBase: KeyboardType.clavierDeBase,
-      complexes: KeyboardType.complexes,
-    }
+    this.formatChampTexte = KeyboardType.complexes
   }
 
   nouvelleVersion() {

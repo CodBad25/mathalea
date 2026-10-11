@@ -451,6 +451,7 @@ const terminaleCaps: CompleteKeysList = {
     'POW10',
     'BRACES',
     'BRACKETS',
+    'xMath',
   ],
   block: [
     'SQRT',

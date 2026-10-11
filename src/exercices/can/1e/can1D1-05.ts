@@ -41,7 +41,7 @@ export default class LectureGraphiqueTangente extends ExerciceSimple {
 
     this.typeExercice = 'simple'
     this.nbQuestions = 1
-    this.formatChampTexte = `${KeyboardType.clavierDeBase} ${KeyboardType.clavierDeBaseAvecVariable}`
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecVariable
   }
 
   nouvelleVersion() {

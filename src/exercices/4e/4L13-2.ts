@@ -966,7 +966,7 @@ export default class ProblemesEnEquationParEtapes extends Exercice {
 
     const varianteParDefaut = probleme.variantes[0]
     const clavierExpression = KeyboardType.clavierDeBaseAvecX
-    const clavierEquation = `${KeyboardType.clavierDeBaseAvecX} ${KeyboardType.clavierDeBaseAvecEgal}`
+    const clavierEquation = KeyboardType.clavierDeBaseAvecXEtEgal
 
     const lignesEtapeB = probleme.donnees
       .map((donnee, rang) => `${donnee} : %{field${rang + 1}}`)

@@ -69,7 +69,7 @@ export default class DeriveeExp1AN303 extends Exercice {
             texte += ajouteChampTexteMathLive(
               this,
               i,
-              `${KeyboardType.clavierFonctionsTerminales} ${KeyboardType.clavierEnsemble}`,
+              KeyboardType.clavierFonctionsTerminalesEnsemble,
               { texteAvant: '<br>$S=$' },
             )
             if (k === 0) {
@@ -127,7 +127,7 @@ export default class DeriveeExp1AN303 extends Exercice {
             texte += ajouteChampTexteMathLive(
               this,
               i,
-              `${KeyboardType.clavierFonctionsTerminales} ${KeyboardType.clavierEnsemble}`,
+              KeyboardType.clavierFonctionsTerminalesEnsemble,
               { texteAvant: '<br>$S=$' },
             )
 
