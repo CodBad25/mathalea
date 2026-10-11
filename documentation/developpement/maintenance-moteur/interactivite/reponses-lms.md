@@ -14,6 +14,10 @@ Moodle a deux points d'entrée, qui partagent le même message `mathalea:score` 
 
 En vue CAN, `resultsByExercice` contient une entrée par question : `moodle.scorm.js` fusionne les `answers` de toutes les entrées (les clés `ExiQj` sont uniques) pour que la copie enregistrée soit complète.
 
+La graine enregistrée est celle renvoyée par MathALÉA pour le premier exercice, sauf pour une Course aux nombres exportée en SCORM avec une graine aléatoire : l'export donne alors à chaque exercice `alea=-1-rang`, le script remplace `-1` par la graine tirée pour l'élève (les exercices reçoivent `graine-0`, `graine-1`…) et c'est cette graine de l'élève qu'il enregistre.
+
+L'URL du SCO (ancre de `index.html`) peut aussi porter `es=…` pour imposer les réglages de la vue élève (titre et référence masqués) ; à défaut, le script ajoute `es=011010`.
+
 La durée est placée avant le premier `|` de `cmi.suspend_data` car les réponses, lorsque le repli JSON brut est utilisé, peuvent elles-mêmes contenir ce caractère (`\left|`). Les copies enregistrées sans durée (`graine|réponses`) restent lisibles.
 
 SCORM 1.2 plafonne `cmi.suspend_data` à 4 096 caractères et `student_response` à 255. Deux mesures maintiennent les réponses sous ces ordres de grandeur.

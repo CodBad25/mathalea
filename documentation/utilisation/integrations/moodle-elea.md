@@ -37,6 +37,13 @@ Procédure générale :
 4. Télécharger le fichier.
 5. Créer une activité Scorm dans Moodle ou déposer le fichier dans le cours en mode édition.
 
+Comme pour le Gift, deux vues sont proposées :
+
+- Vue classique : chaque exercice sélectionné devient un élément de l'activité. L'option « Afficher le titre » permet de masquer le titre et la référence des exercices.
+- Vue Course aux nombres : tous les exercices sont réunis dans un seul élément, présenté sous la forme d'une Course aux nombres, avec les mêmes réglages que le Gift (titre, sous-titre, durée ou course sans chronomètre, accès aux corrections).
+
+L'aléatoire se règle dans les deux vues : soit l'énoncé change à chaque nouvelle tentative et diffère d'un élève à l'autre, soit tous les élèves ont l'énoncé actuel.
+
 Point de réglage important : dans l'activité Scorm, vérifier la méthode d'évaluation dans la section des notes. Pour plusieurs exercices, la note moyenne ou totale doit correspondre à l'usage attendu.
 
 ## Plein écran
@@ -49,4 +56,4 @@ Selon la configuration de Moodle et du navigateur, le plein écran est soit celu
 
 - Gift (Quiz) : intégration dans un test Moodle, une question par exercice.
 - Gift (Course aux nombres) : une seule question de test, course chronométrée sur tous les exercices.
-- Scorm : activité complète, suivi des tentatives et rapports Scorm.
+- Scorm : activité complète, suivi des tentatives et rapports Scorm, en vue classique ou Course aux nombres.

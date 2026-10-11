@@ -191,6 +191,29 @@
     xmlManifest.appendChild(xmlOrganizations)
     let xmlResources = xmlScorm.createElement('resources')
     xmlManifest.appendChild(xmlResources)
+    let scormItemsCount = 0
+    /** Ajoute un SCO au manifeste : un élément du sommaire et sa ressource. */
+    function addScormItem(titre: string, url: string) {
+      scormItemsCount++
+      const identifier = `MathAlea-Exo${scormItemsCount}`
+      const xmlItem = xmlScorm.createElement('item')
+      xmlItem.setAttribute('identifier', identifier)
+      xmlItem.setAttribute('isvisible', 'true')
+      xmlItem.setAttribute('identifierref', identifier)
+      const xmlItemTitle = xmlScorm.createElement('title')
+      xmlItemTitle.textContent = titre
+      xmlItem.appendChild(xmlItemTitle)
+      xmlOrganization.appendChild(xmlItem)
+      const xmlResource = xmlScorm.createElement('resource')
+      xmlResource.setAttribute('identifier', identifier)
+      xmlResource.setAttribute('type', 'webcontent')
+      xmlResource.setAttribute('adlcp:scormtype', 'sco')
+      xmlResource.setAttribute('href', 'index.html#' + url)
+      const xmlDependency = xmlScorm.createElement('dependency')
+      xmlDependency.setAttribute('identifierref', 'COMMON_FILES')
+      xmlResource.appendChild(xmlDependency)
+      xmlResources.appendChild(xmlResource)
+    }
     mathaleaUpdateExercicesParamsFromUrl()
     exercices = await mathaleaGetExercicesFromParams($exercicesParams)
     if (exercices.length === 0) {
@@ -221,31 +244,15 @@
       contentGift += '####' + giftScriptTag
       contentGift += `<mathalea-moodle v="4" url\\="${paramUrl}"${showTitle ? '' : ' titre="false"'}${graine} correction />\n`
       contentGift += '}\n\n'
-      let xmlItem = xmlScorm.createElement('item')
-      xmlItem.setAttribute('identifier', `MathAlea-Exo${i + 1}`)
-      xmlItem.setAttribute('isvisible', 'true')
-      xmlItem.setAttribute('identifierref', `MathAlea-Exo${i + 1}`)
-      let xmlTitle = xmlScorm.createElement('title')
-      xmlTitle.textContent = titre
-      xmlItem.appendChild(xmlTitle)
-      xmlOrganization.appendChild(xmlItem)
-      let xmlResource = xmlScorm.createElement('resource')
-      xmlResource.setAttribute('identifier', `MathAlea-Exo${i + 1}`)
-      xmlResource.setAttribute('type', 'webcontent')
-      xmlResource.setAttribute('adlcp:scormtype', 'sco')
-      xmlResource.setAttribute(
-        'href',
-        'index.html#' +
-          paramUrl.replaceAll('\\=', '=') +
-          (useAlea ? '' : '&alea=' + param.alea),
-      )
-      let xmlDependency = xmlScorm.createElement('dependency')
-      xmlDependency.setAttribute('identifierref', 'COMMON_FILES')
-      xmlResource.appendChild(xmlDependency)
-      xmlResources.appendChild(xmlResource)
+      if (scormView === 'classique') {
+        addScormItem(titre, buildScormExerciceUrl(param, exercice))
+      }
       i++
     }
     buildGiftCan()
+    if (scormView === 'can' && $exercicesParams.length > 0) {
+      addScormItem(canFullTitle(), buildScormCanUrl())
+    }
     let xmlResource = xmlScorm.createElement('resource')
     xmlResource.setAttribute('identifier', 'COMMON_FILES')
     xmlResource.setAttribute('type', 'webcontent')
@@ -315,26 +322,14 @@
           : `${buildParamUrl(param)}&alea\\=${seed}`
       })
       .join('&')
-    const canUrl =
-      paramsUrl +
-      `&canD\\=${canDuration}` +
-      `&canTi\\=${giftUrlValue(canTitle)}` +
-      `&canT\\=${giftUrlValue(canSubTitle)}` +
-      `&canSA\\=${canSolutionsAccess ? '1' : '0'}` +
-      `&canSM\\=${$canOptions.solutionsMode}` +
-      // La course doit être interactive : sans champ de saisie, il n'y aurait
-      // ni réponse à enregistrer ni score à transmettre à Moodle.
-      '&canI\\=1' +
-      (canIsTimerDisabled ? '&canNC\\=1' : '')
+    const canUrl = paramsUrl + canSettingsUrl().replaceAll('=', '\\=')
     const graine = aleaType === 'alea' ? ' graine\\="-1"' : ''
     const nbQuestions = exercices.reduce(
       (total, exercice) =>
         total + (isIExercice(exercice) ? exercice.nbQuestions : 1),
       0,
     )
-    const titre = [canTitle, canSubTitle]
-      .filter((part) => part !== '')
-      .join(' ')
+    const titre = canFullTitle()
     contentGiftCan += `:: ${titre} - ${nbQuestions} ${nbQuestions > 1 ? 'questions' : 'question'} ::\n`
     contentGiftCan += giftScriptTag
     contentGiftCan += `<mathalea-moodle v="4" can url\\="${canUrl}"${graine}/>\n`
@@ -345,8 +340,74 @@
     contentGiftCan += '}\n\n'
   }
 
+  /**
+   * Réglages de la Course aux nombres, sous forme d'URL non échappée
+   * (`&canD=…&canTi=…`). Les valeurs ne contiennent jamais de `=` brut : elles
+   * sont encodées par `giftUrlValue`.
+   */
+  function canSettingsUrl(): string {
+    return (
+      `&canD=${canDuration}` +
+      `&canTi=${giftUrlValue(canTitle)}` +
+      `&canT=${giftUrlValue(canSubTitle)}` +
+      `&canSA=${canSolutionsAccess ? '1' : '0'}` +
+      `&canSM=${$canOptions.solutionsMode}` +
+      // La course doit être interactive : sans champ de saisie, il n'y aurait
+      // ni réponse à enregistrer ni score à transmettre à Moodle.
+      '&canI=1' +
+      (canIsTimerDisabled ? '&canNC=1' : '')
+    )
+  }
+
+  function canFullTitle(): string {
+    return [canTitle, canSubTitle].filter((part) => part !== '').join(' ')
+  }
+
+  /*
+    URL d'un SCO, lue par `moodle.scorm.js` dans l'ancre de `index.html`. Sans
+    `alea`, celui-ci tire une graine propre à chaque tentative de l'élève et la
+    conserve dans `cmi.suspend_data`.
+  */
+  function buildScormExerciceUrl(
+    param: InterfaceParams,
+    exercice: IExercice | IExerciceStatique | undefined,
+  ): string {
+    const seed =
+      scormAleaType === 'graine' ? currentSeed(param, exercice) : undefined
+    return (
+      buildParamUrl(param).replaceAll('\\=', '=') +
+      (seed == null ? '' : `&alea=${seed}`) +
+      // Mêmes réglages de la vue élève que `moodle.js`, sans titre ni référence
+      (showTitle ? '' : '&es=01101000')
+    )
+  }
+
+  /*
+    Une Course aux nombres tient dans un seul SCO. En graine aléatoire, chaque
+    exercice reçoit `alea=-1-rang` : `moodle.scorm.js` remplace `-1` par la
+    graine de l'élève, et le rang évite que deux exercices identiques posent la
+    même question.
+  */
+  function buildScormCanUrl(): string {
+    const paramsUrl = $exercicesParams
+      .map((param, index) => {
+        const seed =
+          scormAleaType === 'graine'
+            ? currentSeed(param, exercices[index])
+            : `-1-${index}`
+        return (
+          buildParamUrl(param).replaceAll('\\=', '=') +
+          (seed == null ? '' : `&alea=${seed}`)
+        )
+      })
+      .join('&')
+    return paramsUrl + canSettingsUrl() + '&v=can'
+  }
+
   let aleaType = 'alea' // 'alea' | 'moodle' | 'graine'
-  let useAlea = true
+  let scormAleaType: 'alea' | 'graine' = 'alea'
+  // Vue choisie dans l'onglet SCORM : un SCO par exercice ou Course aux nombres
+  let scormView: 'classique' | 'can' = 'classique'
   let showTitle = true
   // Réglages de la Course aux nombres, initialisés avec ceux de la page d'accueil
   let canDuration = $canOptions.durationInMinutes
@@ -356,7 +417,8 @@
   let canIsTimerDisabled = $canOptions.isTimerDisabled
   $: {
     aleaType
-    useAlea
+    scormAleaType
+    scormView
     showTitle
     canDuration
     canTitle
@@ -392,6 +454,64 @@
     tab = e.detail
   }
 </script>
+
+{#snippet canSettings(idPrefix: string)}
+  <div
+    class="pl-2 pb-2 mt-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
+  >
+    Course aux nombres
+  </div>
+  <div class="pl-2 flex flex-col space-y-3 max-w-md">
+    <InputText
+      title="Titre"
+      inputID="{idPrefix}-can-title"
+      bind:value={canTitle}
+    />
+    <InputText
+      title="Sous-titre"
+      inputID="{idPrefix}-can-subtitle"
+      bind:value={canSubTitle}
+    />
+    <div>
+      <div
+        class="font-light text-sm text-coopmaths-struct dark:text-coopmathsdark-struct"
+      >
+        Durée (en minutes)
+      </div>
+      <InputNumber
+        id="{idPrefix}-can-duration"
+        min={1}
+        max={120}
+        ariaLabel="Durée de la course en minutes"
+        bind:value={canDuration}
+      />
+    </div>
+    <!--
+      `id` explicite : celui par défaut est fondé sur l'horodatage et deux
+      interrupteurs créés dans la même milliseconde le partageraient, rendant
+      leur libellé incliquable. Le préfixe distingue les onglets Gift et SCORM,
+      qui restent tous deux dans le DOM.
+    -->
+    <ButtonToggleAlt
+      id="{idPrefix}-can-no-timer"
+      title={'Course sans chronomètre'}
+      bind:value={canIsTimerDisabled}
+      explanations={[
+        "La course n'est pas chronométrée : l'élève la termine quand il le souhaite",
+        'La course est chronométrée',
+      ]}
+    />
+    <ButtonToggleAlt
+      id="{idPrefix}-can-solutions"
+      title={'Accès aux corrections'}
+      bind:value={canSolutionsAccess}
+      explanations={[
+        "L'élève voit les corrections à la fin de la course",
+        "L'élève ne voit que son score à la fin de la course",
+      ]}
+    />
+  </div>
+{/snippet}
 
 <main
   class="bg-coopmaths-canvas dark:bg-coopmathsdark-canvas {$darkMode.isActive
@@ -450,10 +570,10 @@
                 <p
                   class="text-coopmaths-corpus dark:text-coopmathsdark-corpus text-lg md:text-xl"
                 >
-                  MathALÉA vous permet de créer un fichier au format gift que vous
-                  pourrez ensuite importer dans la banque de questions de votre
-                  plateforme Moodle. Vous trouverez de plus amples informations
-                  dans notre <a
+                  MathALÉA vous permet de créer un fichier au format gift que
+                  vous pourrez ensuite importer dans la banque de questions de
+                  votre plateforme Moodle. Vous trouverez de plus amples
+                  informations dans notre <a
                     href="https://forge.apps.education.fr/coopmaths/mathalea/-/wikis/Utilisation-de-Mathalea-avec-Moodle"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -467,10 +587,11 @@
                 >
                   Cet export réunit tous les exercices sélectionnés dans une
                   <strong>unique question</strong>
-                  de test Moodle, présentée sous la forme d'une Course aux nombres chronométrée.
-                  La note transmise à Moodle est le total des points obtenus rapporté
-                  au nombre de questions de la course, et la copie de l'élève est réaffichée
-                  avec les corrections une fois le test terminé.
+                  de test Moodle, présentée sous la forme d'une Course aux nombres
+                  chronométrée. La note transmise à Moodle est le total des points
+                  obtenus rapporté au nombre de questions de la course, et la copie
+                  de l'élève est réaffichée avec les corrections une fois le test
+                  terminé.
                 </p>
               {/if}
               <h1
@@ -526,11 +647,12 @@
                       Autres options
                     </div>
                     <ButtonToggleAlt
+                      id="gift-show-title"
                       title={'Afficher le titre'}
                       bind:value={showTitle}
                       explanations={[
-                        "Le titre et la référence de l'exercice sera affiché",
-                        "Le titre et la référence de l'exercice ne sera pas affiché",
+                        "Le titre et la référence de l'exercice seront affichés",
+                        "Le titre et la référence de l'exercice ne seront pas affichés",
                       ]}
                     />
                   {:else}
@@ -554,57 +676,13 @@
                           value: 'moodle',
                         },
                         {
-                          label: "Pas d'aléatoire (utiliser les énoncés actuels)",
+                          label:
+                            "Pas d'aléatoire (utiliser les énoncés actuels)",
                           value: 'graine',
                         },
                       ]}
                     />
-                    <div
-                      class="pl-2 pb-2 mt-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
-                    >
-                      Course aux nombres
-                    </div>
-                    <div class="pl-2 flex flex-col space-y-3 max-w-md">
-                      <InputText title="Titre" bind:value={canTitle} />
-                      <InputText title="Sous-titre" bind:value={canSubTitle} />
-                      <div>
-                        <div
-                          class="font-light text-sm text-coopmaths-struct dark:text-coopmathsdark-struct"
-                        >
-                          Durée (en minutes)
-                        </div>
-                        <InputNumber
-                          id="gift-can-duration"
-                          min={1}
-                          max={120}
-                          ariaLabel="Durée de la course en minutes"
-                          bind:value={canDuration}
-                        />
-                      </div>
-                      <!--
-                        `id` explicite : celui par défaut est fondé sur l'horodatage
-                        et deux interrupteurs créés dans la même milliseconde le
-                        partageraient, rendant leur libellé incliquable.
-                      -->
-                      <ButtonToggleAlt
-                        id="gift-can-no-timer"
-                        title={'Course sans chronomètre'}
-                        bind:value={canIsTimerDisabled}
-                        explanations={[
-                          "La course n'est pas chronométrée : l'élève la termine quand il le souhaite",
-                          'La course est chronométrée',
-                        ]}
-                      />
-                      <ButtonToggleAlt
-                        id="gift-can-solutions"
-                        title={'Accès aux corrections'}
-                        bind:value={canSolutionsAccess}
-                        explanations={[
-                          "L'élève voit les corrections à la fin de la course",
-                          "L'élève ne voit que son score à la fin de la course",
-                        ]}
-                      />
-                    </div>
+                    {@render canSettings('gift')}
                   {/if}
                 </div>
                 <button
@@ -624,7 +702,10 @@
                 Code
               </h1>
               <pre
-                class="my-10 shadow-md bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark text-coopmaths-corpus dark:text-coopmathsdark-corpus p-4 w-full overflow-auto">{giftView === 'classique' ? contentGift : contentGiftCan}
+                class="my-10 shadow-md bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark text-coopmaths-corpus dark:text-coopmathsdark-corpus p-4 w-full overflow-auto">{giftView ===
+                'classique'
+                  ? contentGift
+                  : contentGiftCan}
             </pre>
             </section>
             <!-- FIN GIFT -->
@@ -672,14 +753,66 @@
 
               <div class="flex flex-col justify-center items-center space-y-2">
                 <div class="pl-4 pt-4">
-                  <ButtonToggleAlt
-                    title={'Utiliser des exercices aléatoires'}
-                    bind:value={useAlea}
-                    explanations={[
-                      'Chaque élève aura des exercices différents.',
-                      'Tous les élèves auront le même exercice',
+                  <div
+                    class="pl-2 pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
+                  >
+                    Vue
+                  </div>
+                  <!--
+                    `title` sert à nommer les groupes de boutons radio : il doit
+                    différer de ceux de l'onglet Gift, qui restent dans le DOM.
+                  -->
+                  <FormRadio
+                    title="Vue SCORM"
+                    bind:valueSelected={scormView}
+                    labelsValues={[
+                      { label: 'Vue classique', value: 'classique' },
+                      { label: 'Vue Course aux nombres', value: 'can' },
                     ]}
                   />
+                  <div
+                    class="pl-2 pb-2 mt-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
+                  >
+                    Aléatoire
+                  </div>
+                  <FormRadio
+                    title="Type d'aléatoire SCORM"
+                    bind:valueSelected={scormAleaType}
+                    labelsValues={[
+                      {
+                        label:
+                          scormView === 'classique'
+                            ? "L'énoncé change à chaque nouvelle tentative et est différent pour chaque élève"
+                            : 'Les énoncés changent à chaque nouvelle tentative et sont différents pour chaque élève',
+                        value: 'alea',
+                      },
+                      {
+                        label:
+                          scormView === 'classique'
+                            ? "Pas d'aléatoire (utiliser l'énoncé actuel)"
+                            : "Pas d'aléatoire (utiliser les énoncés actuels)",
+                        value: 'graine',
+                      },
+                    ]}
+                  />
+                  {#if scormView === 'classique'}
+                    <div
+                      class="pl-2 pb-2 mt-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
+                    >
+                      Autres options
+                    </div>
+                    <ButtonToggleAlt
+                      id="scorm-show-title"
+                      title={'Afficher le titre'}
+                      bind:value={showTitle}
+                      explanations={[
+                        "Le titre et la référence de l'exercice seront affichés",
+                        "Le titre et la référence de l'exercice ne seront pas affichés",
+                      ]}
+                    />
+                  {:else}
+                    {@render canSettings('scorm')}
+                  {/if}
                 </div>
 
                 <button
