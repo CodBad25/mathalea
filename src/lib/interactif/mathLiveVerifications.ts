@@ -250,6 +250,10 @@ export function verifyFillInTheBlankMathLive(
     }
 
     if (typeof reponses.callback === 'function') {
+      // Sans cette sauvegarde, la copie rechargée (Capytale…) n'aurait aucune saisie à restaurer.
+      if (mfe.getValue().length > 0 && typeof exercice.answers === 'object') {
+        exercice.answers[`Ex${exercice.numeroExercice}Q${i}`] = mfe.getValue()
+      }
       const result = reponses.callback(exercice, i, variables, bareme)
       lockFillInTheBlankPrompts(mfe)
       return result
