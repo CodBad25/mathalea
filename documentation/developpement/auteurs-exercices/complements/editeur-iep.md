@@ -156,6 +156,28 @@ texte += addEditeurIep(this, i, {
 })
 ```
 
+Les instructions `point` et `pointADistance` demandent des coordonnées ou un
+angle. Pour un élève qui doit seulement « placer un point » ou « placer un point
+à 5 cm de A », on propose plutôt `pointLibre` (seul le nom est demandé) et
+`pointADistanceLibre` (nom, point de départ et distance) : la position ou la
+direction est tirée au hasard au moment de l'ajout, conservée si on modifie
+l'étape, et n'apparaît pas dans le programme affiché (« Placer un point A. »,
+« Placer un point B à 5 cm de A. »). Dans un programme écrit par l'exercice
+(correction), on peut fixer `x`, `y` ou `angle` pour une figure reproductible.
+
+L'instruction `pointSurObjetADistance` place un point sur une droite déjà
+tracée (étape `etape` : droite, segment, demi-droite, parallèle,
+perpendiculaire…) à `distance` cm du point `p1`. Des deux points possibles,
+`choix` garde le plus haut (1), le plus bas (2), le plus à gauche (3) ou le
+plus à droite (4). L'animation place le zéro de la règle graduée sur `p1`, dans
+la direction du point, puis marque le point. Dans l'éditeur, la liste « De » ne
+propose que les points situés sur la droite choisie.
+
+Les sommets d'un polygone (`polygone`, `polygoneRapide`) s'écrivent « A,B,C »,
+« A B C » ou « ABC » : sans séparateur, chaque nom commence par une majuscule
+(« A1B1C1 », « A'B'C' »). Utiliser `lireSommetsPolygone()` pour les relire
+dans un vérificateur.
+
 L'instruction `arc` trace au compas une petite marque de centre `p1` autour du
 point visé `p2`. L'instruction `arcPointPointCentre` trace un arc de cercle
 dont on donne le centre et les deux extrémités : `p1` est le centre, `p2` la
@@ -288,6 +310,8 @@ La valeur `longueur` désigne la longueur totale du nouveau tracé.
 | `allowFullscreen`                | Ajoute un bouton qui ouvre le lecteur dans une modale plein écran. La fermeture replace le même lecteur dans l'éditeur, sans perdre son état. Cette option est désactivée par défaut et peut aussi être activée dans un exercice élève. |
 | `interactivityOn`                | Désactive l'édition quand la valeur vaut `false` : la zone d'ajout et les boutons de modification des lignes sont masqués, mais le bouton « Tester l'animation » reste disponible. |
 | `masquerProgramme` | Masque la liste du programme de construction (HTML) : seule l'animation reste visible (bouton « Voir l'animation »), par exemple pour une correction animée sans le détail des instructions. |
+| `clavier` | Blocs de touches du clavier virtuel MathALÉA pour les champs « nom », « nombre » et « sommets » du polygone (ex. `[['7', '8', '9', '4', '5', '6', '1', '2', '3', '0', ','], ['A', 'B', 'C']]`). Chaque chaîne est le texte inséré. Le champ nombre devient alors un champ texte qui accepte la virgule. Sans cette option, ce sont des champs de saisie ordinaires. |
+| `pointsMax` | Nombre de points de la question (1 par défaut), lu par `ElementIepEditeur.pointsMaxQuestion()`. Le vérificateur doit alors renvoyer un `score` sur ce total, le même pour tous les tirages. |
 | `verifyCallbackName`             | Nom d'une callback de vérification enregistrée avec `ElementIepEditeur.registerVerificationCallback()`.                                                                            |
 
 ## Rendu imprimable

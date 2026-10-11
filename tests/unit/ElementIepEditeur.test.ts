@@ -3,6 +3,9 @@ import {
   construireAnimation,
   decrireInstruction,
   ElementIepEditeur,
+  lireSommetsPolygone,
+  pointsConstruitsDepuisProgramme,
+  pointsSurObjetDirection,
   type InstructionIep,
 } from '../../src/lib/customElements/ElementIepEditeur'
 import CreateurAnimationInstruments from '../../src/exercices/profs/P025'
@@ -662,6 +665,112 @@ describe('P025 editor identity', () => {
     } finally {
       context.isHtml = htmlContextAvantTest
     }
+  })
+})
+
+describe('ElementIepEditeur points sans coordonnées', () => {
+  it('places a point on a line at a given distance from a point', () => {
+    const programme: InstructionIep[] = [
+      { type: 'point', nom: 'A', x: 1, y: 1 },
+      { type: 'point', nom: 'B', x: 5, y: 1 },
+      { type: 'segment', p1: 'A', p2: 'B' },
+      { type: 'perpendiculaireAObjet', etape: 2, p1: 'A' },
+      {
+        type: 'pointSurObjetADistance',
+        nom: 'D',
+        etape: 3,
+        p1: 'A',
+        distance: 3,
+        choix: 1,
+      },
+      {
+        type: 'pointSurObjetADistance',
+        nom: 'E',
+        etape: 3,
+        p1: 'A',
+        distance: 3,
+        choix: 2,
+      },
+      {
+        type: 'pointSurObjetADistance',
+        nom: 'F',
+        etape: 2,
+        p1: 'A',
+        distance: 2,
+        choix: 3,
+      },
+    ]
+    const points = pointsConstruitsDepuisProgramme(programme)
+    expect(points.get('D')?.x).toBeCloseTo(1)
+    expect(points.get('D')?.y).toBeCloseTo(4)
+    expect(points.get('E')?.y).toBeCloseTo(-2)
+    expect(points.get('F')?.x).toBeCloseTo(-1)
+    expect(decrireInstruction(programme[4], programme)).toBe(
+      'Placer le point D sur la perpendiculaire de l’étape 4, à 3 cm de A (point le plus haut).',
+    )
+  })
+
+  it('hides the drawn position of free points', () => {
+    const programme: InstructionIep[] = [
+      { type: 'pointLibre', nom: 'A', x: 2, y: 3 },
+      {
+        type: 'pointADistanceLibre',
+        nom: 'B',
+        p1: 'A',
+        distance: 4,
+        angle: 90,
+      },
+    ]
+    expect(decrireInstruction(programme[0])).toBe('Placer un point A.')
+    expect(decrireInstruction(programme[1])).toBe(
+      'Placer un point B à 4 cm de A.',
+    )
+    expect(pointsConstruitsDepuisProgramme(programme).get('B')?.y).toBeCloseTo(
+      7,
+    )
+  })
+
+  it('reads polygon vertices with or without separators', () => {
+    expect(lireSommetsPolygone('A,B,C')).toEqual(['A', 'B', 'C'])
+    expect(lireSommetsPolygone('DEFG')).toEqual(['D', 'E', 'F', 'G'])
+    expect(lireSommetsPolygone("A'B'C'")).toEqual(["A'", "B'", "C'"])
+    expect(lireSommetsPolygone('A1B1C1')).toEqual(['A1', 'B1', 'C1'])
+  })
+
+  it('offers only the points of the line as starting points', () => {
+    const programme: InstructionIep[] = [
+      { type: 'pointLibre', nom: 'U', x: 2.3, y: 4.1 },
+      {
+        type: 'pointADistanceLibre',
+        nom: 'V',
+        p1: 'U',
+        distance: 7,
+        angle: -137,
+      },
+      { type: 'pointLibre', nom: 'W', x: 5, y: 5 },
+      { type: 'droite', p1: 'U', p2: 'V' },
+      { type: 'perpendiculaireAObjet', etape: 3, p1: 'V' },
+    ]
+    expect(pointsSurObjetDirection(programme, 3)).toEqual(['U', 'V'])
+    expect(pointsSurObjetDirection(programme, 4)).toEqual(['V'])
+  })
+
+  it('places the ruler on the starting point', () => {
+    const xml = construireAnimation([
+      { type: 'point', nom: 'A', x: 0, y: 0 },
+      { type: 'point', nom: 'B', x: 4, y: 0 },
+      { type: 'droite', p1: 'A', p2: 'B' },
+      {
+        type: 'pointSurObjetADistance',
+        nom: 'C',
+        etape: 2,
+        p1: 'A',
+        distance: 3,
+        choix: 4,
+      },
+    ]).script()
+    expect(xml).toContain('objet="regle"')
+    expect(xml).not.toContain('objet="compas"')
   })
 })
 
