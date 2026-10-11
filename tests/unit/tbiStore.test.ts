@@ -14,6 +14,8 @@ import {
   encodeTbiParam,
   exportTbiSettings,
   getTbiSharedState,
+  getTbiColumnGroups,
+  moveTbiCardInColumns,
   importTbiSettings,
   moveCardToTab,
   reconcileTbiCards,
@@ -100,6 +102,87 @@ describe('tbiStore', () => {
     expect(get(exercicesParams).map((p) => p.uuid)).toEqual(['c', 'a', 'b'])
     expect(get(tbiState).cards[0].zoom).toBe(2)
     expect(reorderTbiCard(0, 5)).toBe(false)
+  })
+
+  it('déplace entre colonnes en conservant une colonne vide et les réglages', () => {
+    exercicesParams.set([{ uuid: 'a' }, { uuid: 'b' }, { uuid: 'c' }])
+    reconcileTbiCards(['a', 'b', 'c'])
+    balanceColumnBreaks([0, 1, 2], 3)
+    tbiState.update((state) => {
+      state.cards[1].zoom = 2
+      return state
+    })
+    expect(moveTbiCardInColumns(1, [[0], [], [1, 2]])).toBe(1)
+    expect(getTbiColumnGroups([0, 1, 2], get(tbiState).cards, 3)).toEqual([
+      [0],
+      [],
+      [1, 2],
+    ])
+    expect(get(tbiState).cards[1].zoom).toBe(2)
+    applyTbiSharedState({ widgetVisible: true })
+    expect(get(tbiState).cards[1].column).toBe(2)
+    const encoded = encodeTbiParam(getTbiSharedState(get(tbiState)))
+    tbiState.set(defaultTbiState())
+    reconcileTbiCards(['a', 'b', 'c'])
+    applyTbiSharedState(decodeTbiParam(encoded)!)
+    expect(getTbiColumnGroups([0, 1, 2], get(tbiState).cards, 3)).toEqual([
+      [0],
+      [],
+      [1, 2],
+    ])
+    expect(importTbiSettings(exportTbiSettings())).toBeTruthy()
+    expect(getTbiColumnGroups([0, 1, 2], get(tbiState).cards, 3)).toEqual([
+      [0],
+      [],
+      [1, 2],
+    ])
+    balanceColumnBreaks([0, 1, 2], 2)
+    expect(get(tbiState).cards.every((card) => card.column === undefined)).toBe(
+      true,
+    )
+  })
+
+  it('réordonne dans un onglet aux indices non contigus sans déplacer les autres cartes entre elles', () => {
+    exercicesParams.set(['a', 'b', 'c', 'd', 'e'].map((uuid) => ({ uuid })))
+    reconcileTbiCards(['a', 'b', 'c', 'd', 'e'])
+    expect(moveTbiCardInColumns(4, [[4, 0], [2]])).toBe(0)
+    expect(get(exercicesParams).map((p) => p.uuid)).toEqual([
+      'e',
+      'a',
+      'b',
+      'c',
+      'd',
+    ])
+    expect(getTbiColumnGroups([0, 1, 3], get(tbiState).cards, 2)).toEqual([
+      [0, 1],
+      [3],
+    ])
+    expect(moveTbiCardInColumns(0, [[1], [3, 0]])).toBe(3)
+    expect(get(exercicesParams).map((p) => p.uuid)).toEqual([
+      'a',
+      'b',
+      'c',
+      'e',
+      'd',
+    ])
+    expect(getTbiColumnGroups([0, 2, 3], get(tbiState).cards, 2)).toEqual([
+      [0],
+      [2, 3],
+    ])
+  })
+
+  it('lit les anciens sauts et refuse une destination invalide', () => {
+    exercicesParams.set([{ uuid: 'a' }, { uuid: 'b' }, { uuid: 'c' }])
+    reconcileTbiCards(['a', 'b', 'c'])
+    applyTbiSharedState(decodeTbiParam('c-3_b-1.2')!)
+    expect(getTbiColumnGroups([0, 1, 2], get(tbiState).cards, 3)).toEqual([
+      [0],
+      [1],
+      [2],
+    ])
+    expect(moveTbiCardInColumns(0, [[0, 0], [2]])).toBeNull()
+    expect(moveTbiCardInColumns(0, [[1], [2]])).toBeNull()
+    expect(get(exercicesParams).map((p) => p.uuid)).toEqual(['a', 'b', 'c'])
   })
 
   it('shuffleTbiCards applique la même permutation à exercicesParams et aux cartes', () => {
@@ -383,6 +466,7 @@ describe('tbiStore', () => {
       singleColumnAlign: 'center',
       tabs: [0, 1, 0],
       breaks: [1],
+      columns: [null, null, null],
       tabConfigs: [
         { layout: 'columns', nbColumns: 3, singleColumnAlign: 'right' },
         { layout: 'free', nbColumns: 2, singleColumnAlign: 'center' },
