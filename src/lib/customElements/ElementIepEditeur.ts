@@ -6,6 +6,7 @@ import { droite } from '../2d/droites'
 import { pointAbstrait, type PointAbstrait } from '../2d/PointAbstrait'
 import { projectionOrtho, rotation } from '../2d/transformations'
 import { longueur } from '../2d/utilitairesGeometriques'
+import { renderKatex } from '../latex/renderKatex'
 import {
   milieu,
   pointAdistance,
@@ -285,6 +286,12 @@ export type EditeurIepOptions = {
   interactivityOn?: boolean
   masquerProgramme?: boolean
   masquerEtapesInitiales?: boolean
+  /**
+   * Ne cite aucun instrument dans les intitulés et les descriptions des
+   * instructions (« Tracer un segment » au lieu de « Tracer un segment à la
+   * règle ») : c'est à l'élève de choisir son instrument.
+   */
+  sansOutils?: boolean
   tailleLabelsPoints?: number
   /**
    * Blocs de touches du clavier virtuel pour les champs nom et nombre
@@ -956,23 +963,83 @@ function libelleEtape(etape: number, nombreEtapesInitiales = 0): string {
 }
 
 /**
- * Décrit l'élément référencé par une intersection (ex. « de la droite de l'étape 1 »)
+ * Notation d'un angle avec son chapeau, rendue par KaTeX
+ */
+function angleAvecChapeau(p1: string, p2: string, p3: string): string {
+  return `$\\widehat{${p1}${p2}${p3}}$`
+}
+
+/**
+ * Nom d'un objet tracé par une instruction (ex. « [AB] » pour un segment,
+ * « au segment [AB] passant par C » pour une parallèle), sans sa préposition.
+ * Renvoie undefined pour un objet sans nom naturel : il est alors désigné par
+ * son numéro d'étape. Un objet qui en désigne un autre n'est détaillé que sur
+ * un niveau, pour que la phrase reste lisible.
+ */
+function nomElement(
+  instr: Extract<InstructionIep, { type: TypeElementIntersectable }>,
+  programme: InstructionIep[],
+  nombreEtapesInitiales: number,
+  profondeur: number,
+): string | undefined {
+  const passantPar = (objet: number, point: string) =>
+    `${decrireObjetDirection(programme, objet, nombreEtapesInitiales, profondeur + 1)} passant par ${point}`
+  switch (instr.type) {
+    case 'segment':
+    case 'trait':
+      return `[${instr.p1}${instr.p2}]`
+    case 'droite':
+      return `(${instr.p1}${instr.p2})`
+    case 'demiDroite':
+      return `[${instr.p1}${instr.p2})`
+    case 'cercle':
+      return `de centre ${instr.p1} passant par ${instr.p2}`
+    case 'cercleRayon':
+      return `de centre ${instr.p1} et de rayon ${formateNombre(instr.r)} cm`
+    case 'mediatrice':
+      return `de [${instr.p1}${instr.p2}]`
+    case 'bissectrice':
+      return `de l’angle ${angleAvecChapeau(instr.p1, instr.p2, instr.p3)}`
+    case 'perpendiculaire':
+    case 'parallele':
+      return `à (${instr.p1}${instr.p2}) passant par ${instr.p3}`
+    case 'perpendiculaireAObjet':
+    case 'paralleleAObjet':
+    case 'paralleleObjet':
+      return profondeur > 0
+        ? undefined
+        : passantPar(
+            instr.type === 'perpendiculaireAObjet'
+              ? instr.etape
+              : etapeObjetDirection(instr),
+            instr.p1,
+          )
+    default:
+      return undefined
+  }
+}
+
+/**
+ * Décrit l'élément référencé par une intersection
+ * (ex. « du segment [AB] » ou « de la parallèle au segment [AB] passant par C »)
  */
 function decrireElementPourIntersection(
   programme: InstructionIep[],
   etape: number,
   nombreEtapesInitiales = 0,
+  profondeur = 0,
 ): string {
   const instr = programme[etape]
   const libelle = libelleEtape(etape, nombreEtapesInitiales)
   if (instr === undefined || !estElementIntersectable(instr)) {
     return libelle
   }
-  return `${prepositionElementIntersectable[instr.type]} ${libelle}`
+  const nom = nomElement(instr, programme, nombreEtapesInitiales, profondeur)
+  return `${prepositionElementIntersectable[instr.type]} ${nom ?? libelle}`
 }
 
 /**
- * Décrit la droite qui porte un point (« sur la perpendiculaire de l'étape 3 »)
+ * Décrit la droite qui porte un point (« sur la perpendiculaire à [AB] passant par A »)
  */
 function decrireSupportPoint(
   programme: InstructionIep[],
@@ -988,14 +1055,20 @@ function decrireSupportPoint(
 
 /**
  * Décrit l'objet auquel une droite est parallèle ou perpendiculaire
- * (« au segment de l'étape 3 »)
+ * (« au segment [AB] »)
  */
 function decrireObjetDirection(
   programme: InstructionIep[],
   etape: number,
   nombreEtapesInitiales = 0,
+  profondeur = 0,
 ) {
-  return decrireElementPourIntersection(programme, etape, nombreEtapesInitiales)
+  return decrireElementPourIntersection(
+    programme,
+    etape,
+    nombreEtapesInitiales,
+    profondeur,
+  )
     .replace(/^de la /, 'à la ')
     .replace(/^du /, 'au ')
     .replace(/^de l’/, 'à l’')
@@ -1009,6 +1082,35 @@ function etapeObjetDirection(
   >,
 ) {
   return instr.type === 'paralleleAObjet' ? instr.etape : instr.element
+}
+
+// Instructions dont les points p1 et p2 doivent être distincts
+const typesAvecDeuxPointsDistincts: TypeInstructionIep[] = [
+  'segment',
+  'trait',
+  'droite',
+  'demiDroite',
+  'cercle',
+  'arc',
+  'mediatrice',
+  'perpendiculaire',
+  'parallele',
+]
+
+/**
+ * Retire d'une description ou d'un intitulé les mentions d'instruments
+ * (« à la règle », « au compas », « avec la règle et l’équerre »…)
+ */
+export function retireMentionsOutils(texte: string): string {
+  return texte
+    .replace(/ avec la règle et l’équerre/g, '')
+    .replace(/ \(règle \+ équerre\)/g, '')
+    .replace(/ à la règle graduée/g, '')
+    .replace(/ à la règle/g, '')
+    .replace(/ au compas/g, '')
+    .replace(/^Tracer au rapporteur /, 'Tracer ')
+    .replace(/^Tracer un angle au rapporteur/, 'Tracer un angle')
+    .replace(/^Reporter au compas /, 'Reporter ')
 }
 
 /**
@@ -1077,11 +1179,21 @@ export function decrireInstruction(
     case 'paralleleObjet':
       return `Tracer la parallèle ${decrireObjetDirection(programme, instr.element, nombreEtapesInitiales)} passant par ${instr.p1} avec la règle et l’équerre.`
     case 'prolongerObjet':
-      return `Prolonger ${decrireElementPourIntersection(programme, instr.etape, nombreEtapesInitiales).replace('de', '')} à la règle (${formateNombre(instr.longueur ?? longueurProlongementObjetEditeurIep)} cm).`
+      return `Prolonger ${decrireElementPourIntersection(
+        programme,
+        instr.etape,
+        nombreEtapesInitiales,
+      )
+        .replace(/^de la /, 'la ')
+        .replace(/^du /, 'le ')
+        .replace(
+          /^de l’/,
+          'l’',
+        )} à la règle (${formateNombre(instr.longueur ?? longueurProlongementObjetEditeurIep)} cm).`
     case 'bissectrice':
-      return `Tracer la bissectrice de l’angle ${instr.p1}${instr.p2}${instr.p3} au compas.`
+      return `Tracer la bissectrice de l’angle ${angleAvecChapeau(instr.p1, instr.p2, instr.p3)} au compas.`
     case 'codageAngleDroit':
-      return `Coder l’angle droit ${instr.p1}${instr.p2}${instr.p3}.`
+      return `Coder l’angle droit ${angleAvecChapeau(instr.p1, instr.p2, instr.p3)}.`
     case 'demiDroiteAngle':
       return `Tracer au rapporteur la demi-droite d’origine ${instr.p1} formant un angle de ${formateNombre(instr.angle)}° avec [${instr.p1}${instr.p2}).`
     case 'montrerOutil':
@@ -1093,7 +1205,7 @@ export function decrireInstruction(
     case 'codageMilieu':
       return `Coder que ${instr.p2} est le milieu du segment [${instr.p1}${instr.p3}] (${instr.codage}).`
     case 'angleCodage':
-      return `Coder l’angle ${instr.p1}${instr.p2}${instr.p3} (${instr.codage}).`
+      return `Coder l’angle ${angleAvecChapeau(instr.p1, instr.p2, instr.p3)} (${instr.codage}).`
     case 'regleMontrerGraduations':
       return 'Montrer les graduations de la règle.'
     case 'regleMasquerGraduations':
@@ -3530,6 +3642,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     interactivityOn = true,
     masquerProgramme = false,
     masquerEtapesInitiales = false,
+    sansOutils = false,
     tailleLabelsPoints,
     clavier,
     pointsMax,
@@ -3583,6 +3696,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
       interactivityOn,
       masquerProgramme,
       masquerEtapesInitiales,
+      sansOutils,
       tailleLabelsPoints,
       clavier,
       pointsMax,
@@ -3732,6 +3846,29 @@ export class ElementIepEditeur extends MathaleaCustomElement {
    */
   private get masquerEtapesInitialesActif(): boolean {
     return this.getAttribute('masquer-etapes-initiales') === 'true'
+  }
+
+  /**
+   * Retire la mention des instruments des intitulés et des descriptions
+   * @attr {boolean} [sans-outils=false]
+   */
+  private get sansOutilsActif(): boolean {
+    return this.getAttribute('sans-outils') === 'true'
+  }
+
+  /**
+   * Texte affiché pour un intitulé ou une description d'instruction
+   */
+  private texteAffiche(texte: string): string {
+    return this.sansOutilsActif ? retireMentionsOutils(texte) : texte
+  }
+
+  /**
+   * Écrit la description d'une instruction, en rendant les angles avec chapeau
+   */
+  private ecrireDescription(element: HTMLElement, description: string) {
+    element.innerText = this.texteAffiche(description)
+    if (description.includes('$')) renderKatex(element)
   }
 
   private get tailleLabelsPoints(): number | undefined {
@@ -4174,10 +4311,13 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     )
     this.conditionsInitiales.forEach((instr) => {
       const item = document.createElement('li')
-      item.innerText = decrireInstruction(
-        instr,
-        this.conditionsInitiales,
-        this.conditionsInitiales.length,
+      this.ecrireDescription(
+        item,
+        decrireInstruction(
+          instr,
+          this.conditionsInitiales,
+          this.conditionsInitiales.length,
+        ),
       )
       liste.appendChild(item)
     })
@@ -4233,7 +4373,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     for (const type of types) {
       const option = document.createElement('option')
       option.value = type
-      option.innerText = catalogue[type].label
+      option.innerText = this.texteAffiche(catalogue[type].label)
       this.selectType.appendChild(option)
     }
     if (typeSelectionne !== undefined) this.selectType.value = typeSelectionne
@@ -4264,7 +4404,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     }
     const option = document.createElement('option')
     option.value = type
-    option.innerText = catalogue[type].label
+    option.innerText = this.texteAffiche(catalogue[type].label)
     this.selectType.appendChild(option)
   }
 
@@ -4684,6 +4824,15 @@ export class ElementIepEditeur extends MathaleaCustomElement {
 
   private nomSuivant() {
     const noms = pointsDefinis(this.programmeComplet())
+    // Avec un clavier virtuel, seuls les noms de ses touches peuvent être saisis
+    const nomsDuClavier = this.touchesClavier
+      .flat()
+      .filter((touche) => /^[A-Z][a-z0-9'’]*$/.test(touche))
+    if (nomsDuClavier.length > 0) {
+      return (
+        nomsDuClavier.find((nom) => !noms.includes(nom)) ?? nomsDuClavier[0]
+      )
+    }
     const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     for (let i = this.prochaineLettre; i < alphabet.length; i++) {
       if (!noms.includes(alphabet[i])) return alphabet[i]
@@ -4781,6 +4930,13 @@ export class ElementIepEditeur extends MathaleaCustomElement {
         return
       }
       if (!enEdition) this.prochaineLettre++
+    }
+    if (
+      typesAvecDeuxPointsDistincts.includes(type) &&
+      instruction.p1 === instruction.p2
+    ) {
+      window.alert('Les deux points doivent être différents.')
+      return
     }
     if (type === 'arcPointPointCentre') {
       const etapesPrecedentes = enEdition
@@ -4950,10 +5106,9 @@ export class ElementIepEditeur extends MathaleaCustomElement {
 
       const texte = document.createElement('span')
       texte.classList.add('grow')
-      texte.innerText = decrireInstruction(
-        instruction,
-        programmeComplet,
-        offset,
+      this.ecrireDescription(
+        texte,
+        decrireInstruction(instruction, programmeComplet, offset),
       )
       if (!instructionEstValide(programmeComplet, indexComplet)) {
         texte.classList.add('text-red-600', 'line-through')
