@@ -221,7 +221,7 @@ function creeComparaison(
     x = aligne[sens ? autres[0] : autres[1]]
     y = aligne[extremite]
     z = aligne[sens ? autres[1] : autres[0]]
-    explication = `car les points $${x}$, $${y}$ et $${z}$ ne sont pas alignés : le chemin le plus court entre $${x}$ et $${z}$ est le segment $[${x}${z}]$.`
+    explication = `car les points $${x}$, $${y}$ et $${z}$ sont alignés mais le point $${y}$ n'appartient pas au segment $[${x}${z}]$.`
   } else {
     const [p, q] = shuffle(aligne).slice(0, 2)
     const position = randint(0, 2)
