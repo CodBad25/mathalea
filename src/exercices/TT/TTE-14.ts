@@ -3,7 +3,6 @@ import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
-  miseEnEvidence,
   texteEnCouleur,
   texteEnCouleurEtGras,
 } from '../../lib/outils/embellissements'
@@ -170,7 +169,7 @@ export default class SensVariationKFoisAPuissanceX extends Exercice {
           `Comme $a=${baseTex}${symboleBase} 1$ et $k=${texNombre(k)}${symboleK} 0$,`,
           bleuMathalea,
         )
-        texteCorr += `<br>${conclusion}`
+        texteCorr += `<br>${conclusion.replace('La', 'la')}` // Pas de majuscule après une virgule
       }
 
       if (this.questionJamaisPosee(i, k, baseTex)) {
