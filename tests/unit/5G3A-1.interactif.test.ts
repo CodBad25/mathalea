@@ -177,6 +177,22 @@ describe('5G3A-1 : construction interactive des symétriques', () => {
     expect(enonce).toContain('Coder la figure')
   })
 
+  it("n'affiche pas la lettre a) quand il n'y a qu'un point à construire", () => {
+    const seul = generate(true, 1, false, 'symetrie', 1)
+    expect(seul.listeQuestions[0]).toContain('Construire le point')
+    expect(seul.listeQuestions[0]).not.toContain('a)')
+    const plusieurs = generate(true, 1, false, 'symetrie', 2)
+    expect(plusieurs.listeQuestions[0]).toContain('a)')
+    expect(plusieurs.listeQuestions[0]).toContain('b)')
+  })
+
+  it('ne demande pas de reproduire la figure en sortie Typst', () => {
+    context.isTypst = true
+    const exercise = generate(false)
+    expect(exercise.listeQuestions[0]).not.toContain('Reproduire')
+    expect(exercise.listeQuestions[0]).toContain('Coder la figure')
+  })
+
   it.each(['latex', 'typst', 'amc'])(
     'conserve la figure imprimable en sortie %s',
     (output) => {
