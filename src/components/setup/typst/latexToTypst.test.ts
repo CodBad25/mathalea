@@ -1333,6 +1333,25 @@ describe('sanitizeSvg', () => {
     ).toBe('<path stroke-opacity="0.5" d="M0 0"/>')
   })
 
+  it('remplace dominant-baseline="central" par un dy indépendant de la police', () => {
+    // forme brute générée par lib/2d/textes.ts, puis forme sérialisée par le DOM
+    expect(
+      sanitizeSvg(
+        '<text x="0" y="-10" text-anchor = "middle" dominant-baseline = "central">G</text>',
+      ),
+    ).toBe('<text x="0" y="-10" text-anchor = "middle" dy="0.325em">G</text>')
+    expect(
+      sanitizeSvg('<text x="0" y="-10" dominant-baseline="central">G</text>'),
+    ).toBe('<text x="0" y="-10" dy="0.325em">G</text>')
+    // un dy déjà posé et les autres alignements restent tels quels
+    expect(
+      sanitizeSvg('<text dy="2" dominant-baseline="central">G</text>'),
+    ).toBe('<text dy="2" dominant-baseline="central">G</text>')
+    expect(sanitizeSvg('<text dominant-baseline="hanging">G</text>')).toBe(
+      '<text dominant-baseline="hanging">G</text>',
+    )
+  })
+
   it('retire les animations SMIL et les compteurs de tours des engrenages', () => {
     const svg =
       '<svg><g><path d="M0 0"/><animateTransform attributeName="transform" type="rotate" dur="5" repeatCount="indefinite"\n/></g>' +
