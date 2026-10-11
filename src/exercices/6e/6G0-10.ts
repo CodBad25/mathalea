@@ -25,6 +25,7 @@ export const titre = 'Construire un quadrilatère'
 
 export const interactifReady = true
 export const dateDePublication = '23/08/2026'
+export const dateDeModifImportante = '11/10/2026'
 export const uuid = 'd1b7f'
 
 export const refs = {
@@ -195,8 +196,8 @@ function objetsCorrects(
   ).length
   const mesures = cotes.map(([p1, p2]) => {
     const [A, B] = [pointsEleve.get(p1), pointsEleve.get(p2)]
-    if (A === undefined || B === undefined) return `${p1}${p2} non construit`
-    const mesure = `${p1}${p2} = ${stringNombre(distance(A, B), 2)} cm`
+    if (A === undefined || B === undefined) return `[${p1}${p2}] non construit`
+    const mesure = `[${p1}${p2}] = ${stringNombre(distance(A, B), 2)} cm`
     return segmentTrace(programmeEleve, p1, p2)
       ? mesure
       : `${mesure} (non tracé)`
@@ -289,6 +290,23 @@ ElementIepEditeur.registerVerificationCallback(
   VERIFICATION_QUADRILATERE_INSTRUMENTS_CALLBACK_NAME,
   verifierConstructionQuadrilatere,
 )
+
+/**
+ * Type de figure tiré parmi ceux de la saisie (`1-1-2` : le rectangle a deux
+ * fois plus de chances d'être tiré que le carré). Un seul type ne consomme pas
+ * de nombre aléatoire, et le mélange (ou une saisie invalide) tire parmi les
+ * trois types : le tirage reste celui des anciens réglages numériques 1 à 4.
+ */
+function choisirTypeFigure(saisie: unknown): TypeFigure {
+  const nombres = String(saisie).split('-').map(Number)
+  const cas = nombres.filter(
+    (n) => Number.isInteger(n) && n >= 1 && n <= typesFigures.length,
+  )
+  const melange = cas.length === 0 || nombres.includes(typesFigures.length + 1)
+  const candidats = melange ? typesFigures.map((_, i) => i + 1) : cas
+  if (candidats.length === 1) return typesFigures[candidats[0] - 1]
+  return typesFigures[candidats[randint(0, candidats.length - 1)] - 1]
+}
 
 function creerFigure(type: TypeFigure): FigureAConstruire {
   const nom = creerNomDePolygone(4, [])
@@ -488,7 +506,7 @@ function enonceFigure(figure: FigureAConstruire, interactif: boolean) {
       break
   }
   if (!interactif) return consigne
-  return `${consigne}<br>Le polygone devra être tracé avec l'instruction « Tracer un polygone à la règle ».`
+  return `${consigne}<br>Le polygone devra être tracé avec l'instruction « Tracer un polygone ».`
 }
 
 /**
@@ -499,18 +517,21 @@ export default class ConstruireQuadrilatereAuxInstruments extends Exercice {
     super()
     this.nbQuestions = 1
     this.nbQuestionsModifiable = false
-    this.besoinFormulaireNumerique = [
+    this.besoinFormulaireTexte = [
       'Type de figure',
-      4,
-      '1 : Carré\n2 : Rectangle\n3 : Losange\n4 : Mélange',
+      [
+        'Nombres séparés par des tirets  :',
+        '1 : Carré',
+        '2 : Rectangle',
+        '3 : Losange',
+        '4 : Mélange',
+      ].join('\n'),
     ]
-    this.sup = 4
+    this.sup = '4'
   }
 
   nouvelleVersion() {
-    const typeFigure =
-      typesFigures[this.sup - 1] ??
-      typesFigures[randint(0, typesFigures.length - 1)]
+    const typeFigure = choisirTypeFigure(this.sup)
     const figure = creerFigure(typeFigure)
     const sortieStatique = !context.isHtml || context.isTypst
     if (!this.interactif && sortieStatique) {
@@ -542,6 +563,7 @@ export default class ConstruireQuadrilatereAuxInstruments extends Exercice {
         programmeAttendu,
         verifyCallbackName: VERIFICATION_QUADRILATERE_INSTRUMENTS_CALLBACK_NAME,
         pointsMax: POINTS_QUESTION,
+        sansOutils: true,
         clavier: [
           ['7', '8', '9', '4', '5', '6', '1', '2', '3', '0', ','],
           [...figure.noms],
@@ -571,6 +593,7 @@ export default class ConstruireQuadrilatereAuxInstruments extends Exercice {
       masquerProgramme: !this.interactif,
       programmeInitial: programmeAttendu,
       instructionsDisponibles,
+      sansOutils: true,
     })
     this.listeCorrections[0] = this.interactif
       ? `Voici une construction possible :<br>${correction}`

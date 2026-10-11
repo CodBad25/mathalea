@@ -6,6 +6,7 @@ import {
   lireSommetsPolygone,
   pointsConstruitsDepuisProgramme,
   pointsSurObjetDirection,
+  retireMentionsOutils,
   type InstructionIep,
 } from '../../src/lib/customElements/ElementIepEditeur'
 import CreateurAnimationInstruments from '../../src/exercices/profs/P025'
@@ -706,7 +707,7 @@ describe('ElementIepEditeur points sans coordonnées', () => {
     expect(points.get('E')?.y).toBeCloseTo(-2)
     expect(points.get('F')?.x).toBeCloseTo(-1)
     expect(decrireInstruction(programme[4], programme)).toBe(
-      'Placer le point D sur la perpendiculaire de l’étape 4, à 3 cm de A (point le plus haut).',
+      'Placer le point D sur la perpendiculaire au segment [AB] passant par A, à 3 cm de A (point le plus haut).',
     )
   })
 
@@ -776,16 +777,54 @@ describe('ElementIepEditeur points sans coordonnées', () => {
 
 describe('ElementIepEditeur step numbering', () => {
   it('numbers initial steps and added steps separately', () => {
+    // Un arc et une droite de pente donnée n'ont pas de nom : ils sont
+    // désignés par leur numéro d'étape.
     const programme: InstructionIep[] = [
       { type: 'point', nom: 'A', x: 0, y: 0 },
       { type: 'point', nom: 'B', x: 4, y: 0 },
-      { type: 'droite', p1: 'A', p2: 'B' },
+      { type: 'droitePointPente', p1: 'A', pente: '0' },
       { type: 'point', nom: 'C', x: 2, y: 3 },
-      { type: 'perpendiculaire', p1: 'A', p2: 'B', p3: 'C' },
+      { type: 'arc', p1: 'A', p2: 'C' },
       { type: 'intersection', nom: 'H', etape1: 2, etape2: 4, choix: 1 },
     ]
     expect(decrireInstruction(programme[5], programme, 3)).toBe(
-      'Placer le point H, intersection de la droite de l’étape initiale 3 et de la perpendiculaire de l’étape 2.',
+      'Placer le point H, intersection de la droite de l’étape initiale 3 et de l’arc de l’étape 2.',
+    )
+  })
+
+  it('names the objects referenced by a step instead of numbering them', () => {
+    const programme: InstructionIep[] = [
+      { type: 'pointLibre', nom: 'A' },
+      { type: 'pointADistanceLibre', nom: 'B', p1: 'A', distance: 4 },
+      { type: 'segment', p1: 'A', p2: 'B' },
+      { type: 'paralleleAObjet', etape: 2, p1: 'C' },
+      { type: 'perpendiculaireAObjet', etape: 3, p1: 'B' },
+      { type: 'bissectrice', p1: 'A', p2: 'B', p3: 'C' },
+      { type: 'intersection', nom: 'H', etape1: 3, etape2: 4, choix: 1 },
+      { type: 'intersection', nom: 'I', etape1: 2, etape2: 5, choix: 1 },
+    ]
+    expect(decrireInstruction(programme[3], programme)).toBe(
+      'Tracer la parallèle au segment [AB] passant par C avec la règle et l’équerre.',
+    )
+    expect(decrireInstruction(programme[6], programme)).toBe(
+      'Placer le point H, intersection de la parallèle au segment [AB] passant par C et de la perpendiculaire à la parallèle de l’étape 4 passant par B.',
+    )
+    expect(decrireInstruction(programme[7], programme)).toBe(
+      'Placer le point I, intersection du segment [AB] et de la bissectrice de l’angle $\\widehat{ABC}$.',
+    )
+  })
+
+  it('removes the mentions of instruments on request', () => {
+    expect(retireMentionsOutils('Tracer le segment [AB] à la règle.')).toBe(
+      'Tracer le segment [AB].',
+    )
+    expect(
+      retireMentionsOutils(
+        'Tracer la perpendiculaire au segment [AB] passant par A avec la règle et l’équerre.',
+      ),
+    ).toBe('Tracer la perpendiculaire au segment [AB] passant par A.')
+    expect(retireMentionsOutils('Tracer une parallèle (règle + équerre)')).toBe(
+      'Tracer une parallèle',
     )
   })
 })

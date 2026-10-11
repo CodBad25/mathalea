@@ -144,6 +144,7 @@ describe('6G0-10', () => {
     })
     expect(sansCodage.score).toEqual({ nbBonnesReponses: 1, nbReponses: 4 })
     expect(sansCodage.feedback).toContain('Mesures des côtés de la figure')
+    expect(sansCodage.feedback).toContain(`[${A}${B}] = `)
     expect(sansCodage.feedback).toContain(
       'Côtés tracés à la bonne longueur : 4 sur 4.',
     )
@@ -187,5 +188,32 @@ describe('6G0-10', () => {
         }
       }
     }
+  })
+
+  it('tire le type de figure parmi ceux cochés, selon leur poids', () => {
+    const typeTire = (sup: string, i: number) => {
+      const exercise = generate(0, `6G0-10-poids-${sup}-${i}`)
+      exercise.sup = sup
+      seedrandom(`6G0-10-poids-${sup}-${i}`, { global: true })
+      exercise.nouvelleVersion()
+      const expectedRaw = exercise.autoCorrection[0].valeur?.reponse?.value
+      return (JSON.parse(String(expectedRaw)) as { type: string }).type
+    }
+    const tirages = (sup: string) =>
+      Array.from({ length: 60 }, (_, i) => typeTire(sup, i))
+    expect(new Set(tirages('2')).size).toBe(1)
+    expect(new Set(tirages('1-3'))).toEqual(new Set(['Carré', 'Losange']))
+    expect(new Set(tirages('4'))).toEqual(
+      new Set(['Carré', 'Rectangle', 'Losange']),
+    )
+    const lourd = tirages('1-1-1-1-1-1-2').filter((t) => t === 'Carré').length
+    expect(lourd).toBeGreaterThan(30)
+  })
+
+  it('n’indique aucun instrument dans l’éditeur', () => {
+    const exercise = generate(1, '6G0-10-sans-outils')
+    expect(exercise.listeQuestions[0]).toContain('sans-outils="true"')
+    expect(exercise.listeQuestions[0]).not.toContain('à la règle')
+    expect(exercise.listeCorrections[0]).toContain('sans-outils="true"')
   })
 })
