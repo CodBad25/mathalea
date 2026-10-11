@@ -33,7 +33,7 @@ export const titre =
   "Trouver l'image d'une figure par symétrie centrale dans un pavage"
 export const interactifReady = true
 
-export const dateDeModifImportante = '23/07/2023'
+export const dateDeModifImportante = '11/10/2026'
 
 /**
  * Publié le 14/12/2020
@@ -41,7 +41,7 @@ export const dateDeModifImportante = '23/07/2023'
  * Version Latex & Html grâce à Mathalea2d
  * @author Jean-claude Lhote
  */
-export const uuid = '76ea9'
+export const uuid = '8106a'
 
 export const refs = {
   'fr-fr': ['5G3A-9'],
@@ -69,7 +69,7 @@ export default class PavageEtDemiTour2D extends Exercice {
 
     this.sup = 1 // 1 pour des pavages modestes, 2 pour des plus grands.
     this.sup2 = false // On cache les barycentres par défaut.
-    this.sup3 = '7'
+    this.sup3 = '8' // Mélange de tous les pavages
     this.spacingCorr = context.isHtml ? 2.5 : 1.5
   }
 
