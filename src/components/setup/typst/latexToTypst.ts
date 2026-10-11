@@ -2600,11 +2600,21 @@ function extractKatexTex(html: string): string | null {
   return null
 }
 
+/**
+ * Formule d'un `divLatex` pas encore rendu par KaTeX : les blancs à compléter
+ * de `MetaInteractif2d` (`$\\ldots ^\\circ$`) sont posés tels quels dans le HTML.
+ */
+function extractRawDollarTex(html: string): string | null {
+  const match = html.match(/>\s*\$([^$]+)\$\s*<\/div>\s*$/i)
+  return match != null ? decodeEntities(match[1]) : null
+}
+
 function divLatexToTypstLabel(
   divHtml: string,
   scaleFactor: number,
 ): string | null {
-  const tex = extractKatexTex(divHtml)
+  const texKatex = extractKatexTex(divHtml)
+  const tex = texKatex ?? extractRawDollarTex(divHtml)
   if (tex == null) return null
   const label = normalizeOverlayLatex(tex)
   if (label.tex.length === 0) return null
@@ -2639,7 +2649,16 @@ function divLatexToTypstLabel(
   const args = [
     `${(leftPx * 0.75 * scaleFactor).toFixed(1)}pt`,
     `${(topPx * 0.75 * scaleFactor).toFixed(1)}pt`,
-    `[$${latexMathToTypst(label.tex)}$]`,
+    // blanc posé sur une figure : deux fois moins large que dans le texte, pour
+    // ne pas masquer le tracé
+    `[$${
+      texKatex == null
+        ? latexMathToTypst(label.tex).replaceAll(
+            ANSWER_BLANK,
+            ANSWER_BLANK.replace('5em', '2.5em'),
+          )
+        : latexMathToTypst(label.tex)
+    }$]`,
     ...options,
   ]
   return `mathalea-label(${args.join(', ')})`

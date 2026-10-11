@@ -932,6 +932,17 @@ describe('htmlToTypst', () => {
     expect(figures[0]).toContain('image(bytes("<svg')
   })
 
+  it('rend en pointillés le blanc `$\\ldots$` non rendu par KaTeX posé sur une figure (MetaInteractif2d)', () => {
+    const figures: string[] = []
+    const result = htmlToTypst(
+      '<div class="svgContainer"><div><svg class="mathalea2d" width="96" height="48"><line x1="0" y1="0" x2="10" y2="10"/></svg><div class="divLatex" style="position: absolute; top: 10px; left: 20px; transform: translate(-50%,-50%); opacity: 1;" data-top=10 data-left=20>$\\ldots ^\\circ$</div></div></div>',
+      figures,
+    )
+    expect(result).toContain(
+      'mathalea-label(15.0pt, 7.5pt, [$#box(width: 2.5em, repeat(gap: 2pt)[.])^circle.small$])',
+    )
+  })
+
   it('passe la largeur naturelle à mathalea-figure-block pour une figure à labels, sans la mesurer', () => {
     const figures: string[] = []
     const result = htmlToTypst(
