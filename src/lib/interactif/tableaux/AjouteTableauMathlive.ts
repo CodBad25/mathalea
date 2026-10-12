@@ -514,6 +514,7 @@ export class AddTabDbleEntryMathlive {
     classes: string,
     isInteractif: boolean,
     style: ObjetParams,
+    hauteurLigneEm?: number,
   ) {
     // tableau doit contenir headingCols et headingLines, qui peuvent être vides, mais doivent être fournis.
     if (
@@ -539,7 +540,18 @@ export class AddTabDbleEntryMathlive {
     const NoQ = question
     table.className = 'tableauMathlive'
     table.id = `tabMathliveEx${numeroExercice}Q${question}`
-    const firstLine = document.createElement('tr')
+    // Hauteur minimale (en em) commune à toutes les lignes, par exemple pour
+    // pouvoir écrire une fraction dans chaque case. L'export Typst la relit
+    // via data-hauteur-ligne.
+    if (hauteurLigneEm != null) {
+      table.setAttribute('data-hauteur-ligne', String(hauteurLigneEm))
+    }
+    const nouvelleLigne = () => {
+      const tr = document.createElement('tr')
+      if (hauteurLigneEm != null) tr.style.height = `${hauteurLigneEm}em`
+      return tr
+    }
+    const firstLine = nouvelleLigne()
     table.appendChild(firstLine)
     tableauMathlive.headingCols = tableau.headingCols.map((el) =>
       JSON.parse(JSON.stringify(el)),
@@ -566,7 +578,7 @@ export class AddTabDbleEntryMathlive {
     }
     // lignes suivantes
     for (let j = 0; j < tableau.raws.length; j++) {
-      const newLine = document.createElement('tr')
+      const newLine = nouvelleLigne()
       table.appendChild(newLine)
       if (tableau.headingLines != null) {
         const sty =
@@ -629,7 +641,7 @@ export class AddTabDbleEntryMathlive {
       }
     }
     if (tableau.colFooters.length != 0) {
-      const lastLine = document.createElement('tr')
+      const lastLine = nouvelleLigne()
       table.appendChild(lastLine)
       let lineIndex = tableau.raws.length
       if (tableau.headingCols.length != 0) { lineIndex++ }

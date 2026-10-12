@@ -322,13 +322,21 @@ export class Yohaku {
     tabEnteteColonnes.push(
       `\\text{${this.operation === 'addition' ? 'Sommes' : 'Produits'}}`,
     )
+    // Avec des fractions, chaque ligne doit avoir la même hauteur et laisser la
+    // place d'écrire une fraction (en TeX, un étai ajouté dans la 1re cellule).
+    const hauteurLigneEm = this.type.includes('frac') ? 3 : undefined
+    const etaiTex =
+      hauteurLigneEm != null && !context.isHtml
+        ? `\\rule[-${hauteurLigneEm / 2}em]{0pt}{${hauteurLigneEm}em}`
+        : ''
+    if (etaiTex !== '') tabEnteteColonnes[0] = `{${tabEnteteColonnes[0]}}${etaiTex}`
     // Les entêtes de lignes
     const tabEnteteLignes: string[] = []
     for (let i = 0; i < dimension; i++) {
-      tabEnteteLignes.push(`\\text{Ligne ${i + 1}}`)
+      tabEnteteLignes.push(`${etaiTex}\\text{Ligne ${i + 1}}`)
     }
     tabEnteteLignes.push(
-      `\\text{${this.operation === 'addition' ? 'Sommes' : 'Produits'}}`,
+      `${etaiTex}\\text{${this.operation === 'addition' ? 'Sommes' : 'Produits'}}`,
     )
     // Y a-t-il une case prédéfinie ?
     const laCase =
@@ -473,6 +481,7 @@ export class Yohaku {
         classes + ' ' + this.clavier,
         isInteractif,
         style,
+        hauteurLigneEm != null ? 3.6 : undefined,
       )
       return tab.output
     } else {
