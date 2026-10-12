@@ -27,7 +27,8 @@ export const refs = {
 
 type Solide = {
   cle: string
-  nom: string // Orthographe attendue, affichée dans les listes de choix et dans les messages
+  article: 'un' | 'une'
+  nom: string // Orthographe attendue, utilisée dans les messages
   reponses: string[] // Réponses acceptées sans remarque
   fautesToleres: string[] // Réponses acceptées mais signalées comme mal orthographiées
   texte: string
@@ -38,65 +39,99 @@ type Solide = {
 const solides: Solide[] = [
   {
     cle: 'cube',
+    article: 'un',
     nom: 'cube',
     reponses: ['cube'],
-    fautesToleres: ['qube'],
+    fautesToleres: ['qube', 'cub', 'cubbe'],
     texte:
       'Je suis un pavé droit dont toutes les arêtes sont de même longueur.',
     texteCorr: `Un pavé droit dont toutes les arêtes sont de même longueur est un ${texteEnCouleurEtGras('cube')}.`,
   },
   {
     cle: 'pave',
+    article: 'un',
     nom: 'pavé droit',
     reponses: ['pavé droit', 'pavé'],
-    fautesToleres: ['pave droit', 'pave', 'pavé doit', 'pavé droite'],
+    fautesToleres: [
+      'pave droit',
+      'pave',
+      'pavé doit',
+      'pavé droite',
+      'pavé droi',
+      'pave doit',
+      'pavet droit',
+    ],
     texte:
       "Je possède le même nombre de faces, de sommets et d'arêtes que le cube, mais je ne suis pas toujours un cube.",
     texteCorr: `Le solide qui possède le même nombre de faces, de sommets et d'arêtes que le cube, sans pour autant être toujours un cube, c'est un ${texteEnCouleurEtGras('pavé droit')}.`,
   },
   {
     cle: 'prisme',
+    article: 'un',
     nom: 'prisme droit',
     reponses: ['prisme droit', 'prisme'],
-    fautesToleres: ['prime', 'prisme doit', 'prysme'],
+    fautesToleres: [
+      'prime',
+      'prisme doit',
+      'prysme',
+      'prisme droi',
+      'prime droit',
+      'prysme droit',
+      'prisme droite',
+    ],
     texte:
       'Je possède deux faces identiques parallèles, et toutes mes autres faces sont des rectangles, mais je ne suis pas un pavé droit.',
     texteCorr: `Le solide qui possède deux faces identiques parallèles et dont toutes les autres faces sont des rectangles (sans pour autant être un pavé droit) est un ${texteEnCouleurEtGras('prisme droit')}.`,
   },
   {
     cle: 'cylindre',
+    article: 'un',
     nom: 'cylindre',
     reponses: ['cylindre'],
-    fautesToleres: ['cilindre', 'silindre', 'cylindr'],
+    fautesToleres: [
+      'cilindre',
+      'silindre',
+      'cylindr',
+      'cilyndre',
+      'cylyndre',
+      'silyndre',
+      'cylindrre',
+    ],
     texte:
       'Je possède deux faces identiques circulaires parallèles et une face courbe.',
     texteCorr: `Le solide qui possède deux faces identiques circulaires parallèles et une face courbe est un ${texteEnCouleurEtGras('cylindre')}.`,
   },
   {
     cle: 'pyramide',
+    article: 'une',
     nom: 'pyramide',
     reponses: ['pyramide'],
-    fautesToleres: ['piramide', 'pyramyde', 'pyramid'],
+    fautesToleres: ['piramide', 'pyramyde', 'pyramid', 'pyrammide'],
     texte: "J'ai une face de plus que le nombre de côtés de ma base.",
     texteCorr: `Le solide qui a une face de plus que le nombre de côtés de sa base est une ${texteEnCouleurEtGras('pyramide')}.`,
   },
   {
     cle: 'cone',
+    article: 'un',
     nom: 'cône',
     reponses: ['cône'],
-    fautesToleres: ['cone', 'conne'],
+    fautesToleres: ['cone', 'conne', 'cônne'],
     texte: "J'ai un seul sommet.",
     texteCorr: `Le solide qui a un seul sommet est un ${texteEnCouleurEtGras('cône')}.`,
   },
   {
     cle: 'boule',
+    article: 'une',
     nom: 'boule',
     reponses: ['boule', 'sphère'],
-    fautesToleres: ['sphere', 'boulle'],
+    fautesToleres: ['sphere', 'boulle', 'boul'],
     texte: "Je n'ai ni sommet, ni arête, ni face.",
     texteCorr: `Le solide qui n'a ni sommet, ni arête, ni face est une ${texteEnCouleurEtGras('boule')}.`,
   },
 ]
+
+// Libellé complet (« un cube ») pour que la phrase « Je suis … » soit complète dans les listes de choix.
+const libelle = (solide: Solide) => `${solide.article} ${solide.nom}`
 
 // Propositions du QCM et de la liste déroulante : ordre alphabétique pour ne pas donner d'indice.
 const solidesParOrdreAlphabetique = [...solides].sort((a, b) =>
@@ -104,25 +139,28 @@ const solidesParOrdreAlphabetique = [...solides].sort((a, b) =>
 )
 
 /**
+ * Indique si la saisie est une faute d'orthographe tolérée (ou un mot attendu avec un « s » final en trop).
+ */
+function estFauteTolere(saisie: string, solide: Solide): boolean {
+  const mot = saisie.trim().replace(/\s+/g, ' ').toLowerCase()
+  const singulier = mot.replace(/s(?=\s|$)/g, '')
+  return [mot, singulier].some(
+    (candidat) =>
+      candidat !== '' &&
+      (solide.fautesToleres.includes(candidat) ||
+        (candidat !== mot && solide.reponses.includes(candidat))),
+  )
+}
+
+/**
  * Compare la saisie aux réponses attendues puis, à défaut, à une liste de fautes d'orthographe tolérées.
- * Un « s » final en trop (cubes, pavés droits) est aussi toléré.
  * Une faute tolérée est acceptée (la question est réussie) mais la remarque invite à corriger l'orthographe.
  */
 function compareAvecFautesToleres(solide: Solide): CompareFunction {
   return (saisie, reponse, options) => {
     const resultat = fonctionComparaison(saisie, reponse, options)
     if (resultat.isOk) return resultat
-    const singulier = saisie.trim().replace(/s(?=\s|$)/gi, '')
-    const faute =
-      solide.fautesToleres.some(
-        (mot) => fonctionComparaison(saisie, mot, options).isOk,
-      ) ||
-      (singulier !== '' &&
-        singulier !== saisie.trim() &&
-        [reponse, ...solide.fautesToleres].some(
-          (mot) => fonctionComparaison(singulier, mot, options).isOk,
-        ))
-    return faute
+    return estFauteTolere(saisie, solide)
       ? {
           isOk: true,
           feedback: `Attention à l'orthographe : écrire « ${solide.nom} ».`,
@@ -187,14 +225,16 @@ export default class nomSolides extends Exercice {
       const texteCorr = solide.texteCorr
       if (this.sup2 === 3) {
         const propositions = solidesParOrdreAlphabetique.map((s) => ({
-          texte: s.nom,
+          texte: libelle(s),
           statut: s.cle === solide.cle,
         }))
         const qcmOptions = { radio: true, vertical: false }
+        const enonce = texte
+        texte += `${context.isHtml ? '<br>' : '\\\\\n'}Je suis…`
         handleAnswers(
           this,
           i,
-          { qcm: { enonce: texte, propositions, options: qcmOptions } },
+          { qcm: { enonce, propositions, options: qcmOptions } },
           { formatInteractif: 'mathalea-qcm' },
         )
         if (context.isHtml) {
@@ -206,11 +246,11 @@ export default class nomSolides extends Exercice {
           texte += propositionsQcm(this, i).texte
         }
       } else if (this.interactif && this.sup2 === 2) {
-        texte += `<br>Je suis un/une ${choixDeroulant(this, i, {
+        texte += `<br>Je suis ${choixDeroulant(this, i, {
           choices: [
             { label: '?', value: '' },
             ...solidesParOrdreAlphabetique.map((s) => ({
-              label: s.nom,
+              label: libelle(s),
               value: s.cle,
             })),
           ],
