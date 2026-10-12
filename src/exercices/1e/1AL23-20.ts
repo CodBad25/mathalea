@@ -13,7 +13,12 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { pgcd } from '../../lib/outils/primalite'
 import type FractionEtendue from '../../modules/FractionEtendue'
 import { fraction } from '../../modules/fractions'
-import { egal, listeQuestionsToContenu } from '../../modules/outils'
+import {
+  egal,
+  gestionnaireFormulaireTexte,
+  listeQuestionsToContenu,
+  randint,
+} from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const interactifReady = true
@@ -37,14 +42,23 @@ export default class Resolutionavecformecanonique extends Exercice {
   constructor() {
     super()
 
-    this.consigne =
-      'Utiliser la forme canonique pour résoudre une équation du second degré : '
     this.nbQuestions = 4
+    this.besoinFormulaireTexte = [
+      'Coefficient de $x^2$',
+      [
+        'Nombres séparés par des tirets  :',
+        '1 : Égal à 1',
+        '2 : Différent de 1',
+        '3 : Mélange',
+      ].join('\n'),
+    ]
+    this.sup = 3
 
     this.spacingCorr = 3
   }
 
   nouvelleVersion() {
+    this.consigne = `Résoudre, dans $\\mathbb{R}$, ${this.nbQuestions > 1 ? 'les équations suivantes' : "l'équation suivante"} sans utiliser le discriminant, mais en utilisant la forme canonique du polynôme.`
     if (this.interactif) {
       this.consigne += '<br> '
     }
@@ -52,6 +66,20 @@ export default class Resolutionavecformecanonique extends Exercice {
       [true, true, false],
       this.nbQuestions,
     )
+    // Le mélange (choisiDelta) ne passe pas par gestionnaireFormulaireTexte
+    // pour ne pas modifier les tirages des liens déjà partagés.
+    const melangeCoefficients = String(this.sup ?? '')
+      .split('-')
+      .includes('3')
+    const listeTypeDeCoefficients = melangeCoefficients
+      ? []
+      : gestionnaireFormulaireTexte({
+          saisie: this.sup,
+          max: 2,
+          melange: 3,
+          defaut: 3,
+          nbQuestions: this.nbQuestions,
+        })
     for (
       let i = 0,
         texte,
@@ -75,14 +103,24 @@ export default class Resolutionavecformecanonique extends Exercice {
       i < this.nbQuestions && cpt < 50;
     ) {
       let answer = ''
-      ;[a, b, c] = choisiDelta(listeTypeDeQuestions[i])
+      const typeDeCoefficient = listeTypeDeCoefficients[i]
+      if (typeDeCoefficient === 1 || typeDeCoefficient === 2) {
+        // Le coefficient de x² est imposé : égal à 1 ou différent de 1
+        do {
+          a = typeDeCoefficient === 1 ? 1 : randint(-5, 5, [0, 1])
+          b = randint(-5, 5, 0)
+          c = randint(-5, 5, 0)
+          delta = b * b - 4 * a * c
+        } while (listeTypeDeQuestions[i] ? delta <= 0 : delta >= 0)
+      } else {
+        ;[a, b, c] = choisiDelta(listeTypeDeQuestions[i])
+      }
       c1 = fraction(c, a)
       b1 = fraction(b, a)
       alpha = fraction(b, 2 * a)
       delta = b * b - 4 * a * c
       b2 = fraction(delta, 4 * a * a).simplifie() // terme b² dans l'expression a²-b²
-      texte = `Résoudre, dans $\\mathbb{R}$, l'équation $${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}=0$ sans utiliser le discriminant,`
-      texte += ' mais en utilisant la forme canonique du polynôme.'
+      texte = `$${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}=0$`
       texteCorr = `On veut résoudre, dans $\\mathbb{R}$, l'équation $${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}=0\\quad(1)$.`
       texteCorr +=
         '<br>On reconnaît une équation du second degré sous la forme $ax^2+bx+c = 0$.'
