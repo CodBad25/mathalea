@@ -73,6 +73,15 @@ la correction, permet d'agrandir la construction papier sans modifier les
 coordonnées ni les appels aléatoires des liens partagés. La mise en page
 peut encore réduire la figure dans des colonnes étroites.
 
+## Nommer les points dans la figure interactive
+
+Une lettre saisie au clavier nomme le premier point sans nom, ou renomme le
+dernier point si tous sont déjà nommés. Une apostrophe complète le nom qui
+vient d'être saisi : taper `C` puis `'` donne `C'`, même si d'autres points
+attendent un nom. Un clic dans la figure ou la perte du focus termine cette
+saisie. Supprimer uniquement le label efface le nom et permet de nommer à
+nouveau le point, sans supprimer ses constructions.
+
 ## Vérifier la construction de l'élève
 
 La correction se fait dans `correctionInteractive(i)`, en indexant tout par `i`

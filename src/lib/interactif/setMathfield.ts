@@ -7,7 +7,7 @@ import type { BlockForKeyboard } from '../../components/keyboard/types/keyboardC
 import { injectFontInMetaInteractif2d } from '../../modules/loaders'
 import { globalOptions } from '../stores/globalOptions'
 import { getKeyboardShortcusts } from './claviers/keyboard'
-import { isMathfieldFocused } from './mathfieldFocus'
+import { champAvecClavierFocalise } from './champTexteClavier'
 
 export const setMathfieldListener = (e: Event) =>
   setMathfield(e.currentTarget as MathfieldElement)
@@ -74,7 +74,7 @@ function handleFocusOutMathField(event: FocusEvent) {
       '#mathalea-virtual-keyboard',
     )
     if (
-      !isMathfieldFocused(document.activeElement) &&
+      !champAvecClavierFocalise(document.activeElement) &&
       focusDansClavier == null
     ) {
       keyboardState.update((value) => {

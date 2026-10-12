@@ -72,12 +72,9 @@ export default class FormeAlgebriqueQuotientComplexes extends Exercice {
       \\end{aligned}$`
 
       if (this.interactif) {
-        texte += ajouteChampTexteMathLive(
-          this,
-          i,
-          `${KeyboardType.clavierDeBase} ${KeyboardType.complexes}`,
-          { texteAvant: '<br>' },
-        )
+        texte += ajouteChampTexteMathLive(this, i, KeyboardType.complexes, {
+          texteAvant: '<br>',
+        })
       }
       handleAnswers(this, i, { reponse: { value: resultat.tex() } })
 

@@ -39,6 +39,51 @@ describe('isSolvedForm', () => {
   })
 })
 
+describe('isSolvedForm dans C', () => {
+  it.each([
+    'z=3',
+    'z=-3i',
+    'z=i',
+    'z=2+3i',
+    'z=-2-i',
+    'z=3i+2',
+    'z=\\mathrm{i}',
+    'z=2-5\\mathrm{i}',
+    'z=\\dfrac{1}{13}+\\dfrac{5}{13}i',
+    'z=-\\dfrac{3}{13}-\\dfrac{5}{13}\\mathrm{i}',
+    'z=\\dfrac{1}{13}+\\dfrac{5i}{13}',
+    'z=2,5-1,5i',
+    '1+2i=z',
+    // Les fractions n'ont pas besoin d'être simplifiées dans C.
+    'z=\\dfrac{2}{4}+i',
+    'z=\\dfrac{6}{3}i',
+    'z=\\dfrac{140}{245}+\\dfrac{350}{245}\\mathrm{i}',
+    'z=-\\dfrac{140}{245}-\\dfrac{350i}{245}',
+  ])('accepte %s', (value) => {
+    expect(isSolvedForm(value, 'equation', 'z', true)).toBe(true)
+  })
+
+  it.each([
+    'z=\\dfrac{1+5i}{13}',
+    'z=\\dfrac{-1+i}{2+3i}',
+    'z=(1+i)(2-i)',
+    'z=2+3',
+    'z=2i+3i',
+    'z=2+0i',
+    'z=0+3i',
+    'z=\\dfrac{140+350i}{245}',
+    'z=\\dfrac{1}{0}+i',
+    '(1+i)z=3',
+    'z=1+z',
+  ])("refuse %s tant que le calcul n'est pas fini", (value) => {
+    expect(isSolvedForm(value, 'equation', 'z', true)).toBe(false)
+  })
+
+  it("refuse l'unité imaginaire dans R", () => {
+    expect(isSolvedForm('x=2+3i', 'equation', 'x')).toBe(false)
+  })
+})
+
 describe('tousLesSolveursSontTermines', () => {
   const exercice = {
     autoCorrection: [

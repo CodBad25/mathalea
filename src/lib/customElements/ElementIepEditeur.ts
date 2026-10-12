@@ -1,3 +1,4 @@
+import { litTouchesPersonnalisees } from '../../components/keyboard/lib/touchesPersonnalisees'
 import Alea2iep, { anglesArcCentre2Extremites } from '../../modules/Alea2iep'
 import { context } from '../../modules/context'
 import { cercle } from '../2d/cercle'
@@ -5,6 +6,7 @@ import { droite } from '../2d/droites'
 import { pointAbstrait, type PointAbstrait } from '../2d/PointAbstrait'
 import { projectionOrtho, rotation } from '../2d/transformations'
 import { longueur } from '../2d/utilitairesGeometriques'
+import { renderKatex } from '../latex/renderKatex'
 import {
   milieu,
   pointAdistance,
@@ -14,6 +16,7 @@ import {
   pointSurDroite,
   pointSurSegment,
 } from '../2d/utilitairesPoint'
+import { brancheClavierSurChampTexte } from '../interactif/champTexteClavier'
 import { stringNombre } from '../outils/texNombre'
 import type { IExercice } from '../types'
 import MathaleaCustomElement, {
@@ -187,6 +190,25 @@ type InstructionIepSansOptions =
       distance: number
       angle: number
     }
+  // Point placé au hasard : les coordonnées tirées ne sont pas affichées
+  | { type: 'pointLibre'; nom: string; x?: number; y?: number }
+  // Point placé à une distance donnée d'un autre, dans une direction tirée au hasard
+  | {
+      type: 'pointADistanceLibre'
+      nom: string
+      p1: string
+      distance: number
+      angle?: number
+    }
+  // Point d'une droite (étape `etape`) situé à une distance donnée du point p1
+  | {
+      type: 'pointSurObjetADistance'
+      nom: string
+      etape: number
+      p1: string
+      distance: number
+      choix: number
+    }
   | { type: 'segment'; p1: string; p2: string; couleur?: string }
   | { type: 'trait'; p1: string; p2: string }
   | { type: 'polygone'; sommets: string }
@@ -264,7 +286,24 @@ export type EditeurIepOptions = {
   interactivityOn?: boolean
   masquerProgramme?: boolean
   masquerEtapesInitiales?: boolean
+  /**
+   * Ne cite aucun instrument dans les intitulés et les descriptions des
+   * instructions (« Tracer un segment » au lieu de « Tracer un segment à la
+   * règle ») : c'est à l'élève de choisir son instrument.
+   */
+  sansOutils?: boolean
   tailleLabelsPoints?: number
+  /**
+   * Blocs de touches du clavier virtuel pour les champs nom et nombre
+   * (ex. `[['7', '8', '9', …, ','], ['A', 'B']]`). Sans cette option, ce sont
+   * des champs de saisie ordinaires.
+   */
+  clavier?: string[][]
+  /**
+   * Nombre de points de la question (1 par défaut). Le vérificateur renvoie
+   * alors un `score` sur ce total, identique pour tous les tirages.
+   */
+  pointsMax?: number
   verifyCallbackName?: string
   verifyCallback?: ElementIepVerificationCallback
 }
@@ -309,6 +348,8 @@ type ChampSpec = {
   label: string
   defaut?: number | string
   optionnel?: boolean
+  // Options [valeur, texte] d'un champ `choix` (par défaut : point le plus haut ou le plus bas)
+  options?: [string, string][]
 }
 
 // Symboles de codage disponibles pour un segment (marque de longueur égale)
@@ -347,6 +388,13 @@ const optionsCouleurCrayon: { valeur: string; label: string }[] = [
   { valeur: 'gray', label: 'Gris' },
 ]
 
+const optionsChoixPointSurObjet: [string, string][] = [
+  ['1', 'Point le plus haut'],
+  ['2', 'Point le plus bas'],
+  ['3', 'Point le plus à gauche'],
+  ['4', 'Point le plus à droite'],
+]
+
 const champCouleur = {
   cle: 'couleur',
   genre: 'couleurCrayon',
@@ -377,6 +425,33 @@ const catalogue: Record<
       { cle: 'p1', genre: 'point', label: 'Depuis' },
       { cle: 'distance', genre: 'nombre', label: 'Distance (cm)', defaut: 5 },
       { cle: 'angle', genre: 'nombre', label: 'Angle (°)', defaut: 0 },
+    ],
+  },
+  pointSurObjetADistance: {
+    label: 'Placer un point sur une droite à une distance donnée d’un point',
+    champs: [
+      { cle: 'nom', genre: 'nom', label: 'Nom' },
+      { cle: 'etape', genre: 'objetDirection', label: 'Sur' },
+      { cle: 'distance', genre: 'nombre', label: 'À (cm)', defaut: 5 },
+      { cle: 'p1', genre: 'point', label: 'De' },
+      {
+        cle: 'choix',
+        genre: 'choix',
+        label: 'Si 2 points possibles',
+        options: optionsChoixPointSurObjet,
+      },
+    ],
+  },
+  pointLibre: {
+    label: 'Placer un point',
+    champs: [{ cle: 'nom', genre: 'nom', label: 'Nom' }],
+  },
+  pointADistanceLibre: {
+    label: 'Placer un point à une distance donnée d’un autre',
+    champs: [
+      { cle: 'nom', genre: 'nom', label: 'Nom' },
+      { cle: 'p1', genre: 'point', label: 'Depuis' },
+      { cle: 'distance', genre: 'nombre', label: 'Distance (cm)', defaut: 5 },
     ],
   },
   segment: {
@@ -685,6 +760,9 @@ const catalogue: Record<
 const ordreCatalogue: TypeInstructionIep[] = [
   'point',
   'pointADistance',
+  'pointLibre',
+  'pointADistanceLibre',
+  'pointSurObjetADistance',
   'segment',
   'trait',
   'polygone',
@@ -733,7 +811,15 @@ const categoriesCatalogue: CategorieInstructionIep[] = [
   {
     id: 'points',
     label: 'Points',
-    types: ['point', 'pointADistance', 'milieu', 'intersection'],
+    types: [
+      'point',
+      'pointADistance',
+      'pointLibre',
+      'pointADistanceLibre',
+      'pointSurObjetADistance',
+      'milieu',
+      'intersection',
+    ],
   },
   {
     id: 'traces-base',
@@ -827,6 +913,11 @@ function penteAleatoire() {
   return Math.floor(Math.random() * 11) - 5
 }
 
+// Coordonnée d'un point placé au hasard, au dixième, entre 1 et 7
+function coordonneeAleatoire() {
+  return (Math.floor(Math.random() * 61) + 10) / 10
+}
+
 function lireNombreOptionnelFiniOuInfini(
   valeur: number | string | undefined,
 ): number | undefined {
@@ -847,11 +938,18 @@ function formateAngleOptionnel(angle: number | string | undefined) {
   return `de ${formateNombre(lireNombreFiniOuInfini(angle))}°`
 }
 
-function lireSommetsPolygone(sommets: string): string[] {
-  return sommets
+/**
+ * Lit les sommets d'un polygone : « A,B,C », « A B C » ou « ABC ».
+ * Sans séparateur, chaque nom commence par une majuscule (« A1B1C1 », « A'B'C' »).
+ */
+export function lireSommetsPolygone(sommets: string): string[] {
+  const noms = sommets
     .split(/[,\s;]+/)
     .map((nom) => nom.trim())
     .filter((nom) => nom !== '')
+  if (noms.length !== 1) return noms
+  const nomsAccoles = noms[0].match(/[A-Z][a-z0-9'’]*/g) ?? []
+  return nomsAccoles.join('') === noms[0] ? nomsAccoles : noms
 }
 
 /**
@@ -865,19 +963,116 @@ function libelleEtape(etape: number, nombreEtapesInitiales = 0): string {
 }
 
 /**
- * Décrit l'élément référencé par une intersection (ex. « de la droite de l'étape 1 »)
+ * Notation d'un angle avec son chapeau, rendue par KaTeX
+ */
+function angleAvecChapeau(p1: string, p2: string, p3: string): string {
+  return `$\\widehat{${p1}${p2}${p3}}$`
+}
+
+/**
+ * Nom d'un objet tracé par une instruction (ex. « [AB] » pour un segment,
+ * « au segment [AB] passant par C » pour une parallèle), sans sa préposition.
+ * Renvoie undefined pour un objet sans nom naturel : il est alors désigné par
+ * son numéro d'étape. Un objet qui en désigne un autre n'est détaillé que sur
+ * un niveau, pour que la phrase reste lisible.
+ */
+function nomElement(
+  instr: Extract<InstructionIep, { type: TypeElementIntersectable }>,
+  programme: InstructionIep[],
+  nombreEtapesInitiales: number,
+  profondeur: number,
+): string | undefined {
+  const passantPar = (objet: number, point: string) =>
+    `${decrireObjetDirection(programme, objet, nombreEtapesInitiales, profondeur + 1)} passant par ${point}`
+  switch (instr.type) {
+    case 'segment':
+    case 'trait':
+      return `[${instr.p1}${instr.p2}]`
+    case 'droite':
+      return `(${instr.p1}${instr.p2})`
+    case 'demiDroite':
+      return `[${instr.p1}${instr.p2})`
+    case 'cercle':
+      return `de centre ${instr.p1} passant par ${instr.p2}`
+    case 'cercleRayon':
+      return `de centre ${instr.p1} et de rayon ${formateNombre(instr.r)} cm`
+    case 'mediatrice':
+      return `de [${instr.p1}${instr.p2}]`
+    case 'bissectrice':
+      return `de l’angle ${angleAvecChapeau(instr.p1, instr.p2, instr.p3)}`
+    case 'perpendiculaire':
+    case 'parallele':
+      return `à (${instr.p1}${instr.p2}) passant par ${instr.p3}`
+    case 'perpendiculaireAObjet':
+    case 'paralleleAObjet':
+    case 'paralleleObjet':
+      return profondeur > 0
+        ? undefined
+        : passantPar(
+            instr.type === 'perpendiculaireAObjet'
+              ? instr.etape
+              : etapeObjetDirection(instr),
+            instr.p1,
+          )
+    default:
+      return undefined
+  }
+}
+
+/**
+ * Décrit l'élément référencé par une intersection
+ * (ex. « du segment [AB] » ou « de la parallèle au segment [AB] passant par C »)
  */
 function decrireElementPourIntersection(
   programme: InstructionIep[],
   etape: number,
   nombreEtapesInitiales = 0,
+  profondeur = 0,
 ): string {
   const instr = programme[etape]
   const libelle = libelleEtape(etape, nombreEtapesInitiales)
   if (instr === undefined || !estElementIntersectable(instr)) {
     return libelle
   }
-  return `${prepositionElementIntersectable[instr.type]} ${libelle}`
+  const nom = nomElement(instr, programme, nombreEtapesInitiales, profondeur)
+  return `${prepositionElementIntersectable[instr.type]} ${nom ?? libelle}`
+}
+
+/**
+ * Décrit la droite qui porte un point (« sur la perpendiculaire à [AB] passant par A »)
+ */
+function decrireSupportPoint(
+  programme: InstructionIep[],
+  etape: number,
+  nombreEtapesInitiales = 0,
+) {
+  return decrireElementPourIntersection(programme, etape, nombreEtapesInitiales)
+    .replace(/^de la /, 'sur la ')
+    .replace(/^du /, 'sur le ')
+    .replace(/^de l’/, 'sur l’')
+    .replace(/^de /, 'sur ')
+}
+
+/**
+ * Décrit l'objet auquel une droite est parallèle ou perpendiculaire
+ * (« au segment [AB] »)
+ */
+function decrireObjetDirection(
+  programme: InstructionIep[],
+  etape: number,
+  nombreEtapesInitiales = 0,
+  profondeur = 0,
+) {
+  return decrireElementPourIntersection(
+    programme,
+    etape,
+    nombreEtapesInitiales,
+    profondeur,
+  )
+    .replace(/^de la /, 'à la ')
+    .replace(/^du /, 'au ')
+    .replace(/^de l’/, 'à l’')
+    .replace(/^de /, 'à ')
 }
 
 function etapeObjetDirection(
@@ -887,6 +1082,35 @@ function etapeObjetDirection(
   >,
 ) {
   return instr.type === 'paralleleAObjet' ? instr.etape : instr.element
+}
+
+// Instructions dont les points p1 et p2 doivent être distincts
+const typesAvecDeuxPointsDistincts: TypeInstructionIep[] = [
+  'segment',
+  'trait',
+  'droite',
+  'demiDroite',
+  'cercle',
+  'arc',
+  'mediatrice',
+  'perpendiculaire',
+  'parallele',
+]
+
+/**
+ * Retire d'une description ou d'un intitulé les mentions d'instruments
+ * (« à la règle », « au compas », « avec la règle et l’équerre »…)
+ */
+export function retireMentionsOutils(texte: string): string {
+  return texte
+    .replace(/ avec la règle et l’équerre/g, '')
+    .replace(/ \(règle \+ équerre\)/g, '')
+    .replace(/ à la règle graduée/g, '')
+    .replace(/ à la règle/g, '')
+    .replace(/ au compas/g, '')
+    .replace(/^Tracer au rapporteur /, 'Tracer ')
+    .replace(/^Tracer un angle au rapporteur/, 'Tracer un angle')
+    .replace(/^Reporter au compas /, 'Reporter ')
 }
 
 /**
@@ -904,6 +1128,12 @@ export function decrireInstruction(
       return `Placer le point ${instr.nom} (${formateNombre(instr.x)} ; ${formateNombre(instr.y)}).`
     case 'pointADistance':
       return `Placer le point ${instr.nom} à ${formateNombre(instr.distance)} cm de ${instr.p1} (direction ${formateNombre(instr.angle)}°).`
+    case 'pointLibre':
+      return `Placer un point ${instr.nom}.`
+    case 'pointADistanceLibre':
+      return `Placer un point ${instr.nom} à ${formateNombre(instr.distance)} cm de ${instr.p1}.`
+    case 'pointSurObjetADistance':
+      return `Placer le point ${instr.nom} ${decrireSupportPoint(programme, instr.etape, nombreEtapesInitiales)}, à ${formateNombre(instr.distance)} cm de ${instr.p1} (${(optionsChoixPointSurObjet.find(([valeur]) => Number(valeur) === instr.choix)?.[1] ?? optionsChoixPointSurObjet[0][1]).toLowerCase()}).`
     case 'segment':
       return `Tracer le segment [${instr.p1}${instr.p2}] à la règle.`
     case 'trait':
@@ -941,19 +1171,29 @@ export function decrireInstruction(
     case 'perpendiculaire':
       return `Tracer la perpendiculaire à (${instr.p1}${instr.p2}) passant par ${instr.p3} avec la règle et l’équerre.`
     case 'perpendiculaireAObjet':
-      return `Tracer la perpendiculaire ${decrireElementPourIntersection(programme, instr.etape, nombreEtapesInitiales)} passant par ${instr.p1} avec la règle et l’équerre.`
+      return `Tracer la perpendiculaire ${decrireObjetDirection(programme, instr.etape, nombreEtapesInitiales)} passant par ${instr.p1} avec la règle et l’équerre.`
     case 'parallele':
       return `Tracer la parallèle à (${instr.p1}${instr.p2}) passant par ${instr.p3} avec la règle et l’équerre.`
     case 'paralleleAObjet':
-      return `Tracer la parallèle ${decrireElementPourIntersection(programme, instr.etape, nombreEtapesInitiales)} passant par ${instr.p1} avec la règle et l’équerre.`
+      return `Tracer la parallèle ${decrireObjetDirection(programme, instr.etape, nombreEtapesInitiales)} passant par ${instr.p1} avec la règle et l’équerre.`
     case 'paralleleObjet':
-      return `Tracer la parallèle ${decrireElementPourIntersection(programme, instr.element, nombreEtapesInitiales)} passant par ${instr.p1} avec la règle et l’équerre.`
+      return `Tracer la parallèle ${decrireObjetDirection(programme, instr.element, nombreEtapesInitiales)} passant par ${instr.p1} avec la règle et l’équerre.`
     case 'prolongerObjet':
-      return `Prolonger ${decrireElementPourIntersection(programme, instr.etape, nombreEtapesInitiales).replace('de', '')} à la règle (${formateNombre(instr.longueur ?? longueurProlongementObjetEditeurIep)} cm).`
+      return `Prolonger ${decrireElementPourIntersection(
+        programme,
+        instr.etape,
+        nombreEtapesInitiales,
+      )
+        .replace(/^de la /, 'la ')
+        .replace(/^du /, 'le ')
+        .replace(
+          /^de l’/,
+          'l’',
+        )} à la règle (${formateNombre(instr.longueur ?? longueurProlongementObjetEditeurIep)} cm).`
     case 'bissectrice':
-      return `Tracer la bissectrice de l’angle ${instr.p1}${instr.p2}${instr.p3} au compas.`
+      return `Tracer la bissectrice de l’angle ${angleAvecChapeau(instr.p1, instr.p2, instr.p3)} au compas.`
     case 'codageAngleDroit':
-      return `Coder l’angle droit ${instr.p1}${instr.p2}${instr.p3}.`
+      return `Coder l’angle droit ${angleAvecChapeau(instr.p1, instr.p2, instr.p3)}.`
     case 'demiDroiteAngle':
       return `Tracer au rapporteur la demi-droite d’origine ${instr.p1} formant un angle de ${formateNombre(instr.angle)}° avec [${instr.p1}${instr.p2}).`
     case 'montrerOutil':
@@ -965,7 +1205,7 @@ export function decrireInstruction(
     case 'codageMilieu':
       return `Coder que ${instr.p2} est le milieu du segment [${instr.p1}${instr.p3}] (${instr.codage}).`
     case 'angleCodage':
-      return `Coder l’angle ${instr.p1}${instr.p2}${instr.p3} (${instr.codage}).`
+      return `Coder l’angle ${angleAvecChapeau(instr.p1, instr.p2, instr.p3)} (${instr.codage}).`
     case 'regleMontrerGraduations':
       return 'Montrer les graduations de la règle.'
     case 'regleMasquerGraduations':
@@ -990,6 +1230,9 @@ export function pointsDefinis(programme: InstructionIep[]): string[] {
     if (
       (instr.type === 'point' ||
         instr.type === 'pointADistance' ||
+        instr.type === 'pointLibre' ||
+        instr.type === 'pointADistanceLibre' ||
+        instr.type === 'pointSurObjetADistance' ||
         instr.type === 'milieu' ||
         instr.type === 'intersection') &&
       instr.nom !== '' &&
@@ -1280,7 +1523,10 @@ function instructionEstValide(
       return false
     }
   }
-  if (instr.type === 'perpendiculaireAObjet') {
+  if (
+    instr.type === 'perpendiculaireAObjet' ||
+    instr.type === 'pointSurObjetADistance'
+  ) {
     if (instr.etape >= index || !estElementDirection(programme[instr.etape])) {
       return false
     }
@@ -1291,6 +1537,9 @@ function instructionEstValide(
     if (
       precedente.type === 'point' ||
       precedente.type === 'pointADistance' ||
+      precedente.type === 'pointLibre' ||
+      precedente.type === 'pointADistanceLibre' ||
+      precedente.type === 'pointSurObjetADistance' ||
       precedente.type === 'milieu' ||
       precedente.type === 'demiTourPoint' ||
       precedente.type === 'intersection'
@@ -1413,6 +1662,93 @@ type FigureStatiqueIep = {
   ymin: number
   xmax: number
   ymax: number
+}
+
+/**
+ * Point de la droite tracée à l'étape `instr.etape` situé à `instr.distance` cm
+ * de `instr.p1`. Parmi les deux points possibles, `instr.choix` garde le plus
+ * haut (1), le plus bas (2), le plus à gauche (3) ou le plus à droite (4).
+ * Renvoie undefined si la droite est trop loin de `instr.p1`.
+ */
+function pointSurObjetADistance(
+  instr: Extract<InstructionIep, { type: 'pointSurObjetADistance' }>,
+  points: Map<string, PointAbstrait>,
+  programme: InstructionIep[],
+): PointAbstrait | undefined {
+  const P = points.get(instr.p1)
+  const element = elementGeometrique(programme[instr.etape], points, programme)
+  if (P === undefined || element?.nature !== 'droite') return undefined
+  const d = element.objet
+  const longueurDirection = Math.hypot(d.x2 - d.x1, d.y2 - d.y1)
+  if (longueurDirection === 0) return undefined
+  const ux = (d.x2 - d.x1) / longueurDirection
+  const uy = (d.y2 - d.y1) / longueurDirection
+  // H : projeté orthogonal de P sur la droite
+  const t = (P.x - d.x1) * ux + (P.y - d.y1) * uy
+  const hx = d.x1 + t * ux
+  const hy = d.y1 + t * uy
+  const carreDistancePH = (P.x - hx) ** 2 + (P.y - hy) ** 2
+  if (instr.distance ** 2 < carreDistancePH - 1e-9) return undefined
+  const s = Math.sqrt(Math.max(0, instr.distance ** 2 - carreDistancePH))
+  const candidats = [
+    { x: hx + s * ux, y: hy + s * uy },
+    { x: hx - s * ux, y: hy - s * uy },
+  ]
+  // Critère principal puis critère de départage (droite horizontale ou verticale)
+  const criteres: Record<
+    number,
+    [
+      (q: { x: number; y: number }) => number,
+      (q: { x: number; y: number }) => number,
+    ]
+  > = {
+    1: [(q) => q.y, (q) => q.x],
+    2: [(q) => -q.y, (q) => -q.x],
+    3: [(q) => -q.x, (q) => q.y],
+    4: [(q) => q.x, (q) => q.y],
+  }
+  const [principal, secondaire] = criteres[instr.choix] ?? criteres[1]
+  const [Q1, Q2] = candidats
+  const ecart = principal(Q1) - principal(Q2)
+  const retenu =
+    Math.abs(ecart) > 1e-9
+      ? ecart > 0
+        ? Q1
+        : Q2
+      : secondaire(Q1) >= secondaire(Q2)
+        ? Q1
+        : Q2
+  return pointAbstrait(retenu.x, retenu.y, instr.nom)
+}
+
+/**
+ * Noms des points du programme situés sur la droite tracée à l'étape `etape`
+ */
+export function pointsSurObjetDirection(
+  programme: InstructionIep[],
+  etape: number,
+): string[] {
+  if (!Number.isInteger(etape)) return []
+  const programmeResolu = resoudreDirectionsAleatoires(programme)
+  const points = pointsConstruitsDepuisProgramme(programmeResolu)
+  const element = elementGeometrique(
+    programmeResolu[etape],
+    points,
+    programmeResolu,
+  )
+  if (element?.nature !== 'droite') return []
+  const d = element.objet
+  const longueurDirection = Math.hypot(d.x2 - d.x1, d.y2 - d.y1)
+  if (longueurDirection === 0) return []
+  return [...points.entries()]
+    .filter(
+      ([, P]) =>
+        Math.abs((d.x2 - d.x1) * (P.y - d.y1) - (d.y2 - d.y1) * (P.x - d.x1)) /
+          longueurDirection <
+        // Les coordonnées d'une Droite sont arrondies au centième
+        0.02,
+    )
+    .map(([nom]) => nom)
 }
 
 /**
@@ -1582,6 +1918,8 @@ function outilsRequisParInstruction(instr: InstructionIep): OutilIep[] {
   switch (instr.type) {
     case 'point':
     case 'pointADistance':
+    case 'pointLibre':
+    case 'pointADistanceLibre':
     case 'intersection':
     case 'texte':
     case 'segmentCodage':
@@ -1602,6 +1940,8 @@ function outilsRequisParInstruction(instr: InstructionIep): OutilIep[] {
       return ['regle', 'crayon']
     case 'demiTourPoint':
       return ['compas', 'regle', 'crayon']
+    case 'pointSurObjetADistance':
+      return ['regle', 'crayon']
     case 'cercle':
     case 'arc':
     case 'arcPointPointCentre':
@@ -1645,6 +1985,8 @@ function instructionIntermediaireSansRangement(instr: InstructionIep) {
   return (
     instr.type === 'point' ||
     instr.type === 'pointADistance' ||
+    instr.type === 'pointLibre' ||
+    instr.type === 'pointADistanceLibre' ||
     instr.type === 'intersection' ||
     instr.type === 'texte' ||
     instr.type === 'pause' ||
@@ -1750,6 +2092,32 @@ function jouerProgramme(
             taille: tailleLabelsPoints ?? 10,
             ...decalageLabelPoint,
           })
+          points.set(instr.nom, A)
+          break
+        }
+        case 'pointSurObjetADistance': {
+          const A = pointSurObjetADistance(instr, points, programme)
+          const origine = recupere(instr.p1)
+          if (A === undefined || origine === undefined) {
+            etapesIgnorees.push(index)
+            break
+          }
+          // Zéro de la règle graduée sur le point de départ, dans la direction du point
+          const regleVisible = anim.regle.visibilite
+          anim.regleMontrerGraduations()
+          if (!regleVisible) anim.regleMontrer()
+          anim.regleRotationTranslation(
+            (Math.atan2(A.y - origine[0].y, A.x - origine[0].x) * 180) /
+              Math.PI,
+            origine[0],
+          )
+          anim.crayonMontrer(A)
+          anim.pointCreer(A, {
+            label: instr.nom,
+            taille: tailleLabelsPoints ?? 10,
+          })
+          if (!regleVisible) anim.regleMasquer()
+          anim.regleMasquerGraduations()
           points.set(instr.nom, A)
           break
         }
@@ -2292,8 +2660,29 @@ export function construireAnimation(
   return anim
 }
 
+/**
+ * Fixe les valeurs laissées au hasard (pente, angle, position d'un point libre)
+ * et ramène les points libres à des points ordinaires pour la lecture
+ */
 function resoudreDirectionsAleatoires(programme: InstructionIep[]) {
   return programme.map((instr): InstructionIep => {
+    if (instr.type === 'pointLibre') {
+      const { x, y, ...reste } = instr
+      return {
+        ...reste,
+        type: 'point',
+        x: x ?? coordonneeAleatoire(),
+        y: y ?? coordonneeAleatoire(),
+      }
+    }
+    if (instr.type === 'pointADistanceLibre') {
+      const { angle, ...reste } = instr
+      return {
+        ...reste,
+        type: 'pointADistance',
+        angle: angle ?? angleAleatoire(),
+      }
+    }
     if (instr.type === 'droitePointPente' && valeurEstVide(instr.pente)) {
       return { ...instr, pente: penteAleatoire() }
     }
@@ -2325,6 +2714,11 @@ export function pointsConstruitsDepuisProgramme(
     switch (instr.type) {
       case 'point': {
         points.set(instr.nom, pointAbstrait(instr.x, instr.y, instr.nom))
+        break
+      }
+      case 'pointSurObjetADistance': {
+        const A = pointSurObjetADistance(instr, points, programme)
+        if (A !== undefined) points.set(instr.nom, A)
         break
       }
       case 'pointADistance': {
@@ -2454,6 +2848,13 @@ function construireCommandesFigureStatique(
     switch (instr.type) {
       case 'point': {
         const A = pointAbstrait(instr.x, instr.y, instr.nom)
+        points.set(instr.nom, A)
+        ajouterPointFigureStatique(commandes, A, instr.nom)
+        break
+      }
+      case 'pointSurObjetADistance': {
+        const A = pointSurObjetADistance(instr, points, programme)
+        if (A === undefined) break
         points.set(instr.nom, A)
         ajouterPointFigureStatique(commandes, A, instr.nom)
         break
@@ -3241,7 +3642,10 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     interactivityOn = true,
     masquerProgramme = false,
     masquerEtapesInitiales = false,
+    sansOutils = false,
     tailleLabelsPoints,
+    clavier,
+    pointsMax,
     verifyCallbackName,
     verifyCallback,
   }: EditeurIepOptions = {}): string {
@@ -3292,7 +3696,10 @@ export class ElementIepEditeur extends MathaleaCustomElement {
       interactivityOn,
       masquerProgramme,
       masquerEtapesInitiales,
+      sansOutils,
       tailleLabelsPoints,
+      clavier,
+      pointsMax,
       verifyCallbackName: computedCallbackName,
     })
   }
@@ -3307,6 +3714,17 @@ export class ElementIepEditeur extends MathaleaCustomElement {
       )
     }
     ElementIepEditeur.verificationCallbacks.set(name, callback)
+  }
+
+  static pointsMaxQuestion(exercice: IExercice, i: number): number {
+    const question = exercice.listeQuestions?.[i] ?? ''
+    const attribut = question.match(
+      new RegExp(
+        `<${ElementIepEditeur.elementTag}\\b[^>]*\\spoints-max="(\\d+)"`,
+      ),
+    )
+    const points = Number(attribut?.[1])
+    return Number.isInteger(points) && points > 0 ? points : 1
   }
 
   static unregisterVerificationCallback(name: string): void {
@@ -3330,6 +3748,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
       `#feedbackEx${exercice.numeroExercice}Q${i}`,
     ) as HTMLElement | null
 
+    const pointsMax = ElementIepEditeur.pointsMaxQuestion(exercice, i)
     const finish = (result: ElementIepVerificationResult) => {
       const isOk = result.isOk
       const feedback =
@@ -3346,8 +3765,8 @@ export class ElementIepEditeur extends MathaleaCustomElement {
         isOk,
         feedback,
         score: result.score ?? {
-          nbBonnesReponses: isOk ? 1 : 0,
-          nbReponses: 1,
+          nbBonnesReponses: isOk ? pointsMax : 0,
+          nbReponses: pointsMax,
         },
       }
     }
@@ -3414,11 +3833,42 @@ export class ElementIepEditeur extends MathaleaCustomElement {
   }
 
   /**
+   * Touches du clavier virtuel des champs nom, nombre et sommets
+   * @attr {string[][]} [clavier]
+   */
+  private get touchesClavier(): string[][] {
+    return litTouchesPersonnalisees(this.getAttribute('clavier') ?? undefined)
+  }
+
+  /**
    * Masque la liste « Étapes déjà construites » : la figure initiale reste affichée
    * @attr {boolean} [masquer-etapes-initiales=false]
    */
   private get masquerEtapesInitialesActif(): boolean {
     return this.getAttribute('masquer-etapes-initiales') === 'true'
+  }
+
+  /**
+   * Retire la mention des instruments des intitulés et des descriptions
+   * @attr {boolean} [sans-outils=false]
+   */
+  private get sansOutilsActif(): boolean {
+    return this.getAttribute('sans-outils') === 'true'
+  }
+
+  /**
+   * Texte affiché pour un intitulé ou une description d'instruction
+   */
+  private texteAffiche(texte: string): string {
+    return this.sansOutilsActif ? retireMentionsOutils(texte) : texte
+  }
+
+  /**
+   * Écrit la description d'une instruction, en rendant les angles avec chapeau
+   */
+  private ecrireDescription(element: HTMLElement, description: string) {
+    element.innerText = this.texteAffiche(description)
+    if (description.includes('$')) renderKatex(element)
   }
 
   private get tailleLabelsPoints(): number | undefined {
@@ -3861,10 +4311,13 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     )
     this.conditionsInitiales.forEach((instr) => {
       const item = document.createElement('li')
-      item.innerText = decrireInstruction(
-        instr,
-        this.conditionsInitiales,
-        this.conditionsInitiales.length,
+      this.ecrireDescription(
+        item,
+        decrireInstruction(
+          instr,
+          this.conditionsInitiales,
+          this.conditionsInitiales.length,
+        ),
       )
       liste.appendChild(item)
     })
@@ -3920,7 +4373,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     for (const type of types) {
       const option = document.createElement('option')
       option.value = type
-      option.innerText = catalogue[type].label
+      option.innerText = this.texteAffiche(catalogue[type].label)
       this.selectType.appendChild(option)
     }
     if (typeSelectionne !== undefined) this.selectType.value = typeSelectionne
@@ -3951,7 +4404,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     }
     const option = document.createElement('option')
     option.value = type
-    option.innerText = catalogue[type].label
+    option.innerText = this.texteAffiche(catalogue[type].label)
     this.selectType.appendChild(option)
   }
 
@@ -4153,7 +4606,19 @@ export class ElementIepEditeur extends MathaleaCustomElement {
           option.innerText = '(position actuelle)'
           select.appendChild(option)
         }
-        for (const nom of noms) {
+        // Le point de départ d'une mesure sur une droite est un point de cette droite
+        const nomsProposes =
+          type === 'pointSurObjetADistance' && champ.cle === 'p1'
+            ? pointsSurObjetDirection(
+                this.programmeComplet(),
+                Number(
+                  this.divParametres.querySelector<HTMLSelectElement>(
+                    '[data-cle="etape"]',
+                  )?.value,
+                ),
+              )
+            : noms
+        for (const nom of nomsProposes) {
           const option = document.createElement('option')
           option.value = nom
           option.innerText = nom
@@ -4163,9 +4628,13 @@ export class ElementIepEditeur extends MathaleaCustomElement {
         const indice = catalogue[type].champs
           .filter((c) => c.genre === 'point')
           .findIndex((c) => c.cle === champ.cle)
-        if (champ.genre === 'point' && noms.length > indice)
-          select.value = noms[indice]
-        if (valeursCourantes[champ.cle] !== undefined) {
+        if (champ.genre === 'point' && nomsProposes.length > indice)
+          select.value = nomsProposes[indice]
+        if (
+          valeursCourantes[champ.cle] !== undefined &&
+          (champ.genre === 'pointOptionnel' ||
+            nomsProposes.includes(valeursCourantes[champ.cle]))
+        ) {
           select.value = valeursCourantes[champ.cle]
         }
         etiquette.appendChild(select)
@@ -4236,7 +4705,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
         const select = document.createElement('select')
         select.classList.add(...classesSelect, 'min-w-40')
         select.dataset.cle = champ.cle
-        const optionsChoix: [string, string][] = [
+        const optionsChoix: [string, string][] = champ.options ?? [
           ['1', 'Point le plus haut'],
           ['2', 'Point le plus bas'],
         ]
@@ -4268,7 +4737,22 @@ export class ElementIepEditeur extends MathaleaCustomElement {
         const champTexte = document.createElement('input')
         champTexte.classList.add(...classesChamp)
         champTexte.dataset.cle = champ.cle
-        if (champ.genre === 'nombre') {
+        const touchesClavier = this.touchesClavier
+        const avecClavier =
+          touchesClavier.length > 0 &&
+          (champ.genre === 'nombre' ||
+            champ.genre === 'nom' ||
+            champ.cle === 'sommets')
+        if (avecClavier) {
+          champTexte.id = `${this.id || 'editeur-iep'}-champ-${champ.cle}`
+          brancheClavierSurChampTexte(champTexte, touchesClavier)
+        }
+        if (champ.genre === 'nombre' && avecClavier) {
+          // Un champ number refuse la virgule et l'insertion par le clavier.
+          champTexte.type = 'text'
+          champTexte.classList.add('w-20')
+          champTexte.value = String(champ.defaut ?? 0).replace('.', ',')
+        } else if (champ.genre === 'nombre') {
           champTexte.type = 'number'
           champTexte.inputMode = 'decimal'
           champTexte.step = '0.1'
@@ -4299,7 +4783,10 @@ export class ElementIepEditeur extends MathaleaCustomElement {
           champTexte.value = String(champ.defaut ?? '')
         }
         if (valeursCourantes[champ.cle] !== undefined) {
-          champTexte.value = valeursCourantes[champ.cle]
+          champTexte.value =
+            champ.genre === 'nombre' && avecClavier
+              ? valeursCourantes[champ.cle].replace('.', ',')
+              : valeursCourantes[champ.cle]
         }
         etiquette.appendChild(champTexte)
       }
@@ -4337,6 +4824,15 @@ export class ElementIepEditeur extends MathaleaCustomElement {
 
   private nomSuivant() {
     const noms = pointsDefinis(this.programmeComplet())
+    // Avec un clavier virtuel, seuls les noms de ses touches peuvent être saisis
+    const nomsDuClavier = this.touchesClavier
+      .flat()
+      .filter((touche) => /^[A-Z][a-z0-9'’]*$/.test(touche))
+    if (nomsDuClavier.length > 0) {
+      return (
+        nomsDuClavier.find((nom) => !noms.includes(nom)) ?? nomsDuClavier[0]
+      )
+    }
     const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     for (let i = this.prochaineLettre; i < alphabet.length; i++) {
       if (!noms.includes(alphabet[i])) return alphabet[i]
@@ -4394,9 +4890,31 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     const programmeSansEdition = enEdition
       ? this.programme.filter((_, i) => i !== this.editingIndex)
       : this.programme
+    if (type === 'pointLibre' || type === 'pointADistanceLibre') {
+      // La position est tirée une fois pour toutes : elle ne change pas quand
+      // on modifie l'étape sans changer son type.
+      const precedente = enEdition
+        ? (this.programme[this.editingIndex as number] as unknown as Record<
+            string,
+            unknown
+          >)
+        : undefined
+      const conserve = precedente?.type === type
+      if (type === 'pointLibre') {
+        instruction.x = conserve ? Number(precedente.x) : coordonneeAleatoire()
+        instruction.y = conserve ? Number(precedente.y) : coordonneeAleatoire()
+      } else {
+        instruction.angle = conserve
+          ? Number(precedente.angle)
+          : angleAleatoire()
+      }
+    }
     if (
       type === 'point' ||
       type === 'pointADistance' ||
+      type === 'pointLibre' ||
+      type === 'pointADistanceLibre' ||
+      type === 'pointSurObjetADistance' ||
       type === 'milieu' ||
       type === 'demiTourPoint' ||
       type === 'intersection'
@@ -4412,6 +4930,13 @@ export class ElementIepEditeur extends MathaleaCustomElement {
         return
       }
       if (!enEdition) this.prochaineLettre++
+    }
+    if (
+      typesAvecDeuxPointsDistincts.includes(type) &&
+      instruction.p1 === instruction.p2
+    ) {
+      window.alert('Les deux points doivent être différents.')
+      return
     }
     if (type === 'arcPointPointCentre') {
       const etapesPrecedentes = enEdition
@@ -4581,10 +5106,9 @@ export class ElementIepEditeur extends MathaleaCustomElement {
 
       const texte = document.createElement('span')
       texte.classList.add('grow')
-      texte.innerText = decrireInstruction(
-        instruction,
-        programmeComplet,
-        offset,
+      this.ecrireDescription(
+        texte,
+        decrireInstruction(instruction, programmeComplet, offset),
       )
       if (!instructionEstValide(programmeComplet, indexComplet)) {
         texte.classList.add('text-red-600', 'line-through')

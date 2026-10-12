@@ -2176,6 +2176,32 @@ function missingBox(label: string): string {
 }
 
 /**
+ * Décalage vertical (en `em`) remplaçant `dominant-baseline="central"` : le
+ * centre d'un texte se trouve à peu près 0,325 em au-dessus de sa ligne de
+ * base (valeur calibrée sur le rendu de Libertinus par Typst).
+ */
+const CENTRAL_BASELINE_DY = '0.325em'
+
+/**
+ * Remplace `dominant-baseline="central"` (noms des points, étiquettes…) par un
+ * `dy` équivalent. L'aperçu Typst affiche la figure comme une image SVG que
+ * le navigateur met en page lui-même, avec les polices installées sur la
+ * machine : `central` se calcule alors à partir des métriques de la police,
+ * et sans Libertinus Math (cas de nombreux postes Linux) la police de repli
+ * décale le texte jusqu'à le coller au point qu'il nomme. Le `dy` ne dépend
+ * pas de la police et reste inchangé pour le PDF.
+ * `kept` est la liste des attributs de la balise (modifiée sur place).
+ */
+function centerTextBaseline(kept: string[], seen: Set<string>): void {
+  if (seen.has('dy')) return
+  const index = kept.findIndex((attr) =>
+    /^dominant-baseline\s*=\s*"central"$/.test(attr),
+  )
+  if (index === -1) return
+  kept[index] = `dy="${CENTRAL_BASELINE_DY}"`
+}
+
+/**
  * Nettoie un SVG mathalea2d pour le parseur XML strict de Typst :
  * les textes des figures sont générés avec un point-virgule parasite
  * entre deux attributs (`font-family= "Book Antiqua"; font-style=...`)
@@ -2228,6 +2254,7 @@ export function sanitizeSvg(svg: string): string {
         seen.add(attrName)
         kept.unshift(attr[0].trim())
       }
+      if (name === 'text') centerTextBaseline(kept, seen)
       return `<${name}${kept.length > 0 ? ' ' + kept.join(' ') : ''}${selfClosing ? '/>' : '>'}`
     },
   )
@@ -2600,11 +2627,21 @@ function extractKatexTex(html: string): string | null {
   return null
 }
 
+/**
+ * Formule d'un `divLatex` pas encore rendu par KaTeX : les blancs à compléter
+ * de `MetaInteractif2d` (`$\\ldots ^\\circ$`) sont posés tels quels dans le HTML.
+ */
+function extractRawDollarTex(html: string): string | null {
+  const match = html.match(/>\s*\$([^$]+)\$\s*<\/div>\s*$/i)
+  return match != null ? decodeEntities(match[1]) : null
+}
+
 function divLatexToTypstLabel(
   divHtml: string,
   scaleFactor: number,
 ): string | null {
-  const tex = extractKatexTex(divHtml)
+  const texKatex = extractKatexTex(divHtml)
+  const tex = texKatex ?? extractRawDollarTex(divHtml)
   if (tex == null) return null
   const label = normalizeOverlayLatex(tex)
   if (label.tex.length === 0) return null
@@ -2639,7 +2676,16 @@ function divLatexToTypstLabel(
   const args = [
     `${(leftPx * 0.75 * scaleFactor).toFixed(1)}pt`,
     `${(topPx * 0.75 * scaleFactor).toFixed(1)}pt`,
-    `[$${latexMathToTypst(label.tex)}$]`,
+    // blanc posé sur une figure : deux fois moins large que dans le texte, pour
+    // ne pas masquer le tracé
+    `[$${
+      texKatex == null
+        ? latexMathToTypst(label.tex).replaceAll(
+            ANSWER_BLANK,
+            ANSWER_BLANK.replace('5em', '2.5em'),
+          )
+        : latexMathToTypst(label.tex)
+    }$]`,
     ...options,
   ]
   return `mathalea-label(${args.join(', ')})`

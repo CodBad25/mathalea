@@ -423,11 +423,7 @@ export default class nomExercice extends Exercice {
     i = 26
     this.listeQuestions[i] =
       'Factoriser $x^2-25$.<br>' +
-      ajouteChampTexteMathLive(
-        this,
-        i,
-        `${KeyboardType.clavierDeBaseAvecX} ${KeyboardType.clavierFullOperations}`,
-      )
+      ajouteChampTexteMathLive(this, i, KeyboardType.clavierFullOperations)
     this.listeCorrections[i] =
       `On utilise l'identité remarquable $a^2-b^2=(a+b)(a-b)$ pour obtenir : $x^2 - 25 = x^2 - 5^2 = ${miseEnEvidence('(x+5)(x-5)')} $`
     handleAnswers(this, i, {

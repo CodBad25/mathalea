@@ -523,6 +523,6 @@ export function analysePuissance(
  */
 export function clavierFonctionComposee(famille: string) {
   return ['sin', 'cos', 'somme'].includes(famille)
-    ? `${KeyboardType.clavierFonctionsTerminales} ${KeyboardType.grecTrigo}`
+    ? KeyboardType.clavierFonctionsTerminalesTrigo
     : KeyboardType.clavierFonctionsTerminales
 }

@@ -3,11 +3,28 @@
   import { get } from 'svelte/store'
   import { tick } from 'svelte'
   import { fly } from 'svelte/transition'
+  import {
+    appliqueToucheAuChampTexte,
+    estChampTexteAvecClavier,
+  } from '../../lib/interactif/champTexteClavier'
   import { renderKatex } from '../../lib/latex/renderKatex'
   import { resizeContent } from '../../lib/components/sizeTools'
   import { globalOptions } from '../../lib/stores/globalOptions'
   import { keyboardBlocks, specialKeys } from './layouts/keysBlocks'
-  import { GAP_BETWEEN_BLOCKS, MD_BREAKPOINT, getMode } from './lib/sizes'
+  import {
+    GAP_BETWEEN_BLOCKS,
+    KEYCAP_HEIGHT,
+    KEYCAP_WIDTH,
+    MD_BREAKPOINT,
+    SM_BREAKPOINT,
+    getMode,
+  } from './lib/sizes'
+  import {
+    choisitClavierReduit,
+    dimensionsClavierAgrandi,
+    enregistrePreferenceClavierReduit,
+    lisPreferenceClavierReduit,
+  } from './lib/modeClavier'
   import { latexMatriceAvecPlaceholders } from './lib/matrix'
   import {
     enregistreTouchesPersonnalisees,
@@ -32,6 +49,7 @@
   export let height: number = 0
 
   let innerWidth: number = 0
+  let innerHeight: number = 0
   let pages: KeyboardBlock[][] = []
   let usualBlocks: KeyboardBlock[] = []
   let unitsBlocks: KeyboardBlock[] = []
@@ -46,6 +64,15 @@
   let matrixRows = 2
   let matrixColumns = 2
   const myKeyboard: Keyboard = new Keyboard()
+
+  /** Touches de gestion du clavier (pages, agrandir) : carré plein, icône blanche. */
+  const CLASSE_TOUCHE_ACTION =
+    'flex justify-center items-center rounded-md border-b-2 border-r border-r-slate-400 dark:border-r-gray-500 border-b-slate-300 dark:border-b-gray-600 bg-coopmaths-action dark:bg-coopmathsdark-action-light hover:bg-coopmaths-action-lightest dark:hover:bg-coopmathsdark-action-lightest text-coopmaths-canvas dark:text-coopmathsdark-canvas shadow-[2px_2px_4px_rgba(180,180,180,0.5)] active:translate-y-[1.5px]'
+  $: styleToucheAction = `width: ${
+    KEYCAP_WIDTH[getMode(innerWidth, isInLine)]
+  }px; height: ${
+    innerWidth <= SM_BREAKPOINT ? KEYCAP_HEIGHT.sm : KEYCAP_HEIGHT.md
+  }px;`
 
   function renderKeyboard() {
     if (!divKeyboard) return
@@ -84,9 +111,10 @@
     const largeurDisponible =
       innerWidth - 2 * 40 - (innerWidth >= MD_BREAKPOINT ? 32 : 16)
     const espaceEntreBlocs = GAP_BETWEEN_BLOCKS[mode]
-    // Les touches spéciales (effacer, flèches…) sont répétées sur chaque page :
-    // une page ne doit jamais se réduire à elles seules.
-    const largeurTouchesSpeciales = inLineBlockWidth(specialKeys, mode)
+    // Les touches spéciales (effacer, flèches…) et la touche agrandir sont
+    // répétées sur chaque page : une page ne doit jamais se réduire à elles.
+    const largeurTouchesSpeciales =
+      inLineBlockWidth(specialKeys, mode) + espaceEntreBlocs + KEYCAP_WIDTH[mode]
     let page: KeyboardBlock[] = [specialKeys]
     let pageWidth = largeurTouchesSpeciales
     let pageAUnBloc = false
@@ -94,8 +122,20 @@
     // découpé : sinon sa page déborde de l'écran et des touches sont coupées.
     const largeurMaxBloc =
       largeurDisponible - largeurTouchesSpeciales - espaceEntreBlocs
-    const blocsDuClavier = [...usualBlocks, ...unitsBlocks]
-      .filter((block) => block !== specialKeys)
+    // Les unités suivent le premier bloc de touches (souvent les chiffres) :
+    // quand une unité est attendue, elle ne doit pas être reléguée en
+    // dernière page derrière les opérations ou les variables.
+    const blocsUsuels = usualBlocks.filter((block) => block !== specialKeys)
+    const premierBlocStandard = blocsUsuels.findIndex(
+      (block) => block.title !== TITRE_BLOC_PERSONNALISE,
+    )
+    const nbBlocsAvantUnites =
+      premierBlocStandard === -1 ? blocsUsuels.length : premierBlocStandard + 1
+    const blocsDuClavier = [
+      ...blocsUsuels.slice(0, nbBlocsAvantUnites),
+      ...unitsBlocks,
+      ...blocsUsuels.slice(nbBlocsAvantUnites),
+    ]
       .flatMap((block) => decoupeBlocEnLigne(block, mode, largeurMaxBloc))
     for (const block of blocsDuClavier) {
       const blockWidth = espaceEntreBlocs + inLineBlockWidth(block, mode)
@@ -117,7 +157,8 @@
   keyboardState.subscribe(async (value) => {
     // Un nouveau champ repart de la première page du clavier : sinon l'index
     // de page du champ précédent s'applique à un clavier différent.
-    if (value.idMathField !== idChampPrecedent) {
+    const nouveauChamp = value.idMathField !== idChampPrecedent
+    if (nouveauChamp) {
       idChampPrecedent = value.idMathField
       currentPageIndex = 0
     }
@@ -157,6 +198,21 @@
     unitsBlocks = unitsBlocks
     usualBlocks = usualBlocks
     computePages()
+    if (nouveauChamp && value.idMathField !== '' && innerWidth > 0) {
+      const reduit = choisitClavierReduit({
+        preference: lisPreferenceClavierReduit(),
+        nbPagesEnLigne: pages.length,
+        agrandi: dimensionsClavierAgrandi(usualBlocks, unitsBlocks, innerWidth),
+        innerWidth,
+        innerHeight,
+        tactile: 'ontouchstart' in window,
+      })
+      if (reduit !== value.isInLine) {
+        // Le store relance cet abonnement avec le bon mode.
+        keyboardState.update((state) => ({ ...state, isInLine: reduit }))
+        return
+      }
+    }
     pages = pages
     if (currentPageIndex >= pages.length) currentPageIndex = 0
     alphanumericDisplayed = value.blocks.includes('alphanumeric')
@@ -165,6 +221,16 @@
     // document.dispatchEvent(new window.Event('KeyboardUpdated', { bubbles: true }))
     // console.log('message envoyé: ' + 'KeyboardUpdated')
   })
+
+  async function basculeModeClavier(e: MouseEvent) {
+    e.preventDefault()
+    e.stopPropagation()
+    computePages()
+    $keyboardState.isInLine = !$keyboardState.isInLine
+    enregistrePreferenceClavierReduit($keyboardState.isInLine)
+    await tick()
+    renderKeyboard()
+  }
 
   async function navRight(e: MouseEvent) {
     e.preventDefault()
@@ -235,6 +301,20 @@
       }
     } else {
       if (event.currentTarget instanceof HTMLButtonElement) {
+        const champTexte = document.getElementById($keyboardState.idMathField)
+        if (estChampTexteAvecClavier(champTexte)) {
+          champTexte.focus()
+          if (key.command === 'closeKeyboard') {
+            keyboardState.update((value) => {
+              value.isVisible = false
+              value.idMathField = ''
+              return value
+            })
+          } else {
+            appliqueToucheAuChampTexte(champTexte, key)
+          }
+          return
+        }
         const mf = mathfieldActif()
         if (mf != null) {
           mf.focus()
@@ -258,7 +338,7 @@
   }
 </script>
 
-<svelte:window bind:innerWidth />
+<svelte:window bind:innerWidth bind:innerHeight />
 {''}
 {#if isVisible}
   <div
@@ -327,12 +407,41 @@
           {isInLine}
           {innerWidth}
           {clickKeycap}
-        />
+        >
+          <!-- Touche agrandir / réduire, à côté des touches spéciales : une
+               touche de taille normale se remarque, contrairement à l'ancien
+               petit « + » dans le coin. Agrandi, elle s'aligne sur la touche
+               de fermeture, en bas. -->
+          <button
+            id="kb-nav-reduced"
+            type="button"
+            title={isInLine
+              ? 'Afficher toutes les touches'
+              : 'Réduire le clavier'}
+            aria-label={isInLine
+              ? 'Afficher toutes les touches'
+              : 'Réduire le clavier'}
+            class="{CLASSE_TOUCHE_ACTION} shrink-0 {isInLine ? '' : 'self-end'}"
+            style={styleToucheAction}
+            on:click={basculeModeClavier}
+            on:mousedown={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+            }}
+          >
+            <i
+              class="bx {isInLine
+                ? 'bx-expand-alt'
+                : 'bx-collapse-alt'} text-xl md:text-2xl"
+            ></i>
+          </button>
+        </KeyboardPage>
         <!-- Boutons de navigation entre les pages : vers la DROITE -->
         <button
           id="kb-nav-right"
           aria-label="Page suivante"
-          class="absolute right-2 md:right-0 top-0 bottom-0 m-auto flex justify-center items-center h-8 w-8 text-coopmaths-action dark:text-coopmathsdark-action hover:text-coopmaths-action-lightest dark:hover:text-coopmathsdark-action-lightest disabled:text-transparent dark:disabled:text-transparent"
+          class="{CLASSE_TOUCHE_ACTION} absolute right-0 top-0 bottom-0 m-auto disabled:invisible"
+          style={styleToucheAction}
           on:click={navRight}
           on:mousedown={(e) => {
             e.preventDefault()
@@ -340,13 +449,14 @@
           }}
           disabled={pages.length === 1 || currentPageIndex === 0 || !isInLine}
         >
-          <i class="bx bx-chevron-right bx-lg"></i>
+          <i class="bx bx-chevron-right text-2xl md:text-3xl"></i>
         </button>
         <!-- Boutons de navigation entre les pages : vers la GAUCHE -->
         <button
           id="kb-nav-left"
           aria-label="Page précédente"
-          class="absolute left-2 md:left-0 top-0 bottom-0 m-auto flex justify-center items-center h-8 w-8 text-coopmaths-action dark:text-coopmathsdark-action hover:text-coopmaths-action-lightest dark:hover:text-coopmathsdark-action-lightest disabled:text-transparent dark:disabled:text-transparent"
+          class="{CLASSE_TOUCHE_ACTION} absolute left-0 top-0 bottom-0 m-auto disabled:invisible"
+          style={styleToucheAction}
           on:click={navLeft}
           on:mousedown={(e) => {
             e.preventDefault()
@@ -356,31 +466,10 @@
             currentPageIndex === pages.length - 1 ||
             !isInLine}
         >
-          <i class="bx bx-chevron-left bx-lg"></i>
+          <i class="bx bx-chevron-left text-2xl md:text-3xl"></i>
         </button>
       </div>
     {/if}
-    <!-- Bouton de réduction du clavier -->
-    <button
-      id="kb-nav-reduced"
-      type="button"
-      aria-label={isInLine ? 'Agrandir le clavier' : 'Réduire le clavier'}
-      class="z-[10000] absolute right-0 top-0 h-5 w-5 rounded-sm bg-coopmaths-action hover:bg-coopmaths-action-lightest dark:bg-coopmathsdark-action-light dark:hover:bg-coopmathsdark-action-lightest text-coopmaths-canvas dark:text-coopmaths-canvas"
-      on:click={async (e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        computePages()
-        $keyboardState.isInLine = !$keyboardState.isInLine
-        await tick()
-        renderKeyboard()
-      }}
-      on:mousedown={(e) => {
-        e.preventDefault()
-        e.stopPropagation()
-      }}
-    >
-      <i class="bx {isInLine ? 'bx-plus' : 'bx-minus'}"></i>
-    </button>
     <!-- bouton de passage du clavier alphanumérique au clavier maths-->
     <button
       id="kb-nav-alpha"
@@ -390,7 +479,7 @@
         : 'Clavier alphanumérique'}
       class="z-[10000] {$keyboardState.blocks.includes('alphanumeric')
         ? 'flex justify-center items-center'
-        : 'hidden'} absolute right-0 top-6 h-5 w-5 rounded-sm bg-coopmaths-action hover:bg-coopmaths-action-lightest dark:bg-coopmathsdark-action-light dark:hover:bg-coopmathsdark-action-lightest text-coopmaths-canvas dark:text-coopmaths-canvas"
+        : 'hidden'} absolute right-0 top-0 h-5 w-5 rounded-sm bg-coopmaths-action hover:bg-coopmaths-action-lightest dark:bg-coopmathsdark-action-light dark:hover:bg-coopmathsdark-action-lightest text-coopmaths-canvas dark:text-coopmaths-canvas"
       on:click={async (e) => {
         e.preventDefault()
         e.stopPropagation()

@@ -199,7 +199,7 @@ export default class RegionsDuPlan extends Exercice {
             const P1 = pointSurCercle(c1, 60, '')
             const longRayon2 = placeLatexSurSegment(r2Tex, P1, D2, {
               horizontal: true,
-              distance: 0.35,
+              distance: 0.8,
               letterSize: 'scriptsize',
             })
 

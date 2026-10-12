@@ -96,7 +96,7 @@ export default class nomExercice extends Exercice {
               // on ne produit pas le feedback « n'est pas égal à 0 × 0 ».
               const sansReponse = saisie1 === '' && saisie2 === ''
               if (spanReponseLigne != null) {
-                spanReponseLigne.innerHTML = sansReponse ? '' : '☹️'
+                spanReponseLigne.innerHTML = '☹️'
               }
               return {
                 isOk: false,
@@ -109,10 +109,24 @@ export default class nomExercice extends Exercice {
                 },
               }
             }
-            const facteur1 = Number(saisie1)
-            const facteur2 = Number(saisie2)
+            // La saisie MathLive est du LaTeX : « 0,5 » arrive sous la forme « 0{,}5 ».
+            const versNombre = (saisie: string) =>
+              Number(saisie.replace(/\\,|\s|[{}]/g, '').replace(',', '.'))
+            const facteur1 = versNombre(saisie1)
+            const facteur2 = versNombre(saisie2)
             const isOk =
               facteur1 * facteur2 === a * b && facteur1 !== 1 && facteur2 !== 1
+            if (!Number.isInteger(facteur1) || !Number.isInteger(facteur2)) {
+              mfe.setPromptState('champ1', 'incorrect', false)
+              mfe.setPromptState('champ2', 'incorrect', false)
+              if (spanReponseLigne != null) spanReponseLigne.innerHTML = '☹️'
+              return {
+                isOk: false,
+                feedback:
+                  'Attention, il faut utiliser des nombres entiers différents de 1.',
+                score: { nbBonnesReponses: 0, nbReponses: 1 },
+              }
+            }
             if (isOk) {
               mfe.setPromptState('champ1', 'correct', true)
               mfe.setPromptState('champ2', 'correct', true)
@@ -127,7 +141,10 @@ export default class nomExercice extends Exercice {
                 mfe.setPromptState('champ1', 'incorrect', false)
                 mfe.setPromptState('champ2', 'incorrect', false)
               }
-              feedback = `Attention, ${a * b} n'est pas égal à ${facteur1} × ${facteur2}.`
+              feedback =
+                facteur1 * facteur2 === a * b
+                  ? 'Attention, il faut utiliser des nombres entiers différents de 1.'
+                  : `Attention, ${a * b} n'est pas égal à ${facteur1} × ${facteur2}.`
             }
             if (spanReponseLigne != null) {
               spanReponseLigne.innerHTML = isOk ? '😎' : '☹️'

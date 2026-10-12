@@ -8,6 +8,7 @@ import {
   splitInequality,
 } from '../interactif/checks/inequalityChecks'
 import { pointsMaxDuBareme } from '../interactif/baremeExercice'
+import { haveSameComplexValue } from '../interactif/checks/complexArithmetic'
 import { fonctionComparaison } from '../interactif/comparisonFunctions'
 import { toutAUnPoint, toutPourUnPoint } from '../interactif/fonctionsBaremes'
 import { setMathfield, setMathfieldListener } from '../interactif/setMathfield'
@@ -96,6 +97,12 @@ export type MathaleaSolveurOptions = {
   kind?: SolveurKind
   mode?: SolveurMode
   variable?: string
+  /**
+   * Résolution dans C : `i` est l'unité imaginaire, l'équivalence des étapes est
+   * contrôlée sur les nombres complexes et la solution attendue est de la forme
+   * algébrique `a+bi` (clavier avec la touche `i`). Équations uniquement.
+   */
+  complex?: boolean
   showInterval?: boolean
   intervalMin?: number
   intervalMax?: number
@@ -128,6 +135,7 @@ export class MathaleaSolveurElement extends MathaleaCustomElement {
     kind = 'equation',
     mode = 'entrainement',
     variable = 'x',
+    complex = false,
     showInterval = false,
     intervalMin = -5,
     intervalMax = 5,
@@ -146,6 +154,7 @@ export class MathaleaSolveurElement extends MathaleaCustomElement {
       kind,
       mode,
       variable,
+      complex,
       showInterval,
       intervalMin,
       intervalMax,
@@ -185,10 +194,16 @@ export class MathaleaSolveurElement extends MathaleaCustomElement {
     // Une étape équivalente à la solution (ex : `x+3-3=7-3`) ne suffit pas :
     // la dernière ligne doit être la forme résolue, sans calcul à poursuivre.
     const kind = element?.kind ?? 'equation'
+    const complex = element?.complex ?? false
     const isSolved =
-      isSolvedForm(actual, kind, element?.getAttribute('variable') ?? 'x') &&
+      isSolvedForm(
+        actual,
+        kind,
+        element?.getAttribute('variable') ?? 'x',
+        complex,
+      ) &&
       expectedValues.some((candidate) =>
-        isConformToExpected(actual, candidate, kind),
+        isConformToExpected(actual, candidate, kind, complex),
       )
     const hasWrongStep = (element?.nbEtapesFausses ?? 0) > 0
     // En mode entrainement, le second « champ » vaut 1 si aucune étape n'est fausse.
@@ -238,6 +253,11 @@ export class MathaleaSolveurElement extends MathaleaCustomElement {
     return this.getAttribute('kind') === 'inequation'
       ? 'inequation'
       : 'equation'
+  }
+
+  /** Résolution dans C (voir l'option `complex`). */
+  get complex(): boolean {
+    return this.getAttribute('complex') === 'true' && this.kind === 'equation'
   }
 
   get mode(): SolveurMode {
@@ -342,7 +362,9 @@ export class MathaleaSolveurElement extends MathaleaCustomElement {
         'data-keyboard',
         this.kind === 'inequation'
           ? 'numbersInconnue basicOperations compare'
-          : 'numbersInconnue basicOperations2',
+          : this.complex
+            ? 'numbersInconnue basicOperationsComplexes'
+            : 'numbersInconnue basicOperations2',
       )
       field.dataset.inconnue = this.getAttribute('variable') ?? 'x'
       field.setAttribute(
@@ -385,6 +407,8 @@ export class MathaleaSolveurElement extends MathaleaCustomElement {
     input: string,
     expected: string,
   ): { passed: boolean; feedbackKo: string; feedbackOk?: string } {
+    if (this.complex)
+      return isEquivalentEquation({ complexes: true }).run(input, expected)
     return this.kind === 'inequation'
       ? isEquivalentInequality().run(input, expected)
       : isEquivalentEquation().run(
@@ -416,7 +440,12 @@ export class MathaleaSolveurElement extends MathaleaCustomElement {
     this.messageIsSuccess = result.passed
     if (result.passed) {
       if (
-        isSolvedForm(current, this.kind, this.getAttribute('variable') ?? 'x')
+        isSolvedForm(
+          current,
+          this.kind,
+          this.getAttribute('variable') ?? 'x',
+          this.complex,
+        )
       ) {
         this.message =
           this.kind === 'inequation'
@@ -504,16 +533,84 @@ export function isSolvedForm(
   value: string,
   kind: SolveurKind,
   variable: string,
+  complex = false,
 ): boolean {
   const relation =
     kind === 'inequation' ? splitInequality(value) : splitEquation(value)
   if (relation == null) return false
+  const isFinal = complex ? isFinalComplexNumber : isFinalNumber
   return (
     (isVariableAlone(relation.left, variable) &&
-      isFinalNumber(relation.right, variable)) ||
+      isFinal(relation.right, variable)) ||
     (isVariableAlone(relation.right, variable) &&
-      isFinalNumber(relation.left, variable))
+      isFinal(relation.left, variable))
   )
+}
+
+/**
+ * Un nombre complexe est terminal s'il est écrit sous forme algébrique `a+bi`
+ * où `a` et `b` sont des nombres ou des fractions, simplifiées ou non, de
+ * numérateur et dénominateur numériques (ex : `-3`, `2i`,
+ * `\dfrac{1}{13}+\dfrac{5}{13}i`, `-\dfrac{5i}{13}`), sans terme nul lorsque
+ * l'écriture comporte deux termes.
+ */
+function isFinalComplexNumber(expression: string, variable: string): boolean {
+  if (containsVariable(expression, variable)) return false
+  const compact = expression
+    .replaceAll('\\left', '')
+    .replaceAll('\\right', '')
+    .replaceAll('\\mathrm{i}', 'i')
+    .replaceAll('\\text{i}', 'i')
+    .replaceAll('\\imaginaryI', 'i')
+    .replaceAll('{i}', 'i')
+    .replace(/\s/g, '')
+  const termes = splitTermes(compact)
+  if (termes.length === 0 || termes.length > 2) return false
+  const natures = termes.map((terme) => natureTerme(terme, variable))
+  const [premier, second] = natures
+  if (premier == null || (termes.length === 2 && second == null)) return false
+  if (second == null) return true
+  return premier.imaginaire !== second.imaginaire && !premier.nul && !second.nul
+}
+
+type NatureTerme = { imaginaire: boolean; nul: boolean }
+
+/** Découpe une somme en termes signés, sans couper à l'intérieur d'accolades. */
+function splitTermes(expression: string): string[] {
+  const termes: string[] = []
+  let debut = 0
+  let profondeur = 0
+  for (let index = 0; index < expression.length; index++) {
+    const caractere = expression[index]
+    if (caractere === '{') profondeur++
+    if (caractere === '}') profondeur--
+    if (profondeur === 0 && index > debut && '+-'.includes(caractere)) {
+      termes.push(expression.slice(debut, index))
+      debut = index
+    }
+  }
+  termes.push(expression.slice(debut))
+  return termes.filter((terme) => terme !== '')
+}
+
+/** Nature d'un terme signé (réel ou imaginaire pur) s'il est terminal, sinon `null`. */
+function natureTerme(terme: string, variable: string): NatureTerme | null {
+  const signe = terme.startsWith('-') ? '-' : ''
+  const corps = terme.replace(/^[+-]/, '')
+  let coefficient: string | null = null
+  const imaginaireEntier = /^(\d+(?:[.,]\d+)?)?i$/.exec(corps)
+  const imaginaireFraction = /^(\\[dt]?frac\{[^{}]+\}\{[^{}]+\})i$/.exec(corps)
+  const imaginaireNumerateur =
+    /^\\([dt]?frac)\{([+-]?)(\d+(?:[.,]\d+)?)?i\}\{([^{}]+)\}$/.exec(corps)
+  if (imaginaireEntier != null) coefficient = imaginaireEntier[1] ?? '1'
+  else if (imaginaireFraction != null) coefficient = imaginaireFraction[1]
+  else if (imaginaireNumerateur != null)
+    coefficient = `\\${imaginaireNumerateur[1]}{${imaginaireNumerateur[2]}${imaginaireNumerateur[3] ?? '1'}}{${imaginaireNumerateur[4]}}`
+  else if (corps.includes('i')) return null
+  const imaginaire = coefficient != null
+  const reel = `${signe}${coefficient ?? corps}`
+  if (!isFinalNumber(reel, variable, false)) return null
+  return { imaginaire, nul: /^[+-]?0*(?:[.,]0*)?$/.test(coefficient ?? corps) }
 }
 
 /**
@@ -521,7 +618,11 @@ export function isSolvedForm(
  * fractionnaire (ex : `-3`, `2,5`, `\\dfrac{-6}{5}`), pas d'un calcul à
  * poursuivre (ex : `2\\times\\frac{3}{5}`).
  */
-function isFinalNumber(expression: string, variable: string): boolean {
+function isFinalNumber(
+  expression: string,
+  variable: string,
+  exigeIrreductible = true,
+): boolean {
   if (containsVariable(expression, variable)) return false
   const compact = expression
     .replaceAll('\\left', '')
@@ -536,9 +637,11 @@ function isFinalNumber(expression: string, variable: string): boolean {
   ).exec(compact)
   if (fraction == null) return false
   // Une fraction n'est terminale que si elle est irréductible (`6/2` ou `6/4`
-  // restent à simplifier).
+  // restent à simplifier), sauf si `exigeIrreductible` est faux.
   const numerateur = Math.abs(Number(fraction[1].replace(',', '.')))
   const denominateur = Math.abs(Number(fraction[2].replace(',', '.')))
+  if (denominateur === 0) return false
+  if (!exigeIrreductible) return true
   if (!Number.isInteger(numerateur) || !Number.isInteger(denominateur))
     return true
   return denominateur > 1 && pgcd(numerateur, denominateur) === 1
@@ -624,8 +727,20 @@ function isConformToExpected(
   input: string,
   expected: string,
   kind: SolveurKind,
+  complex = false,
 ): boolean {
   if (input.trim() === '' || expected.trim() === '') return false
+  if (complex && kind === 'equation') {
+    const inputParts = input.split('=')
+    const expectedParts = expected.split('=')
+    if (inputParts.length !== 2 || expectedParts.length !== 2) return false
+    return (
+      (haveSameComplexValue(inputParts[0], expectedParts[0]) &&
+        haveSameComplexValue(inputParts[1], expectedParts[1])) ||
+      (haveSameComplexValue(inputParts[0], expectedParts[1]) &&
+        haveSameComplexValue(inputParts[1], expectedParts[0]))
+    )
+  }
   if (kind === 'equation') {
     const inputParts = input.split('=')
     const expectedParts = expected.split('=')

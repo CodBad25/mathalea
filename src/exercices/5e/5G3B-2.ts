@@ -548,7 +548,7 @@ export default class SymetrieProprietes extends Exercice {
               'green',
             ),
             latexParPoint(
-              `${angle(ptRef1, B, ptRef2, 0)}^\\circ`,
+              `${Math.round(angle(ptRef1, B, ptRef2))}^\\circ`,
               BLabel,
               'green',
               12,
@@ -570,7 +570,7 @@ export default class SymetrieProprietes extends Exercice {
               'green',
             ),
             latexParPoint(
-              `${angle(ptRef1, C, ptRef2, 0)}^\\circ`,
+              `${Math.round(angle(ptRef1, C, ptRef2))}^\\circ`,
               CLabel,
               'green',
               12,
@@ -592,7 +592,7 @@ export default class SymetrieProprietes extends Exercice {
               'green',
             ),
             latexParPoint(
-              `${180 - angle(A, ptRef2, ptRef1, 0) - angle(A, ptRef1, ptRef2, 0)}^\\circ`,
+              `${180 - Math.round(angle(A, ptRef2, ptRef1)) - Math.round(angle(A, ptRef1, ptRef2))}^\\circ`,
               ALabel,
               'green',
               12,
@@ -617,8 +617,8 @@ export default class SymetrieProprietes extends Exercice {
           texteCorr += `Les angles $\\widehat{${A.nom}${C.nom}${B.nom}}$ et $\\widehat{${D.nom}${F.nom}${E.nom}}$ sont symétriques par rapport à $${typesDeTransformations[i] === 2 ? '(d)' : 'O'}$.<br>`
           texteCorr +=
             "Or, le symétrique d'un angle est un angle de même mesure.<br>"
-          texteCorr += `Donc les angles $\\widehat{${A.nom}${C.nom}${B.nom}}$ et $\\widehat{${D.nom}${F.nom}${E.nom}}$ ont la même mesure et $\\widehat{${D.nom}${F.nom}${E.nom}} = ${miseEnEvidence(angle(D, F, E, 0))}^\\circ$.<br>`
-          reponse = new Grandeur(angle(D, F, E, 0), '°').toString()
+          texteCorr += `Donc les angles $\\widehat{${A.nom}${C.nom}${B.nom}}$ et $\\widehat{${D.nom}${F.nom}${E.nom}}$ ont la même mesure et $\\widehat{${D.nom}${F.nom}${E.nom}} = ${miseEnEvidence(Math.round(angle(D, F, E)))}^\\circ$.<br>`
+          reponse = new Grandeur(Math.round(angle(D, F, E)), '°').toString()
           objetReponse = {
             reponse: {
               value: reponse,

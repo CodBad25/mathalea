@@ -1,4 +1,4 @@
-import ResoudreDesProblemesDiviseursCommuns from '../3e/3A12-1'
+import ResoudreDesProblemesDiviseursCommuns from '../3e/3A12-3'
 export const titre =
   'Résoudre des problèmes avec recherche de diviseurs communs'
 export const dateDeModifImportante = '05/09/2026'

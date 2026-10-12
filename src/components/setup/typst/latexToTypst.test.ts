@@ -932,6 +932,17 @@ describe('htmlToTypst', () => {
     expect(figures[0]).toContain('image(bytes("<svg')
   })
 
+  it('rend en pointillés le blanc `$\\ldots$` non rendu par KaTeX posé sur une figure (MetaInteractif2d)', () => {
+    const figures: string[] = []
+    const result = htmlToTypst(
+      '<div class="svgContainer"><div><svg class="mathalea2d" width="96" height="48"><line x1="0" y1="0" x2="10" y2="10"/></svg><div class="divLatex" style="position: absolute; top: 10px; left: 20px; transform: translate(-50%,-50%); opacity: 1;" data-top=10 data-left=20>$\\ldots ^\\circ$</div></div></div>',
+      figures,
+    )
+    expect(result).toContain(
+      'mathalea-label(15.0pt, 7.5pt, [$#box(width: 2.5em, repeat(gap: 2pt)[.])^circle.small$])',
+    )
+  })
+
   it('passe la largeur naturelle à mathalea-figure-block pour une figure à labels, sans la mesurer', () => {
     const figures: string[] = []
     const result = htmlToTypst(
@@ -1320,6 +1331,25 @@ describe('sanitizeSvg', () => {
     expect(
       sanitizeSvg('<path stroke-opacity="0.5" stroke-opacity="0.5" d="M0 0"/>'),
     ).toBe('<path stroke-opacity="0.5" d="M0 0"/>')
+  })
+
+  it('remplace dominant-baseline="central" par un dy indépendant de la police', () => {
+    // forme brute générée par lib/2d/textes.ts, puis forme sérialisée par le DOM
+    expect(
+      sanitizeSvg(
+        '<text x="0" y="-10" text-anchor = "middle" dominant-baseline = "central">G</text>',
+      ),
+    ).toBe('<text x="0" y="-10" text-anchor = "middle" dy="0.325em">G</text>')
+    expect(
+      sanitizeSvg('<text x="0" y="-10" dominant-baseline="central">G</text>'),
+    ).toBe('<text x="0" y="-10" dy="0.325em">G</text>')
+    // un dy déjà posé et les autres alignements restent tels quels
+    expect(
+      sanitizeSvg('<text dy="2" dominant-baseline="central">G</text>'),
+    ).toBe('<text dy="2" dominant-baseline="central">G</text>')
+    expect(sanitizeSvg('<text dominant-baseline="hanging">G</text>')).toBe(
+      '<text dominant-baseline="hanging">G</text>',
+    )
   })
 
   it('retire les animations SMIL et les compteurs de tours des engrenages', () => {

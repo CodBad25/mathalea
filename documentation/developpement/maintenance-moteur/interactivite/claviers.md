@@ -36,6 +36,8 @@ Quelques types courants :
 | `clavierDeBase`                       | nombres et opérations                                                          |
 | `clavierDeBaseAvecFraction`           | nombres, opérations, fractions                                                 |
 | `clavierDeBaseAvecVariable`           | idem avec des lettres                                                          |
+| `complexes`                           | nombres complexes (chiffres, `i`, fraction, puissance, trigonométrie)          |
+| `complexesAvecVariable`               | idem avec des lettres (`x`, `y`, `z`…)                                         |
 | `clavierMatrice`                      | coefficients usuels du lycée et insertion d'une matrice de dimensions choisies |
 | `lycee`, `lyceeClassique`             | fonctions et opérations du lycée                                               |
 | `grecTrigo`                           | lettres grecques et fonctions trigonométriques                                 |
@@ -43,6 +45,14 @@ Quelques types courants :
 | `clavierEnsemble`                     | ensembles et intervalles                                                       |
 | `longueur`, `aire`, `volume`, `masse` | grandeurs avec unités                                                          |
 | `alphanumeric`                        | clavier alphanumérique                                                         |
+
+Certains types (`complexes`, `clavierDeBase`, `clavierDeBaseAvecX`…) contiennent
+déjà les chiffres : ne pas les combiner avec un autre clavier de nombres, les
+chiffres s'afficheraient en double. Utiliser `complexes` seul (ou
+`complexesAvecVariable` pour avoir aussi des lettres), ou un type qui réunit déjà
+les blocs voulus (`clavierDeBaseAvecXEtEgal`, `clavierDeBaseAvecEgalEtVariable`,
+`clavierFonctionsTerminalesEnsemble`, `clavierFonctionsTerminalesTrigo`). Le test
+`keyboard.test.ts` repère les combinaisons fautives dans les exercices.
 
 La liste complète est `KEYBOARD_CATEGORIES` dans
 `src/lib/interactif/claviers/keyboard.ts`.
@@ -87,3 +97,21 @@ est fournie par `KeyboardType.clavierMatrice` avec les nombres, fractions,
 racines, puissances et opérations usuelles.
 
 Vérifier le résultat sur la page de test `?uuid=clavier`.
+
+## Affichage réduit ou agrandi
+
+Le clavier a deux affichages : **réduit** (touches sur une ligne, réparties
+en pages si elles ne tiennent pas) et **agrandi** (blocs en grille, toutes les
+touches visibles). Des pages passent facilement inaperçues : à l'ouverture
+d'un champ, `choisitClavierReduit()` (`src/components/keyboard/lib/modeClavier.ts`)
+choisit l'affichage ainsi :
+
+1. le dernier choix de l'élève (touche agrandir / réduire, à côté des touches
+   spéciales), mémorisé dans `localStorage` (`mathaleaClavierReduit`), prime ;
+2. si toutes les touches tiennent sur une ligne, le clavier est réduit ;
+3. sinon il est agrandi, sauf s'il est plus large que l'écran ou, hors écran
+   tactile, s'il dépasse 40 % de la hauteur de la fenêtre : on garde alors les
+   pages.
+
+En affichage réduit, les blocs d'unités suivent le premier bloc du clavier
+(souvent les chiffres) pour ne pas être relégués en dernière page.

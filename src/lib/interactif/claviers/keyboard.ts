@@ -34,6 +34,7 @@ const KEYBOARD_CATEGORIES = [
   'clavierSuite',
   'college6eme',
   'complexes',
+  'complexesAvecVariable',
   'geolocalisation',
   'grecTrigo',
   'longueur',
@@ -41,6 +42,10 @@ const KEYBOARD_CATEGORIES = [
   'lyceeClassique',
   'masse',
   'clavierFonctionsTerminales',
+  'clavierFonctionsTerminalesEnsemble',
+  'clavierFonctionsTerminalesTrigo',
+  'clavierDeBaseAvecXEtEgal',
+  'clavierDeBaseAvecEgalEtVariable',
   'nombresEtDegre',
   'nombresEtDegreCelsius',
   'numbersSpace',
@@ -146,6 +151,10 @@ export const convertKeyboardTypeToBlocks = (
       return ['numbers', 'compare', 'basicOperations']
     case KeyboardType.clavierFonctionsTerminales:
       return ['clavierFonctionsTerminales']
+    case KeyboardType.clavierFonctionsTerminalesEnsemble:
+      return ['clavierFonctionsTerminales', 'ensemble', 'ensembleDefini']
+    case KeyboardType.clavierFonctionsTerminalesTrigo:
+      return ['clavierFonctionsTerminales', 'greek', 'trigo']
     case KeyboardType.lycee:
       return ['numbers', 'fullOperations', 'variables', 'advanced']
     case KeyboardType.lyceeClassique:
@@ -156,6 +165,10 @@ export const convertKeyboardTypeToBlocks = (
       return ['numbers', 'basicOperationsPlus']
     case KeyboardType.clavierDeBaseAvecEgal:
       return ['numbers2', 'basicOperations']
+    case KeyboardType.clavierDeBaseAvecXEtEgal:
+      return ['numbers2', 'basicOperationsPlus']
+    case KeyboardType.clavierDeBaseAvecEgalEtVariable:
+      return ['numbers2', 'basicOperations', 'variables']
     case KeyboardType.clavierDeBaseAvecVariable:
       return ['numbers', 'basicOperations', 'variables']
     case KeyboardType.clavierEmvx:
@@ -174,8 +187,12 @@ export const convertKeyboardTypeToBlocks = (
       return ['numbers', 'fullOperations', 'suite']
     case KeyboardType.clavierNumbers:
       return ['numbers']
+    // Le bloc `complexes` contient déjà les chiffres : ne pas le combiner avec
+    // un clavier de nombres, sous peine de les afficher en double.
     case KeyboardType.complexes:
       return ['complexes']
+    case KeyboardType.complexesAvecVariable:
+      return ['complexes', 'variables']
     case KeyboardType.numbersSpace:
       return ['numbersSpace']
     case KeyboardType.clavierFullOperations:

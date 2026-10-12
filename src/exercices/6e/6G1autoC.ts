@@ -22,6 +22,7 @@ export const interactifReady = true
 
 // Gestion de la date de publication initiale
 export const dateDePublication = '08/05/2025'
+export const dateDeModifImportante = '11/10/2026'
 
 /**
  * Donner le nombre d'axes de symétrie d'une figure.

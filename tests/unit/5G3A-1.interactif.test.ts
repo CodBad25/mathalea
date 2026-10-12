@@ -15,6 +15,7 @@ function generate(
   notebook = 1,
   offCenter = false,
   seed = 'symetrie',
+  nbPoints?: number,
 ) {
   seedrandom(seed, { global: true })
   const exercise = new SymetrieCentralePoint()
@@ -24,6 +25,7 @@ function generate(
   exercise.nbQuestions = 3
   exercise.sup2 = notebook
   exercise.sup4 = offCenter
+  if (nbPoints !== undefined) exercise.sup5 = nbPoints
   exercise.nouvelleVersion()
   return exercise
 }
@@ -140,6 +142,55 @@ describe('5G3A-1 : construction interactive des symétriques', () => {
         ),
       ).toHaveLength(notebook === 3 ? 0 : notebook)
     }
+  })
+
+  it.each([1, 2, 3, 4, 5])(
+    'permet de choisir le nombre de points (%s)',
+    (nbPoints) => {
+      for (const notebook of [1, 2, 3]) {
+        const exercise = generate(true, notebook, false, 'symetrie', nbPoints)
+        for (let i = 0; i < 3; i++) {
+          expect(exercise.goodAnswers[i]).toHaveLength(nbPoints)
+          const labels = exercise.goodAnswers[i].map((a) => a.label)
+          expect(new Set(labels).size).toBe(nbPoints)
+          const figure = exercise.figuresApiGeom![i]
+          for (const answer of exercise.goodAnswers[i]) {
+            figure.create('Point', answer)
+            expect(answer.x).toBeGreaterThan(figure.xMin)
+            expect(answer.x).toBeLessThan(figure.xMax)
+            expect(answer.y).toBeGreaterThan(figure.yMin)
+            expect(answer.y).toBeLessThan(figure.yMax)
+          }
+          expect(exercise.correctionInteractive(i)).toEqual(
+            Array(nbPoints).fill('OK'),
+          )
+        }
+      }
+    },
+  )
+
+  it.each([1, 4, 5])("adapte l'énoncé imprimable à %s point(s)", (nbPoints) => {
+    context.isHtml = false
+    const exercise = generate(false, 1, false, 'symetrie', nbPoints)
+    const enonce = exercise.listeQuestions[0]
+    expect(enonce.match(/Construire le point/g)).toHaveLength(nbPoints)
+    expect(enonce).toContain('Coder la figure')
+  })
+
+  it("n'affiche pas la lettre a) quand il n'y a qu'un point à construire", () => {
+    const seul = generate(true, 1, false, 'symetrie', 1)
+    expect(seul.listeQuestions[0]).toContain('Construire le point')
+    expect(seul.listeQuestions[0]).not.toContain('a)')
+    const plusieurs = generate(true, 1, false, 'symetrie', 2)
+    expect(plusieurs.listeQuestions[0]).toContain('a)')
+    expect(plusieurs.listeQuestions[0]).toContain('b)')
+  })
+
+  it('ne demande pas de reproduire la figure en sortie Typst', () => {
+    context.isTypst = true
+    const exercise = generate(false)
+    expect(exercise.listeQuestions[0]).not.toContain('Reproduire')
+    expect(exercise.listeQuestions[0]).toContain('Coder la figure')
   })
 
   it.each(['latex', 'typst', 'amc'])(

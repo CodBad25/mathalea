@@ -223,7 +223,7 @@ export default class Resolutionavecformecanonique extends Exercice {
       texte += ajouteChampTexteMathLive(
         this,
         i,
-        `${KeyboardType.clavierDeBaseAvecX} ${KeyboardType.clavierFullOperations}`,
+        KeyboardType.clavierFullOperations,
         delta < 0 ? {} : { texteAvant: ' $=$' },
       )
       if (this.interactif) {
