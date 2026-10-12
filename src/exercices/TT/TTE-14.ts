@@ -61,15 +61,15 @@ export default class SensVariationKFoisAPuissanceX extends Exercice {
     this.spacingCorr = 2
 
     this.besoinFormulaireNumerique = [
-      'Valeur de la base $a$',
+      'Valeur de la base a',
       3,
-      '1 : $a\\gt 1$\n2 : $0\\lt a\\lt 1$\n3 : Mélange',
+      '1 : a > 1\n2 : 0 < a < 1\n3 : Mélange',
     ]
     this.sup = 3
     this.besoinFormulaire2Numerique = [
-      'Signe de $k$',
+      'Signe de k',
       3,
-      '1 : $k\\gt 0$\n2 : $k\\lt 0$\n3 : Mélange',
+      '1 : k > 0\n2 : k < 0\n3 : Mélange',
     ]
     this.sup2 = 3
     this.besoinFormulaire3CaseACocher = ['Correction détaillée', false]
