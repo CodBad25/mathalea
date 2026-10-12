@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
+import type { IExercice } from '../../src/lib/types'
 import { MathaleaTextfieldElement } from '../../src/lib/customElements/MathaleaTextfield'
 
 describe('MathaleaTextfieldElement', () => {
@@ -32,5 +33,20 @@ describe('MathaleaTextfieldElement', () => {
 
     expect(input.size).toBe(22)
     wrapper.remove()
+  })
+
+  it('vaut un point par défaut et suit le barème de la question', () => {
+    const exercice = (bareme?: unknown) =>
+      ({
+        autoCorrection: [{ valeur: { reponse: { value: 'a' }, bareme } }],
+      }) as unknown as IExercice
+
+    expect(MathaleaTextfieldElement.pointsMaxQuestion(exercice(), 0)).toBe(1)
+    expect(
+      MathaleaTextfieldElement.pointsMaxQuestion(
+        exercice((points: number[]) => [points[0], 2]),
+        0,
+      ),
+    ).toBe(2)
   })
 })
