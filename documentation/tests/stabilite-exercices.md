@@ -118,6 +118,13 @@ même valeur (MathML, annotation LaTeX et rendu visuel). Comparer les mesures
 visibles et les réponses avec la version publiée, pour les mêmes graines et
 paramètres, avant de mettre à jour uniquement les empreintes concernées.
 
+Rétablir une introduction ou une figure omise lors de l'agrégation peut aussi
+ajouter des nombres à l'empreinte sans modifier les tirages. Comparer les
+réponses, les corrections et les données CAN avec la version publiée, pour
+les mêmes graines, paramètres et sélections de questions. Si seule la
+restitution du contexte manquant change, mettre à jour uniquement la référence
+concernée ; un changement des valeurs tirées reste soumis à l'archivage.
+
 Conditions du tirage : mode non interactif, trois questions, une graine dérivée
 de l'`uuid`.
 
