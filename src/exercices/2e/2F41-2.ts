@@ -39,7 +39,7 @@ type PromptInequalitySymbolsPayload = {
   questionIndex: number
 }
 
-type FillInTheBlankElementLike = {
+export type FillInTheBlankElementLike = {
   getPromptValue: (id: string) => string
   setPromptState: (
     id: string,
