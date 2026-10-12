@@ -16,7 +16,7 @@ import {
   type MathaleaTextfieldVerificationCallback,
 } from '../customElements/MathaleaTextfield'
 import type { ToucheDeQuestion } from '../../components/keyboard/lib/touchesPersonnalisees'
-import { sp } from '../outils/outilString'
+import { texteApresChamp } from '../outils/outilString'
 import './champTexte.scss'
 import { buildDataKeyboardFromStyle } from './claviers/keyboard'
 import { handleAnswers } from './gestionInteractif'
@@ -111,7 +111,7 @@ export function ajouteQuestionMathlive({
   handleAnswers(exercice, question, objetReponse, reponseParams)
   switch (typeInteractivite) {
     case 'fillInTheBlank':
-      return `${texteAvant}${remplisLesBlancs(exercice, question, content, classe, '\\ldots')}${texteApres}`
+      return `${texteAvant}${remplisLesBlancs(exercice, question, content, classe, '\\ldots')}${texteApresChamp(texteApres)}`
     case 'tableauMathlive': {
       if (!tableau) {
         window.notify(
@@ -225,7 +225,7 @@ function ajouteChamp(params: ParamsChamp, options: OptionsChamp = {}) {
     placeholder = '',
     dataKeys,
   } = options
-  if (texteApres !== '') texteApres = sp() + texteApres
+  texteApres = texteApresChamp(texteApres)
   if (!context.isHtml || !exercice.interactif || style === 'none') return ''
   if (typeof style !== 'string') {
     window.notify(

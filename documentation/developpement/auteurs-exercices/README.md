@@ -48,6 +48,7 @@ mathématique simple.
 | Coder une question simple ou de Course aux nombres    | [Exercice simple](complements/exercice-simple.md)                     |
 | Faire construire une figure dynamique                 | [Géométrie dynamique apiGeom](complements/geometrie-dynamique-apigeom.md) |
 | Mettre en forme texte, couleurs et listes             | [Mise en forme](complements/mise-en-forme.md)                         |
+| Coder une question, ou des sous-questions a), b)      | [Questions et sous-questions](complements/sous-questions.md)          |
 | Afficher ou calculer des objets mathématiques         | [Recettes mathématiques](mathematiques/README.md)                     |
 
 ## Quand passer au niveau moteur

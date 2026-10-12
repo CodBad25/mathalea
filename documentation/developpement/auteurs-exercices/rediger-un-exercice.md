@@ -44,6 +44,10 @@ Quand le champ de saisie interactif termine une phrase, le point final va dans
 `texteApres`, après l'unité s'il y en a une. Sans phrase autour du champ
 (simple retour à la ligne, `$A=$`…), pas de point.
 
+`texteApres` est toujours séparé du champ par une seule espace, ajoutée par le
+moteur (`texteApresChamp()`, `src/lib/outils/outilString.ts`) : ne pas la
+mettre soi-même. Une espace en tête de `texteApres` est ignorée.
+
 ```ts
 // Oui
 this.optionsChampTexte = {

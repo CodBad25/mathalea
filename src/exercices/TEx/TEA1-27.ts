@@ -5,9 +5,7 @@ import { polygone } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { texteParPosition } from '../../lib/2d/textes'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { toutPourUnPoint } from '../../lib/interactif/fonctionsBaremes'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
+import { createQuestion } from '../../lib/interactif/createQuestion'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -116,47 +114,29 @@ export default class ParcoursPolygoneRegulier extends Exercice {
         arrow,
         arrowHead,
       )
-      let text = `${sides >= 6 ? 'L’' : 'Le '}${names[sides - 3]} $${letters}$ est inscrit dans le cercle $\\mathcal{C}$. Ses sommets découpent le cercle en $${sides}$ arcs identiques. Un point mobile $M$ parcourt le cercle en partant du sommet $${letters[start]}$.<br>${figure}<br>Déterminer le sommet d'arrivée de $M$ après avoir parcouru $${texNombre(steps)}$ arcs consécutifs :<br>a) dans le sens de la flèche ;<br>b) dans le sens inverse de la flèche.`
-      if (this.interactif)
-        text +=
-          '<br>' +
-          remplisLesBlancs(
-            this,
-            i,
-            '\\text{a) }%{champ1}\\qquad\\text{b) }%{champ2}',
-            KeyboardType.clavierMajuscules,
-          )
       const remainder = steps % sides
-      const destinations = [direction, -direction].map(
-        (sign) => (start + sign * remainder + sides) % sides,
-      )
-      let correction = `Un tour complet correspond à $${sides}$ arcs et ramène $M$ à son sommet de départ. On effectue la division euclidienne de $${texNombre(steps)}$ par $${sides}$ :<br>$${texNombre(steps)}=${sides}\\times ${texNombre(Math.floor(steps / sides))}+${remainder}$<br>Après $${texNombre(Math.floor(steps / sides))}$ tours complets, il reste donc $${remainder}$ arc${remainder > 1 ? 's' : ''} à parcourir depuis $${letters[start]}$.<br>`
-      for (let j = 0; j < 2; j++) {
-        const sign = j === 0 ? direction : -direction
-        const path = Array.from(
-          { length: remainder + 1 },
-          (_, k) => letters[(start + sign * k + sides) % sides],
-        ).join('\\longrightarrow ')
-        correction += `${j === 0 ? 'a) Dans le sens de la flèche' : 'b) Dans le sens inverse de la flèche'} : ${remainder === 0 ? 'aucun arc supplémentaire à parcourir' : `$${path}$`}. Le sommet d'arrivée est $${miseEnEvidence(letters[destinations[j]])}$.<br>`
-      }
-      handleAnswers(
-        this,
-        i,
-        {
-          bareme: toutPourUnPoint,
-          champ1: {
-            value: letters[destinations[0]],
-            options: { texteSansCasse: true },
-          },
-          champ2: {
-            value: letters[destinations[1]],
-            options: { texteSansCasse: true },
-          },
-        },
-        { formatInteractif: 'fill-in-the-blank' },
-      )
-      this.listeQuestions[i] = text
-      this.listeCorrections[i] = correction
+      const turns = Math.floor(steps / sides)
+      createQuestion(this, i, {
+        question: `${sides >= 6 ? 'L’' : 'Le '}${names[sides - 3]} $${letters}$ est inscrit dans le cercle $\\mathcal{C}$. Ses sommets découpent le cercle en $${sides}$ arcs identiques. Un point mobile $M$ parcourt le cercle en partant du sommet $${letters[start]}$.<br>${figure}<br>Déterminer le sommet d'arrivée de $M$ après avoir parcouru $${texNombre(steps)}$ arcs consécutifs.`,
+        correction: `Un tour complet correspond à $${sides}$ arcs et ramène $M$ à son sommet de départ. On effectue la division euclidienne de $${texNombre(steps)}$ par $${sides}$ :<br>$${texNombre(steps)}=${sides}\\times ${texNombre(turns)}+${remainder}$<br>Après $${texNombre(turns)}$ tours complets, il reste donc $${remainder}$ arc${remainder > 1 ? 's' : ''} à parcourir depuis $${letters[start]}$.`,
+        subQuestions: [
+          { label: 'Dans le sens de la flèche.', sign: direction },
+          { label: 'Dans le sens inverse de la flèche.', sign: -direction },
+        ].map(({ label, sign }) => {
+          const destination =
+            letters[(start + sign * remainder + sides) % sides]
+          const path = Array.from(
+            { length: remainder + 1 },
+            (_, k) => letters[(start + sign * k + sides) % sides],
+          ).join('\\longrightarrow ')
+          return {
+            question: label,
+            answer: { value: destination, options: { texteSansCasse: true } },
+            field: { keyboard: KeyboardType.clavierMajuscules },
+            correction: `${remainder === 0 ? 'Aucun arc supplémentaire à parcourir' : `$${path}$`}. Le sommet d'arrivée est $${miseEnEvidence(destination)}$.`,
+          }
+        }),
+      })
       i++
     }
     listeQuestionsToContenu(this)

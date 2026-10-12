@@ -1,4 +1,5 @@
 import { notify } from '../../../bugsnag'
+import { texteApresChamp } from '../../outils/outilString'
 import { TableauMathliveElement } from '../../customElements/TableauMathlive'
 import type { AllChoicesType } from '../../customElements/ListeDeroulanteElement'
 import '../../customElements/ListeDeroulanteElement'
@@ -176,7 +177,7 @@ function appendCell({
       cell.appendChild(element)
       if (options.texteApres != null && options.texteApres !== '') {
         const spanApres = document.createElement('span')
-        spanApres.textContent = options.texteApres
+        spanApres.innerHTML = texteApresChamp(options.texteApres)
         cell.appendChild(spanApres)
       }
       /*  const spanResultat = document.createElement('span')
@@ -558,11 +559,11 @@ export class AddTabDbleEntryMathlive {
     ) // on clone les lignes pour ne pas modifier le tableau passé en argument
     tableauMathlive.headingLines = tableau.headingLines.map((el) =>
       JSON.parse(JSON.stringify(el)),
-    ) // on clone les lignes pour ne pas modifier le tableau passé en argument 
+    ) // on clone les lignes pour ne pas modifier le tableau passé en argument
     tableauMathlive.raws = tableau.raws.map((el) =>
       JSON.parse(JSON.stringify(el)),
     ) // on clone les raws pour ne pas modifier le tableau passé en argument
- 
+
     if (tableau.headingCols != null) {
       fillLine({
         isInteractif,
@@ -620,12 +621,13 @@ export class AddTabDbleEntryMathlive {
                 `L${tableau.headingCols != null ? 1 + j : j}C${tableau.headingLines != null ? i + 1 : i}`
               ],
           })
-        } 
+        }
       }
       if (tableau.lineFooters.length > 0) {
         const sty =
-          style[`L${tableau.headingCols != null ? 2 + j : 1 + j}C${raw.length}`] ||
-          style[`LC${raw.length}`]
+          style[
+            `L${tableau.headingCols != null ? 2 + j : 1 + j}C${raw.length}`
+          ] || style[`LC${raw.length}`]
         appendCell({
           isInteractif,
           line: newLine,
@@ -644,7 +646,9 @@ export class AddTabDbleEntryMathlive {
       const lastLine = nouvelleLigne()
       table.appendChild(lastLine)
       let lineIndex = tableau.raws.length
-      if (tableau.headingCols.length != 0) { lineIndex++ }
+      if (tableau.headingCols.length != 0) {
+        lineIndex++
+      }
       fillLine({
         isInteractif,
         line: lastLine,
@@ -716,8 +720,7 @@ export class AddTabDbleEntryMathlive {
     tabLineFooters: (string | number)[] = [],
     gras: boolean = true,
     color: string = 'black',
-  ): ItabDbleEntry
-   {
+  ): ItabDbleEntry {
     const headingCols: Icell[] = []
     for (const enTete of tabEntetesColonnes) {
       headingCols.push({ texte: enTete.toString(), latex: true, gras, color })
@@ -739,7 +742,7 @@ export class AddTabDbleEntryMathlive {
         'Un tableau à double entrée doit avoir des entête de colonne ou des entête de ligne',
       )
     // on boucle sur les lignes mais il peut ne pas y avoir de headingLines ! On doit alors diviser le nombre de cellules par le nombre de colonnes à remplir.
-    let nbCols: number = headingCols.length;
+    let nbCols: number = headingCols.length
     if (haveHeadC) {
       if (haveHeadL) nbCols--
       if (tabLineFooters.length > 0) nbCols--
@@ -760,20 +763,26 @@ export class AddTabDbleEntryMathlive {
       raws.push(raw)
     }
 
-    if ((haveHeadL && tabLineFooters.length > 0 && tabLineFooters.length != headingLines.length)
-       || (haveHeadC && tabColFooters.length > 0 && tabColFooters.length != headingCols.length))
+    if (
+      (haveHeadL &&
+        tabLineFooters.length > 0 &&
+        tabLineFooters.length != headingLines.length) ||
+      (haveHeadC &&
+        tabColFooters.length > 0 &&
+        tabColFooters.length != headingCols.length)
+    )
       throw Error(
         'Les pieds de colonne ou ligne ne sont pas de même taille que les entêtes',
       )
-    const colFooters: Icell[] = [];
+    const colFooters: Icell[] = []
     for (const footer of tabColFooters) {
       colFooters.push({ texte: footer.toString(), latex: true, gras, color })
     }
-    const lineFooters: Icell[] = [];
+    const lineFooters: Icell[] = []
     for (const footer of tabLineFooters) {
       lineFooters.push({ texte: footer.toString(), latex: true, gras, color })
     }
-    
+
     return { raws, headingCols, headingLines, colFooters, lineFooters }
   }
 }

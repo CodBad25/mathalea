@@ -118,7 +118,6 @@ export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
         dataTemplate: createList({
           items: questionItems,
           style: 'alpha',
-          classOptions: 'alpha-parenthesis',
         }),
 
         dataOptions: onlyWithImage
@@ -257,7 +256,6 @@ export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
       texteCorr = createList({
         items: correctionItems,
         style: 'alpha',
-        classOptions: 'alpha-parenthesis',
       })
       handleAnswers(
         this,
