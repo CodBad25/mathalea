@@ -287,6 +287,11 @@ function injectPromptStyles(mf: MathfieldElement) {
       outline-width: thin !important;
       outline-color: var(--color-coopmathsdark-corpus-light) !important;
     }
+    /* Le rouge par défaut de MathLive (#a01b00) est peu visible à côté du vert : on le renforce. */
+    .ML__incorrectPromptBox {
+      outline: 2px solid #dc2626 !important;
+      box-shadow: 0 0 6px 1px #dc2626 !important;
+    }
     
     `
     shadow.appendChild(style)
