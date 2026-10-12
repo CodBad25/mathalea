@@ -256,6 +256,13 @@ handleAnswers(
 
 Le helper injecte un custom element `mathalea-textfield`.
 
+Pour accepter des fautes d'orthographe courantes tout en les signalant, fournir
+une fonction `compare` qui renvoie `{ isOk: true, feedback: "Attention à
+l'orthographe : écrire « cylindre »." }` quand la saisie figure dans une liste
+de fautes tolérées. La question est réussie, mais l'élève voit la remarque. Voir
+[6G8A-2](../../../../src/exercices/6e/6G8A-2.ts) (`compareAvecFautesToleres()`),
+qui propose aussi la même question en liste déroulante ou en QCM.
+
 ## Texte à trous
 
 À utiliser quand plusieurs champs doivent apparaître dans une même phrase ou formule.
