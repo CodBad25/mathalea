@@ -39,7 +39,7 @@ export default class EquationDuPremierDegreDansC extends Exercice {
     this.sup2 = 1
 
     this.consigne =
-      'Résoudre dans $\\mathbb{C}$ les équations ci-dessous. On écrira les solutions sous forme algébrique.'
+      'Résoudre dans $\\mathbb{C}$ les équations ci-dessous. On écrira les solutions éventuelles sous forme algébrique.'
     this.nbQuestions = 2
 
     this.spacingCorr = 2
