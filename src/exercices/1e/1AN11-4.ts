@@ -1,4 +1,4 @@
-import { courbe } from '../../lib/2d/Courbe'
+import { courbe, intervallesDansLaFenetre } from '../../lib/2d/Courbe'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
@@ -140,35 +140,6 @@ const fonctionsDeReference: FonctionDeReference[] = [
 
 const fenetre = 5 // le repère est [-5 ; 5] × [-5 ; 5]
 
-/**
- * Parties des intervalles sur lesquelles la courbe reste dans le repère.
- * Le tracé s'arrête ainsi exactement au bord du repère (et non au dernier point calculé avant d'en sortir).
- */
-const intervallesVisibles = (
-  f: (x: number) => number,
-  intervalles: [number, number][],
-): [number, number][] => {
-  const pas = 0.005
-  const resultat: [number, number][] = []
-  for (const [xMin, xMax] of intervalles) {
-    let debut: number | null = null
-    let dernier = xMin
-    for (let n = 0; xMin + n * pas <= xMax + pas / 2; n++) {
-      const x = Math.min(xMin + n * pas, xMax)
-      const y = f(x)
-      if (isFinite(y) && Math.abs(y) <= fenetre) {
-        if (debut === null) debut = x
-        dernier = x
-      } else if (debut !== null) {
-        resultat.push([debut, dernier])
-        debut = null
-      }
-    }
-    if (debut !== null) resultat.push([debut, dernier])
-  }
-  return resultat
-}
-
 const expression = (fonction: FonctionDeReference, k: number, c: number) =>
   `f(x)=${fonction.terme(k)}${c === 0 ? '' : ecritureAlgebrique(c)}`
 
@@ -200,18 +171,22 @@ export default class AssocierCourbeTangenteFonction extends ExerciceQcmA {
       axeXStyle: '->',
       axeYStyle: '->',
     })
-    const objets = intervallesVisibles(f, fonction.intervalles).map(
-      ([xMin, xMax]) =>
-        courbe(f, {
-          repere: r,
-          xMin,
-          xMax,
-          yMin: -fenetre,
-          yMax: fenetre,
-          color: bleuMathalea,
-          epaisseur: 2,
-          step: 0.05,
-        }),
+    const objets = intervallesDansLaFenetre(
+      f,
+      fonction.intervalles,
+      -fenetre,
+      fenetre,
+    ).map(([xMin, xMax]) =>
+      courbe(f, {
+        repere: r,
+        xMin,
+        xMax,
+        yMin: -fenetre,
+        yMax: fenetre,
+        color: bleuMathalea,
+        epaisseur: 2,
+        step: 0.05,
+      }),
     )
     const droiteTangente = courbe(tangente, {
       repere: r,
