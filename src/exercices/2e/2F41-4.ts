@@ -45,7 +45,7 @@ export const refs = {
 }
 
 type FonctionReference = 'carré' | 'inverse' | 'racine carrée'
-type PositionIntervalle = 'positif' | 'negatif' | 'contientZero'
+type PositionIntervalle = 'positif' | 'negatif'
 
 /** Symbole d'inégalité « dans le sens croissant » (a < b) ou « décroissant » (a > b). */
 function symbole(large: boolean, croissant: boolean): string {
@@ -173,15 +173,13 @@ export default class EncadrerImageExpressionAffine extends Exercice {
       const large2 = choice([true, false])
       // Expression affine : m x + p
       const m = choice([-4, -3, -2, -1, 2, 3, 4])
-      const largeur = abs(m) * (b - a)
       const minimumDeMx = Math.min(m * a, m * b)
       const maximumDeMx = Math.max(m * a, m * b)
 
       // On fixe p pour que l'encadrement de mx+p convienne à la fonction choisie.
       let position: PositionIntervalle
-      if (fonction === 'carré' && largeur >= 3) {
-        position = choice(['positif', 'negatif', 'contientZero'])
-      } else if (fonction === 'racine carrée') {
+      // Pour le carré, les deux bornes ont le même signe (l'intervalle ne contient pas 0 en son intérieur).
+      if (fonction === 'racine carrée') {
         position = 'positif'
       } else {
         position = choice(['positif', 'negatif'])
@@ -190,13 +188,8 @@ export default class EncadrerImageExpressionAffine extends Exercice {
       if (position === 'positif') {
         // Pour l'inverse, le dénominateur doit rester non nul.
         p = randint(fonction === 'inverse' ? 1 : 0, 5) - minimumDeMx
-      } else if (position === 'negatif') {
-        p = -randint(fonction === 'inverse' ? 1 : 0, 5) - maximumDeMx
       } else {
-        // Borne inférieure strictement négative, différente de l'opposé de la borne supérieure
-        // (sinon le maximum du carré est atteint aux deux bornes).
-        const borneInf = -randint(1, largeur - 1, [largeur / 2])
-        p = borneInf - minimumDeMx
+        p = -randint(fonction === 'inverse' ? 1 : 0, 5) - maximumDeMx
       }
       if (p === 0) continue
 
@@ -225,23 +218,12 @@ export default class EncadrerImageExpressionAffine extends Exercice {
             largeGauche = largeInf
             largeDroite = largeSup
             justification = `La fonction carré est strictement croissante sur $[0;+\\infty[$ et les nombres $${borneInf}$ et $${borneSup}$ sont positifs : elle conserve l'ordre.`
-          } else if (position === 'negatif') {
+          } else {
             gauche = String(borneSup ** 2)
             droite = String(borneInf ** 2)
             largeGauche = largeSup
             largeDroite = largeInf
             justification = `La fonction carré est strictement décroissante sur $]-\\infty;0]$ et les nombres $${borneInf}$ et $${borneSup}$ sont négatifs : elle change l'ordre.`
-          } else {
-            gauche = '0'
-            largeGauche = true
-            if (borneSup ** 2 > borneInf ** 2) {
-              droite = String(borneSup ** 2)
-              largeDroite = largeSup
-            } else {
-              droite = String(borneInf ** 2)
-              largeDroite = largeInf
-            }
-            justification = `L'intervalle contient $0$ : la fonction carré est strictement décroissante sur $]-\\infty;0]$ puis strictement croissante sur $[0;+\\infty[$. Son minimum est donc $0$ et son maximum est atteint à l'extrémité la plus éloignée de $0$.`
           }
           break
         case 'inverse':
