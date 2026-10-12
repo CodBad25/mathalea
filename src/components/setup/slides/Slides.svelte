@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { getShortAnswer } from '../typst/minimalCorrection'
   import seedrandom from 'seedrandom'
   import { onDestroy, onMount } from 'svelte'
   import { get } from 'svelte/store'
@@ -157,12 +158,16 @@
         .join('<br>')
       const questions = exercise.listeQuestions ?? []
       const corrections = exercise.listeCorrections ?? []
-      return questions.map((question, i) => ({
-        question: format(
-          intro.length > 0 ? `${intro}<br>${question}` : question,
-        ),
-        correction: format(corrections[i] ?? ''),
-      }))
+      return questions.map((question, i) => {
+        const shortAnswer = getShortAnswer(exercise, i)
+        return {
+          question: format(
+            intro.length > 0 ? `${intro}<br>${question}` : question,
+          ),
+          correction: format(corrections[i] ?? ''),
+          shortAnswer: shortAnswer == null ? shortAnswer : format(shortAnswer),
+        }
+      })
     }
     for (const [k, exercise] of exercises.entries()) {
       if (exercise == null) {

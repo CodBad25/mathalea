@@ -45,10 +45,14 @@ Le décompte est porté par `ratioTime` (0 à 100) et `startTimer()` dans `Slide
 `SlideshowOverviewAnswersTable.svelte` affiche, pour chaque question, dans l'ordre :
 
 1. les lettres des bonnes propositions si la question est un QCM (`extraitLettresQcm`, lues dans `autoCorrection[i].propositions`) ;
-2. les réponses mises en évidence en orange dans la correction (`extraitReponsesCourtes`), repérées par `reponsesMisesEnEvidence` comme pour la [correction minimale Typst](typst.md#correction-minimale) : `miseEnEvidence()` dans une formule et `texteEnCouleurEtGras()` hors formule. Pour un QCM, les textes orange sont ignorés : ce sont les lettres déjà affichées. Plusieurs réponses (typiquement `remplisLesBlancs`) font afficher la correction entière, plus lisible que des valeurs isolées (`doitAfficherFormuleComplete`) ;
+2. la réponse explicite `listeReponsesCourtes[i]`, si elle est renseignée ; sinon les réponses mises en évidence en orange dans la correction (`extraitReponsesCourtes`), repérées par `reponsesMisesEnEvidence` comme pour la [correction minimale Typst](typst.md#correction-minimale) : `miseEnEvidence()` dans une formule et `texteEnCouleurEtGras()` hors formule. Pour un QCM, les textes orange sont ignorés : ce sont les lettres déjà affichées. Plusieurs réponses (typiquement `remplisLesBlancs`) font afficher la correction entière, plus lisible que des valeurs isolées (`doitAfficherFormuleComplete`) ;
 3. sinon, une **miniature** de la correction complète, SVG compris, calée sur sa fin (là où se trouve en général la réponse : figure, tableau de signes, construction). Un clic l'ouvre en grand dans une modale.
 
-Une question sans correction affiche « – ».
+Une question sans correction affiche « – ». `reponseCourteDisponible = false`
+ou `listeReponsesCourtes[i] = null` impose la miniature pour une question sans
+lettres de QCM, même si la correction contient des étapes orange. Les réglages
+signalent les exercices pour lesquels la miniature sera utilisée. Voir le
+[contrat auteur](../../auteurs-exercices/rediger-un-exercice.md#réponse-courte-et-correction-minimale).
 
 Côté exercice, une réponse n'est donc reprise que si elle est en orange : les étapes intermédiaires ou les commentaires de la correction détaillée doivent être mis en évidence dans une autre couleur (`bleuMathalea`), sinon ils apparaissent comme réponses dans le tableau et dans la correction minimale.
 

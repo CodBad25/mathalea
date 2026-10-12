@@ -2599,6 +2599,19 @@ describe('correction minimale (minimalCorrections)', () => {
     minimalCorrections: true,
   }
 
+  it('utilise les réponses explicites et respecte les questions sans réponse courte', () => {
+    const code = buildTypstDocument([
+      exercise({
+        questions: ['Calculer.', 'Construire.'],
+        corrections: ['Calcul détaillé.', `Construction complète $${highlight('étape')}$`],
+        shortAnswers: ['$42$', null],
+      }),
+    ], minimalOptions)
+    expect(code).toContain('$42$')
+    expect(code).not.toContain('Calcul détaillé')
+    expect(code).toContain('Construction complète')
+  })
+
   it('ne garde que la réponse mise en évidence', () => {
     const code = buildTypstDocument(
       [

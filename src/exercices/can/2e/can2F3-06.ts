@@ -18,6 +18,7 @@ export default class BetaModeleSplineCAN extends BetaModeleSpline {
   can: boolean
   constructor() {
     super()
+    this.reponseCourteDisponible = false // La réponse est une figure ou un tableau.
     this.nbQuestions = 1
     this.can = true
     this.sup = 1

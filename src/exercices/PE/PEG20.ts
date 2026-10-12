@@ -23,6 +23,7 @@ export const refs = {
 export default class PartageSegmentCompasRegle extends Exercice {
   constructor() {
     super()
+    this.reponseCourteDisponible = false // La réponse est une figure ou un tableau.
     this.nbQuestions = 1
     this.nbQuestionsModifiable = false
   }

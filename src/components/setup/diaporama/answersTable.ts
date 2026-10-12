@@ -17,7 +17,10 @@ import {
 export function extraitReponsesCourtes(
   correction: string,
   avecTextes = true,
+  shortAnswer?: string | null,
 ): string[] {
+  if (shortAnswer === null) return []
+  if (shortAnswer?.trim()) return [shortAnswer]
   const reponses: string[] = []
   for (const { nature, contenu } of reponsesMisesEnEvidence(correction)) {
     if (nature === 'texte' && !avecTextes) continue

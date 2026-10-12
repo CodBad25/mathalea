@@ -10,6 +10,8 @@ Index des documents liés aux tests locaux, à la CI GitLab et aux rapports d'ex
 | Rapports d'exercices  | Lancer et lire les rapports `interactif` et `AMCNum`                                | Développeurs d'exercices             | Documentation durable renommée | [rapports-exercices.md](rapports-exercices.md)   |
 | Stabilité des tirages | Garantir que les corrigés partagés restent valides après modification d'un exercice | Développeurs d'exercices, relecteurs | Documentation durable          | [stabilite-exercices.md](stabilite-exercices.md) |
 
+Voir aussi le [contrôle des corrections minimales](corrections-minimales.md), exécuté sur le corpus de régression et les exercices modifiés.
+
 ## Écrire un test
 
 Les tests utilisent [Vitest](https://vitest.dev/api/expect.html) ; les tests de

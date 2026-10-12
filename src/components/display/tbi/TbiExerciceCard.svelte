@@ -22,7 +22,10 @@
     tbiState,
   } from '../../../lib/stores/tbiStore'
   import type { IExercice } from '../../../lib/types'
-  import { minimalCorrection } from '../../setup/typst/minimalCorrection'
+  import {
+    getShortAnswer,
+    minimalCorrection,
+  } from '../../setup/typst/minimalCorrection'
   import Settings from '../../shared/exercice/exerciceMathalea/exerciceMathaleaVueProf/presentationalComponents/Settings.svelte'
   import BasicClassicModal from '../../shared/modal/BasicClassicModal.svelte'
   import TbiCardActions from './TbiCardActions.svelte'
@@ -75,9 +78,9 @@
    * n'en contient aucune), comme le réglage « Correction minimale » de la
    * vue Typst.
    */
-  function displayedCorrection(correction: string): string {
+  function displayedCorrection(correction: string, index: number): string {
     return correctionDetail === 'minimal'
-      ? minimalCorrection(correction)
+      ? minimalCorrection(correction, getShortAnswer(exercise, index))
       : correction
   }
 
@@ -472,7 +475,7 @@
                       >
                         <!-- eslint-disable-next-line svelte/no-at-html-tags -->
                         {@html mathaleaFormatExercice(
-                          displayedCorrection(exercise.listeCorrections[i]),
+                          displayedCorrection(exercise.listeCorrections[i], i),
                         )}
                       </div>
                     </div>
@@ -514,7 +517,7 @@
                   >
                     <!-- eslint-disable-next-line svelte/no-at-html-tags -->
                     {@html mathaleaFormatExercice(
-                      displayedCorrection(correction),
+                      displayedCorrection(correction, i),
                     )}
                   </li>
                 </div>
@@ -612,7 +615,7 @@
                   >
                     <!-- eslint-disable-next-line svelte/no-at-html-tags -->
                     {@html mathaleaFormatExercice(
-                      displayedCorrection(correction),
+                      displayedCorrection(correction, i),
                     )}
                   </li>
                 </div>

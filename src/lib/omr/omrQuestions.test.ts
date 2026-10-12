@@ -376,3 +376,17 @@ describe('repli en question ouverte', () => {
     expect(questionsDepuisExercice(exercice, 0)).toHaveLength(0)
   })
 })
+
+
+describe('réponse courte explicite en OMR', () => {
+  it('la convertit sans modifier la correction complète', () => {
+    const questions = questionsDepuisExercice({
+      amcType: 'AMCOpen',
+      listeQuestions: ['Calculer.'],
+      listeCorrections: ['Calcul détaillé.'],
+      listeReponsesCourtes: ['$42$'],
+    }, 0)
+    expect(questions[0].correction).toBe('Calcul détaillé.')
+    expect(questions[0].correctionMinimale).toBe('$42$')
+  })
+})

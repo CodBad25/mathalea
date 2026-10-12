@@ -93,6 +93,7 @@ export default class ExerciceMultiplicationsRelatifs extends Exercice {
         // Si la question n'a jamais été posée, on en créé une autre
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
+        this.listeReponsesCourtes[i] = `$${a * b}$`
         i++
       }
       cpt++

@@ -63,6 +63,12 @@ export default class Exercice implements IExercice {
   listeQuestions: string[] = []
   listeCorrections: string[] = []
   listeCanReponsesACompleter: string[] = []
+  /** Réponses courtes HTML/LaTeX : undefined = extraction orange, null = correction complète. */
+  listeReponsesCourtes: (string | null | undefined)[] = []
+  /** Faux pour une construction, un tableau ou une démonstration sans réponse courte. */
+  reponseCourteDisponible: boolean = true
+  /** Réponse courte du tirage courant d'un exercice simple. */
+  reponseCourteExplicite?: string | null
   listeCanEnonces: string[] = []
   listeCanLiees: number[][] = []
   listeCanNumerosLies: number[] = []

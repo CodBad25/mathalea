@@ -910,6 +910,7 @@ export default class SerieDeTransformations extends Exercice {
       ) {
         this.listeQuestions.push(texte)
         this.listeCorrections.push(texteCorr)
+        this.listeReponsesCourtes.push(`$${chemin.join('\\,;\\,')}$`)
         i++
       }
       cpt++

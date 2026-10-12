@@ -712,6 +712,15 @@ précédente.
 
 ## Correction minimale
 
+`TypstExerciseInput.shortAnswers` transporte les réponses explicites de
+`listeReponsesCourtes` et les déclarations d'absence (`null`). Elles sont
+résolues par `getShortAnswer`, puis passées en second argument à
+`minimalCorrection` : une réponse non vide est prioritaire, `null` conserve
+le corrigé complet, `undefined` déclenche l’extraction orange. Ces réponses
+restent associées aux questions figées lors d'un changement de leur nombre.
+Le même contrat sert aux autres vues et exports ; voir le
+[guide auteur](../../auteurs-exercices/rediger-un-exercice.md#réponse-courte-et-correction-minimale).
+
 Case à cocher des Réglages du document (`TypstDocumentOptions.minimalCorrections`, désactivée quand la correction n'est pas affichée) : quand une correction met sa réponse en évidence en orange, seule cette réponse est imprimée — le raisonnement disparaît. Une correction sans mise en évidence, ou dont la mise en évidence utilise une autre couleur (choisie justement pour ne pas désigner la réponse, voir `lib/outils/ecritures.ts`), est conservée telle quelle.
 
 `minimalCorrection` (`components/setup/typst/minimalCorrection.ts`) reconnaît les **deux** façons de mettre une réponse en évidence :

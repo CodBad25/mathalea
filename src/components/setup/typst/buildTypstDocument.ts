@@ -1442,6 +1442,8 @@ export interface TypstExerciseInput {
    * du tableau. Une entrée vide laisse la cellule vide.
    */
   canAnswers?: string[]
+  /** Réponses courtes explicites ; null conserve la correction complète. */
+  shortAnswers?: (string | null | undefined)[]
   /**
    * Mode « Course aux nombres » : pour chaque question, les numéros
    * (`canNumeroLie`) des questions auxquelles son énoncé est lié
@@ -2113,7 +2115,9 @@ function withMinimalCorrections(
   if (!options.minimalCorrections) return exercises
   return exercises.map((exercise) => ({
     ...exercise,
-    corrections: exercise.corrections.map(minimalCorrection),
+    corrections: exercise.corrections.map((correction, i) =>
+      minimalCorrection(correction, exercise.shortAnswers?.[i]),
+    ),
   }))
 }
 

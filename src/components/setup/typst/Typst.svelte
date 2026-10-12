@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { getShortAnswer } from './minimalCorrection'
   import { EditorState } from '@codemirror/state'
   import { EditorView } from '@codemirror/view'
   import JSZip from 'jszip'
@@ -1471,6 +1472,7 @@
         introCorrection: current.introCorrection,
         questions: current.questions,
         corrections: current.corrections,
+        shortAnswers: current.shortAnswers ?? [],
         canQuestions: current.canQuestions ?? [],
         canAnswers: current.canAnswers ?? [],
       })
@@ -3043,6 +3045,7 @@
       introCorrection: string
       questions: string[]
       corrections: string[]
+      shortAnswers: (string | null | undefined)[]
       /** Énoncés et réponses du tableau « Course aux nombres » */
       canQuestions: string[]
       canAnswers: string[]
@@ -3158,6 +3161,10 @@
         mathaleaFormatExercice(text).replaceAll('{zoomFactor}', '1')
       input.questions = (exercise.listeQuestions ?? []).map(format)
       input.corrections = (exercise.listeCorrections ?? []).map(format)
+      input.shortAnswers = input.questions.map((_, i) => {
+        const answer = getShortAnswer(exercise, i)
+        return answer == null ? answer : format(answer)
+      })
       input.introCorrection = mathaleaFormatExercice(
         exercise.consigneCorrection ?? '',
       )
@@ -3200,6 +3207,9 @@
         )
         input.corrections = input.corrections.map(
           (correction, i) => frozen.corrections[i] ?? correction,
+        )
+        input.shortAnswers = input.shortAnswers?.map((answer, i) =>
+          i < frozen.questions.length ? frozen.shortAnswers[i] : answer,
         )
         input.canQuestions = input.canQuestions?.map(
           (question, i) => frozen.canQuestions[i] ?? question,

@@ -61,6 +61,8 @@ export default class SignefonctionaffineVariation extends Exercice {
       // on rajoute les variables dont on a besoin
       let texte = ''
       let texteCorr = ''
+      // Les questions de signes demandent aussi un tableau : conserver le corrigé entier.
+      this.listeReponsesCourtes[i] = listeTypeQuestions[i] === 'Signes1' ? null : undefined
       const variables: number[] = []
       switch (listeTypeQuestions[i]) {
         case 'Signes1':
