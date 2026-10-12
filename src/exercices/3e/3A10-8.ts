@@ -245,8 +245,13 @@ const texListe = (nombres: number[]) =>
 export default class RepartirEnGroupesIdentiques extends Exercice {
   constructor() {
     super()
-    this.nbQuestions = 5
     this.nbQuestionsModifiable = false
+    this.besoinFormulaireCaseACocher = ['Liste des diviseurs', true]
+    this.besoinFormulaire2CaseACocher = ['Plus grand diviseur commun', true]
+    this.besoinFormulaire3CaseACocher = ['Répartition', true]
+    this.sup = true
+    this.sup2 = true
+    this.sup3 = true
   }
 
   nouvelleVersion() {
@@ -263,58 +268,91 @@ export default class RepartirEnGroupesIdentiques extends Exercice {
       Il souhaite répartir la totalité des $${texNb1}$ ${s.objet1} et des $${texNb2}$ ${s.objet2} dans des ${s.groupements}.<br>
       Chaque ${s.groupement} doit comporter le même nombre de ${s.objet1} et le même nombre de ${s.objet2}.`
 
-    // Questions 1 et 2 : liste des diviseurs de chaque effectif
-    effectifs.forEach((n, i) => {
+    // La question sur le nombre maximal de groupes est toujours posée
+    const avecDiviseurs = Boolean(this.sup)
+    const avecPgcd = Boolean(this.sup2)
+    const avecRepartition = Boolean(this.sup3)
+    this.nbQuestions =
+      (avecDiviseurs ? 2 : 0) +
+      (avecPgcd ? 1 : 0) +
+      1 +
+      (avecRepartition ? 1 : 0)
+    // Numéro de la prochaine question, pour les champs et les réponses interactives
+    let numero = 0
+
+    const corrDiviseurs = effectifs.map((n, i) => {
       const texN = texNombre(n, 0)
-      let texte = `Trouver tous les entiers positifs qui divisent $${texN}$.`
+      return `${texRechercheDesDiviseurs(n)}<br><br>Les diviseurs de $${texN}$ sont : $${miseEnEvidence(texListe(diviseurs[i]))}$.`
+    })
+    const corrCommuns = texteEnCouleur(
+      `Les diviseurs communs à $${texNb1}$ et $${texNb2}$ sont les nombres qui apparaissent dans les deux listes : $${texListe(communs)}$.`,
+      bleuMathalea,
+    )
+    const corrGcd = `Le plus grand diviseur commun à $${texNb1}$ et $${texNb2}$ est donc $${miseEnEvidence(texGcd)}$.`
+    // Démarche à rappeler dans la correction quand les questions qui la détaillent ne sont pas posées
+    const rappelDiviseurs = avecDiviseurs
+      ? ''
+      : `${corrDiviseurs.join('<br><br>')}<br><br>`
+    const rappelPgcd = avecPgcd
+      ? ''
+      : `${rappelDiviseurs}${corrCommuns}<br>${corrGcd}<br><br>`
+
+    // Questions 1 et 2 : liste des diviseurs de chaque effectif
+    if (avecDiviseurs) {
+      effectifs.forEach((n, i) => {
+        const texN = texNombre(n, 0)
+        let texte = `Trouver tous les entiers positifs qui divisent $${texN}$.`
+        if (this.interactif) {
+          texte += ` Écrire la liste de ces diviseurs en les séparant par des points-virgules.<br>${ajouteChampTexteMathLive(
+            this,
+            numero,
+            KeyboardType.clavierEnsemble,
+            {
+              texteAvant: `La liste des diviseurs de $${texN}$ est `,
+              texteApres: '.',
+            },
+          )}`
+        }
+        handleAnswers(this, numero, {
+          reponse: {
+            value: diviseurs[i].join(';'),
+            options: { suiteDeNombres: true },
+          },
+        })
+        this.listeQuestions.push(texte)
+        this.listeCorrections.push(corrDiviseurs[i])
+        numero++
+      })
+    }
+
+    // Question 3 : plus grand diviseur commun
+    if (avecPgcd) {
+      let texte3 = `${avecDiviseurs ? 'En déduire le' : 'Déterminer le'} plus grand diviseur commun à $${texNb1}$ et $${texNb2}$.`
       if (this.interactif) {
-        texte += ` Écrire la liste de ces diviseurs en les séparant par des points-virgules.<br>${ajouteChampTexteMathLive(
+        texte3 += `<br>${ajouteChampTexteMathLive(
           this,
-          i,
-          KeyboardType.clavierEnsemble,
+          numero,
+          KeyboardType.clavierNumbers,
           {
-            texteAvant: `La liste des diviseurs de $${texN}$ est `,
+            texteAvant: `Le plus grand diviseur commun à $${texNb1}$ et $${texNb2}$ est `,
             texteApres: '.',
           },
         )}`
       }
-      handleAnswers(this, i, {
-        reponse: {
-          value: diviseurs[i].join(';'),
-          options: { suiteDeNombres: true },
-        },
-      })
-      this.listeQuestions.push(texte)
+      handleAnswers(this, numero, { reponse: { value: leGcd } })
+      this.listeQuestions.push(texte3)
       this.listeCorrections.push(
-        `${texRechercheDesDiviseurs(n)}<br><br>Les diviseurs de $${texN}$ sont : $${miseEnEvidence(texListe(diviseurs[i]))}$.`,
+        `${rappelDiviseurs}${corrCommuns}<br>${corrGcd}`,
       )
-    })
-
-    // Question 3 : plus grand diviseur commun
-    let texte3 = `En déduire le plus grand diviseur commun à $${texNb1}$ et $${texNb2}$.`
-    if (this.interactif) {
-      texte3 += `<br>${ajouteChampTexteMathLive(
-        this,
-        2,
-        KeyboardType.clavierNumbers,
-        {
-          texteAvant: `Le plus grand diviseur commun à $${texNb1}$ et $${texNb2}$ est `,
-          texteApres: '.',
-        },
-      )}`
+      numero++
     }
-    handleAnswers(this, 2, { reponse: { value: leGcd } })
-    const texteCorr3 = `${texteEnCouleur(
-      `Les diviseurs communs à $${texNb1}$ et $${texNb2}$ sont les nombres qui apparaissent dans les deux listes : $${texListe(communs)}$.`,
-      bleuMathalea,
-    )}<br>Le plus grand diviseur commun à $${texNb1}$ et $${texNb2}$ est donc $${miseEnEvidence(texGcd)}$.`
 
     // Question 4 : nombre maximal de groupes
     let texte4 = `Quel est le plus grand nombre ${s.deGroupements} que le ${s.qui} pourra constituer ?`
     if (this.interactif) {
       texte4 += `<br>${ajouteChampTexteMathLive(
         this,
-        3,
+        numero,
         KeyboardType.clavierNumbers,
         {
           texteAvant: 'Il pourra constituer au maximum ',
@@ -322,36 +360,41 @@ export default class RepartirEnGroupesIdentiques extends Exercice {
         },
       )}`
     }
-    handleAnswers(this, 3, { reponse: { value: leGcd } })
-    const texteCorr4 = `${texteEnCouleur(
+    handleAnswers(this, numero, { reponse: { value: leGcd } })
+    numero++
+    const texteCorr4 = `${rappelPgcd}${texteEnCouleur(
       `Chaque ${s.groupement} contient le même nombre de ${s.objet1} et la totalité des ${s.objet1} est répartie : le nombre de ${s.groupements} divise donc $${texNb1}$. Pour la même raison, il divise $${texNb2}$, c’est donc un diviseur commun à $${texNb1}$ et $${texNb2}$.<br>
-      Pour en constituer le plus possible, on prend le plus grand diviseur commun à $${texNb1}$ et $${texNb2}$, qui vaut $${texGcd}$ d’après la question précédente.`,
+      Pour en constituer le plus possible, on prend le plus grand diviseur commun à $${texNb1}$ et $${texNb2}$, qui vaut $${texGcd}$${avecPgcd ? ' d’après la question précédente' : ''}.`,
       bleuMathalea,
     )}<br>Le ${s.qui} pourra constituer au maximum $${miseEnEvidence(texGcd)}$ ${s.groupements}.`
+    this.listeQuestions.push(texte4)
+    this.listeCorrections.push(texteCorr4)
 
-    // Question 5 : composition d'un groupe
-    let texte5 = `Combien de ${s.objet1} et de ${s.objet2} y aura-t-il dans chaque ${s.groupement} ?`
-    if (this.interactif) {
-      texte5 += `<br>${remplisLesBlancs(
-        this,
-        4,
-        `\\text{Il y aura }%{champ1}\\text{ ${s.objet1} et }%{champ2}\\text{ ${s.objet2}.}`,
-        KeyboardType.clavierNumbers,
-      )}`
-    }
-    handleAnswers(this, 4, {
-      bareme: toutPourUnPoint,
-      champ1: { value: String(nb1 / leGcd) },
-      champ2: { value: String(nb2 / leGcd) },
-    })
-    const texteCorr5 = `${texteEnCouleur(
-      `Il y a $${texNb1}$ ${s.objet1} et $${texNb2}$ ${s.objet2} à répartir dans $${texGcd}$ ${s.groupements}.`,
-      bleuMathalea,
-    )}<br>$${texNb1}\\div ${texGcd}=${miseEnEvidence(texNombre(nb1 / leGcd, 0))}$ ${s.objet1}
+    if (avecRepartition) {
+      // Question 5 : composition d'un groupe
+      let texte5 = `Combien de ${s.objet1} et de ${s.objet2} y aura-t-il dans chaque ${s.groupement} ?`
+      if (this.interactif) {
+        texte5 += `<br>${remplisLesBlancs(
+          this,
+          numero,
+          `\\text{Il y aura }%{champ1}\\text{ ${s.objet1} et }%{champ2}\\text{ ${s.objet2}.}`,
+          KeyboardType.clavierNumbers,
+        )}`
+      }
+      handleAnswers(this, numero, {
+        bareme: toutPourUnPoint,
+        champ1: { value: String(nb1 / leGcd) },
+        champ2: { value: String(nb2 / leGcd) },
+      })
+      const texteCorr5 = `${texteEnCouleur(
+        `Il y a $${texNb1}$ ${s.objet1} et $${texNb2}$ ${s.objet2} à répartir dans $${texGcd}$ ${s.groupements}.`,
+        bleuMathalea,
+      )}<br>$${texNb1}\\div ${texGcd}=${miseEnEvidence(texNombre(nb1 / leGcd, 0))}$ ${s.objet1}
       et $${texNb2}\\div ${texGcd}=${miseEnEvidence(texNombre(nb2 / leGcd, 0))}$ ${s.objet2} dans chaque ${s.groupement}.`
 
-    this.listeQuestions.push(texte3, texte4, texte5)
-    this.listeCorrections.push(texteCorr3, texteCorr4, texteCorr5)
+      this.listeQuestions.push(texte5)
+      this.listeCorrections.push(texteCorr5)
+    }
     listeQuestionsToContenu(this)
   }
 }
