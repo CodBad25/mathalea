@@ -69,16 +69,38 @@ createQuestion(this, i, {
 })
 ```
 
-| Clé d'une sous-question | Rôle                                                                                                                                                                  |
-| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `question`              | énoncé, sans son repère « a) »                                                                                                                                        |
-| `correction`            | correction, sans son repère                                                                                                                                           |
-| `answer`                | réponse attendue. Sans `answer`, la sous-question n'a pas de champ (« Justifier. »)                                                                                   |
-| `field`                 | options du champ du `multi-mathfield` : `keyboard`, `texteApres`, `choices` (liste déroulante), `qcm`… Voir [Formats interactifs spécialisés](formats-interactifs.md) |
+| Clé d'une sous-question | Rôle                                                                                                                                                                                                                  |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `question`              | énoncé, sans son repère « a) »                                                                                                                                                                                        |
+| `correction`            | correction, sans son repère                                                                                                                                                                                           |
+| `answer`                | réponse attendue, ou liste de réponses (plusieurs champs, voir ci-dessous). Sans `answer`, la sous-question n'a pas de champ (« Justifier. »)                                                                         |
+| `field`                 | options du champ (ou liste d'options, dans l'ordre des réponses) du `multi-mathfield` : `keyboard`, `texteApres`, `choices` (liste déroulante), `qcm`… Voir [Formats interactifs spécialisés](formats-interactifs.md) |
 
 Une question à sous-questions n'a pas d'`answer` propre : les réponses sont
-dans les sous-questions. Au plus 9 sous-questions (`field0` à `field8`), et un
-seul champ par sous-question.
+dans les sous-questions. Au plus 9 champs au total (`field0` à `field8`).
+
+## Plusieurs champs dans une sous-question
+
+Pour une sous-question qui attend plusieurs réponses (quotient **et** reste),
+passer des tableaux à `answer` et `field`, et placer les champs dans l'énoncé
+avec les repères `%{0}`, `%{1}`… (ordre des réponses). Sans repère, les champs
+sont ajoutés à la suite de l'énoncé. Hors interactivité, chaque repère devient
+des points de suspension. Les repères se placent hors des `$…$`.
+Extrait de `src/exercices/TEx/TEA1-21.ts` :
+
+```ts
+{
+  question: `Division euclidienne de $${a}$ par $${b}$.<br>$q=$ %{0}$\\quad r=$ %{1}`,
+  answer: [{ value: quotient }, { value: reste }],
+  field: [{ keyboard: KeyboardType.clavierDeBase }, { keyboard: KeyboardType.clavierDeBase }],
+  correction: `…`,
+}
+```
+
+Le premier champ de la sous-question k s'appelle `field<k>` ; les champs
+supplémentaires prennent les noms suivants (`field<nbSousQuestions>`…).
+Comme le nombre de champs peut dépendre du tirage, fixer le `bareme`
+(voir ci-dessous).
 
 ## Barème
 

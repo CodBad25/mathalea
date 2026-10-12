@@ -103,6 +103,64 @@ describe('createSubQuestions', () => {
   })
 })
 
+describe('createSubQuestions avec plusieurs champs par sous-question', () => {
+  beforeEach(() => {
+    setOutputHtml()
+    document.body.innerHTML = ''
+  })
+
+  const plusieursChamps = [
+    {
+      question: 'Division de $17$ par $5$.<br>$q=$ %{0}$\\quad r=$ %{1}',
+      answer: [{ value: 3 }, { value: 2 }],
+      correction: 'Première correction.',
+    },
+    {
+      question: 'Division de $-17$ par $5$.<br>$q=$ %{0}$\\quad r=$ %{1}',
+      answer: [{ value: -4 }, { value: 3 }],
+      correction: 'Deuxième correction.',
+    },
+  ]
+
+  it('place chaque champ au repère de son énoncé', () => {
+    const exercice = newExercice(true)
+    const { question } = createSubQuestions(exercice, 0, plusieursChamps)
+    const gabarit = question.match(/data-template="([^"]*)"/)?.[1] ?? ''
+    expect(gabarit).toContain('$q=$ %{field0}$\\quad r=$ %{field2}')
+    expect(gabarit).toContain('$q=$ %{field1}$\\quad r=$ %{field3}')
+    expect(Object.keys(exercice.autoCorrection[0].valeur ?? {})).toEqual([
+      'field0',
+      'field2',
+      'field1',
+      'field3',
+      'bareme',
+    ])
+    expect(MultiMathfieldElement.pointsMaxQuestion(exercice, 0)).toBe(4)
+  })
+
+  it('ajoute les champs à la suite sans repère dans l’énoncé', () => {
+    const exercice = newExercice(true)
+    const { question } = createSubQuestions(exercice, 0, [
+      {
+        question: 'Donner deux nombres.',
+        answer: [{ value: 1 }, { value: 2 }],
+        correction: '',
+      },
+    ])
+    expect(question).toContain('Donner deux nombres. %{field0} %{field1}')
+  })
+
+  it('remplace les repères par des points de suspension hors interactivité', () => {
+    const { question } = createSubQuestions(
+      newExercice(false),
+      0,
+      plusieursChamps,
+    )
+    expect(question).not.toContain('%{')
+    expect(question).toContain('$q=$ $\\ldots$$\\quad r=$ $\\ldots$')
+  })
+})
+
 describe('createQuestion', () => {
   beforeEach(() => {
     setOutputHtml()
