@@ -2,6 +2,11 @@
   import { formattedTimeStamp } from '../../../../../lib/components/time'
   import { exercicesParams } from '../../../../../lib/stores/generalStore'
   import type { IExercice } from '../../../../../lib/types'
+  import {
+    getShortAnswer,
+    reponsesMisesEnEvidence,
+  } from '../../../typst/minimalCorrection'
+  import { extraitLettresQcm } from '../../answersTable'
   import NumberInput from '../../../../shared/forms/InputNumber.svelte'
 
   export let exercises: IExercice[]
@@ -47,6 +52,22 @@
       }
     }
     return sum
+  }
+
+  function usesFullCorrection(exercise: IExercice): boolean {
+    // Les exercices sont chargés avant leur premier tirage dans les réglages.
+    if (exercise.listeCorrections.length === 0)
+      return exercise.reponseCourteDisponible === false
+    return exercise.listeCorrections.some((correction, i) => {
+      if (!correction?.trim() || extraitLettresQcm(exercise, i).length > 0)
+        return false
+      const answer = getShortAnswer(exercise, i)
+      return (
+        answer === null ||
+        (answer === undefined &&
+          reponsesMisesEnEvidence(correction).length === 0)
+      )
+    })
   }
 
   function updateQuestionsNb(i: number, value: number) {
@@ -157,6 +178,12 @@
               ></i>
             </span>
             {exercise.id} - {exercise.titre}
+            {#if usesFullCorrection(exercise)}
+              <p class="mt-1 text-xs opacity-75">
+                Tableau des réponses : aperçu de la correction pour les
+                questions sans réponse courte.
+              </p>
+            {/if}
           </td>
           <td class="whitespace-normal px-3 py-4 text-sm">
             <NumberInput

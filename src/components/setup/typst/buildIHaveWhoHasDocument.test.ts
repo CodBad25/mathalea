@@ -24,6 +24,16 @@ const exercise: TypstExerciseInput = {
 }
 
 describe('buildIHaveWhoHasDocument', () => {
+  it('détecte les doublons des réponses explicites', () => {
+    expect(duplicateMinimalAnswers([{ ...exercise, shortAnswers: ['$42$', '$42$', '$5$'] }])).toEqual(['42'])
+  })
+
+  it('préfère les réponses explicites dans la chaîne', () => {
+    const cards = buildIHaveWhoHasCards([{ ...exercise, shortAnswers: ['$vingt$', null] }])
+    expect(cards[0].answer).toBe('$vingt$.')
+    expect(cards[1].answer).toBe(exercise.corrections[1] + '.')
+  })
+
   it('forme une chaîne fermée réponse courante / question suivante', () => {
     const cards = buildIHaveWhoHasCards([exercise])
     expect(cards.map(({ question }) => question)).toEqual([

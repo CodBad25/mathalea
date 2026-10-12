@@ -123,6 +123,42 @@ const texteQcm = `${texteEnCouleurEtGras('Le nombre')} $${miseEnEvidence(a)}$ ${
 const explication = texteEnCouleur('Mentalement, on ajoute $10$ puis on retire $1$.', bleuMathalea)
 ```
 
+## Réponse courte et correction minimale
+
+La réponse finale en orange est extraite automatiquement pour la correction
+minimale (Typst, TBI, flashcards, diaporama PDF, « J’ai / Qui a », OMR) et pour
+le tableau des réponses du diaporama. Les explications intermédiaires ne doivent
+pas utiliser cette couleur.
+
+Pour conserver une autre convention de couleurs ou fournir une réponse structurée,
+remplir `this.listeReponsesCourtes[i]` pendant la génération, avec un fragment
+HTML/LaTeX autonome (formules entre `$...$`). Il a priorité sur l’extraction :
+
+```ts
+this.listeReponsesCourtes[i] = `$${a * b}$`
+```
+
+Pour un `ExerciceSimple`, affecter `this.reponseCourteExplicite` dans
+`nouvelleVersion()` ; le moteur la copie pour chaque question. Les réponses
+explicites sont effacées à chaque génération, y compris entre deux questions
+simples, pour éviter de conserver une réponse d’un ancien tirage.
+
+Quand la réponse nécessite une construction, un tableau ou une démonstration,
+déclarer `this.reponseCourteDisponible = false` dans le constructeur et expliquer
+la raison dans un commentaire. La correction complète est alors conservée,
+même si elle contient une étape orange. Une réponse explicite non vide reste
+prioritaire. Pour un exercice mixte, affecter seulement
+`this.listeReponsesCourtes[i] = null` aux questions concernées. `undefined` ou
+une chaîne vide laisse l’extraction automatique s’appliquer.
+
+Le tableau du diaporama conserve les lettres des QCM ; pour une question sans
+réponse courte, il propose une miniature agrandissable de la correction. Les
+réglages signalent cette présentation avant de lancer le diaporama.
+
+Le contrôle [des corrections minimales](../../tests/corrections-minimales.md)
+vérifie les exercices modifiés en CI. Ne pas déclarer une absence de réponse
+courte pour masquer un résultat final oublié.
+
 ## Métadonnées
 
 - `uuid` et `refs` ne sont jamais copiés depuis un autre exercice : générer

@@ -31,6 +31,7 @@ export const refs = {
 export default class EcondDegreAbscisseOrdonneeSommet extends ExerciceSimple {
   constructor() {
     super()
+    this.reponseCourteDisponible = false // La réponse est une figure ou un tableau.
 
     this.typeExercice = 'simple'
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction

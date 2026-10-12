@@ -145,7 +145,10 @@ export function buildIHaveWhoHasCards(
                 removeTrailingCompletionEquals(removeQuestionIndex(question)),
                 '?',
               ),
-              answer: withFinalPunctuation(minimalCorrection(correction), '.'),
+              answer: withFinalPunctuation(
+                minimalCorrection(correction, exercise.shortAnswers?.[index]),
+                '.',
+              ),
             },
           ]
         : []
@@ -162,8 +165,8 @@ export function buildIHaveWhoHasCards(
  * reconnus par `minimalCorrection` sont retirés afin que « 19 » soit détecté
  * comme doublon quelle que soit la façon dont l'exercice le met en évidence.
  */
-export function minimalAnswerKey(correction: string): string {
-  return minimalCorrection(correction)
+export function minimalAnswerKey(correction: string, shortAnswer?: string | null): string {
+  return minimalCorrection(correction, shortAnswer)
     .replace(/<[^>]+>/g, '')
     .replace(/\\color\{#[0-9a-f]{6}\}/gi, '')
     .replace(/\\boldsymbol\{([^{}]*)\}/g, '$1')
@@ -183,7 +186,7 @@ export function duplicateMinimalAnswers(
     for (const [index, correction] of exercise.corrections.entries()) {
       if (exercise.questions[index]?.trim() === '') continue
       if (correction.trim() === '') continue
-      const key = minimalAnswerKey(correction)
+      const key = minimalAnswerKey(correction, exercise.shortAnswers?.[index])
       if (seen.has(key)) duplicates.add(key)
       else seen.add(key)
     }

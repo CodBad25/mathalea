@@ -28,6 +28,7 @@
   import KickOff from '../../display/can/presentationalComponents/KickOff.svelte'
   import ButtonText from '../../shared/forms/ButtonText.svelte'
   import { extraitLettresQcm, extraitReponsesCourtes } from './answersTable'
+  import { getShortAnswer } from '../typst/minimalCorrection'
   import SlideshowOverview from './slideshowOverview/SlideshowOverview.svelte'
   import SlideshowPlay from './slideshowPlay/SlideshowPlay.svelte'
   import SlideshowSettings from './slideshowSettings/SlideshowSettings.svelte'
@@ -163,6 +164,7 @@
                 reponsesCourtes: extraitReponsesCourtes(
                   correction,
                   lettresQcm.length === 0,
+                  getShortAnswer(exercise, i),
                 ),
               }
             } while (

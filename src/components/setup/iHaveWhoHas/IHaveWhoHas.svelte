@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { getShortAnswer } from '../typst/minimalCorrection'
   import JSZip from 'jszip'
   import seedrandom from 'seedrandom'
   import { onDestroy, onMount } from 'svelte'
@@ -150,6 +151,10 @@
         questions: (exercise.listeQuestions ?? []).map(format),
         introCorrection: '',
         corrections: (exercise.listeCorrections ?? []).map(format),
+        shortAnswers: (exercise.listeQuestions ?? []).map((_, i) => {
+          const answer = getShortAnswer(exercise, i)
+          return answer == null ? answer : format(answer)
+        }),
         numbered: false,
       })
     }

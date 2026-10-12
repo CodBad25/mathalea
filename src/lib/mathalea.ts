@@ -1069,6 +1069,7 @@ export function mathaleaHandleExerciceSimple(
     let i = 0, cptSecours = 0;
     i < exercice.nbQuestions && cptSecours < 50;
   ) {
+    exercice.reponseCourteExplicite = undefined
     seedrandom(seed ?? String(exercice.seed) + i + cptSecours, { global: true })
     if (
       exercice.nouvelleVersion &&
@@ -1362,6 +1363,7 @@ export function mathaleaHandleExerciceSimple(
         }
       }
       exercice.listeCorrections.push(exercice.correction ?? '')
+      exercice.listeReponsesCourtes?.push(exercice.reponseCourteExplicite)
       exercice.listeCanEnonces?.push(exercice.canEnonce ?? '')
       exercice.listeCanReponsesACompleter?.push(
         exercice.canReponseACompleter ?? '',
