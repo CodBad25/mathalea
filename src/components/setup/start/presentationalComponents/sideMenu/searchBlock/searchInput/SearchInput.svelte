@@ -221,10 +221,12 @@
     if (event.repeat) return
     switch (event.key) {
       case 'Enter':
+        // l'écouteur est sur window : Entrée ne doit être bloquée que dans le
+        // champ de recherche (sinon plus de saut de ligne dans un textarea)
         if (isInputFocused) {
           isEnterDown = true
+          event.preventDefault()
         }
-        event.preventDefault()
         break
     }
     if (isEnterDown) {
