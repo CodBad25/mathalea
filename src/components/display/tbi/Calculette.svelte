@@ -7,8 +7,10 @@
   } from '../../../lib/calculette'
 
   /**
-   * Calculatrice très basique (quatre opérations, virgule décimale, calcul
-   * écrit en ligne, valeur approchée du résultat). Tout est dimensionné en
+   * Calculatrice très basique (quatre opérations sans priorité : le 2e
+   * opérateur effectue le calcul en cours et poursuit sur une nouvelle ligne
+   * avec le résultat ; virgule décimale, valeur approchée du résultat). Tout
+   * est dimensionné en
    * unités de conteneur (cqw) : le rendu suit la largeur du widget.
    */
   interface Key {
@@ -66,6 +68,7 @@
   // un long calcul reste lisible : l'écran montre toujours la fin de la saisie
   $effect(() => {
     void state.expression
+    void state.previous
     expressionEl.scrollLeft = expressionEl.scrollWidth
   })
 </script>
@@ -83,6 +86,7 @@
   >
     <div class="brand">MathALÉA</div>
     <div class="screen">
+      <div class="previous">{state.previous ?? ''}</div>
       <div bind:this={expressionEl} class="expression">{state.expression}</div>
       <div class="result" role="status">
         {state.error ? 'Erreur' : (state.result ?? '')}
@@ -143,7 +147,7 @@
     flex-direction: column;
     justify-content: space-between;
     box-sizing: border-box;
-    height: 26cqw;
+    height: 33cqw;
     padding: 2.5cqw 4cqw;
     border-radius: 3cqw;
     background: #c8d1c3;
@@ -152,6 +156,17 @@
       inset 0 0.6cqw 1.6cqw rgba(0, 0, 0, 0.35),
       0 0 0 1.2cqw #1c2025;
     margin: 0.6cqw;
+  }
+
+  .previous {
+    min-height: 1.3em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: right;
+    font-size: 4.4cqw;
+    line-height: 1.3;
+    color: rgba(31, 36, 41, 0.6);
+    font-variant-numeric: tabular-nums;
   }
 
   .expression {
