@@ -25,7 +25,7 @@ export default class auto1AP3c extends ExerciceQcmA {
     const nbB = urneB.length
 
     // Description des urnes
-    const descriptionUrnes = `On dispose d'une urne A contenant $${nbA}$ boules numérotées : $${urneA.join(' ; ')}$ et d'une urne B contenant $${nbB}$ boules numérotées : $${urneB.join(' ; ')}$.<br>
+    const descriptionUrnes = `On dispose d'une urne E contenant $${nbA}$ boules numérotées : $${urneA.join(' ; ')}$ et d'une urne F contenant $${nbB}$ boules numérotées : $${urneB.join(' ; ')}$.<br>
     Les boules sont indiscernables au toucher.`
 
     const texteQuestion =
@@ -59,22 +59,22 @@ export default class auto1AP3c extends ExerciceQcmA {
 
     if (bonneReponse === 1) {
       texteBonneReponse =
-        "La probabilité d'obtenir une boule portant un numéro supérieur ou égal à 15 est plus grande en choisissant l'urne A."
+        "La probabilité d'obtenir une boule portant un numéro supérieur ou égal à 15 est plus grande en choisissant l'urne E."
       probaACorrect = pSup15A
       probaBCorrect = pSup15B
     } else if (bonneReponse === 2) {
       texteBonneReponse =
-        "La probabilité d'obtenir une boule portant un numéro impair est plus grande en choisissant l'urne A."
+        "La probabilité d'obtenir une boule portant un numéro impair est plus grande en choisissant l'urne E."
       probaACorrect = pImpairA
       probaBCorrect = pImpairB
     } else if (bonneReponse === 3) {
       texteBonneReponse =
-        "La probabilité d'obtenir une boule portant un multiple de 3 est plus grande en choisissant l'urne A."
+        "La probabilité d'obtenir une boule portant un multiple de 3 est plus grande en choisissant l'urne E."
       probaACorrect = pMult3A
       probaBCorrect = pMult3B
     } else {
       texteBonneReponse =
-        "La probabilité d'obtenir une boule portant un nombre premier est plus grande en choisissant l'urne A."
+        "La probabilité d'obtenir une boule portant un nombre premier est plus grande en choisissant l'urne E."
       probaACorrect = pPremierA
       probaBCorrect = pPremierB
     }
@@ -117,18 +117,18 @@ export default class auto1AP3c extends ExerciceQcmA {
     }
 
     if (nbFavA === 1) {
-      correction += `Dans l'urne A, il n'y a qu'une seule issue favorable : $${issuesFavA[0]}$.<br>`
+      correction += `Dans l'urne E, il n'y a qu'une seule issue favorable : $${issuesFavA[0]}$.<br>`
     } else {
-      correction += `Dans l'urne A, les issues favorables sont : $${issuesFavA.join(', ')}$.<br>`
+      correction += `Dans l'urne E, les issues favorables sont : $${issuesFavA.join(', ')}$.<br>`
     }
-    correction += `$P_A = \\dfrac{${nbFavA}}{${nbA}}${probaACorrect.d !== nbA ? ` = ${probaACorrect.texFractionSimplifiee}` : ''}$<br>`
+    correction += `$P_E = \\dfrac{${nbFavA}}{${nbA}}${probaACorrect.d !== nbA ? ` = ${probaACorrect.texFractionSimplifiee}` : ''}$<br>`
 
     if (nbFavB === 1) {
-      correction += `Dans l'urne B, il n'y a qu'une seule issue favorable : $${issuesFavB[0]}$.<br>`
+      correction += `Dans l'urne F, il n'y a qu'une seule issue favorable : $${issuesFavB[0]}$.<br>`
     } else {
-      correction += `Dans l'urne B, les issues favorables sont : $${issuesFavB.join(', ')}$.<br>`
+      correction += `Dans l'urne F, les issues favorables sont : $${issuesFavB.join(', ')}$.<br>`
     }
-    correction += `$P_B = \\dfrac{${nbFavB}}{${nbB}}${probaBCorrect.d !== nbB ? ` = ${probaBCorrect.texFractionSimplifiee}` : ''}$<br>`
+    correction += `$P_F = \\dfrac{${nbFavB}}{${nbB}}${probaBCorrect.d !== nbB ? ` = ${probaBCorrect.texFractionSimplifiee}` : ''}$<br>`
 
     // Comparer les fractions
     correction += `On a `
@@ -150,10 +150,10 @@ export default class auto1AP3c extends ExerciceQcmA {
 
     // Les 4 propositions
     this.reponses = [
-      "La probabilité d'obtenir une boule portant un numéro supérieur ou égal à $15$ est plus grande en choisissant l'urne A plutôt que l'urne B.",
-      "La probabilité d'obtenir une boule portant un numéro impair est plus grande en choisissant l'urne A plutôt que l'urne B.",
-      "La probabilité d'obtenir une boule portant un multiple de $3$ est plus grande en choisissant l'urne A plutôt que l'urne B.",
-      "La probabilité d'obtenir une boule portant un nombre premier est plus grande en choisissant l'urne A plutôt que l'urne B.",
+      "La probabilité d'obtenir une boule portant un numéro supérieur ou égal à $15$ est plus grande en choisissant l'urne E plutôt que l'urne F.",
+      "La probabilité d'obtenir une boule portant un numéro impair est plus grande en choisissant l'urne E plutôt que l'urne F.",
+      "La probabilité d'obtenir une boule portant un multiple de $3$ est plus grande en choisissant l'urne E plutôt que l'urne F.",
+      "La probabilité d'obtenir une boule portant un nombre premier est plus grande en choisissant l'urne E plutôt que l'urne F.",
     ]
 
     // Mettre la bonne réponse en premier
