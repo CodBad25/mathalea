@@ -51,6 +51,12 @@ describe('1AL23-40 : saisie de l’ensemble des solutions', () => {
               ? 'union'
               : response.value
           covered.add(kind)
+          if (kind === '\\mathbb{R}') {
+            expect(compare(']-\\infty;+\\infty[').isOk).toBe(true)
+            expect(compare(']-\\infty;\\infty[').isOk).toBe(true)
+            expect(compare(']-\\infty;+\\infty]').isOk).toBe(false)
+            expect(compare(']-\\infty;3[').isOk).toBe(false)
+          }
           if (kind === 'singleton') {
             const root = response.value.slice(2, -2)
             expect(compare(`\\{\\frac{${Number(root) * 2}}{2}\\}`).isOk).toBe(
