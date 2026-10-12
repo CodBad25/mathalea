@@ -973,6 +973,17 @@ Si $${inégalité}$ alors, $${Math.pow(a, 3)} ${large1 ? ' \\leqslant ' : ' < '}
           },
           { formatInteractif: 'fill-in-the-blank' },
         )
+        // Réponse courte : l'encadrement complet, comme dans les champs à remplir
+        const expression =
+          {
+            carré: 'x^2',
+            inverse: '\\dfrac{1}{x}',
+            'racine carrée': '\\sqrt{x}',
+            cube: 'x^3',
+          }[listeTypeQuestions[i]] ?? ''
+        this.listeReponsesCourtes[i] = reponseValue.champ2
+          ? `$${reponseValue.champ1.value} ${expression} ${reponseValue.champ2.value}$`
+          : `$${expression} ${reponseValue.champ1.value}$`
         // Si la question n'a jamais été posée, on en crée une autre
         this.listeQuestions[i] =
           texte +
