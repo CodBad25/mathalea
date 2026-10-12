@@ -11,10 +11,7 @@ import {
   ecritureParentheseSiNegatif,
   rienSi1,
 } from '../../lib/outils/ecritures'
-import {
-  miseEnEvidence,
-  texteEnCouleur,
-} from '../../lib/outils/embellissements'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { gestionnaireFormulaireTexte } from '../../modules/outils'
@@ -63,6 +60,9 @@ type FonctionDeReference = {
   deriveeEn: (k: number, a: number) => string
 }
 
+/** Facteur écrit devant un terme : rien si $k=1$, « - » si $k=-1$ */
+const facteur = (k: number) => (k === 1 ? '' : k === -1 ? '-' : `${k}\\times`)
+
 const fractionAvecSigne = (numerateur: number, denominateur: string) =>
   `${numerateur < 0 ? '-' : ''}\\dfrac{${Math.abs(numerateur)}}{${denominateur}}`
 
@@ -76,7 +76,7 @@ const fonctionsDeReference: FonctionDeReference[] = [
     valeursK: [-2, -1, 1, 2],
     intervalles: [[-5, 5]],
     terme: (k) => `${rienSi1(k)}x^2`,
-    termeEn: (k, a) => `${k}\\times${ecritureParentheseSiNegatif(a)}^2`,
+    termeEn: (k, a) => `${facteur(k)}${ecritureParentheseSiNegatif(a)}^2`,
     derivee: (k) => `${rienSi1(2 * k)}x`,
     deriveeEn: (k, a) => `${2 * k}\\times${ecritureParentheseSiNegatif(a)}`,
   },
@@ -89,7 +89,7 @@ const fonctionsDeReference: FonctionDeReference[] = [
     valeursK: [-1, 1],
     intervalles: [[-5, 5]],
     terme: (k) => `${rienSi1(k)}x^3`,
-    termeEn: (k, a) => `${k}\\times${ecritureParentheseSiNegatif(a)}^3`,
+    termeEn: (k, a) => `${facteur(k)}${ecritureParentheseSiNegatif(a)}^3`,
     derivee: (k) => `${rienSi1(3 * k)}x^2`,
     deriveeEn: (k, a) => `${3 * k}\\times${ecritureParentheseSiNegatif(a)}^2`,
   },
@@ -118,7 +118,7 @@ const fonctionsDeReference: FonctionDeReference[] = [
       [0.2, 5],
     ],
     terme: (k) => fractionAvecSigne(k, 'x'),
-    termeEn: (k, a) => `${k}\\times\\dfrac{1}{${a}}`,
+    termeEn: (k, a) => `${facteur(k)}\\dfrac{1}{${a}}`,
     derivee: (k) => fractionAvecSigne(-k, 'x^2'),
     deriveeEn: (k, a) =>
       fractionAvecSigne(-k, `${ecritureParentheseSiNegatif(a)}^2`),
@@ -132,9 +132,9 @@ const fonctionsDeReference: FonctionDeReference[] = [
     valeursK: [-3, -2, -1, 1, 2, 3],
     intervalles: [[-5, 5]],
     terme: (k) => `${rienSi1(k)}\\text{e}^x`,
-    termeEn: (k, a) => `${k}\\times\\text{e}^{${a}}`,
+    termeEn: (k, a) => `${facteur(k)}\\text{e}^{${a}}`,
     derivee: (k) => `${rienSi1(k)}\\text{e}^x`,
-    deriveeEn: (k, a) => `${k}\\times\\text{e}^{${a}}`,
+    deriveeEn: (k, a) => `${facteur(k)}\\text{e}^{${a}}`,
   },
 ]
 
@@ -268,27 +268,15 @@ export default class AssocierCourbeTangenteFonction extends ExerciceQcmA {
       texNombre(kk * fonction.g(a) + cc)
 
     this.corrections = [
-      texteEnCouleur(
-        `Pour cette fonction, $${calculImage(k, c)}=${valeurImage(k, c)}$ et $${calculDerivee(k)}=${valeurDerivee(k)}$ : elle convient.`,
-        bleuMathalea,
-      ),
-      texteEnCouleur(
-        `Pour cette fonction, $${calculImage(k, cDistracteur)}=${valeurImage(k, cDistracteur)}$, or $f(${a})=${texNombre(image)}$ : elle ne convient pas.`,
-        bleuMathalea,
-      ),
-      texteEnCouleur(
-        `Pour cette fonction, $${calculDerivee(kDistracteur)}=${valeurDerivee(kDistracteur)}$, or $f'(${a})=${texNombre(nombreDerive)}$ : elle ne convient pas.`,
-        bleuMathalea,
-      ),
+      `Pour cette fonction, $${calculImage(k, c)}=${valeurImage(k, c)}$ et $${calculDerivee(k)}=${valeurDerivee(k)}$ : elle convient.`,
+      `Pour cette fonction, $${calculImage(k, cDistracteur)}=${valeurImage(k, cDistracteur)}$, or $f(${a})=${texNombre(image)}$ : elle ne convient pas.`,
+      `Pour cette fonction, $${calculDerivee(kDistracteur)}=${valeurDerivee(kDistracteur)}$, or $f'(${a})=${texNombre(nombreDerive)}$ : elle ne convient pas.`,
     ]
 
     this.enonce = `On a tracé ci-dessous la courbe $\\mathcal{C}_f$ (en bleu) d'une fonction $f$ définie sur ${fonction.domaine}, ainsi que la tangente $T$ (en rouge) à $\\mathcal{C}_f$ au point d'abscisse $${a}$.<br>
 ${graphique}
 Une seule des trois fonctions ci-dessous a pour courbe représentative $\\mathcal{C}_f$. Laquelle ?`
-    this.correction = texteEnCouleur(
-      `Par lecture graphique, $f(${a})=${texNombre(image)}$ et le coefficient directeur de la tangente $T$ est $${texNombre(nombreDerive)}$, donc $f'(${a})=${texNombre(nombreDerive)}$.<br>On calcule ces deux valeurs pour chacune des fonctions proposées.<br>`,
-      bleuMathalea,
-    )
+    this.correction = `Par lecture graphique, $f(${a})=${texNombre(image)}$ et le coefficient directeur de la tangente $T$ est $${texNombre(nombreDerive)}$, donc $f'(${a})=${texNombre(nombreDerive)}$.<br>On calcule ces deux valeurs pour chacune des fonctions proposées.<br>`
     this.correction += `La bonne réponse est : $${miseEnEvidence(bonne)}$`
     this.correction += '.<br>'
   }
