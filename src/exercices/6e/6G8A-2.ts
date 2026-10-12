@@ -1,8 +1,10 @@
 import { addMathaleaQcm } from '../../lib/customElements/MathaleaQcm'
+import type { MathaleaTextfieldVerificationCallback } from '../../lib/customElements/MathaleaTextfield'
 import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { verifySingleMathLiveField } from '../../lib/interactif/mathLiveVerifications'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexte } from '../../lib/interactif/questionMathLive'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
@@ -169,6 +171,59 @@ function compareAvecFautesToleres(solide: Solide): CompareFunction {
   }
 }
 
+// La dernière question vaut 1 point pour sa réponse + 1 point si toutes les réponses sont bien orthographiées.
+const POINTS_DERNIERE_QUESTION = 2
+
+/**
+ * Indique si la saisie est exactement l'une des réponses attendues (à la casse près),
+ * donc sans faute d'orthographe tolérée ni « s » final en trop.
+ */
+function estBienOrthographie(saisie: string, solide: Solide): boolean {
+  const mot = saisie.trim().replace(/\s+/g, ' ')
+  return solide.reponses.some(
+    (reponse) =>
+      fonctionComparaison(mot, reponse, { texteSansCasse: true }).isOk,
+  )
+}
+
+/**
+ * Vérifie la dernière question puis ajoute le point d'orthographe
+ * si toutes les réponses de l'exercice sont justes et bien orthographiées.
+ */
+function verifieDerniereQuestionAvecBonus(
+  solidesPosees: Solide[],
+): MathaleaTextfieldVerificationCallback {
+  return (exercice, i, textfield) => {
+    const resultat = verifySingleMathLiveField(
+      exercice,
+      i,
+      textfield.querySelector('input'),
+    )
+    const toutBienOrthographie = solidesPosees.every((solide, j) => {
+      const champ = document.getElementById(
+        `champTexteEx${exercice.numeroExercice}Q${j}`,
+      ) as HTMLInputElement | null
+      return champ != null && estBienOrthographie(champ.value, solide)
+    })
+    return {
+      isOk: resultat.isOk,
+      feedback: [
+        resultat.feedback,
+        toutBienOrthographie
+          ? "Point d'orthographe obtenu : toutes les réponses sont bien orthographiées."
+          : '',
+      ]
+        .filter((message) => message !== '')
+        .join('<br>'),
+      score: {
+        nbBonnesReponses:
+          resultat.score.nbBonnesReponses + (toutBienOrthographie ? 1 : 0),
+        nbReponses: POINTS_DERNIERE_QUESTION,
+      },
+    }
+  }
+}
+
 /**
  *
  * @author Mireille Gain
@@ -206,6 +261,10 @@ export default class nomSolides extends Exercice {
       this.nbQuestions === 1
         ? 'Parmi les solides étudiés au collège, donner le nom de celui qui est présenté ci-dessous.'
         : 'Parmi les solides étudiés au collège, donner le nom de chacun de ceux qui sont présentés ci-dessous.'
+    if (this.interactif && this.sup2 === 1) {
+      this.consigne +=
+        ' Un point supplémentaire est accordé si tous les noms sont bien orthographiés.'
+    }
     this.spacing = 1.5
     this.spacingCorr = 1.5
 
@@ -218,6 +277,10 @@ export default class nomSolides extends Exercice {
       saisie: this.sup,
       listeOfCase: solides.map((s) => s.cle),
     }) as string[] // Tous les types de questions sont posés mais l'ordre diffère à chaque "cycle"
+
+    const solidesPosees = listeCles.map(
+      (cle) => solides.find((s) => s.cle === cle) as Solide,
+    )
 
     for (let i = 0; i < this.nbQuestions; i++) {
       const solide = solides.find((s) => s.cle === listeCles[i]) as Solide
@@ -262,9 +325,13 @@ export default class nomSolides extends Exercice {
           { formatInteractif: 'liste-deroulante' },
         )
       } else if (this.interactif) {
+        const derniere = i === this.nbQuestions - 1
         texte += `<br>${ajouteChampTexte(this, i, KeyboardType.alphanumeric, {
           texteAvant: 'Je suis un/une ',
           texteApres: '.',
+          ...(derniere && {
+            verifyCallback: verifieDerniereQuestionAvecBonus(solidesPosees),
+          }),
         })}`
         handleAnswers(
           this,
@@ -275,6 +342,12 @@ export default class nomSolides extends Exercice {
               options: { texteSansCasse: true },
               compare: compareAvecFautesToleres(solide),
             },
+            ...(derniere && {
+              bareme: (listePoints: number[]): [number, number] => [
+                listePoints[0] ?? 0,
+                POINTS_DERNIERE_QUESTION,
+              ],
+            }),
           },
           { formatInteractif: 'mathalea-textfield' },
         )

@@ -1,3 +1,4 @@
+import { pointsMaxDuBareme } from '../interactif/baremeExercice'
 import { verifySingleMathLiveField } from '../interactif/mathLiveVerifications'
 import type { IExercice } from '../types'
 import MathaleaCustomElement, {
@@ -112,6 +113,11 @@ export class MathaleaTextfieldElement extends MathaleaCustomElement {
       return callback(exercice, i, textfield)
     }
     return verifySingleMathLiveField(exercice, i, textfield?.input ?? null)
+  }
+
+  static pointsMaxQuestion(exercice: IExercice, i: number): number {
+    // `verifySingleMathLiveField()` applique le barème de la question à son unique champ.
+    return pointsMaxDuBareme(exercice.autoCorrection?.[i]?.valeur?.bareme, 1)
   }
 
   static registerVerificationCallback(
