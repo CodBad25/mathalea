@@ -286,11 +286,8 @@ export default class ExerciceAdditionnerOuSoustraireDesFractions extends Exercic
         for (let w = 1; w < etapes.length - 1; w++) {
           texteCorr += `<br>${lettreDepuisChiffre(i + 1)} = $${etapes[w]}$ <br>`
         }
-        if (context.isHtml) {
-          texteCorr += `<br>${lettreDepuisChiffre(i + 1)} = $${etapes[etapes.length - 1]}`
-        } else {
-          texteCorr += `<br>${lettreDepuisChiffre(i + 1)} = ${etapes[etapes.length - 1].replace('$', '')}`
-        }
+        // Le dernier morceau commence par le `$` fermant de la ligne précédente, il faut le retirer
+        texteCorr += `<br>${lettreDepuisChiffre(i + 1)} = ${etapes[etapes.length - 1].replace('$', '')}`
       }
 
       if (!new FractionEtendue(num, den).estIrreductible)
