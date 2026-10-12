@@ -39,8 +39,9 @@ export const interactifType = 'mathLive'
 /**
  * Une courbe et sa tangente en un point $A$ sont tracées : il faut lire le nombre dérivé en $A$,
  * c'est-à-dire le coefficient directeur de la tangente.
- * Le point de tangence $A$ est toujours à coordonnées entières et la pente est entière ou demi-entière,
- * de sorte que la tangente passe par un second point $B$ à coordonnées entières.
+ * Le point de tangence $A$ est toujours à coordonnées entières et le nombre dérivé est entier (par défaut)
+ * ou fractionnaire, de sorte que la tangente passe par un second point $B$ à coordonnées entières, situé dans le repère
+ * (à une unité de $A$ pour un nombre dérivé entier, au dénominateur près sinon).
  * La correction trace en pointillés le « triangle de pente » entre $A$ et $B$.
  * @author Rémi Angot
  */
@@ -66,8 +67,15 @@ const deriveeSurR = 'dérivable sur $\\mathbb{R}$'
 
 const toutLIntervalle: [number, number][] = [[fenetre.xMin, fenetre.xMax]]
 
-const parabole = (): Modele => {
-  const k = choice([-2, -1, -0.5, -0.25, 0.25, 0.5, 1, 2])
+/**
+ * Les paramètres des courbes sont choisis pour que, quand `fractionnaire` est vrai, certains points à coordonnées
+ * entières aient un nombre dérivé fractionnaire (ce qui exclut l'exponentielle et la fonction périodique).
+ */
+const parabole = (fractionnaire: boolean): Modele => {
+  // k = ±1/9 : en x - h = ±3, on a f(x) - c = ±1 et f'(x) = ±2/3 ; k = ±1/16 : en x - h = ±4, f(x) - c = ±1 et f'(x) = ±1/2
+  const k = fractionnaire
+    ? choice([-1 / 9, 1 / 9, -1 / 16, 1 / 16])
+    : choice([-2, -1, -0.5, -0.25, 0.25, 0.5, 1, 2])
   const h = randint(-3, 3)
   const c = randint(-3, 3)
   return {
@@ -79,8 +87,11 @@ const parabole = (): Modele => {
   }
 }
 
-const cube = (): Modele => {
-  const k = choice([-1, -0.5, -0.25, 0.25, 0.5, 1])
+const cube = (fractionnaire: boolean): Modele => {
+  // k = ±1/8 : en x - h = ±2, on a f(x) - c = ±1 et f'(x) = 3/2
+  const k = fractionnaire
+    ? choice([-1 / 8, 1 / 8])
+    : choice([-1, -0.5, -0.25, 0.25, 0.5, 1])
   const h = randint(-2, 2)
   const c = randint(-2, 2)
   return {
@@ -150,8 +161,11 @@ const exponentielle = (): Modele => {
   }
 }
 
-const logarithme = (): Modele => {
-  const k = choice([-3, -2, -1, 1, 2, 3])
+const logarithme = (fractionnaire: boolean): Modele => {
+  // en x - h = 1, on a f(x) = c et f'(x) = k
+  const k = fractionnaire
+    ? choice([-1.5, -0.5, 0.5, 1.5])
+    : choice([-3, -2, -1, 1, 2, 3])
   const h = randint(-4, 0)
   const c = randint(-3, 3)
   return {
@@ -238,7 +252,7 @@ const courbeQuelconque = (): Modele => {
 }
 
 /** Familles de courbes, dans l'ordre du paramètre de l'exercice */
-const familles: (() => Modele)[] = [
+const familles: ((fractionnaire: boolean) => Modele)[] = [
   parabole,
   cube,
   cubiqueTroisRacines,
@@ -252,41 +266,67 @@ const familles: (() => Modele)[] = [
 
 /**
  * Numéros des familles (dans l'ordre de `familles`) qui offrent assez de points de tangence lisibles
- * pour tracer deux ou trois tangentes. Les autres (exponentielle, logarithme, et racine carrée ou
- * périodique pour trois tangentes) n'ont qu'un ou deux tels points ; elles sont remplacées.
+ * pour tracer `nbTangentes` tangentes, avec un nombre dérivé entier ou fractionnaire. Les autres sont remplacées :
+ * l'exponentielle et la fonction périodique n'ont aucun point de tangence à nombre dérivé fractionnaire,
+ * et les autres familles en ont trop peu pour tracer plusieurs tangentes.
  */
-const famillesAvecPlusieursTangentes: Record<number, number[]> = {
-  1: familles.map((_, k) => k + 1),
-  2: [1, 2, 3, 4, 5, 8, 9],
-  3: [1, 2, 3, 5, 9],
+const famillesCompatibles = (nbTangentes: number, fractionnaire: boolean) => {
+  const compatibles: Record<string, number[]> = {
+    entier1: familles.map((_, k) => k + 1),
+    entier2: [1, 2, 3, 5, 8, 9],
+    entier3: [1, 2, 3, 9],
+    fractionnaire1: [1, 2, 3, 4, 5, 7, 9],
+    fractionnaire2: [1, 2, 3, 4, 5, 9],
+    fractionnaire3: [1, 3],
+  }
+  return compatibles[
+    `${fractionnaire ? 'fractionnaire' : 'entier'}${nbTangentes}`
+  ]
 }
 
 type Tirage = {
   modele: Modele
   a: number
   image: number
-  /** Nombre dérivé en $a$ : entier ou demi-entier */
+  /** Nombre dérivé en $a$ : entier ou fractionnaire (de dénominateur 2, 3 ou 4) */
   pente: number
-  /** Second point entier de la tangente, à un déplacement horizontal de $A$ */
+  /** Dénominateur de la pente écrite sous forme de fraction irréductible */
+  denominateur: number
+  /** Second point entier de la tangente, à `denominateur` unités (vers la droite ou la gauche) de $A$ */
   b: { x: number; y: number }
 }
 
-const estDemiEntier = (x: number) =>
-  Math.abs(2 * x - Math.round(2 * x)) < tolerance
+const denominateurMax = 4
+
+/** Plus petit dénominateur (au plus `denominateurMax`) qui permet d'écrire `x` en fraction, `undefined` sinon */
+const denominateurDe = (x: number) =>
+  Array.from({ length: denominateurMax }, (_, n) => n + 1).find(
+    (q) => Math.abs(q * x - Math.round(q * x)) < tolerance,
+  )
 
 /** Second point entier de la tangente, à droite de $A$ si le repère le permet, sinon à gauche */
-const secondPoint = (a: number, image: number, pente: number) => {
-  const dx = Number.isInteger(pente) ? 1 : 2
+const secondPoint = (
+  a: number,
+  image: number,
+  pente: number,
+  denominateur: number,
+) => {
   for (const sens of [1, -1]) {
-    const x = a + sens * dx
-    const y = image + sens * dx * pente
+    const x = a + sens * denominateur
+    const y = Math.round(image + sens * denominateur * pente)
     if (Math.abs(x) <= 5 && Math.abs(y) <= 4) return { x, y }
   }
   return undefined
 }
 
-/** Point de tangence lisible : coordonnées entières, pente entière ou demi-entière et second point entier dans le repère */
-const pointsDeTangencePossibles = (modele: Modele): Tirage[] => {
+/**
+ * Point de tangence lisible : coordonnées entières, pente entière (ou fractionnaire si `fractionnaire`)
+ * et second point entier de la tangente dans le repère
+ */
+const pointsDeTangencePossibles = (
+  modele: Modele,
+  fractionnaire: boolean,
+): Tirage[] => {
   const abscisses =
     modele.abscisses ?? Array.from({ length: 11 }, (_, n) => n - 5)
   const tirages: Tirage[] = []
@@ -295,13 +335,15 @@ const pointsDeTangencePossibles = (modele: Modele): Tirage[] => {
     const m = modele.df(a)
     if (!isFinite(y) || !isFinite(m)) continue
     if (Math.abs(y - Math.round(y)) > tolerance) continue
-    if (!estDemiEntier(m) || Math.abs(m) > 3) continue
+    const denominateur = denominateurDe(m)
+    if (denominateur === undefined || Math.abs(m) > 3) continue
+    if (denominateur > 1 !== fractionnaire) continue
     const image = Math.round(y)
-    const pente = Math.round(2 * m) / 2 + 0 // + 0 évite -0
+    const pente = Math.round(m * denominateur) / denominateur + 0 // + 0 évite -0
     if (Math.abs(image) > 3) continue
-    const b = secondPoint(a, image, pente)
+    const b = secondPoint(a, image, pente, denominateur)
     if (b === undefined) continue
-    tirages.push({ modele, a, image, pente, b })
+    tirages.push({ modele, a, image, pente, denominateur, b })
   }
   return tirages
 }
@@ -311,10 +353,10 @@ const memeDroite = (t1: Tirage, t2: Tirage) =>
   t1.pente === t2.pente &&
   t1.image - t1.pente * t1.a === t2.image - t2.pente * t2.a
 
-const ecriturePente = (pente: number) =>
-  Number.isInteger(pente)
+const ecriturePente = (pente: number, denominateur: number) =>
+  denominateur === 1
     ? texNombre(pente)
-    : `${pente < 0 ? '-' : ''}\\dfrac{${Math.abs(2 * pente)}}{2}`
+    : `${pente < 0 ? '-' : ''}\\dfrac{${Math.abs(Math.round(pente * denominateur))}}{${denominateur}}`
 
 const fractionPente = (dy: number, dx: number) => `\\dfrac{${dy}}{${dx}}`
 
@@ -365,7 +407,13 @@ export default class LireNombreDeriveGraphiquement extends Exercice {
       '1 : Une tangente\n2 : Deux tangentes\n3 : Trois tangentes',
     ]
     this.sup = '10'
+    this.besoinFormulaire3Numerique = [
+      'Nombre dérivé',
+      2,
+      '1 : Entier\n2 : Fractionnaire',
+    ]
     this.sup2 = 1
+    this.sup3 = 1
   }
 
   nouvelleVersion() {
@@ -378,7 +426,8 @@ export default class LireNombreDeriveGraphiquement extends Exercice {
       nbQuestions: this.nbQuestions,
     }).map(Number)
     const nbTangentes = Math.min(Math.max(Number(this.sup2) || 1, 1), 3)
-    const compatibles = famillesAvecPlusieursTangentes[nbTangentes]
+    const fractionnaire = Number(this.sup3) === 2
+    const compatibles = famillesCompatibles(nbTangentes, fractionnaire)
     const listeTypes = combinaisonListes(types, this.nbQuestions).map((type) =>
       compatibles.includes(type) ? type : choice(compatibles),
     )
@@ -393,7 +442,10 @@ export default class LireNombreDeriveGraphiquement extends Exercice {
     const nbEssais = nbTangentes === 1 ? 100 : 100 * exigences.length
 
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < nbEssais; cpt++) {
-      const possibles = pointsDeTangencePossibles(familles[listeTypes[i] - 1]())
+      const possibles = pointsDeTangencePossibles(
+        familles[listeTypes[i] - 1](fractionnaire),
+        fractionnaire,
+      )
       if (possibles.length === 0) continue
       // Le premier tirage est le seul quand il n'y a qu'une tangente : il ne dépend pas du nombre de tangentes.
       // Les tangentes suivantes sont prises à au moins deux unités des précédentes pour rester lisibles.
@@ -582,7 +634,7 @@ export default class LireNombreDeriveGraphiquement extends Exercice {
         const { a, image, pente, b } = t
         const dx = b.x - a
         const dy = b.y - image
-        const reponse = ecriturePente(pente)
+        const reponse = ecriturePente(pente, t.denominateur)
         const deplacementVertical =
           dy === 0
             ? 'sans monter ni descendre'
@@ -591,7 +643,7 @@ export default class LireNombreDeriveGraphiquement extends Exercice {
           texteEnCouleur(
             `La tangente $${nom('T', k)}$ passe par $${nom('A', k)}(${a}\\,;\\,${image})$ et par le point $${nom('B', k)}(${b.x}\\,;\\,${b.y})$, de coordonnées entières.<br>
 Pour aller de $${nom('A', k)}$ à $${nom('B', k)}$, on se déplace de ${deplacement(dx, 'la droite', 'la gauche')}, ${deplacementVertical} (pointillés verts).<br>
-Le coefficient directeur de $${nom('T', k)}$ est donc $\\dfrac{y_{${nom('B', k)}}-y_{${nom('A', k)}}}{x_{${nom('B', k)}}-x_{${nom('A', k)}}}=${fractionPente(dy, dx)}$, soit $${ecriturePente(pente)}$.<br>`,
+Le coefficient directeur de $${nom('T', k)}$ est donc $\\dfrac{y_{${nom('B', k)}}-y_{${nom('A', k)}}}{x_{${nom('B', k)}}-x_{${nom('A', k)}}}=${fractionPente(dy, dx)}$, soit $${ecriturePente(pente, t.denominateur)}$.<br>`,
             bleuMathalea,
           ) + `Ainsi, $f'(${a})=${miseEnEvidence(reponse)}$.`
         )
@@ -624,11 +676,11 @@ ${dessiner(objetsEnonce)}`
         continue
       }
       if (unique) {
-        const { a, pente } = tangentes[0]
+        const { a, pente, denominateur } = tangentes[0]
         createQuestion(this, i, {
           question: `${enonce}Déterminer, par lecture graphique, $f'(${a})$.`,
           correction: `${explicationNombreDerive}${resolution(tangentes[0], 0)}<br>${dessiner(objetsCorrection)}`,
-          answer: { value: ecriturePente(pente) },
+          answer: { value: ecriturePente(pente, denominateur) },
           field: {
             keyboard: KeyboardType.clavierDeBaseAvecFraction,
             texteAvant: `<br>$f'(${a})=$`,
@@ -641,13 +693,14 @@ ${dessiner(objetsEnonce)}`
           correction: `${explicationNombreDerive}${dessiner(objetsCorrection)}`,
           subQuestions: tangentes.map((t, k) => ({
             question: `$f'(${t.a})=$`,
-            answer: { value: ecriturePente(t.pente) },
+            answer: { value: ecriturePente(t.pente, t.denominateur) },
             field: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
             correction: resolution(t, k),
           })),
         })
       }
       i++
+      cpt = -1 // le budget d'essais est renouvelé pour chaque question (cpt++ le ramène à 0)
     }
     listeQuestionsToContenu(this)
   }
