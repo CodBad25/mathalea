@@ -18,7 +18,7 @@ export const amcType = 'AMCNum'
 export const uuid = '63dff'
 
 export const refs = {
-  'fr-fr': ['can5C1-06', '5N1A-flash3'],
+  'fr-fr': ['can5C1-06', '5N1A-flash2'],
   'fr-ch': [],
 }
 export default class Division5e extends ExerciceSimple {
@@ -39,7 +39,7 @@ this.optionsChampTexte = { texteAvant: '<br>' }
     this.correction = //miseEnEvidence(aRemplacer)
       `$${c} \\div ${b}=${miseEnEvidence(a)}$<br>` +
       texteEnCouleur(`Mentalement : <br>
-    On décompose $${c}$ en $${b * 10}+${c - 10 * b}=${b}\\times 10+${b}\\times ${(c - 10 * b) / b}=${b}(10+${(c - 10 * b) / b})$.<br>
+    On décompose $${c}$ en $${b * 10}+${c - 10 * b}=(${b}\\times 10)+(${b}\\times ${(c - 10 * b) / b})=${b}\\times(10+${(c - 10 * b) / b})$.<br>
         Ainsi :
      $${c} \\div ${b}=10+${(c - 10 * b) / b}=${a}$.`,
                bleuMathalea,)
