@@ -23,7 +23,7 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 import {
-  areEquivalentDoubleInequalityParts,
+  compareDoubleInequalityParts,
   type FillInTheBlankElementLike,
 } from './2F41-2'
 
@@ -109,24 +109,15 @@ function verifieEncadrements(
   for (let ligne = 0; ligne < nbLignes; ligne++) {
     const gauche = `champ${2 * ligne + 1}`
     const droite = `champ${2 * ligne + 2}`
-    lignesJustes.push(
-      areEquivalentDoubleInequalityParts({
-        inputLeft: fillInTheBlank.getPromptValue(gauche),
-        inputRight: fillInTheBlank.getPromptValue(droite),
-        expectedLeft: reponses[gauche].value,
-        expectedRight: reponses[droite].value,
-      }),
-    )
-    fillInTheBlank.setPromptState(
-      gauche,
-      lignesJustes[ligne] ? 'correct' : 'incorrect',
-      true,
-    )
-    fillInTheBlank.setPromptState(
-      droite,
-      lignesJustes[ligne] ? 'correct' : 'incorrect',
-      true,
-    )
+    const { left, right } = compareDoubleInequalityParts({
+      inputLeft: fillInTheBlank.getPromptValue(gauche),
+      inputRight: fillInTheBlank.getPromptValue(droite),
+      expectedLeft: reponses[gauche].value,
+      expectedRight: reponses[droite].value,
+    })
+    lignesJustes.push(left && right)
+    fillInTheBlank.setPromptState(gauche, left ? 'correct' : 'incorrect', true)
+    fillInTheBlank.setPromptState(droite, right ? 'correct' : 'incorrect', true)
   }
   const finalJuste = lignesJustes[nbLignes - 1]
   const etapesJustes = lignesJustes.slice(0, nbLignes - 1).every(Boolean)

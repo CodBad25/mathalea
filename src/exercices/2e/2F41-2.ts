@@ -195,7 +195,12 @@ function sameInequalityPart(
   )
 }
 
-export function areEquivalentDoubleInequalityParts({
+/**
+ * Compare séparément les deux champs d'une inégalité double, dans le sens
+ * attendu (`a < x < b`) ou dans le sens inverse (`b > x > a`).
+ * Le sens retenu est celui dans lequel au moins un des deux champs est juste.
+ */
+export function compareDoubleInequalityParts({
   inputLeft,
   inputRight,
   expectedLeft,
@@ -205,30 +210,45 @@ export function areEquivalentDoubleInequalityParts({
   inputRight: string
   expectedLeft: string
   expectedRight: string
-}): boolean {
+}): { left: boolean; right: boolean } {
   const inputLeftPart = parseLeftInequalityPart(inputLeft)
   const inputRightPart = parseRightInequalityPart(inputRight)
   const expectedLeftPart = parseLeftInequalityPart(expectedLeft)
   const expectedRightPart = parseRightInequalityPart(expectedRight)
-  if (
-    inputLeftPart == null ||
-    inputRightPart == null ||
-    expectedLeftPart == null ||
-    expectedRightPart == null
-  ) {
-    return false
+  if (expectedLeftPart == null || expectedRightPart == null) {
+    return { left: false, right: false }
   }
-  const sameOrder =
-    sameInequalityPart(inputLeftPart, expectedLeftPart) &&
-    sameInequalityPart(inputRightPart, expectedRightPart)
-  const reverseOrder =
-    inputLeftPart.operator ===
-      reverseInequalityOperator(expectedRightPart.operator) &&
-    sameBound(inputLeftPart.bound, expectedRightPart.bound) &&
-    inputRightPart.operator ===
-      reverseInequalityOperator(expectedLeftPart.operator) &&
-    sameBound(inputRightPart.bound, expectedLeftPart.bound)
-  return sameOrder || reverseOrder
+  const sameOrder = {
+    left:
+      inputLeftPart != null &&
+      sameInequalityPart(inputLeftPart, expectedLeftPart),
+    right:
+      inputRightPart != null &&
+      sameInequalityPart(inputRightPart, expectedRightPart),
+  }
+  if (sameOrder.left || sameOrder.right) return sameOrder
+  return {
+    left:
+      inputLeftPart != null &&
+      inputLeftPart.operator ===
+        reverseInequalityOperator(expectedRightPart.operator) &&
+      sameBound(inputLeftPart.bound, expectedRightPart.bound),
+    right:
+      inputRightPart != null &&
+      inputRightPart.operator ===
+        reverseInequalityOperator(expectedLeftPart.operator) &&
+      sameBound(inputRightPart.bound, expectedLeftPart.bound),
+  }
+}
+
+export function areEquivalentDoubleInequalityParts(args: {
+  inputLeft: string
+  inputRight: string
+  expectedLeft: string
+  expectedRight: string
+}): boolean {
+  const { left, right } = compareDoubleInequalityParts(args)
+  return left && right
 }
 
 function verify2F412FillInTheBlank(
@@ -953,6 +973,17 @@ Si $${inégalité}$ alors, $${Math.pow(a, 3)} ${large1 ? ' \\leqslant ' : ' < '}
           },
           { formatInteractif: 'fill-in-the-blank' },
         )
+        // Réponse courte : l'encadrement complet, comme dans les champs à remplir
+        const expression =
+          {
+            carré: 'x^2',
+            inverse: '\\dfrac{1}{x}',
+            'racine carrée': '\\sqrt{x}',
+            cube: 'x^3',
+          }[listeTypeQuestions[i]] ?? ''
+        this.listeReponsesCourtes[i] = reponseValue.champ2
+          ? `$${reponseValue.champ1.value} ${expression} ${reponseValue.champ2.value}$`
+          : `$${expression} ${reponseValue.champ1.value}$`
         // Si la question n'a jamais été posée, on en crée une autre
         this.listeQuestions[i] =
           texte +
