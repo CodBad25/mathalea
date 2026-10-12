@@ -17,6 +17,7 @@ import { fonctionComparaison } from '../interactif/comparisonFunctions'
 import { toutAUnPoint } from '../interactif/fonctionsBaremes'
 import { setMathfield, setMathfieldListener } from '../interactif/setMathfield'
 import { optionsKatex } from '../latex/Katex'
+import { texteApresChamp } from '../outils/outilString'
 import type { IExercice, ValeurNames } from '../types'
 import './ListeDeroulanteElement'
 import type ListeDeroulanteElement from './ListeDeroulanteElement'
@@ -88,7 +89,7 @@ function buildLatexEnumitemBlock(lines: string[]): string | null {
   })
 
   return [
-    '\\begin{enumerate}[label=\\alph*)]',
+    '\\begin{enumerate}[label=\\textbf{\\alph*)}]',
     ...items,
     '\\end{enumerate}',
   ].join('\n')
@@ -328,11 +329,9 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
         margin-top: 0.5em;
       }
       ol.alpha > li::marker {
+        content: counter(list-item, lower-alpha) ') ';
         color: var(--color-coopmaths-struct, #216d9a);
         font-weight: bold;
-      }
-      ol.alpha.alpha-parenthesis > li::marker {
-        content: counter(list-item, lower-alpha) ') ';
       }
       /* QCU : le shadowRoot ne reçoit ni Tailwind ni la surcharge de app.css.
          On reproduit ici le style des autres QCM du site (ex. 1A-E01-1) :
@@ -558,7 +557,7 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
         // le texte d'unité : sinon il « pendouille » après la question en mode
         // non interactif (ex. « Quel sera le capital au bout de 3 ans ? euros »).
         if (hasVisibleField && fieldOptions.texteApres) {
-          result += fieldOptions.texteApres
+          result += texteApresChamp(fieldOptions.texteApres)
         }
       } else {
         result += token
@@ -800,7 +799,7 @@ export class MultiMathfieldElement extends MathaleaCustomElement {
       }
       if (fieldOptions.texteApres) {
         const texteApres = document.createElement('span')
-        texteApres.innerHTML = fieldOptions.texteApres
+        texteApres.innerHTML = texteApresChamp(fieldOptions.texteApres)
         fieldContent.appendChild(texteApres)
       }
       const checkSpan = document.createElement('span')

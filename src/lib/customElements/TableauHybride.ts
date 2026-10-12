@@ -1,4 +1,5 @@
 import { MathfieldElement } from 'mathlive'
+import { texteApresChamp } from '../outils/outilString'
 import { context } from '../../modules/context'
 import {
   compteChampsDeReponse,
@@ -348,7 +349,9 @@ export class TableauHybrideElement extends MathaleaCustomElement {
             })
           }
           td.append(field)
-          if (cell.texteApres != null) td.append(cell.texteApres)
+          if (cell.texteApres != null) {
+            td.insertAdjacentHTML('beforeend', texteApresChamp(cell.texteApres))
+          }
           const result = document.createElement('span')
           result.dataset.resultCellId = cell.id
           result.style.marginLeft = '0.25rem'

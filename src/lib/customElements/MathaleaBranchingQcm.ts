@@ -1,4 +1,5 @@
 import { MathfieldElement } from 'mathlive'
+import { texteApresChamp } from '../outils/outilString'
 import { context } from '../../modules/context'
 import { fonctionComparaison } from '../interactif/comparisonFunctions'
 import { setMathfield, setMathfieldListener } from '../interactif/setMathfield'
@@ -269,7 +270,9 @@ export class MathaleaBranchingQcmElement extends MathaleaCustomElement {
       }
       if (selectedChoice.followup.texteApres != null) {
         const texteApres = document.createElement('span')
-        texteApres.innerHTML = selectedChoice.followup.texteApres
+        texteApres.innerHTML = texteApresChamp(
+          selectedChoice.followup.texteApres,
+        )
         fieldRow.append(texteApres)
       }
       followup.append(fieldRow)
