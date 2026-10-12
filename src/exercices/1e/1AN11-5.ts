@@ -8,8 +8,7 @@ import { texteParPosition } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { bleuMathalea, vertMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { createQuestion } from '../../lib/interactif/createQuestion'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { ecritureAlgebrique } from '../../lib/outils/ecritures'
 import {
@@ -57,9 +56,13 @@ type Modele = {
   intervalles: [number, number][]
   /** Abscisses possibles pour le point de tangence (par défaut, tous les entiers de [-5 ; 5]) */
   abscisses?: number[]
+  /** Domaine de définition et de dérivabilité, tel qu'il est écrit dans l'énoncé */
+  domaine: string
   /** Identifiant des paramètres tirés, pour ne pas poser deux fois la même question */
   cle: string
 }
+
+const deriveeSurR = 'dérivable sur $\\mathbb{R}$'
 
 const toutLIntervalle: [number, number][] = [[fenetre.xMin, fenetre.xMax]]
 
@@ -71,6 +74,7 @@ const parabole = (): Modele => {
     f: (x) => k * (x - h) ** 2 + c,
     df: (x) => 2 * k * (x - h),
     intervalles: toutLIntervalle,
+    domaine: deriveeSurR,
     cle: `parabole${k};${h};${c}`,
   }
 }
@@ -83,6 +87,7 @@ const cube = (): Modele => {
     f: (x) => k * (x - h) ** 3 + c,
     df: (x) => 3 * k * (x - h) ** 2,
     intervalles: toutLIntervalle,
+    domaine: deriveeSurR,
     cle: `cube${k};${h};${c}`,
   }
 }
@@ -97,6 +102,7 @@ const cubiqueTroisRacines = (): Modele => {
     df: (x) =>
       k * ((x - r2) * (x - r3) + (x - r1) * (x - r3) + (x - r1) * (x - r2)),
     intervalles: toutLIntervalle,
+    domaine: deriveeSurR,
     cle: `cubique${k};${r1};${r2};${r3}`,
   }
 }
@@ -109,6 +115,7 @@ const racine = (): Modele => {
     f: (x) => k * Math.sqrt(x - h) + c,
     df: (x) => k / (2 * Math.sqrt(x - h)),
     intervalles: [[h, fenetre.xMax]],
+    domaine: `définie sur $[${h}\\,;\\,+\\infty[$ et dérivable sur $]${h}\\,;\\,+\\infty[$`,
     cle: `racine${k};${h};${c}`,
   }
 }
@@ -124,6 +131,7 @@ const inverse = (): Modele => {
       [fenetre.xMin, h - 0.02],
       [h + 0.02, fenetre.xMax],
     ],
+    domaine: `définie et dérivable sur $\\mathbb{R}\\setminus\\{${h}\\}$`,
     cle: `inverse${k};${h};${c}`,
   }
 }
@@ -137,6 +145,7 @@ const exponentielle = (): Modele => {
     f: (x) => k * Math.exp(sens * (x - h)) + c,
     df: (x) => sens * k * Math.exp(sens * (x - h)),
     intervalles: toutLIntervalle,
+    domaine: deriveeSurR,
     cle: `exp${k};${sens};${h};${c}`,
   }
 }
@@ -149,6 +158,7 @@ const logarithme = (): Modele => {
     f: (x) => k * Math.log(x - h) + c,
     df: (x) => k / (x - h),
     intervalles: [[h + 0.005, fenetre.xMax]],
+    domaine: `définie et dérivable sur $]${h}\\,;\\,+\\infty[$`,
     cle: `ln${k};${h};${c}`,
   }
 }
@@ -163,6 +173,7 @@ const sinusoide = (): Modele => {
     f: (x) => amplitude * Math.cos(omega * (x - h)) + c,
     df: (x) => -amplitude * omega * Math.sin(omega * (x - h)),
     intervalles: toutLIntervalle,
+    domaine: deriveeSurR,
     cle: `cos${amplitude};${demiPeriode};${h};${c}`,
   }
 }
@@ -221,6 +232,7 @@ const courbeQuelconque = (): Modele => {
     },
     intervalles: toutLIntervalle,
     abscisses: xs.slice(1, -1),
+    domaine: deriveeSurR,
     cle: `quelconque${ys.join(',')};${pentes.join(',')}`,
   }
 }
@@ -237,6 +249,17 @@ const familles: (() => Modele)[] = [
   sinusoide,
   courbeQuelconque,
 ]
+
+/**
+ * Numéros des familles (dans l'ordre de `familles`) qui offrent assez de points de tangence lisibles
+ * pour tracer deux ou trois tangentes. Les autres (exponentielle, logarithme, et racine carrée ou
+ * périodique pour trois tangentes) n'ont qu'un ou deux tels points ; elles sont remplacées.
+ */
+const famillesAvecPlusieursTangentes: Record<number, number[]> = {
+  1: familles.map((_, k) => k + 1),
+  2: [1, 2, 3, 4, 5, 8, 9],
+  3: [1, 2, 3, 5, 9],
+}
 
 type Tirage = {
   modele: Modele
@@ -282,6 +305,11 @@ const pointsDeTangencePossibles = (modele: Modele): Tirage[] => {
   }
   return tirages
 }
+
+/** Deux tirages définissent la même tangente (même pente, même ordonnée à l'origine) */
+const memeDroite = (t1: Tirage, t2: Tirage) =>
+  t1.pente === t2.pente &&
+  t1.image - t1.pente * t1.a === t2.image - t2.pente * t2.a
 
 const ecriturePente = (pente: number) =>
   Number.isInteger(pente)
@@ -331,7 +359,13 @@ export default class LireNombreDeriveGraphiquement extends Exercice {
         '10 : Mélange',
       ].join('\n'),
     ]
+    this.besoinFormulaire2Numerique = [
+      'Nombre de tangentes',
+      3,
+      '1 : Une tangente\n2 : Deux tangentes\n3 : Trois tangentes',
+    ]
     this.sup = '10'
+    this.sup2 = 1
   }
 
   nouvelleVersion() {
@@ -343,15 +377,54 @@ export default class LireNombreDeriveGraphiquement extends Exercice {
       defaut: familles.length + 1,
       nbQuestions: this.nbQuestions,
     }).map(Number)
-    const listeTypes = combinaisonListes(types, this.nbQuestions)
+    const nbTangentes = Math.min(Math.max(Number(this.sup2) || 1, 1), 3)
+    const compatibles = famillesAvecPlusieursTangentes[nbTangentes]
+    const listeTypes = combinaisonListes(types, this.nbQuestions).map((type) =>
+      compatibles.includes(type) ? type : choice(compatibles),
+    )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 100; cpt++) {
+    // Avec plusieurs tangentes, on exige d'abord des pentes toutes différentes (donc des réponses différentes) ;
+    // si aucune courbe tirée ne s'y prête (fonction cube, par exemple), on relâche peu à peu cette exigence.
+    const exigences: ((t: Tirage, p: Tirage) => boolean)[][] = [
+      [(t, p) => t.pente !== p.pente, (t, p) => Math.abs(t.a - p.a) >= 2],
+      [(t, p) => !memeDroite(t, p), (t, p) => Math.abs(t.a - p.a) >= 2],
+      [(t, p) => !memeDroite(t, p)],
+    ]
+    const nbEssais = nbTangentes === 1 ? 100 : 100 * exigences.length
+
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < nbEssais; cpt++) {
       const possibles = pointsDeTangencePossibles(familles[listeTypes[i] - 1]())
       if (possibles.length === 0) continue
-      const { modele, a, image, pente, b } = choice(possibles)
+      // Le premier tirage est le seul quand il n'y a qu'une tangente : il ne dépend pas du nombre de tangentes.
+      // Les tangentes suivantes sont prises à au moins deux unités des précédentes pour rester lisibles.
+      const tirages = [choice(possibles)]
+      const criteres = exigences[Math.floor(cpt / 100)] ?? exigences[0]
+      while (tirages.length < nbTangentes) {
+        const autres = possibles.filter((p) =>
+          tirages.every((t) => criteres.every((critere) => critere(t, p))),
+        )
+        if (autres.length === 0) break
+        tirages.push(choice(autres))
+      }
+      if (tirages.length < nbTangentes) continue
+      // Les points A et B de toutes les tangentes sont deux à deux distincts, pour que les étiquettes ne se superposent pas
+      const points = new Set(
+        tirages.flatMap((t) => [`${t.a};${t.image}`, `${t.b.x};${t.b.y}`]),
+      )
+      if (points.size < 2 * nbTangentes) continue
+      tirages.sort((t1, t2) => t1.a - t2.a)
+      const { modele } = tirages[0]
       const { f, df } = modele
-      const tangente = (x: number) => pente * (x - a) + image
-      if (Math.abs(df(a) - pente) > tolerance) continue
+      const tangentes = tirages.map((t) => ({
+        ...t,
+        fonction: (x: number) => t.pente * (x - t.a) + t.image,
+      }))
+      if (tangentes.some((t) => Math.abs(df(t.a) - t.pente) > tolerance))
+        continue
+
+      /** Nom d'un objet de la figure : indexé quand il y a plusieurs tangentes */
+      const nom = (lettre: string, k: number) =>
+        nbTangentes === 1 ? lettre : `${lettre}_${k + 1}`
 
       const r = repere({
         ...fenetre,
@@ -378,12 +451,6 @@ export default class LireNombreDeriveGraphiquement extends Exercice {
           step: 0.05,
         }),
       )
-      const droiteTangente = courbe(tangente, {
-        repere: r,
-        ...fenetre,
-        color: 'red',
-        epaisseur: 1.5,
-      })
       const marque = (x: number, y: number) => {
         const p = tracePoint(pointAbstrait(x, y), 'black')
         p.taille = 6
@@ -391,51 +458,65 @@ export default class LireNombreDeriveGraphiquement extends Exercice {
         return p
       }
       /** Étiquette d'un point de la tangente, placée du côté opposé à la courbe */
-      const etiquette = (nom: string, x: number, y: number) => {
-        const cote = -coteDeLaCourbe(f, tangente, x)
-        const norme = Math.sqrt(1 + pente ** 2)
+      const etiquette = (
+        nomPoint: string,
+        x: number,
+        y: number,
+        t: (typeof tangentes)[number],
+      ) => {
+        const cote = -coteDeLaCourbe(f, t.fonction, x)
+        const norme = Math.sqrt(1 + t.pente ** 2)
         return texteParPosition(
-          `$${nom}$`,
-          x - (cote * pente * 0.5) / norme,
+          `$${nomPoint}$`,
+          x - (cote * t.pente * 0.5) / norme,
           y + (cote * 0.5) / norme,
           0,
           'black',
           1,
         )
       }
-      // Le nom de la tangente est placé sur une portion visible de T, le plus loin possible de A et de B
-      const positionsNomTangente = [1, -1].flatMap((sens) =>
-        Array.from({ length: 100 }, (_, n) => ({
-          sens,
-          x: (sens > 0 ? fenetre.xMax : fenetre.xMin) - sens * (0.5 + n * 0.1),
-        })).filter(({ x }) => Math.abs(tangente(x)) <= fenetre.yMax - 0.8),
-      )
-      const ecartAuxPoints = (x: number) =>
-        Math.min(2, Math.abs(x - a), Math.abs(x - b.x))
-      const xT = positionsNomTangente.reduce(
-        (meilleure, position) =>
-          ecartAuxPoints(position.x) > ecartAuxPoints(meilleure.x)
-            ? position
-            : meilleure,
-        positionsNomTangente[0],
-      )
-      const nomTangente = texteParPosition(
-        '$T$',
-        xT.x + xT.sens * 0.3,
-        tangente(xT.x) + (pente * xT.sens >= 0 ? 0.3 : -0.3),
-        0,
-        'red',
-        1,
-      )
-
-      const objetsEnonce: ObjetMathalea2D[] = [
-        r,
-        ...courbes,
-        droiteTangente,
-        marque(a, image),
-        etiquette('A', a, image),
-        nomTangente,
-      ]
+      const abscissesDesPoints = tangentes.flatMap((t) => [t.a, t.b.x])
+      const objetsEnonce: ObjetMathalea2D[] = [r, ...courbes]
+      tangentes.forEach((t, k) => {
+        const { a, image, pente } = t
+        objetsEnonce.push(
+          courbe(t.fonction, {
+            repere: r,
+            ...fenetre,
+            color: 'red',
+            epaisseur: 1.5,
+          }),
+          marque(a, image),
+          etiquette(nom('A', k), a, image, t),
+        )
+        // Le nom de la tangente est placé sur une portion visible de T, le plus loin possible de A et de B
+        const positionsNomTangente = [1, -1].flatMap((sens) =>
+          Array.from({ length: 100 }, (_, n) => ({
+            sens,
+            x:
+              (sens > 0 ? fenetre.xMax : fenetre.xMin) - sens * (0.5 + n * 0.1),
+          })).filter(({ x }) => Math.abs(t.fonction(x)) <= fenetre.yMax - 0.8),
+        )
+        const ecartAuxPoints = (x: number) =>
+          Math.min(2, ...abscissesDesPoints.map((xp) => Math.abs(x - xp)))
+        const xT = positionsNomTangente.reduce(
+          (meilleure, position) =>
+            ecartAuxPoints(position.x) > ecartAuxPoints(meilleure.x)
+              ? position
+              : meilleure,
+          positionsNomTangente[0],
+        )
+        objetsEnonce.push(
+          texteParPosition(
+            `$${nom('T', k)}$`,
+            xT.x + xT.sens * 0.3,
+            t.fonction(xT.x) + (pente * xT.sens >= 0 ? 0.3 : -0.3),
+            0,
+            'red',
+            1,
+          ),
+        )
+      })
       const dessiner = (objets: ObjetMathalea2D[]) =>
         mathalea2d(
           Object.assign(
@@ -446,86 +527,127 @@ export default class LireNombreDeriveGraphiquement extends Exercice {
           objets,
         )
 
-      // Triangle de pente en pointillés : un déplacement horizontal puis un déplacement vertical, de A à B
-      const dx = b.x - a
-      const dy = b.y - image
-      const horizontal = segment(a, image, b.x, image, vertMathalea)
-      const pointilles = [horizontal]
-      // Pente non nulle : le déplacement horizontal est écrit à l'extérieur du triangle ; sinon, du côté de la courbe,
-      // les étiquettes A et B étant du côté opposé
-      const ecartLabelHorizontal =
-        dy === 0 ? 0.45 * coteDeLaCourbe(f, tangente, a) : dy > 0 ? -0.4 : 0.4
-      const objetsCorrection = [
-        ...objetsEnonce,
-        horizontal,
-        marque(b.x, b.y),
-        etiquette('B', b.x, b.y),
-        texteParPosition(
-          `$${ecritureAlgebrique(dx)}$`,
-          (a + b.x) / 2,
-          image + ecartLabelHorizontal,
-          0,
-          vertMathalea,
-          1,
-        ),
-        texteParPosition(
-          `$${dy === 0 ? 0 : ecritureAlgebrique(dy)}$`,
-          b.x + Math.sign(dx) * 0.6,
-          dy === 0 ? image + ecartLabelHorizontal : (image + b.y) / 2,
-          0,
-          vertMathalea,
-          1,
-        ),
-      ]
-      if (dy !== 0) {
-        const vertical = segment(b.x, image, b.x, b.y, vertMathalea)
-        pointilles.push(vertical)
-        objetsCorrection.push(vertical)
-      }
-      for (const s of pointilles) {
-        s.pointilles = 2
-        s.epaisseur = 3
-      }
-
-      const reponse = ecriturePente(pente)
-      let texte = `On a tracé ci-dessous la courbe $\\mathcal{C}_f$ (en bleu) d'une fonction $f$ et la tangente $T$ (en rouge) à $\\mathcal{C}_f$ au point $A$ d'abscisse $${a}$.<br>
-${dessiner(objetsEnonce)}
-Déterminer, par lecture graphique, $f'(${a})$.`
-      if (this.interactif) {
-        texte += ajouteChampTexteMathLive(
-          this,
-          i,
-          KeyboardType.clavierDeBaseAvecFraction,
-          { texteAvant: `<br>$f'(${a})=$`, texteApres: '.' },
+      // Triangles de pente en pointillés : un déplacement horizontal puis un déplacement vertical, de A à B
+      const objetsCorrection = [...objetsEnonce]
+      tangentes.forEach((t, k) => {
+        const { a, image, b } = t
+        const dx = b.x - a
+        const dy = b.y - image
+        const horizontal = segment(a, image, b.x, image, vertMathalea)
+        const pointilles = [horizontal]
+        // Pente non nulle : le déplacement horizontal est écrit à l'extérieur du triangle ; sinon, du côté de la courbe,
+        // les étiquettes A et B étant du côté opposé
+        const ecartLabelHorizontal =
+          dy === 0
+            ? 0.45 * coteDeLaCourbe(f, t.fonction, a)
+            : dy > 0
+              ? -0.4
+              : 0.4
+        objetsCorrection.push(
+          horizontal,
+          marque(b.x, b.y),
+          etiquette(nom('B', k), b.x, b.y, t),
+          texteParPosition(
+            `$${ecritureAlgebrique(dx)}$`,
+            (a + b.x) / 2,
+            image + ecartLabelHorizontal,
+            0,
+            vertMathalea,
+            1,
+          ),
+          texteParPosition(
+            `$${dy === 0 ? 0 : ecritureAlgebrique(dy)}$`,
+            b.x + Math.sign(dx) * 0.6,
+            dy === 0 ? image + ecartLabelHorizontal : (image + b.y) / 2,
+            0,
+            vertMathalea,
+            1,
+          ),
         )
-      } else {
-        texte += '<br>'
-      }
-      handleAnswers(this, i, { reponse: { value: reponse } })
+        if (dy !== 0) {
+          const vertical = segment(b.x, image, b.x, b.y, vertMathalea)
+          pointilles.push(vertical)
+          objetsCorrection.push(vertical)
+        }
+        for (const s of pointilles) {
+          s.pointilles = 2
+          s.epaisseur = 3
+        }
+      })
 
-      let texteCorr = texteEnCouleur(
-        `Le nombre dérivé $f'(${a})$ est le coefficient directeur de la tangente $T$ à $\\mathcal{C}_f$ au point $A$ d'abscisse $${a}$.<br>`,
-        bleuMathalea,
-      )
       const deplacement = (valeur: number, positif: string, negatif: string) =>
         `$${Math.abs(valeur)}$ ${Math.abs(valeur) > 1 ? 'unités' : 'unité'} vers ${valeur > 0 ? positif : negatif}`
-      const deplacementVertical =
-        dy === 0
-          ? 'sans monter ni descendre'
-          : `puis de ${deplacement(dy, 'le haut', 'le bas')}`
-      texteCorr += texteEnCouleur(
-        `La tangente $T$ passe par $A(${a}\\,;\\,${image})$ et par le point $B(${b.x}\\,;\\,${b.y})$, de coordonnées entières.<br>
-Pour aller de $A$ à $B$, on se déplace de ${deplacement(dx, 'la droite', 'la gauche')}, ${deplacementVertical} (pointillés verts).<br>
-Le coefficient directeur de $T$ est donc $\\dfrac{y_B-y_A}{x_B-x_A}=${fractionPente(dy, dx)}$, soit $${ecriturePente(pente)}$.<br>`,
+      /** Raisonnement et réponse pour la tangente d'indice `k` */
+      const resolution = (t: (typeof tangentes)[number], k: number) => {
+        const { a, image, pente, b } = t
+        const dx = b.x - a
+        const dy = b.y - image
+        const reponse = ecriturePente(pente)
+        const deplacementVertical =
+          dy === 0
+            ? 'sans monter ni descendre'
+            : `puis de ${deplacement(dy, 'le haut', 'le bas')}`
+        return (
+          texteEnCouleur(
+            `La tangente $${nom('T', k)}$ passe par $${nom('A', k)}(${a}\\,;\\,${image})$ et par le point $${nom('B', k)}(${b.x}\\,;\\,${b.y})$, de coordonnées entières.<br>
+Pour aller de $${nom('A', k)}$ à $${nom('B', k)}$, on se déplace de ${deplacement(dx, 'la droite', 'la gauche')}, ${deplacementVertical} (pointillés verts).<br>
+Le coefficient directeur de $${nom('T', k)}$ est donc $\\dfrac{y_{${nom('B', k)}}-y_{${nom('A', k)}}}{x_{${nom('B', k)}}-x_{${nom('A', k)}}}=${fractionPente(dy, dx)}$, soit $${ecriturePente(pente)}$.<br>`,
+            bleuMathalea,
+          ) + `Ainsi, $f'(${a})=${miseEnEvidence(reponse)}$.`
+        )
+      }
+
+      const noms = (lettre: string) =>
+        tangentes.map((_, k) => `$${nom(lettre, k)}$`)
+      const enumeration = (elements: string[]) =>
+        elements.length === 1
+          ? elements[0]
+          : `${elements.slice(0, -1).join(', ')} et ${elements[elements.length - 1]}`
+      const unique = nbTangentes === 1
+      const enonce = `On a tracé ci-dessous la courbe $\\mathcal{C}_f$ (en bleu) d'une fonction $f$ ${modele.domaine} et ${
+        unique
+          ? `la tangente $T$ (en rouge) à $\\mathcal{C}_f$ au point $A$ d'abscisse $${tangentes[0].a}$`
+          : `les tangentes ${enumeration(noms('T'))} (en rouge) à $\\mathcal{C}_f$ aux points ${enumeration(noms('A'))} d'abscisses respectives ${enumeration(tangentes.map((t) => `$${t.a}$`))}`
+      }.<br>
+${unique ? 'La tangente passe' : 'Chaque tangente passe'} par des points de coordonnées entières.<br>
+${dessiner(objetsEnonce)}`
+      const explicationNombreDerive = texteEnCouleur(
+        unique
+          ? `Le nombre dérivé $f'(${tangentes[0].a})$ est le coefficient directeur de la tangente $T$ à $\\mathcal{C}_f$ au point $A$ d'abscisse $${tangentes[0].a}$.<br>`
+          : `Un nombre dérivé $f'(a)$ est le coefficient directeur de la tangente à $\\mathcal{C}_f$ au point d'abscisse $a$.<br>`,
         bleuMathalea,
       )
-      texteCorr += `Ainsi, $f'(${a})=${miseEnEvidence(reponse)}$.<br>${dessiner(objetsCorrection)}`
 
-      if (this.questionJamaisPosee(i, modele.cle, a)) {
-        this.listeQuestions[i] = texte
-        this.listeCorrections[i] = texteCorr
-        i++
+      if (
+        !this.questionJamaisPosee(i, modele.cle, ...tangentes.map((t) => t.a))
+      ) {
+        continue
       }
+      if (unique) {
+        const { a, pente } = tangentes[0]
+        createQuestion(this, i, {
+          question: `${enonce}Déterminer, par lecture graphique, $f'(${a})$.`,
+          correction: `${explicationNombreDerive}${resolution(tangentes[0], 0)}<br>${dessiner(objetsCorrection)}`,
+          answer: { value: ecriturePente(pente) },
+          field: {
+            keyboard: KeyboardType.clavierDeBaseAvecFraction,
+            texteAvant: `<br>$f'(${a})=$`,
+            texteApres: '.',
+          },
+        })
+      } else {
+        createQuestion(this, i, {
+          question: `${enonce}Déterminer, par lecture graphique, les nombres dérivés suivants.`,
+          correction: `${explicationNombreDerive}${dessiner(objetsCorrection)}`,
+          subQuestions: tangentes.map((t, k) => ({
+            question: `$f'(${t.a})=$`,
+            answer: { value: ecriturePente(t.pente) },
+            field: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
+            correction: resolution(t, k),
+          })),
+        })
+      }
+      i++
     }
     listeQuestionsToContenu(this)
   }
