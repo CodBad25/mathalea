@@ -1,14 +1,20 @@
-import { choice } from '../../lib/outils/arrayOutils'
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
   texteEnCouleurEtGras,
 } from '../../lib/outils/embellissements'
+import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceQcmACourt from '../ExerciceQcmACourt'
 
 export const dateDePublication = '22/07/2025'
-export const uuid = '28d47'
+export const dateDeModifImportante = '12/10/2026'
+
+export const uuid = '73f3e'
 /**
  * @author Claude (ia) et un peu Gilles Mora
  *
@@ -23,7 +29,7 @@ export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Comparer des proportions (sous différentes formes)'
 
-export default class ElectionPourcentages extends ExerciceQcmA {
+export default class ElectionPourcentages extends ExerciceQcmACourt {
   versionOriginale: () => void = () => {
     this.enonce =
       "Lors d'une élection, le quart des électeurs a voté pour X, $20\\,\\%$ a voté pour Y, un tiers a voté pour Z, et le reste a voté pour T.<br>Le candidat ayant recueilli le moins de votes est :"
@@ -349,6 +355,62 @@ Le candidat ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est donc 
           : ['le candidat X', 'le candidat T', 'le candidat Y', 'le candidat Z']
         break
       }
+    }
+  }
+
+  /**
+   * Version sans QCM : l'élève choisit le candidat dans une liste déroulante.
+   * La case « Version QCM » (`sup3`) réactive le QCM d'origine.
+   */
+  nouvelleVersion() {
+    if (this.sup3) {
+      super.nouvelleVersion()
+      return
+    }
+    if (context.isAmc) {
+      // L'export AMC reste un QCM : on court-circuite ExerciceQcmACourt
+      ExerciceQcmA.prototype.nouvelleVersion.call(this)
+      return
+    }
+
+    this.consigne = ''
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 30; cpt++) {
+      if (this.sup && this.versionOriginale != null) this.versionOriginale()
+      else this.versionAleatoire()
+
+      const bonneReponse = this.reponses[0]
+      if (this.questionJamaisPosee(i, this.enonce, bonneReponse)) {
+        const choices = [
+          { label: 'Choisir un candidat', value: '' },
+          ...shuffle([...this.reponses]).map((reponse) => ({
+            label: reponse,
+            value: reponse,
+          })),
+        ]
+
+        // En non interactif, pas de liste déroulante : on reformule la phrase
+        // en vraie question plutôt que de laisser « … est : » sans réponse.
+        const enonceAffiche = this.interactif
+          ? this.enonce
+          : this.enonce.replace(
+              /Le candidat ayant recueilli (le moins|le plus) de votes est :$/,
+              'Quel est le candidat ayant recueilli $1 de votes ?',
+            )
+
+        this.listeQuestions[i] =
+          enonceAffiche +
+          (this.interactif ? `<br>${choixDeroulant(this, i, { choices })}` : '')
+        this.listeCorrections[i] = this.correction ?? ''
+
+        handleAnswers(
+          this,
+          i,
+          { reponse: { value: bonneReponse } },
+          { formatInteractif: 'liste-deroulante' },
+        )
+        i++
+      }
+      if (this.sup) break
     }
   }
 
