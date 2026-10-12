@@ -22,7 +22,7 @@ export const titre = 'Associer une courbe et sa tangente à une fonction'
 export const dateDePublication = '12/10/2026'
 export const uuid = '3792f'
 export const refs = {
-  'fr-fr': ['1AN11-4'],
+  'fr-fr': [],
   'fr-ch': [],
 }
 export const interactifReady = true
@@ -34,6 +34,9 @@ export const amcType = 'qcmMono'
  * $k\times g(x)+c$ ($g$ étant une fonction de référence), il faut retrouver celle qui convient :
  * - un distracteur a la bonne pente mais pas la bonne image (lecture de $f(a)$) ;
  * - un distracteur a la bonne image mais pas le bon nombre dérivé (lecture de $f'(a)$).
+ *
+ * Par défaut, la courbe n'est tracée qu'au voisinage du point de tangence pour qu'on ne puisse pas
+ * deviner la fonction en lisant d'autres images (par exemple $f(0)$) ; une option permet de la tracer en entier.
  * @author Rémi Angot
  */
 
@@ -139,6 +142,10 @@ const fonctionsDeReference: FonctionDeReference[] = [
 ]
 
 const fenetre = 5 // le repère est [-5 ; 5] × [-5 ; 5]
+// Par défaut, la courbe n'est tracée qu'au voisinage du point de tangence : on ne peut pas y lire d'autres
+// images (par exemple f(0)) qui permettraient d'éliminer des propositions sans utiliser le nombre dérivé.
+const voisinageCourbe = 0.75
+const voisinageTangente = 1 // la tangente passe alors par des points à coordonnées entières
 
 const expression = (fonction: FonctionDeReference, k: number, c: number) =>
   `f(x)=${fonction.terme(k)}${c === 0 ? '' : ecritureAlgebrique(c)}`
@@ -171,9 +178,18 @@ export default class AssocierCourbeTangenteFonction extends ExerciceQcmA {
       axeXStyle: '->',
       axeYStyle: '->',
     })
+    const toutTracer = Boolean(this.sup5)
+    const intervallesTraces = toutTracer
+      ? fonction.intervalles
+      : fonction.intervalles
+          .map(([xMin, xMax]): [number, number] => [
+            Math.max(xMin, a - voisinageCourbe),
+            Math.min(xMax, a + voisinageCourbe),
+          ])
+          .filter(([xMin, xMax]) => xMin < xMax)
     const objets = intervallesDansLaFenetre(
       f,
-      fonction.intervalles,
+      intervallesTraces,
       -fenetre,
       fenetre,
     ).map(([xMin, xMax]) =>
@@ -190,8 +206,8 @@ export default class AssocierCourbeTangenteFonction extends ExerciceQcmA {
     )
     const droiteTangente = courbe(tangente, {
       repere: r,
-      xMin: -fenetre,
-      xMax: fenetre,
+      xMin: toutTracer ? -fenetre : a - voisinageTangente,
+      xMax: toutTracer ? fenetre : a + voisinageTangente,
       yMin: -fenetre,
       yMax: fenetre,
       color: 'red',
@@ -201,9 +217,13 @@ export default class AssocierCourbeTangenteFonction extends ExerciceQcmA {
     pointTangence.taille = 6
     pointTangence.epaisseur = 2
 
-    // Le nom de la tangente est placé près de son extrémité visible, du côté du bord droit
-    let xT = fenetre - 0.5
-    while (Math.abs(tangente(xT)) > fenetre - 0.8 && xT > -fenetre) xT -= 0.1
+    // Le nom de la tangente est placé près de son extrémité droite, tant qu'elle reste dans le repère
+    let xT = toutTracer ? fenetre - 0.5 : a + voisinageTangente
+    while (
+      Math.abs(tangente(xT)) > fenetre - 0.8 &&
+      xT > (toutTracer ? -fenetre : a)
+    )
+      xT -= 0.1
     const nomTangente = texteParPosition(
       '$T$',
       xT + 0.3,
@@ -248,7 +268,7 @@ export default class AssocierCourbeTangenteFonction extends ExerciceQcmA {
       `Pour cette fonction, $${calculDerivee(kDistracteur)}=${valeurDerivee(kDistracteur)}$, or $f'(${a})=${texNombre(nombreDerive)}$ : elle ne convient pas.`,
     ]
 
-    this.enonce = `On a tracé ci-dessous la courbe $\\mathcal{C}_f$ (en bleu) d'une fonction $f$ définie sur ${fonction.domaine}, ainsi que la tangente $T$ (en rouge) à $\\mathcal{C}_f$ au point d'abscisse $${a}$.<br>
+    this.enonce = `On a tracé, ci-dessous, une partie de la courbe $\\mathcal{C}_f$ (en bleu) d'une fonction $f$ définie sur ${fonction.domaine}, ainsi que la tangente $T$ (en rouge) à $\\mathcal{C}_f$ au point d'abscisse $${a}$.<br>
 ${graphique}
 Une seule des trois fonctions ci-dessous a pour courbe représentative $\\mathcal{C}_f$. Laquelle ?`
     this.correction = `Par lecture graphique, $f(${a})=${texNombre(image)}$ et le coefficient directeur de la tangente $T$ est $${texNombre(nombreDerive)}$, donc $f'(${a})=${texNombre(nombreDerive)}$.<br>On calcule ces deux valeurs pour chacune des fonctions proposées.<br>`
@@ -303,6 +323,9 @@ Une seule des trois fonctions ci-dessous a pour courbe représentative $\\mathca
       ].join('\n'),
     ]
     this.sup3 = '6'
+    // Décochée, la courbe n'est tracée qu'au voisinage du point de tangence
+    this.besoinFormulaire5CaseACocher = ['Tracer toute la courbe', false]
+    this.sup5 = false
     this.versionAleatoire()
   }
 }
