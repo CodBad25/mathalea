@@ -6,7 +6,7 @@ MathALÉA peut être intégré dans Moodle/ELEA principalement avec deux formats
 
 L'export Gift permet d'importer des questions dans un test Moodle. Il convient lorsque l'objectif est d'utiliser le moteur de quiz Moodle.
 
-Deux variantes sont proposées, sous deux onglets du bouton Moodle.
+Deux variantes sont proposées dans l'onglet Gift du bouton Moodle.
 
 ### Gift (Quiz)
 
@@ -24,6 +24,27 @@ Deux limites tiennent au fonctionnement de Moodle :
 
 - Moodle n'accepte qu'un jeu figé de notes partielles (100 %, 90 %, 83,33 %, 80 %, 75 %…). Le score de la course est arrondi à la valeur la plus proche : pour un nombre de questions qui ne tombe pas sur cette liste (7 questions par exemple), la note est approchée.
 - La course est chronométrée par la page de l'élève, pas par Moodle : le temps mis est enregistré avec la copie, mais quitter la page en cours de course revient à la recommencer.
+
+## Marque-page magique
+
+Le marque-page magique, disponible dans l'onglet du même nom du bouton Moodle,
+permet d'ajouter directement les exercices sélectionnés dans un test Moodle/ELEA,
+dans leur ordre de sélection. Chaque exercice devient une question dont le nom
+dans la banque contient sa référence et son titre.
+
+Dans Moodle, ouvrir le sélecteur « Ajouter une question », puis activer le
+marque-page. Le menu « Type d'aléatoire » propose deux modes :
+
+- Par défaut, l'énoncé change à chaque nouvelle tentative du test et diffère pour
+  chaque élève. Il reste identique lors d'une actualisation de la page pendant la
+  tentative.
+- L'énoncé change à chaque actualisation de la page, comme dans l'ancien
+  marque-page.
+
+Sélectionner les exercices, puis appuyer sur « Ajouter ». Les questions sont
+ajoutées à la fin du test. Le réglage d'aléatoire s'applique à toutes les questions
+de cet ajout. Le marque-page permet aussi de créer une activité Scorm depuis le
+sélecteur d'ajout d'activité.
 
 ## Scorm
 

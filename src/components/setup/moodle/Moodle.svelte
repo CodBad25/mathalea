@@ -855,7 +855,8 @@
                 class="text-coopmaths-corpus dark:text-coopmathsdark-corpus text-lg md:text-xl"
               >
                 Le marque-page magique permet de créer des activités MathALÉA
-                (au format scorm) en un clic.<br />
+                (au format scorm) ou des questions dans un test Moodle/ELEA en
+                un clic.<br />
                 <center
                   ><img
                     src="./assets/images/moodle-bookmarklet-demo.gif"
@@ -873,7 +874,7 @@
               page :<br />
               <!-- svelte-ignore a11y-invalid-attribute -->
               <a
-                href="javascript:var MathAleaBookmarkletScript = document.createElement('script');MathAleaBookmarkletScript.type='text/javascript';MathAleaBookmarkletScript.src='https://coopmaths.fr/alea/assets/externalJs/moodle-bookmarklet.js?v=2';document.body.appendChild(MathAleaBookmarkletScript);void(0);"
+                href="javascript:var MathAleaBookmarkletScript = document.createElement('script');MathAleaBookmarkletScript.type='text/javascript';MathAleaBookmarkletScript.src='https://coopmaths.fr/alea/assets/externalJs/moodle-bookmarklet.js?v=3';document.body.appendChild(MathAleaBookmarkletScript);void(0);"
                 style="color:blue;text-decoration:underline;"
                 >Activité MathALÉA</a
               >
@@ -940,6 +941,16 @@
                     <li>
                       Une fois les exercices choisis, appuyez sur le bouton
                       "Ajouter" pour les insérer dans votre quiz (à la fin).
+                    </li>
+                    <li>
+                      Par défaut, l'énoncé change à chaque nouvelle tentative du
+                      test et diffère pour chaque élève. Le menu « Type
+                      d'aléatoire » permet aussi de choisir un changement à
+                      chaque actualisation de la page.
+                    </li>
+                    <li>
+                      Le nom de chaque question dans la banque comprend la
+                      référence et le titre de l'exercice.
                     </li>
                   </ul>
                 </li>

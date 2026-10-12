@@ -48,7 +48,13 @@
     popupWidthCss.innerHTML = '.chooserdialogue-mod_quiz-questionchooser { width: 90% !important; }'
     document.head.appendChild(popupWidthCss)
     popup.querySelector('.moodle-dialogue-hd').textContent = 'Ajouter une question de type MathALÉA'
-    popup.querySelector('.moodle-dialogue-bd').innerHTML = '<iframe src="https://coopmaths.fr/alea/?recorder=moodle" style="width:100%;height:calc(100vh - 200px);"></iframe>'
+    popup.querySelector('.moodle-dialogue-bd').innerHTML = `
+      <label for="mathalea-bookmarklet-random">Type d'aléatoire</label>
+      <select id="mathalea-bookmarklet-random">
+        <option value="moodle">L'énoncé change à chaque nouvelle tentative du test Moodle et diffère pour chaque élève.</option>
+        <option value="alea">L'énoncé change à chaque actualisation de la page.</option>
+      </select>
+      <iframe src="https://coopmaths.fr/alea/?recorder=moodle" style="width:100%;height:calc(100vh - 250px);"></iframe>`
   }
 
   let extractFormData = (url) => { // modedit.php?add=scorm&type=&course=1024&section=0&return=0&sr=0
@@ -293,13 +299,15 @@
   if (isQuestionChooser) {
     createExercices = (exercices) => {
       return () => {
+        // Lire le réglage une seule fois pour toutes les questions de l'ajout.
+        const randomType = popup.querySelector('#mathalea-bookmarklet-random').value;
         return new Promise((resolve, reject) => { // Créer un exercice
           let i = 0
           let p = Promise.resolve();
           const actions = [];
 
           for (const exercice of exercices) {
-            actions.push(createExercice(exercice));
+            actions.push(createExercice(exercice, randomType));
           }
 
           for (const action of actions) {
@@ -314,7 +322,7 @@
       };
     };
 
-    createExercice = (exercice, datas) => {
+    createExercice = (exercice, randomType) => {
       return () => {
         return new Promise((resolve, reject) => {
           return extractFormData(
@@ -344,11 +352,14 @@
             // ////////////////////////////// //
             //    Création de la question     //
             // ////////////////////////////// //
-            datas.name = exercice.titre;
+            datas.name = exercice.id ? `${exercice.id} - ${exercice.titre}` : exercice.titre;
+            // Sans attribut graine, moodle.js utilise l'identifiant de tentative
+            // Moodle : l'énoncé reste identique lors d'une actualisation.
+            const seedAttribute = randomType === 'alea' ? ' graine="-1"' : '';
             datas['questiontext[text]'] = `<script src\="https\://coopmaths.fr/alea/assets/externalJs/moodle.js" type\="module"></script>
-        <mathalea-moodle v="4" url\="${exercice.url}" graine\="-1"/>`
+        <mathalea-moodle v="4" url\="${exercice.url}"${seedAttribute}/>`
             datas['generalfeedback[text]'] = `<script src\="https\://coopmaths.fr/alea/assets/externalJs/moodle.js" type\="module"></script>
-        <mathalea-moodle v="4" url\="${exercice.url}" graine\="-1" correction />`
+        <mathalea-moodle v="4" url\="${exercice.url}"${seedAttribute} correction />`
 
             fetch('/question/bank/editquestion/question.php', {
               body: new URLSearchParams(datas),
