@@ -1,4 +1,6 @@
 <script lang="ts" module>
+  import type { SectionKey } from './overlaySections'
+
   /** Contrôle flottant, positionné en % du conteneur de l'aperçu */
   export interface OverlayWidget {
     /**
@@ -34,6 +36,12 @@
     top: number
     /** Marge de page où placer les contrôles des questions */
     side?: 'left' | 'right'
+    /**
+     * Sections (énoncé/correction d'un exercice) auxquelles le contrôle se
+     * rattache : il n'est affiché que lorsque l'une d'elles est survolée
+     * (`activeSection`). Absent : contrôle commun à la fiche, toujours affiché.
+     */
+    sections?: SectionKey[]
   }
 
   /** Mise en page courante des questions d'un exercice (lue dans le code) */
@@ -222,6 +230,11 @@
      * code d'un exercice, lignes pour écrire).
      */
     canMode?: boolean
+    /**
+     * Section survolée dans l'aperçu (voir `locateSectionAnchor`) : seuls
+     * ses contrôles sont affichés, en plus de ceux communs à la fiche.
+     */
+    activeSection?: SectionKey | null
     onChangeQuestionCount: (num: number, delta: number) => void
     onDeleteExercise: (num: number) => void
     /** Duplique l'exercice : la copie se place juste après lui */
@@ -316,6 +329,7 @@
     mergedExercises = [],
     mergeExercisesEnabled = true,
     canMode = false,
+    activeSection = null,
     onChangeQuestionCount,
     onDeleteExercise,
     onDuplicateExercise,
@@ -1110,6 +1124,12 @@
 
 <div class="pointer-events-none absolute inset-0 z-10 text-xs text-gray-700">
   {#each widgets as widget, i (i)}
+    <!-- contrôle d'un autre exercice que celui survolé : masqué (mais
+         toujours atteignable au clavier, voir .typst-pill-idle) ; ceux de
+         l'exercice survolé sont pleinement visibles -->
+    {@const idle =
+      widget.sections != null &&
+      (activeSection == null || !widget.sections.includes(activeSection))}
     {#if widget.kind === 'tasks' && widget.target != null}
       {@const target = widget.target}
       <!-- num 0 : la liste des corrections du mode « Course aux nombres »,
@@ -1133,6 +1153,8 @@
       <!-- contrôles des questions, dans la marge la plus proche -->
       <div
         class="pointer-events-auto absolute flex -translate-y-1/2 flex-col typst-pill typst-pill-box"
+        class:typst-pill-idle={idle}
+        class:typst-pill-current={widget.sections != null && !idle}
         style="top: {widget.top}%; {widget.side === 'right'
           ? 'right: 0.3%'
           : 'left: 0.3%'}"
@@ -1610,6 +1632,8 @@
            réglages, nouvelles données, nombre de questions, suppression -->
       <div
         class="pointer-events-auto absolute flex -translate-x-full -translate-y-1/2 items-center gap-0.5 typst-pill typst-pill-round px-1"
+        class:typst-pill-idle={idle}
+        class:typst-pill-current={widget.sections != null && !idle}
         class:typst-pill-force-visible={(openInsertion?.space === 'exo' &&
           openInsertion.num === insertGapNum) ||
           openWritingLines === widget.num ||
@@ -1793,6 +1817,8 @@
            sujets B, C..., seule la nouvelle graine est locale à la version. -->
       <div
         class="pointer-events-auto absolute flex -translate-x-full -translate-y-1/2 items-center gap-0.5 typst-pill typst-pill-round px-1"
+        class:typst-pill-idle={idle}
+        class:typst-pill-current={widget.sections != null && !idle}
         style="top: {widget.top}%; left: {widget.left - 0.3}%;"
         data-testid="typst-overlay-version-exo"
       >
@@ -1820,6 +1846,8 @@
       {@const hasColumnBreak = corrInsertions.includes(COLUMN_BREAK_SNIPPET)}
       <div
         class="pointer-events-auto absolute flex -translate-x-full -translate-y-1/2 items-center gap-0.5 typst-pill typst-pill-round px-1"
+        class:typst-pill-idle={idle}
+        class:typst-pill-current={widget.sections != null && !idle}
         class:typst-pill-force-visible={openInsertion?.space === 'corr' &&
           openInsertion.num === widget.num}
         class:z-20={openInsertion?.space === 'corr' &&
@@ -1931,6 +1959,8 @@
       {@const figAlign = figureAlignValues[widget.num] ?? 'center'}
       <div
         class="pointer-events-auto absolute flex -translate-x-full -translate-y-full items-center gap-0.5 typst-pill typst-pill-round px-1"
+        class:typst-pill-idle={idle}
+        class:typst-pill-current={widget.sections != null && !idle}
         style="left: {widget.left}%; top: {widget.top}%;"
         data-testid="typst-overlay-figure"
       >
@@ -2011,6 +2041,8 @@
         !hasFollowingExo
           ? 'translate-y-2'
           : '-translate-y-[135%]'} items-center gap-0.5 typst-pill typst-pill-round px-1"
+        class:typst-pill-idle={idle}
+        class:typst-pill-current={widget.sections != null && !idle}
         class:typst-pill-force-visible={openInsertion?.space === 'exo' &&
           openInsertion.num === widget.num}
         class:z-20={openInsertion?.space === 'exo' &&
@@ -2135,8 +2167,17 @@
   }
   .typst-pill:hover,
   .typst-pill:focus-within,
+  .typst-pill-current,
   .typst-pill-force-visible {
     opacity: 1;
+  }
+  /* Contrôle d'un exercice non survolé : invisible et transparent aux clics
+     (on clique l'aperçu dessous), mais reste dans le DOM pour la navigation
+     au clavier, qui le fait réapparaître (:focus-within). Un panneau ouvert
+     (.typst-pill-force-visible) le garde affiché. */
+  .typst-pill-idle:not(:focus-within):not(.typst-pill-force-visible) {
+    opacity: 0;
+    pointer-events: none;
   }
   .typst-pill-round {
     border-radius: 999px;

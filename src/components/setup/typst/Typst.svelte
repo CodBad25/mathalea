@@ -115,6 +115,13 @@
     type PreviewPageGeometry,
   } from '../shared/typstPreview'
   import { typstLanguage } from './editor/typstLanguage'
+  import {
+    anchorSections,
+    locateSectionAnchor,
+    pageIndexAt,
+    sectionKeyOf,
+    type SectionKey,
+  } from './overlaySections'
   import { applyCodePatch, createCodePatch } from './codePatch'
   import {
     hasSeenTypstTour,
@@ -989,6 +996,8 @@
     anchorList: TypstAnchor[],
     pages: PreviewPageGeometry[],
     viewBox: { width: number; height: number },
+    columns: number,
+    exerciseCount: number,
   ): OverlayWidget[] {
     if (viewBox.width <= 0 || viewBox.height <= 0) return []
     const widgets: OverlayWidget[] = []
@@ -1023,13 +1032,70 @@
         // les contrôles des questions vont dans la marge la plus proche :
         // à gauche pour la colonne de gauche, à droite sinon
         side: anchor.x < page.width / 2 ? 'left' : 'right',
+        sections: anchorSections(
+          anchor,
+          anchorList,
+          pages,
+          columns,
+          exerciseCount,
+        ),
       })
     }
     return widgets
   }
   const overlayWidgets = $derived(
-    computeOverlayWidgets(anchors, previewPages, previewViewBox),
+    computeOverlayWidgets(
+      anchors,
+      previewPages,
+      previewViewBox,
+      documentColumns,
+      exercises.length,
+    ),
   )
+  /**
+   * Section (énoncé ou correction d'un exercice) sous le pointeur : la
+   * palette n'affiche que les contrôles de celle-ci, pour que les barres de
+   * plusieurs exercices (voisins, ou côte à côte en multicolonne) ne se
+   * superposent pas.
+   */
+  let hoveredSection: SectionKey | null = $state(null)
+
+  /** Convertit la position du pointeur en point de l'aperçu (page 1-based, pt) */
+  function previewPointFromEvent(
+    event: MouseEvent,
+  ): { page: number; x: number; y: number } | null {
+    if (previewViewBox.width <= 0 || previewViewBox.height <= 0) return null
+    const container = event.currentTarget as HTMLElement
+    const rect = container.getBoundingClientRect()
+    if (rect.width <= 0 || rect.height <= 0) return null
+    const x = ((event.clientX - rect.left) / rect.width) * previewViewBox.width
+    const y = ((event.clientY - rect.top) / rect.height) * previewViewBox.height
+    const pageIndex = pageIndexAt(previewPages, y)
+    if (pageIndex === -1) return null
+    return { page: pageIndex + 1, x, y: y - previewPages[pageIndex].y }
+  }
+
+  function updateHoveredSection(event: PointerEvent) {
+    // pointeur sur un contrôle de la palette (barre, panneau ouvert) : on
+    // garde la section courante, même si la barre déborde sur la section
+    // voisine, sans quoi elle disparaîtrait sous le pointeur
+    const target = event.target as HTMLElement
+    if (target.closest('.typst-pill, .typst-panel') != null) return
+    const point = previewPointFromEvent(event)
+    const anchor =
+      point == null
+        ? null
+        : locateSectionAnchor(
+            anchors,
+            previewPages,
+            documentColumns,
+            point.page,
+            point.x,
+            point.y,
+          )
+    const key = anchor == null ? null : sectionKeyOf(anchor)
+    if (key !== hoveredSection) hoveredSection = key
+  }
 
   /**
    * Relit dans le code les données de la palette : valeurs
@@ -3457,60 +3523,26 @@
       target.closest('button, input, select')
     )
       return
-    if (previewViewBox.width <= 0 || previewViewBox.height <= 0) return
-    const container = event.currentTarget as HTMLElement
-    const rect = container.getBoundingClientRect()
-    if (rect.width <= 0 || rect.height <= 0) return
-    const clickX =
-      ((event.clientX - rect.left) / rect.width) * previewViewBox.width
-    const clickY =
-      ((event.clientY - rect.top) / rect.height) * previewViewBox.height
-
-    let pageIndex = previewPages.findIndex(
-      (page) => clickY >= page.y && clickY <= page.y + page.height,
-    )
-    if (pageIndex === -1) {
-      // clic dans l'espacement entre deux pages : la page la plus proche
-      let bestDistance = Infinity
-      previewPages.forEach((page, index) => {
-        const distance = Math.min(
-          Math.abs(clickY - page.y),
-          Math.abs(clickY - (page.y + page.height)),
-        )
-        if (distance < bestDistance) {
-          bestDistance = distance
-          pageIndex = index
-        }
-      })
-    }
-    if (pageIndex === -1) return
-    const pageNum = pageIndex + 1
-    const localY = clickY - previewPages[pageIndex].y
-
+    const point = previewPointFromEvent(event)
+    if (point == null) return
     const sectionAnchors = anchors.filter(
       (anchor) => anchor.kind === 'exo' || anchor.kind === 'corr',
     )
-    let candidate: TypstAnchor | null = null
-    for (const anchor of sectionAnchors) {
-      const isBeforeClick =
-        anchor.page < pageNum || (anchor.page === pageNum && anchor.y <= localY)
-      if (!isBeforeClick) continue
-      if (
-        candidate == null ||
-        anchor.page > candidate.page ||
-        (anchor.page === candidate.page && anchor.y > candidate.y)
-      ) {
-        candidate = anchor
-      }
-    }
-    // clic au-dessus du premier repère de la page (ex. dans l'en-tête) :
-    // on vise plutôt le premier exercice qui suit
-    if (candidate == null) {
-      candidate =
-        sectionAnchors.find((anchor) => anchor.page >= pageNum) ??
-        sectionAnchors[0] ??
-        null
-    }
+    // dernier repère `exo`/`corr` avant le clic dans l'ordre de lecture
+    // (colonnes comprises) ; clic au-dessus du premier repère de la fiche
+    // (ex. dans l'en-tête) : on vise plutôt le premier exercice qui suit
+    const candidate =
+      locateSectionAnchor(
+        sectionAnchors,
+        previewPages,
+        documentColumns,
+        point.page,
+        point.x,
+        point.y,
+      ) ??
+      sectionAnchors.find((anchor) => anchor.page >= point.page) ??
+      sectionAnchors[0] ??
+      null
     if (candidate == null) return
 
     const line = findExerciseSourceLine(
@@ -5296,12 +5328,16 @@
                 class="typst-svg-container relative mx-auto"
                 title="Double-cliquez sur un exercice pour éditer son code"
                 ondblclick={jumpToSourceFromClick}
+                onpointermove={updateHoveredSection}
+                onpointerdown={updateHoveredSection}
+                onpointerleave={() => (hoveredSection = null)}
               >
                 <!-- eslint-disable-next-line svelte/no-at-html-tags -->
                 {@html svgContent}
                 {#if showOverlay && overlayWidgets.length > 0}
                   <TypstLayoutOverlay
                     widgets={overlayWidgets}
+                    activeSection={hoveredSection}
                     layoutValues={tasksLayoutValues}
                     insertions={insertionValues}
                     insertionsCorrection={insertionCorrectionValues}

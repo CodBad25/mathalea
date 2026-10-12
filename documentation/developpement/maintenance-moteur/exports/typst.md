@@ -100,7 +100,7 @@ Côté interface (`Typst.svelte`) :
 Un double-clic sur l'aperçu (`jumpToSourceFromClick` dans `Typst.svelte`) bascule en « Côte à côte » (si on était en « Aperçu ») et amène le curseur sur l'exercice ou la correction affiché au point cliqué :
 
 1. le clic est converti en coordonnées SVG (mêmes unités que les repères de la palette de mise en page, voir `computeOverlayWidgets`) ;
-2. la page cliquée est retrouvée dans `previewPages`, puis le dernier repère `exo`/`corr` (parmi ceux publiés par `buildTypstDocument`, voir la section « Palette de mise en page ») rencontré au-dessus du point cliqué détermine l'exercice ;
+2. la page cliquée est retrouvée dans `previewPages`, puis le dernier repère `exo`/`corr` (parmi ceux publiés par `buildTypstDocument`, voir la section « Palette de mise en page ») rencontré avant le point cliqué dans l'ordre de lecture (page, colonne, ordonnée — `locateSectionAnchor` dans `overlaySections.ts`) détermine l'exercice ; au-dessus du premier exercice (en-tête), c'est le premier exercice qui suit ;
 3. `findExerciseSourceLine` cherche la ligne où le contenu est réellement éditable. Pour un énoncé, c'est le titre `// ----- Exercice N -----` de sa définition (`#let exN = exo.with(...)`) : le repère `#mathalea-anchor("exo", N)` ne précède que l'appel `#exN()` de la section « Énoncés », où il n'y a rien à modifier. À défaut de définition (mode fusionné, où le contenu suit le repère) — et toujours pour une correction, qui n'a pas de définition séparée — la ligne visée est celle du repère `#mathalea-anchor("exo"|"corr", N)` ;
 4. `revealPosition` (dans `editor/typstEditorSetup.ts`) y place le curseur, en dépliant d'abord tout bloc replié qui la contiendrait (`foldedRanges`/`unfoldEffect`).
 
@@ -119,6 +119,34 @@ Le bouton « Mise en page » de la barre d'outils affiche des contrôles par-des
 - en haut de la page de garde (quand un modèle est choisi) : édition de l'intitulé, de la session, de la matière, de la durée, de la mention de bas de page et des consignes — même mécanisme que le titre de la fiche, voir [Page de garde](#page-de-garde) ;
 - sur le pied de la première page (si affiché) : édition de son texte — voir [En-tête et pied de page](#en-tête-et-pied-de-page) ;
 - à côté de l'étiquette « Sujet A/B... » de l'en-tête (fiche à plusieurs versions) : icône masquant/affichant cette étiquette (`hideVersionLabel`) — voir [En-tête et pied de page](#en-tête-et-pied-de-page).
+
+**Seuls les contrôles de l'exercice survolé sont affichés**, pour que les
+barres de plusieurs exercices (voisins, ou côte à côte en document
+multicolonne) ne se superposent jamais :
+
+- au mouvement du pointeur sur l'aperçu (et au toucher), `Typst.svelte`
+  détermine la section survolée — énoncé `exo-N` ou correction `corr-N` —
+  avec `locateSectionAnchor` (`overlaySections.ts`) : dernier repère
+  `exo`/`version-exo`/`corr` rencontré avant le pointeur dans l'ordre de
+  lecture (page, puis colonne, puis ordonnée). Le haut d'une page appartient
+  donc à l'exercice commencé sur la précédente, et le haut d'une colonne à
+  celui commencé en bas de la colonne précédente. Tant que le pointeur est sur
+  une barre ou un panneau de la palette, la section courante est conservée
+  (une barre peut déborder sur la section voisine) ;
+- chaque contrôle porte les sections auxquelles il se rattache
+  (`OverlayWidget.sections`, calculé par `anchorSections`) : barre et liste de
+  questions de l'exercice, barre et liste de questions de sa correction,
+  figures (rattachées à la section qui les contient), barre entre deux
+  exercices (rattachée aux deux). Les contrôles communs à la fiche (en-tête,
+  page de garde, pied de page, QR-code, ligne « Course aux nombres », barre
+  « Ajouter un exercice » après le dernier exercice) n'en ont pas et restent
+  toujours affichés, à demi transparents ;
+- ceux de la section survolée sont pleinement opaques (`.typst-pill-current`)
+  ; les autres sont invisibles et transparents aux clics
+  (`.typst-pill-idle`), mais restent dans le DOM : la navigation au clavier
+  les fait réapparaître (`:focus-within`), un panneau ouvert
+  (`.typst-pill-force-visible`) garde sa barre affichée, et la visite guidée
+  les rend visibles quand elle les cible (`tour.css`).
 
 Fonctionnement :
 
@@ -838,10 +866,10 @@ Un jeton rejeté (`401`) est effacé du localStorage et le champ de saisie du je
 
 ### Fichiers touchés
 
-| Fichier | Rôle dans cette fonctionnalité |
-| --- | --- |
-| `buildTypstDocument.ts` | `ficheUrl` exportée (était privée) pour être réutilisée hors génération du document |
-| `Typst.svelte` | `ficheUrlForVersion(version)` : recalcule l'URL longue à la volée ; props `ficheTitle` et `onGetFicheLongUrl` passées à `TypstLayoutOverlay` |
+| Fichier                     | Rôle dans cette fonctionnalité                                                                                                                                                            |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `buildTypstDocument.ts`     | `ficheUrl` exportée (était privée) pour être réutilisée hors génération du document                                                                                                       |
+| `Typst.svelte`              | `ficheUrlForVersion(version)` : recalcule l'URL longue à la volée ; props `ficheTitle` et `onGetFicheLongUrl` passées à `TypstLayoutOverlay`                                              |
 | `TypstLayoutOverlay.svelte` | Clé localStorage `mathalea-edurl-token`, appel `fetch` vers le relais, composition du titre, UI du popover (bouton, spinner, formulaire de jeton, « Oublier le jeton », message d'erreur) |
 
 ## Impression recto-verso (démarrage sur page impaire)
@@ -889,6 +917,7 @@ Deux précautions, sans lesquelles driver.js reste bloqué à attendre une cible
 | `src/components/setup/typst/Typst.svelte`                             | La vue : barre d'outils, éditeur, aperçu, exports                                    |
 | `src/lib/onboarding/typstTour.ts`                                     | Visite guidée de la vue (driver.js)                                                  |
 | `src/components/setup/typst/TypstLayoutOverlay.svelte`                | Palette de mise en page dessinée par-dessus l'aperçu                                 |
+| `src/components/setup/typst/overlaySections.ts`                       | Section (exercice/correction) survolée et sections de chaque contrôle de la palette  |
 | `src/components/setup/typst/addExercise/TypstAddExerciseModal.svelte` | Modale « Ajouter un exercice » (navigation dans les référentiels)                    |
 | `src/components/setup/typst/addExercise/TypstExercisePreview.svelte`  | Aperçu d'un exercice dans cette modale (réglages et ajout)                           |
 | `src/components/setup/typst/buildTypstDocument.ts`                    | Génère le code Typst complet (en-tête, exercices, corrections)                       |
