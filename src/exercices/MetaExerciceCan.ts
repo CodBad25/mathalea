@@ -4,6 +4,7 @@ import {
   mathaleaCustomElementsRegistry,
 } from '../lib/customElements/MathaleaCustomElement'
 import { MetaCustomElement } from '../lib/customElements/MetaCustomElement'
+import { composeQuestionContext } from '../lib/components/questionContext'
 import { handleAnswers } from '../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../lib/interactif/qcm'
 import { buildSimpleVersionQcm } from '../lib/interactif/qcmBuilder'
@@ -255,6 +256,31 @@ function remapCustomElementQuestionIds(
     )
   }
   return html
+}
+
+/** Réhéberger aussi les composants du contexte, avant de composer l'énoncé. */
+function composeHostedQuestion(
+  question: Exercice,
+  destinationIndex: number,
+  questionHtml: string,
+): string {
+  const introduction = remapCustomElementQuestionIds(
+    question.introduction ?? '',
+    'apigeom-figure',
+    question.numeroExercice,
+    question.numeroExercice,
+    destinationIndex,
+  ).replace(/<apigeom-figure\b[^>]*>/g, (tag) =>
+    tag.replace(
+      /(\sindex=)(["']?)(\d+)\2/g,
+      (_match, prefix: string, quote: string) =>
+        `${prefix}${quote}${destinationIndex}${quote}`,
+    ),
+  )
+  return composeQuestionContext(
+    { consigne: question.consigne, introduction },
+    questionHtml,
+  )
 }
 
 function remapClickFigures(
@@ -667,8 +693,6 @@ export default class MetaExercice extends Exercice {
           //* ************ Question Exo simple *************//
           if (Question.listeQuestions.length === 0) {
             // On est en présence d'un exo simple
-            const consigne =
-              Question.consigne === '' ? '' : `${Question.consigne}<br>`
             this.listeCorrections[indexQuestion] = Question.correction ?? ''
             const formatChampTexte = String(Question.formatChampTexte ?? '')
             const optionsChampTexte = Question.optionsChampTexte ?? {}
@@ -698,7 +722,11 @@ export default class MetaExercice extends Exercice {
               Question.question = qcmData.question
               Question.correction = qcmData.correction
               this.listeCorrections[indexQuestion] = qcmData.correction
-              this.listeQuestions[indexQuestion] = consigne + qcmData.question
+              this.listeQuestions[indexQuestion] = composeHostedQuestion(
+                Question,
+                indexQuestion,
+                qcmData.question,
+              )
               this.autoCorrection[indexQuestion] =
                 Question.autoCorrection[indexQuestion]
               indexQuestion++
@@ -713,8 +741,9 @@ export default class MetaExercice extends Exercice {
             if (qcmAutoCorrection != null) {
               this.autoCorrection[indexQuestion] =
                 cloneQcmAutoCorrection(qcmAutoCorrection)
-              this.listeQuestions[indexQuestion] =
-                consigne + String(Question.question ?? '')
+              this.listeQuestions[indexQuestion] = String(
+                Question.question ?? '',
+              )
             } else if (estQuestionCustom(Question)) {
               // Avant `customElementFormat` : faute de `formatInteractif`,
               // `getSimpleQuestionCustomElementFormat()` retombe sur
@@ -745,13 +774,11 @@ export default class MetaExercice extends Exercice {
                     '\\ldots',
                   )
                 : enonce
-              this.listeQuestions[indexQuestion] =
-                consigne +
-                this.brancheQuestionCustom(
-                  Question,
-                  indexQuestion,
-                  questionHtml,
-                )
+              this.listeQuestions[indexQuestion] = this.brancheQuestionCustom(
+                Question,
+                indexQuestion,
+                questionHtml,
+              )
             } else if (customElementFormat != null) {
               const tag = customElementFormat
               if (tag === 'apigeom-figure') {
@@ -779,7 +806,7 @@ export default class MetaExercice extends Exercice {
                       formatChampTexte,
                       optionsChampTexte,
                     })
-              this.listeQuestions[indexQuestion] = consigne + questionHtml
+              this.listeQuestions[indexQuestion] = questionHtml
               if (tag === MetaCustomElement.elementTag) {
                 this.autoCorrection[indexQuestion] = {
                   ...(Question.autoCorrection[0] ?? {}),
@@ -808,7 +835,6 @@ export default class MetaExercice extends Exercice {
             } else {
               // * ***************** Question MathLive *****************//
               this.listeQuestions[indexQuestion] =
-                consigne +
                 remapDomReadyPayloadQuestionIds(
                   String(Question.question ?? ''),
                   this.numeroExercice ?? 0,
@@ -1012,11 +1038,7 @@ export default class MetaExercice extends Exercice {
                 indexQuestion,
               )
 
-              this.listeQuestions[indexQuestion] =
-                (Question.introduction != null ? Question.introduction : '') +
-                Question.consigne +
-                '<br><br>' +
-                questionHtml
+              this.listeQuestions[indexQuestion] = questionHtml
               if (
                 tag === 'clique-figure' ||
                 tag === 'apigeom-figure' ||
@@ -1132,18 +1154,19 @@ export default class MetaExercice extends Exercice {
               Question.canReponseACompleter != null
                 ? Question.canReponseACompleter
                 : monQcm.texte
-            const consigne =
-              Question.consigne === null || Question.consigne === ''
-                ? ''
-                : `${Question.consigne}<br>`
             const objetReponse = this.autoCorrection[indexQuestion]
             const enonce = 'enonce' in objetReponse ? objetReponse.enonce : ''
-            this.listeQuestions[indexQuestion] =
-              consigne + enonce + monQcm.texte
+            this.listeQuestions[indexQuestion] = enonce + monQcm.texte
             if (this.listeCorrections[indexQuestion] == null)
               this.listeCorrections[indexQuestion] = monQcm.texteCorr
           }
 
+          // Ajouter le contexte après les branches qui reconstruisent l'énoncé.
+          this.listeQuestions[indexQuestion] = composeHostedQuestion(
+            Question,
+            indexQuestion,
+            this.listeQuestions[indexQuestion],
+          )
           indexQuestion++
           break
         }

@@ -1,5 +1,7 @@
 <script lang="ts">
   import seedrandom from 'seedrandom'
+  import { composeQuestionContext } from '../../../lib/components/questionContext'
+  import QuestionContext from './QuestionContext.svelte'
   import { onDestroy, onMount, tick } from 'svelte'
   import {
     buildExercisesList,
@@ -248,6 +250,10 @@
     // Mettre à jour uniquement les tableaux plats pour la question k
     questions[k] = newQuestion
     corrections[k] = newCorrection
+    consignes[k] = mathaleaFormatExercice(composeQuestionContext(tempExercice))
+    consignesCorrections[k] = mathaleaFormatExercice(
+      tempExercice.consigneCorrection ?? '',
+    )
 
     // Réinitialiser l'état uniquement pour la question k
     isDisabledButton[k] = false
@@ -257,6 +263,8 @@
     // Forcer la réactivité Svelte
     questions = [...questions]
     corrections = [...corrections]
+    consignes = [...consignes]
+    consignesCorrections = [...consignesCorrections]
     isDisabledButton = [...isDisabledButton]
     isCorrectionVisible = [...isCorrectionVisible]
     resultsByQuestion = [...resultsByQuestion]
@@ -288,6 +296,7 @@
     currentIndex = k
     onIndexChange({ currentIndex: k })
     await tick()
+    mathaleaRenderDiv(containerRef)
     const exo = exercices[indiceExercice[k]]
     const questionEvent = new CustomEvent('questionDisplay', {
       detail: {
@@ -322,6 +331,13 @@
 </script>
 
 <div bind:this={containerRef}>
+  {#if typeof questions[currentIndex] === 'string'}
+    <QuestionContext
+      content={consignes[currentIndex] ?? ''}
+      exerciseIndex={indiceExercice[currentIndex]}
+      zoom={Number($globalOptions.z) || 1}
+    />
+  {/if}
   {#each questions as question, k (k + '_' + question)}
     <div class="flex flex-col">
       <div class={$isMenuNeededForQuestions ? '' : 'hidden'}>
@@ -396,10 +412,6 @@
               style="font-size: {($globalOptions.z || 1).toString()}rem"
             >
               <div class="flex flex-col my-2 py-2">
-                <div class="text-coopmaths-corpus pl-2">
-                  <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-                  {@html consignes[k]}
-                </div>
                 <div class="text-coopmaths-corpus pl-2">
                   <!-- eslint-disable-next-line svelte/no-at-html-tags -->
                   {@html question}
