@@ -700,6 +700,7 @@ ${dessiner(objetsEnonce)}`
         })
       }
       i++
+      cpt = -1 // le budget d'essais est renouvelé pour chaque question (cpt++ le ramène à 0)
     }
     listeQuestionsToContenu(this)
   }
