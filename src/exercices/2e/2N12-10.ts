@@ -421,9 +421,11 @@ export default class TableauIntervallesInegalites extends Exercice {
         }
       },
     )
+    // Sur smartphone, le tableau est plus large que l'écran : on le rend
+    // défilable horizontalement au lieu de le laisser déborder de la page.
     this.listeQuestions[0] = renderTable(content, this.interactif).replace(
       '<tableau-mathlive ',
-      `<tableau-mathlive verify-callback-name="${callbackName}" `,
+      `<tableau-mathlive verify-callback-name="${callbackName}" style="display:block;max-width:100%;overflow-x:auto" `,
     )
     handleAnswers(
       this,
