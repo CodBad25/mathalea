@@ -1148,6 +1148,34 @@ export function exerciseTitleLine(
   return `#let exo-${num}-titre = ${title ? `[${htmlToTypst(title)}]` : 'none'}`
 }
 
+/**
+ * Points de chaque exercice quand la fiche les affiche
+ * (`showExercisePoints`), `null` sinon. Ce sont ceux du barème de la page de
+ * garde tant qu'il suit la fiche un pour un ; à défaut, `defaultPoints`
+ * (un point par question, comme le barème proposé).
+ */
+export function exercisePoints(
+  defaultPoints: number[],
+  options: Pick<
+    TypstDocumentOptions,
+    'showExercisePoints' | 'mergeExercises' | 'canMode' | 'coverPage'
+  >,
+): number[] | null {
+  if (!options.showExercisePoints || options.mergeExercises || options.canMode)
+    return null
+  const bareme = options.coverPage?.bareme ?? []
+  return defaultPoints.map((points, k) =>
+    bareme.length === defaultPoints.length && Number.isFinite(bareme[k])
+      ? bareme[k]
+      : points,
+  )
+}
+
+/** Un point par question : points d'un exercice hors barème réglé */
+function defaultExercisePoints(exercises: TypstExerciseInput[]): number[] {
+  return exercises.map((exercise) => Math.max(1, exercise.questions.length))
+}
+
 export function harvestCarryOver(code: string): TypstCarryOver {
   const versions = [...code.matchAll(/^\/\/ mathalea:sujet\((\d+)\)/gm)]
     .map((match) => Number(match[1]))
@@ -1529,6 +1557,18 @@ export interface TypstDocumentOptions {
   /** Affiche l'intitulé MathALÉA après « Exercice N ». */
   showExerciseTitles: boolean
   /**
+   * Affiche les points de chaque exercice (« …… / 4 pts » au bout de sa
+   * ligne de titre) et la note globale dans la ligne d'en-tête. Les points
+   * sont ceux du barème de la page de garde (`coverPage.bareme`). Sans effet
+   * en mode fusionné ou course aux nombres.
+   */
+  showExercisePoints?: boolean
+  /**
+   * Place des points d'un exercice : au bout de sa ligne de titre
+   * (`right`, défaut) ou sous le titre, à gauche (`below`).
+   */
+  exercisePointsPosition?: 'right' | 'below'
+  /**
    * Ajoute au coin de chaque exercice un QR-code pointant vers l'exercice
    * seul sur MathALÉA (comme la sortie LaTeX). Sans effet en mode fusionné.
    */
@@ -1617,6 +1657,21 @@ export interface TypstDocumentOptions {
    * ces parties enchaînent sur la page suivante.
    */
   oddPageStarts: boolean
+  /**
+   * « Plusieurs sujets sur une page » : sujets (A, B...) à la suite sur une
+   * même page quand ils y tiennent,
+   * séparés par un trait pointillé ; un sujet qui ne tient pas dans la place
+   * restante commence une nouvelle page. Les corrections passent toutes à la
+   * fin. Sans effet avec une page de garde.
+   */
+  chainSubjects: boolean
+  /**
+   * Nombre d'exemplaires de chaque sujet sur la page (1 par défaut). Un
+   * exemplaire supplémentaire n'est ajouté que s'il tient dans la place
+   * restante de la page ; les sujets sont alors enchaînés comme avec
+   * `chainSubjects`.
+   */
+  copiesPerPage: number
   /** Page de garde placée en tête de chaque sujet (`aucune` par défaut) */
   coverPage: TypstCoverOptions
   /**
@@ -2002,6 +2057,8 @@ export const defaultTypstDocumentOptions: TypstDocumentOptions = {
   questionsGutter: 1.2,
   showExerciseRefs: false,
   showExerciseTitles: false,
+  showExercisePoints: false,
+  exercisePointsPosition: 'right',
   showCorrections: true,
   columns: 1,
   pageFormat: 'a4',
@@ -2017,6 +2074,8 @@ export const defaultTypstDocumentOptions: TypstDocumentOptions = {
   nbVersions: 1,
   hideVersionLabel: false,
   oddPageStarts: true,
+  chainSubjects: false,
+  copiesPerPage: 1,
   answerLines: 0,
   answerLinesStyle: 'pointilles',
   answerLinesPosition: 'endOfExercise',
@@ -2088,6 +2147,100 @@ export function sharedFigureNumber(
     return end - start === primaryCount ? figNum - start : undefined
   }
   return undefined
+}
+
+/**
+ * Mise en page des sujets enchaînés (`chainSubjects`, `copiesPerPage`) :
+ * chaque sujet est mesuré dans la largeur du corps de page ; les sujets
+ * d'une même page s'en partagent la hauteur à parts égales, séparées par un
+ * trait pointillé (pour découper la feuille). Un sujet qui ne tient pas dans
+ * sa part commence une nouvelle page ; un exemplaire supplémentaire
+ * (`copie: true`) qui ne tient pas est omis. Les hauteurs sont mesurées, pas
+ * lues sur la position courante : la mise en page converge en une passe.
+ */
+export const MATHALEA_CHAIN_HELPER = `#let mathalea-enchainement(sujets, corps: (190mm, 267mm)) = context {
+  let (largeur, hauteur) = corps
+  let ecart = 1.2em.to-absolute()
+  let trait = line(length: 100%, stroke: (paint: luma(150), thickness: 0.6pt, dash: "dashed"))
+  // groupes de sujets par page : k sujets se partagent la page en k parts
+  // égales, un sujet n'entre dans un groupe que si tous y tiennent encore
+  let pages = ()
+  let groupe = ()
+  for (sujet, copie) in sujets {
+    let h = measure(block(width: largeur, sujet)).height
+    let essai = groupe + ((sujet, h),)
+    let part = (hauteur - 1pt) / essai.len()
+    if groupe.len() == 0 or essai.all(((_, hs)) => hs + ecart <= part) {
+      groupe = essai
+    } else if not copie {
+      pages.push(groupe)
+      groupe = ((sujet, h),)
+    }
+  }
+  if groupe.len() > 0 { pages.push(groupe) }
+  for (i, groupe) in pages.enumerate() {
+    if i > 0 { pagebreak(weak: true) }
+    if groupe.len() == 1 {
+      groupe.first().first()
+    } else {
+      let part = (hauteur - 1pt) / groupe.len()
+      for (j, (sujet, _)) in groupe.enumerate() {
+        block(height: part, width: 100%, spacing: 0pt, breakable: false, {
+          if j > 0 {
+            place(top, trait)
+            v(ecart)
+          }
+          sujet
+        })
+      }
+    }
+  }
+}`
+
+/** Nombre maximal d'exemplaires d'un sujet sur une page (`copiesPerPage`) */
+export const MAX_COPIES_PER_PAGE = 4
+
+/** Sépare le rendu d'un sujet en énoncés et corrections (bloc `#if corrige`) */
+function splitCorrections(renderLines: string[]): {
+  enonce: string[]
+  corrections: string[]
+} {
+  const index = renderLines.indexOf('// ----- Corrections -----')
+  return index === -1
+    ? { enonce: renderLines, corrections: [] }
+    : {
+        enonce: renderLines.slice(0, index),
+        corrections: renderLines.slice(index),
+      }
+}
+
+/** Rendu d'un sujet avec le repère de fin de ses énoncés, avant les corrections */
+function withSubjectEnd(
+  renderLines: string[],
+  version: number,
+  exportMode: boolean,
+): string[] {
+  if (exportMode) return renderLines
+  const { enonce, corrections } = splitCorrections(renderLines)
+  return [...enonce, subjectAnchor('end', version), ...corrections]
+}
+
+/** Appel d'un repère de la palette, retiré des exemplaires répétés */
+const ANCHOR_CALL = /#mathalea-anchor\("[^"]*", \d+(?:, dx: [^)]*)?\)/g
+
+/** Repère de début ou de fin des énoncés d'un sujet (hauteur mesurée par l'aperçu) */
+function subjectAnchor(kind: 'start' | 'end', version: number): string {
+  return `#mathalea-anchor("subject-${kind}", ${version})`
+}
+
+/** Dimensions du corps de page (hors marges), en millimètres */
+export function pageBodySize(
+  options: Pick<TypstDocumentOptions, 'pageFormat' | 'orientation'>,
+  marginX: number,
+): { width: number; height: number } {
+  const [w, h] = options.pageFormat === 'a5' ? [148, 210] : [210, 297]
+  const [width, height] = options.orientation === 'landscape' ? [h, w] : [w, h]
+  return { width: width - 2 * marginX, height: height - 2 * 15 }
 }
 
 /**
@@ -3514,6 +3667,12 @@ function buildVersionContent(
       if (options.showExerciseTitles) {
         bankLines.push(`  title: exo-${group.head + 1}-titre,`)
       }
+      // points déclarés dans le préambule (`exo-N-points`) ; un groupe
+      // d'exercices fusionnés vaut la somme de ses membres
+      if (exercisePoints(defaultExercisePoints(exercises), options) != null) {
+        const sum = group.members.map((k) => `exo-${k + 1}-points`).join(' + ')
+        bankLines.push(`  points: ${sum},`)
+      }
       if (isWorkedGroup(group)) bankLines.push('  worked: true,')
       // la référence et le QR-code ne sont affichés que pour un groupe d'un
       // seul exercice (ils ne peuvent pas représenter tout un groupe fusionné)
@@ -3828,6 +3987,11 @@ export function buildTypstDocument(
   // page de garde : le même appel ouvre chaque sujet (le barème et le nombre
   // de questions sont ceux de la fiche, identiques d'une version à l'autre)
   const coverTemplate = options.coverPage?.template ?? 'aucune'
+  // note globale dans la ligne d'en-tête quand les exercices affichent leurs
+  // points ; une page de garde a déjà sa propre case de note
+  const scoreInHeader =
+    exercisePoints(defaultExercisePoints(exercises), options) != null &&
+    coverTemplate === 'aucune'
   const globalQrCodeOnCanCover =
     globalQrCodeUrls[0] != null && options.canMode && coverTemplate === 'can'
   const coverDeclarations =
@@ -4122,6 +4286,13 @@ export function buildTypstDocument(
     // `MATHALEA_SOLUTION_UNDERLINE_HELPER`).
     lines.push('  solution-above: 1.8em,')
     lines.push(`  show-id: ${options.showExerciseRefs},`)
+    // points au bout de la ligne de titre ou dessous, avec un blanc pour la note
+    if (exercisePoints(defaultExercisePoints(exercises), options) != null) {
+      const position =
+        options.exercisePointsPosition === 'below' ? 'below' : 'right'
+      lines.push(`  points-position: "${position}",`)
+      lines.push('  points-format: "score",')
+    }
     lines.push(`  exercise-above: ${options.exerciseSpacing}em,`)
     if (usesQrCode) lines.push(`  qr-size: ${QRCODE_SIZE},`)
     if (usesQrCode) lines.push(`  qr-position: ${QRCODE_POSITION},`)
@@ -4202,6 +4373,17 @@ export function buildTypstDocument(
     }
     lines.push('')
   }
+  const points = exercisePoints(defaultExercisePoints(exercises), options)
+  if (points != null) {
+    lines.push('// ----- Points des exercices -----')
+    for (const [k, value] of points.entries()) {
+      lines.push(`#let exo-${k + 1}-points = ${value}`)
+    }
+    lines.push(
+      `#let exo-points-total = ${points.map((_, k) => `exo-${k + 1}-points`).join(' + ') || '0'}`,
+    )
+    lines.push('')
+  }
   // exercices statiques sans source .typ/_cor.typ (énoncé/correction juste
   // une image scannée) : une variable de zoom par énoncé/correction
   // concerné, ajustable dans la palette de l'aperçu (voir `htmlToTypst`,
@@ -4251,7 +4433,95 @@ export function buildTypstDocument(
   // à deux sujets, n'en compiler qu'un fait plus que diviser l'attente par
   // deux. C'est un commentaire : le document reste identique pour l'export et
   // la compilation CLI.
+  // Sujets enchaînés sur une même page quand ils y tiennent (voir
+  // MATHALEA_CHAIN_HELPER) : chaque sujet devient une variable de contenu,
+  // la mise en page les place à la suite et les corrections suivent toutes.
+  // Pas de repère de sujet : l'aperçu montre la fiche entière, telle qu'elle
+  // sera imprimée. Une page de garde occupe sa page : rien à enchaîner ; le
+  // bandeau compact (`recitation`) tient en tête de page et suit chaque sujet.
+  const copies = Math.min(
+    MAX_COPIES_PER_PAGE,
+    Math.max(1, Math.floor(options.copiesPerPage ?? 1)),
+  )
+  const chain =
+    (copies > 1 || (options.chainSubjects && totalVersions > 1)) &&
+    (coverTemplate === 'aucune' || coverTemplate === 'recitation')
+  if (chain) {
+    lines.push(MATHALEA_CHAIN_HELPER)
+    lines.push('')
+    const subjects = [primary, ...extra].map((version, i) => ({
+      i,
+      ...splitCorrections(version.renderLines),
+    }))
+    const items: string[] = []
+    for (const subject of subjects) {
+      const body = [
+        ...(usesExerciseBank ? ['#exo-counter.update(0)'] : []),
+        ...(exportMode ? [] : [subjectAnchor('start', subject.i)]),
+        ...(coverTemplate === 'recitation'
+          ? [
+              ...(exportMode ? [] : ['#mathalea-anchor("cover", 0)']),
+              ...(subject.i === 0
+                ? primaryCoverLines
+                : coverPageLines(
+                    options.coverPage as TypstCoverOptions,
+                    countQuestions(exercises),
+                    false,
+                    subject.i,
+                  )),
+            ]
+          : []),
+        ...(!exportMode && options.headerStyle !== 'aucun'
+          ? ['#mathalea-anchor("header", 0)']
+          : []),
+        ...headerBlock(
+          options.headerStyle,
+          totalVersions > 1 ? `Sujet ${versionLetter(subject.i)}` : undefined,
+          !exportMode,
+          options.hideVersionLabel,
+          scoreInHeader,
+        ),
+        ...(globalQrCodeUrls[subject.i] != null
+          ? ficheQrCodeLines(subject.i)
+          : []),
+        '',
+        ...subject.enonce,
+        ...(exportMode ? [] : [subjectAnchor('end', subject.i)]),
+      ]
+      lines.push(`#let mathalea-sujet-${subject.i} = [`, ...body, ']')
+      items.push(`(mathalea-sujet-${subject.i}, false)`)
+      if (copies > 1) {
+        // les exemplaires n'ont pas de repère : la palette de l'aperçu ne
+        // propose ses réglages que sur l'original
+        lines.push(
+          `#let mathalea-sujet-${subject.i}-copie = [`,
+          ...body.map((line) => line.replace(ANCHOR_CALL, '')),
+          ']',
+        )
+        for (let k = 1; k < copies; k++) {
+          items.push(`(mathalea-sujet-${subject.i}-copie, true)`)
+        }
+      }
+    }
+    const body = pageBodySize(options, badgeColumn ? 15 : 10)
+    lines.push(
+      `#mathalea-enchainement((${items.join(', ')},), corps: (${body.width}mm, ${body.height}mm))`,
+    )
+    lines.push('')
+    // repère de début des corrections de chaque sujet : l'aperçu ne garde que
+    // les repères du premier sujet pour la palette (voir `paletteAnchors`)
+    for (const subject of subjects) {
+      if (!exportMode && subject.corrections.length > 0) {
+        lines.push(`#mathalea-anchor("subject-corr", ${subject.i})`)
+      }
+      lines.push(...subject.corrections)
+    }
+    return lines.join('\n')
+  }
+
   if (!exportMode && totalVersions > 1) lines.push(subjectMarker(0))
+  // début du sujet, bandeau compact compris (il partage la page des énoncés)
+  if (!exportMode) lines.push(subjectAnchor('start', 0))
   if (primaryCoverLines.length > 0) {
     // repère du bloc de couverture : la palette de l'aperçu propose d'y
     // modifier titre, session, matière, durée et consignes (sans objet en
@@ -4274,6 +4544,7 @@ export function buildTypstDocument(
       totalVersions > 1 ? `Sujet ${versionLetter(0)}` : undefined,
       !exportMode,
       options.hideVersionLabel,
+      scoreInHeader,
     ),
   )
   if (globalQrCodeUrls[0] != null && !globalQrCodeOnCanCover) {
@@ -4284,7 +4555,7 @@ export function buildTypstDocument(
     lines.push(...ficheQrCodeLines(0, exportMode))
   }
   lines.push('')
-  lines.push(...primary.renderLines)
+  lines.push(...withSubjectEnd(primary.renderLines, 0, exportMode))
   for (const [i, version] of extra.entries()) {
     if (!exportMode) lines.push(subjectMarker(i + 1))
     lines.push(sectionPageBreak(options))
@@ -4293,6 +4564,7 @@ export function buildTypstDocument(
     lines.push('#counter(page).update(1)')
     if (usesExerciseBank) lines.push('#exo-counter.update(0)')
     lines.push('')
+    if (!exportMode) lines.push(subjectAnchor('start', i + 1))
     if (coverLines.length > 0) {
       if (!exportMode) lines.push('#mathalea-anchor("cover", 0)')
       lines.push(
@@ -4316,6 +4588,7 @@ export function buildTypstDocument(
         `Sujet ${versionLetter(i + 1)}`,
         !exportMode,
         options.hideVersionLabel,
+        scoreInHeader,
       ),
     )
     if (
@@ -4325,7 +4598,7 @@ export function buildTypstDocument(
       lines.push(...ficheQrCodeLines(i + 1, exportMode))
     }
     lines.push('')
-    lines.push(...version.renderLines)
+    lines.push(...withSubjectEnd(version.renderLines, i + 1, exportMode))
   }
 
   return withTypstHighlights(lines.join('\n'))
@@ -4487,6 +4760,10 @@ function correctionsHeadingLines(
   ]
 }
 
+/** Case de la note globale, sur le total des points des exercices */
+const MATHALEA_SCORE_CELL =
+  'text(weight: "bold")[Note : #box(width: 2.5em, repeat[.]) / #exo-points-total]'
+
 /**
  * Bloc de titre de la fiche (`titre`, `sous-titre`, `entete` déclarés dans
  * les réglages), selon l'habillage choisi.
@@ -4496,6 +4773,7 @@ function headerBlock(
   versionLabel?: string,
   emitAnchor = false,
   hideVersionLabel = false,
+  score = false,
 ): string[] {
   // avec plusieurs versions, l'étiquette « Sujet A/B... » termine la ligne
   // d'en-tête (Nom/Prénom/Classe) plutôt que d'ajouter une ligne à part ;
@@ -4523,6 +4801,17 @@ function headerBlock(
    * centré pour l'habillage « cadre »).
    */
   const enteteLine = (centered: boolean): string => {
+    // note globale (« Note : …… / 16 ») au bout de la ligne, avant
+    // l'étiquette de version
+    if (score) {
+      const align = centered ? 'center' : 'left'
+      const cells = [
+        MATHALEA_SCORE_CELL,
+        ...(versionCell != null ? [versionCell] : []),
+      ]
+      const columns = ['1fr', ...cells.map(() => 'auto')].join(', ')
+      return `grid(columns: (${columns}), align: (${align}, horizon), column-gutter: 1.5em, text(fill: gray.darken(20%))[#entete], ${cells.join(', ')})`
+    }
     if (versionCell != null) {
       const align = centered ? 'center' : 'left'
       return `grid(columns: (1fr, auto), align: (${align}, horizon), text(fill: gray.darken(20%))[#entete], ${versionCell})`
@@ -4531,7 +4820,7 @@ function headerBlock(
     return centered ? `align(center, ${plain})` : plain
   }
   const enteteCondition =
-    hasVersionLabel && !hideVersionLabel ? 'true' : 'entete != ""'
+    score || (hasVersionLabel && !hideVersionLabel) ? 'true' : 'entete != ""'
   // aucun bloc de titre : la fiche commence directement par les exercices.
   // Avec plusieurs versions, l'étiquette « Sujet A/B... » n'a alors nulle
   // part où s'afficher — c'est un compromis accepté du réglage.

@@ -276,6 +276,10 @@
     defaultExerciseTitles?: Record<number, string>
     /** Modifie (`value`, vide pour aucun titre) ou rétablit (`null`) le titre de l'exercice num */
     onSetExerciseTitle?: (num: number, value: string | null) => void
+    /** Points de chaque exercice, quand la fiche les affiche (vide sinon) */
+    exercisePoints?: Record<number, number>
+    /** Modifie les points de l'exercice num */
+    onSetExercisePoints?: (num: number, value: number) => void
   }
 
   let {
@@ -356,6 +360,8 @@
     exerciseTitles = {},
     defaultExerciseTitles = {},
     onSetExerciseTitle,
+    exercisePoints = {},
+    onSetExercisePoints,
   }: Props = $props()
 
   /** Espace des insertions : `exo` (entre les exercices) ou `corr` (avant une correction) */
@@ -731,6 +737,7 @@
       insertionKind = 'section'
     }
     openWritingLines = null
+    openPoints = null
   }
 
   function submitInsertion() {
@@ -786,10 +793,36 @@
   let openTitle: number | null = $state(null)
   let titleDraft = $state('')
 
+  /** Numéro de l'exercice dont le panneau des points est ouvert */
+  let openPoints: number | null = $state(null)
+  let pointsDraft: number | null = $state(null)
+
+  function togglePoints(num: number) {
+    openPoints = openPoints === num ? null : num
+    openInsertion = null
+    openWritingLines = null
+    openTitle = null
+    if (openPoints != null) pointsDraft = exercisePoints[num] ?? null
+  }
+
+  /** Enregistre les points saisis (une seule régénération, à la validation) */
+  function submitPoints(num: number) {
+    if (
+      pointsDraft != null &&
+      Number.isFinite(pointsDraft) &&
+      pointsDraft >= 0 &&
+      pointsDraft !== exercisePoints[num]
+    ) {
+      onSetExercisePoints?.(num, pointsDraft)
+    }
+    openPoints = null
+  }
+
   function toggleTitle(num: number) {
     openTitle = openTitle === num ? null : num
     openInsertion = null
     openWritingLines = null
+    openPoints = null
     if (openTitle != null) titleDraft = exerciseTitles[num] ?? ''
   }
 
@@ -805,6 +838,7 @@
     openWritingLines = openWritingLines === num ? null : num
     openInsertion = null
     openTitle = null
+    openPoints = null
     if (openWritingLines != null) {
       writingLinesDraft = writingLinesValues[num] ?? {
         ...WRITING_LINES_DEFAULT,
@@ -1036,6 +1070,36 @@
           Valider
         </button>
       </div>
+    </div>
+  {/if}
+{/snippet}
+
+{#snippet pointsPanel(num: number)}
+  <!-- panneau des points de l'exercice `num` (barème de la fiche) -->
+  {#if openPoints === num}
+    <div
+      class="absolute top-6 right-0 z-30 flex w-44 items-center gap-2 typst-panel p-2"
+    >
+      <input
+        type="number"
+        step="0.5"
+        min="0"
+        class="w-16 rounded border border-gray-300 px-1 py-0.5 text-xs"
+        aria-label="Points de l'exercice {num}"
+        bind:value={pointsDraft}
+        onkeydown={(e) => {
+          if (e.key === 'Enter') submitPoints(num)
+          if (e.key === 'Escape') openPoints = null
+        }}
+      />
+      <span class="text-xs">pts</span>
+      <button
+        type="button"
+        class="ml-auto px-2 py-0.5 text-xs hover:text-coopmaths-action"
+        onclick={() => submitPoints(num)}
+      >
+        Valider
+      </button>
     </div>
   {/if}
 {/snippet}
@@ -1637,11 +1701,13 @@
         class:typst-pill-force-visible={(openInsertion?.space === 'exo' &&
           openInsertion.num === insertGapNum) ||
           openWritingLines === widget.num ||
-          openTitle === widget.num}
+          openTitle === widget.num ||
+          openPoints === widget.num}
         class:z-20={(openInsertion?.space === 'exo' &&
           openInsertion.num === insertGapNum) ||
           openWritingLines === widget.num ||
-          openTitle === widget.num}
+          openTitle === widget.num ||
+          openPoints === widget.num}
         style="top: {widget.top}%; left: {columnRight - 0.3}%;"
         data-testid="typst-overlay-exo"
       >
@@ -1743,6 +1809,19 @@
             <i class="bx bx-heading"></i>
           </button>
           {@render titlePanel(widget.num)}
+        {/if}
+        {#if exercisePoints[widget.num] != null && !mergedExercises.includes(widget.num)}
+          <button
+            type="button"
+            title="Modifier les points de cet exercice"
+            aria-label="Points de l'exercice {widget.num}"
+            aria-expanded={openPoints === widget.num}
+            data-testid="typst-overlay-points"
+            onclick={() => togglePoints(widget.num)}
+          >
+            <i class="bx bx-medal"></i>
+          </button>
+          {@render pointsPanel(widget.num)}
         {/if}
         {#if !canMode}
           <button

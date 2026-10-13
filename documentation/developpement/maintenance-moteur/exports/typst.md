@@ -758,9 +758,9 @@ Case à cocher des Réglages du document (`TypstDocumentOptions.minimalCorrectio
 
 `reponsesMisesEnEvidence` renvoie les réponses trouvées dans leur ordre d'apparition, dédoublonnées ; le tableau des réponses du diaporama s'en sert aussi (voir [Vue Diaporama](diaporama.md#tableau-des-réponses)). `minimalCorrection` les réémet telles quelles (donc toujours en orange) séparées par un cadratin `&emsp;`. Le réglage s'applique au seul endroit où les corrections passent dans le code généré : `computeGeneratedExercises` (fiche normale, fusionnée, code autonome de la modale d'édition) et `buildCanVersionContent` (tableau « Course aux nombres »). Dans les deux cas les corrections sont dans un environnement `tasks` en `auto-fit` : une fois réduites à leur réponse, elles se répartissent d'elles-mêmes sur plusieurs colonnes, réglables depuis la palette de l'aperçu.
 
-## Titres et exemples corrigés
+## Titres, points et exemples corrigés
 
-Avec [exercise-bank 0.6.5](https://typst.app/universe/package/exercise-bank/),
+Avec [exercise-bank 0.7.0](https://typst.app/universe/package/exercise-bank/),
 la case « Afficher le titre des exercices » des réglages du document ajoute
 l'intitulé MathALÉA après « Exercice N » (`showExerciseTitles`, `title:`).
 Elle est décochée par défaut. Un groupe fusionné reprend le titre de son
@@ -785,7 +785,23 @@ survit à la régénération, au partage par URL et aux déplacements ; une copi
 hérite du réglage. Il est commun aux sujets A, B… et s'applique à tout un
 groupe fusionné si l'un de ses membres est un exemple corrigé.
 
-Ces deux réglages sont désactivés dans les modes de fusion globale et
+La case « Afficher les points des exercices » (`showExercisePoints`) écrit
+« …… / 5 pts » au bout de la ligne de titre de chaque exercice, ou sous le
+titre à gauche selon « Position des points » (`exercisePointsPosition`)
+(`points: exo-N-points`, `exo-setup(points-position: "right" | "below",
+points-format: "score")`) ; les corrections ne répètent pas les points. Les points viennent du
+barème de la page de garde (`coverPage.bareme`), seule source des points, tant
+qu'il compte autant de lignes que d'exercices ; sinon un point par question
+(`exercisePoints`). Ils sont déclarés dans le préambule (`#let exo-N-points`,
+puis `#let exo-points-total`), un groupe fusionné vaut la somme de ses membres.
+Le bouton « Points » (`bx-medal`) de la barre d'outils de l'exercice modifie
+le barème (`setExercisePoints`) et régénère la fiche : page de garde, points
+des exercices et note restent d'accord. Sans page de garde, la ligne d'en-tête
+se termine par « Note : …… / 8 » (`MATHALEA_SCORE_CELL`), avant l'étiquette de
+version ; une page de garde a déjà sa case de note. L'habillage d'en-tête
+« aucun » n'affiche pas de note globale.
+
+Ces trois réglages sont désactivés dans les modes de fusion globale et
 « Course aux nombres », qui n'utilisent pas de bloc `exo` par exercice.
 
 ## Styles d'exercice (badges exercise-bank)
@@ -889,6 +905,43 @@ Le `set page` est **scopé au bloc de code** : la page blanche éventuellement i
 - `to: "odd"` regarde le **compteur de pages**, que chaque sujet remet à 1 juste après le saut. Comme le premier sujet démarre à la page physique 1 et que chaque sujet suivant démarre sur une page impaire, la parité du compteur reste celle des pages physiques — la parité ne dérive donc pas de sujet en sujet ;
 - une variante « manuelle » (`context if calc.odd(here().page())` puis saut) a été écartée : le repère d'introspection est résolu de l'autre côté du saut de page faible, la parité lue n'est pas celle attendue ;
 - les pages de garde (`#mathalea-couverture-*`) gardent leur `pagebreak()` simple : la fiche suit volontairement au dos de sa couverture.
+
+## Plusieurs sujets sur une page
+
+Pour les sujets courts, deux réglages du document placent plusieurs sujets sur
+une même page, à découper :
+
+- « Plusieurs sujets sur une page » (`chainSubjects`, à partir de deux sujets) :
+  les sujets A, B… se suivent ;
+- « Exemplaires par page » (`copiesPerPage`, 1 à 4) : chaque sujet est répété.
+
+Les sujets d'une même page s'en partagent la hauteur à parts égales, séparées
+par un trait pointillé. Un sujet qui ne tient pas dans sa part commence une
+nouvelle page ; un exemplaire qui ne tient pas est omis. Les corrections sont
+regroupées après tous les sujets. Possible sans page de garde ou avec le
+bandeau compact (`recitation`), qui se répète en tête de chaque part ; les
+autres modèles occupent une page entière.
+
+Mise en œuvre (`buildTypstDocument.ts`) : chaque sujet devient une variable de
+contenu (`#let mathalea-sujet-N = [...]`, les exemplaires `-copie` sans
+repères de la palette) et `MATHALEA_CHAIN_HELPER` (`#mathalea-enchainement`)
+mesure leur hauteur dans le corps de page (`pageBodySize`) pour former les
+groupes. Les hauteurs sont mesurées, pas lues sur la position courante : la
+mise en page converge en une passe. Le document n'a alors pas de repère de
+sujet (`// mathalea:sujet(N)`) : l'aperçu montre la fiche entière, et le
+sélecteur « Aperçu » des sujets est masqué.
+
+Les réglages ne sont proposés que si deux sujets tiennent sur une page. Les
+repères `subject-start`/`subject-end` (début et fin des énoncés de chaque
+sujet) donnent leur hauteur à l'aperçu (`subjectsPerPage` dans
+`Typst.svelte`), le plus haut décidant. Quand les sujets sont enchaînés, la
+palette ne garde que les repères du premier sujet (`paletteAnchors`, bornés
+par `subject-start`/`subject-end` et `subject-corr`) : ses réglages sont
+communs aux sujets.
+
+Limite connue : le zoom d'une figure (`fig-N-zoom`) est propre à chaque sujet ;
+réduire les figures du sujet A ne réduit pas celles du sujet B, qui peut alors
+ne plus tenir dans sa part.
 
 ## Persistance dans l'URL
 

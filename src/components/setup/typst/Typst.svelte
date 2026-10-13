@@ -59,8 +59,11 @@
     getGeneratedCorrectionCode,
     getGeneratedExerciseCode,
     exerciseTitleLine,
+    exercisePoints,
     harvestCarryOver,
     swapExerciseFigures,
+    MAX_COPIES_PER_PAGE,
+    pageBodySize,
     subjectEditorCode,
     normalizeTypstLayoutOptions,
     parseNumberingLiteral,
@@ -292,6 +295,18 @@
           ) {
             restoredDocumentOptions.nbVersions =
               defaultTypstDocumentOptions.nbVersions
+          }
+          if (
+            !Number.isInteger(restoredDocumentOptions.copiesPerPage) ||
+            restoredDocumentOptions.copiesPerPage < 1 ||
+            restoredDocumentOptions.copiesPerPage > MAX_COPIES_PER_PAGE
+          ) {
+            restoredDocumentOptions.copiesPerPage =
+              defaultTypstDocumentOptions.copiesPerPage
+          }
+          if (typeof restoredDocumentOptions.chainSubjects !== 'boolean') {
+            restoredDocumentOptions.chainSubjects =
+              defaultTypstDocumentOptions.chainSubjects
           }
           // graines épinglées par sujet : liste de listes de chaînes (ou null)
           if (
@@ -919,6 +934,14 @@
   let codeOverrideCorrectionValues: Record<number, string> = $state({})
   /** Lignes en pointillés réglées par exercice (palette), lues dans le code */
   let writingLinesValues: Record<number, WritingLinesSetting> = $state({})
+  /** Points de chaque exercice affichés sur la fiche (palette de l'aperçu) */
+  const exercisePointValues = $derived(
+    Object.fromEntries(
+      (
+        exercisePoints(exercises.map(defaultCoverPoints), documentOptions) ?? []
+      ).map((points, k) => [k + 1, points]),
+    ),
+  )
   /** Titres d'exercice modifiés dans la palette (`TypstCarryOver.exerciseTitles`) */
   let exerciseTitleValues: Record<number, string> = $state({})
   /** Numéro de l'exercice dont la modale d'édition du code Typst est ouverte */
@@ -1043,9 +1066,28 @@
     }
     return widgets
   }
+  /**
+   * Repères utilisés par la palette. Sujets enchaînés : la fiche entière est
+   * compilée, chaque sujet porte les mêmes repères ; la palette agit sur des
+   * réglages communs aux sujets et ne garde que ceux du premier (énoncés et
+   * corrections). Les repères arrivent dans l'ordre du document.
+   */
+  function paletteAnchors(all: TypstAnchor[]): TypstAnchor[] {
+    if (!chainActive) return all
+    let skip = false
+    return all.filter((anchor) => {
+      if (anchor.kind === 'subject-start') skip = anchor.num > 0
+      else if (anchor.kind === 'subject-corr') skip = anchor.num > 0
+      else if (anchor.kind === 'subject-end' && anchor.num > 0) {
+        skip = false
+        return false
+      }
+      return !skip
+    })
+  }
   const overlayWidgets = $derived(
     computeOverlayWidgets(
-      anchors,
+      paletteAnchors(anchors),
       previewPages,
       previewViewBox,
       documentColumns,
@@ -1375,6 +1417,23 @@
         value ?? undefined,
       ),
     })
+  }
+
+  /**
+   * Points de l'exercice `num` saisis dans la palette : ils vont dans le
+   * barème de la page de garde (source unique des points, voir
+   * `exercisePoints`), réaligné au besoin sur les exercices de la fiche.
+   */
+  function setExercisePoints(num: number, value: number) {
+    const bareme = exercisePoints(
+      exercises.map(defaultCoverPoints),
+      documentOptions,
+    )
+    if (bareme == null || !Number.isFinite(value) || value < 0) return
+    documentOptions.coverPage.bareme = bareme.map((points, k) =>
+      k === num - 1 ? value : points,
+    )
+    applyDocumentOptions()
   }
 
   function adjustExerciseZoom(num: number, delta: number) {
@@ -3633,6 +3692,50 @@
   let previewVersion = $state(0)
 
   /**
+   * Les sujets sont enchaînés : l'aperçu montre la fiche entière. Possible
+   * sans page de garde ou avec le bandeau compact (`recitation`), qui tient
+   * en tête de page ; les autres modèles occupent une page entière.
+   */
+  const chainActive = $derived(
+    (documentOptions.copiesPerPage > 1 ||
+      (documentOptions.chainSubjects && documentOptions.nbVersions > 1)) &&
+      ['aucune', 'recitation'].includes(
+        documentOptions.coverPage?.template ?? 'aucune',
+      ),
+  )
+
+  /**
+   * Nombre de sujets (ou d'exemplaires) qui tiennent sur une page, d'après la
+   * hauteur des sujets mesurée à la dernière compilation (repères
+   * `subject-start`/`subject-end`) ; 1 tant qu'elle est inconnue ou qu'un
+   * sujet déborde sur une seconde page. Les réglages « Enchaîner les sujets »
+   * et « Exemplaires par page » ne sont proposés qu'à partir de 2.
+   */
+  const subjectsPerPage = $derived.by(() => {
+    // le sujet le plus haut décide (tous sont compilés quand ils sont
+    // enchaînés ; sinon seul le sujet affiché a ses repères)
+    let height = 0
+    for (const start of anchors) {
+      if (start.kind !== 'subject-start') continue
+      const end = anchors.find(
+        (anchor) => anchor.kind === 'subject-end' && anchor.num === start.num,
+      )
+      if (end == null || start.page !== end.page) return 1
+      height = Math.max(height, end.y - start.y)
+    }
+    if (height <= 0) return 1
+    const pointsPerMm = 72 / 25.4
+    const body = pageBodySize(documentOptions, 10).height * pointsPerMm
+    // parts égales de la page, chacune avec 1,2 em sous le trait pointillé
+    // (voir MATHALEA_CHAIN_HELPER)
+    const gap = 1.2 * documentOptions.fontSize
+    return Math.max(
+      1,
+      Math.min(MAX_COPIES_PER_PAGE, Math.floor((body - 1) / (height + gap))),
+    )
+  })
+
+  /**
    * Source réellement compilée pour l'aperçu : sur une fiche à plusieurs
    * sujets, seul le sujet affiché est conservé. Compiler les autres coûte
    * leur mise en page entière (l'essentiel du temps d'attente) pour un
@@ -4459,7 +4562,7 @@
            et le code de l'éditeur portent toujours tous les sujets. Les
            contrôles de mise en page sont disponibles pour chaque sujet, qui peut
            porter les repères de la palette. -->
-      {#if documentOptions.nbVersions > 1}
+      {#if documentOptions.nbVersions > 1 && !chainActive}
         <label
           class="flex items-center gap-2 text-sm"
           title="Sujet montré dans l’aperçu — les exports contiennent toujours tous les sujets"
@@ -4651,6 +4754,52 @@
               </span>
             </label>
 
+            {#if documentOptions.nbVersions > 1}
+              <label class="flex items-center gap-2 text-sm cursor-pointer">
+                <input
+                  type="checkbox"
+                  bind:checked={documentOptions.chainSubjects}
+                  disabled={subjectsPerPage < 2 &&
+                    !documentOptions.chainSubjects}
+                  onchange={applyDocumentOptions}
+                />
+                <span
+                  class:opacity-50={subjectsPerPage < 2 &&
+                    !documentOptions.chainSubjects}
+                  title={subjectsPerPage < 2 && !documentOptions.chainSubjects
+                    ? 'Les sujets sont trop longs pour tenir à deux sur une page.'
+                    : 'Les sujets se suivent sur une même page, séparés par un trait pointillé, quand ils y tiennent. Les corrections sont regroupées à la fin.'}
+                >
+                  Plusieurs sujets sur une page
+                </span>
+              </label>
+            {/if}
+
+            <div class="flex items-center justify-between gap-4 text-sm">
+              <label
+                for="typst-copies-input"
+                class:opacity-50={subjectsPerPage < 2 &&
+                  documentOptions.copiesPerPage < 2}
+                title={subjectsPerPage < 2 && documentOptions.copiesPerPage < 2
+                  ? 'Le sujet est trop long pour tenir deux fois sur une page.'
+                  : 'Le sujet est répété sur la page, séparé par un trait pointillé, autant de fois qu’il y tient.'}
+              >
+                Exemplaires par page
+              </label>
+              <select
+                id="typst-copies-input"
+                class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                bind:value={documentOptions.copiesPerPage}
+                disabled={subjectsPerPage < 2 &&
+                  documentOptions.copiesPerPage < 2}
+                onchange={applyDocumentOptions}
+              >
+                {#each Array(Math.max(subjectsPerPage, documentOptions.copiesPerPage)) as _, i (i)}
+                  <option value={i + 1}>{i + 1}</option>
+                {/each}
+              </select>
+            </div>
+
             <label class="flex items-center gap-2 text-sm cursor-pointer">
               <input
                 type="checkbox"
@@ -4741,6 +4890,36 @@
                 Afficher le titre des exercices
               </span>
             </label>
+
+            <label class="flex items-center gap-2 text-sm cursor-pointer">
+              <input
+                type="checkbox"
+                bind:checked={documentOptions.showExercisePoints}
+                disabled={documentOptions.mergeExercises ||
+                  documentOptions.canMode}
+                onchange={applyDocumentOptions}
+              />
+              <span
+                class:opacity-50={documentOptions.mergeExercises ||
+                  documentOptions.canMode}
+              >
+                Afficher les points des exercices
+              </span>
+            </label>
+
+            {#if documentOptions.showExercisePoints && !documentOptions.mergeExercises && !documentOptions.canMode}
+              <label class="flex items-center justify-between gap-4 text-sm">
+                Position des points
+                <select
+                  class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                  bind:value={documentOptions.exercisePointsPosition}
+                  onchange={applyDocumentOptions}
+                >
+                  <option value="right">À droite du titre</option>
+                  <option value="below">Sous le titre</option>
+                </select>
+              </label>
+            {/if}
 
             <label class="flex items-center gap-2 text-sm cursor-pointer">
               <input
@@ -5388,6 +5567,8 @@
                       ]),
                     )}
                     onSetExerciseTitle={setExerciseTitle}
+                    exercisePoints={exercisePointValues}
+                    onSetExercisePoints={setExercisePoints}
                     onCutImage={openImageCuts}
                     onAdjustExerciseCorrectionZoom={adjustExerciseCorrectionZoom}
                     onSetFigureAlign={setFigureAlign}
