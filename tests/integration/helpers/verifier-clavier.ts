@@ -94,6 +94,12 @@ const REGLES: Regle[] = [
     requiert: (nettoyee) => /,/.test(nettoyee),
     satisfaitPar: ['COMMA'],
   },
+  {
+    // Équation attendue (`y=2x+1`, `x=3`…) : le signe `=` doit être saisissable.
+    nom: 'égalité',
+    requiert: (nettoyee) => /=/.test(nettoyee),
+    satisfaitPar: ['='],
+  },
 ]
 
 /**
