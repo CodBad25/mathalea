@@ -9,7 +9,8 @@ describe('CAN 4e 2021 : choix des questions', () => {
     exercice.nouvelleVersion()
     expect(exercice.nbQuestions).toBe(2)
     expect(exercice.listeQuestions).toHaveLength(2)
-    expect(exercice.listeQuestions[0]).toContain('Le tiers de')
+    // la question 2 tire au hasard entre « Le quart de » et « Le tiers de »
+    expect(exercice.listeQuestions[0]).toMatch(/Le (quart|tiers) de/)
     expect(exercice.listeQuestions[1]).toContain('\\times')
   })
 
