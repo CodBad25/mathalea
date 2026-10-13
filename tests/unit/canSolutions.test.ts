@@ -43,7 +43,7 @@ import '../../src/lib/customElements/MultiMathfield'
 import '../../src/lib/customElements/MySpreadSheet'
 import '../../src/lib/customElements/ObjetsCliquablesElement'
 import '../../src/lib/customElements/PointsCliquablesElement'
-import '../../src/lib/customElements/PossibleMultiLinesAnswerElement'
+import { PossibleMultiLinesAnswerElement } from '../../src/lib/customElements/PossibleMultiLinesAnswerElement'
 import '../../src/lib/customElements/RelierEtiquettesElement'
 import '../../src/lib/customElements/ScratchEditor'
 import '../../src/lib/customElements/SvgSelectionElement'
@@ -128,6 +128,19 @@ describe('formatStudentAnswer', () => {
     expect(formatStudentAnswer(question, '{"rep1":"3","rep2":"x+1"}')).toBe(
       '$3$ ; $x+1$',
     )
+  })
+
+  it("n'affiche que la dernière ligne d'un possible-multi-lines-answer", () => {
+    context.isHtml = true
+    const question = PossibleMultiLinesAnswerElement.create({
+      numeroExercice: 0,
+      questionIndex: 0,
+      prefix: 'A =',
+    })
+    expect(formatStudentAnswer(question, '["1+2\\times3","1+6","7"]')).toBe(
+      '$7$',
+    )
+    expect(formatStudentAnswer(question, '7')).toBe('$7$')
   })
 
   it("formate l'historique d'un compte est bon", () => {
