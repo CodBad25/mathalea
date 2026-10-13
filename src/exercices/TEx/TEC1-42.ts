@@ -1,5 +1,6 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { verifieDeuxChampsSansOrdre } from '../../lib/interactif/verifieDeuxChampsSansOrdre'
 import {
   ajouteChampTexteMathLive,
   remplisLesBlancs,
@@ -275,6 +276,11 @@ export default class EquationsAvecConjugue extends Exercice {
           {
             champ1: { value: solution1.tex() },
             champ2: { value: solution2.tex() },
+            // Les deux solutions peuvent être saisies dans n'importe quel ordre.
+            callback: verifieDeuxChampsSansOrdre([
+              solution1.tex(),
+              solution2.tex(),
+            ]),
           },
           { formatInteractif: 'fill-in-the-blank' },
         )
