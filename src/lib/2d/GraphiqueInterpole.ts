@@ -34,9 +34,13 @@ export class GraphiqueInterpole extends ObjetMathalea2D {
       let depart, fin
       xmin > x0 ? (depart = xmin) : (depart = x0)
       xmax < x1 ? (fin = xmax) : (fin = x1)
+      // Le pas est ajusté pour que le dernier point calculé soit exactement
+      // à la fin du morceau (sinon les extremums locaux ne sont pas atteints).
+      const nbPas = Math.max(1, Math.ceil((fin - depart) / step - 1e-9))
+      const pas = fin > depart ? (fin - depart) / nbPas : step
       const c = courbe(f, {
         repere,
-        step,
+        step: pas,
         xMin: depart,
         xMax: fin,
         color,
