@@ -44,10 +44,10 @@ export default class relationPascal extends Exercice {
       if (this.interactif) {
         texte += remplisLesBlancs(
           this,
-          0,
+          i,
           '=\\begin{pmatrix}%{champ1}\\\\%{champ2}\\end{pmatrix}',
         )
-        handleAnswers(this, 0, { champ1: { value: n }, champ2: { value: k } })
+        handleAnswers(this, i, { champ1: { value: n }, champ2: { value: k } })
       }
       texte += '.'
       if (this.questionJamaisPosee(i, texte)) {

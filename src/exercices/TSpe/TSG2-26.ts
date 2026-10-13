@@ -40,6 +40,8 @@ export default class DistancePointDroite extends Exercice {
 
   nouvelleVersion() {
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
+      // Quatre champs par problème : le problème i occupe les indices 4i à 4i + 3.
+      const champ0 = 4 * i
       let texte = ''
       // On choisit la droite (d) passant par A et de vecteur directeur u
       // On choisit le point B qui n'est pas sur (d)
@@ -103,7 +105,7 @@ export default class DistancePointDroite extends Exercice {
         'Exprimer $AM$ en fonction de $t$ en détaillant les calculs.' +
         ajouteQuestionMathlive({
           exercice: this,
-          question: 0,
+          question: champ0,
           objetReponse: {
             reponse: { value: `\\sqrt{${exprF}}`.replaceAll('x', 't') },
           },
@@ -128,7 +130,7 @@ export default class DistancePointDroite extends Exercice {
         "Justifier que $f$ est définie et dérivable sur $\\mathbb{R}$ puis calculer $f'(x)$ pour tout x." +
         ajouteQuestionMathlive({
           exercice: this,
-          question: 1,
+          question: champ0 + 1,
           objetReponse: {
             reponse: {
               value: `\\frac{${2 * a}x${ecritureAlgebrique(b)}}{2\\sqrt{${exprF}}}`,
@@ -173,7 +175,7 @@ export default class DistancePointDroite extends Exercice {
         "Montrer que $f$ admet un minimum en une valeur $\\mu$ que l'on déterminera." +
         ajouteQuestionMathlive({
           exercice: this,
-          question: 2,
+          question: champ0 + 2,
           objetReponse: { reponse: { value: xMinimum.texFSD } },
           reponseParams: { formatInteractif: 'mathalea-mathfield' },
           typeInteractivite: 'mathlive',
@@ -189,7 +191,7 @@ export default class DistancePointDroite extends Exercice {
         'Que vaut ce minimum ?' +
         ajouteQuestionMathlive({
           exercice: this,
-          question: 3,
+          question: champ0 + 3,
           objetReponse: { reponse: { value: minimum } },
           reponseParams: { formatInteractif: 'mathalea-mathfield' },
           typeInteractivite: 'mathlive',

@@ -117,13 +117,13 @@ export default class ExerciceEchelleGraphique extends Exercice {
               '<br>' +
               remplisLesBlancs(
                 this,
-                0,
+                i,
                 '\\text{Longueur} = %{champ1}~\\text{m} \\quad \\text{Largeur} = %{champ2}~\\text{m}',
                 KeyboardType.clavierDeBase,
               )
             handleAnswers(
               this,
-              0,
+              i,
               {
                 bareme: (listePoints) => [listePoints[0] + listePoints[1], 2],
                 champ1: { value: rectangle.height },
@@ -145,13 +145,13 @@ export default class ExerciceEchelleGraphique extends Exercice {
               '<br>' +
               remplisLesBlancs(
                 this,
-                1,
+                i,
                 '\\text{Longueur} = %{champ1}~\\text{cm} \\quad \\text{Largeur} = %{champ2}~\\text{cm}',
                 KeyboardType.clavierDeBase,
               )
             handleAnswers(
               this,
-              1,
+              i,
               {
                 bareme: (listePoints) => [listePoints[0] + listePoints[1], 2],
                 champ1: { value: rectangle.height / nombreDeMetresPour1Cm },
