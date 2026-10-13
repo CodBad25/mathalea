@@ -158,6 +158,11 @@ const arithmeticOperationByScratchOpcode: Record<string, ArithmeticOperation> =
     operator_divide: 'divise',
   }
 
+/** Identifiant stable d'une variable, partagé par la boîte à outils et les programmes. */
+export function scratchVariableId(name: string): string {
+  return `scratch-variable-${name}`
+}
+
 class ScratchToolboxBuilder {
   static build(
     toolbox?: ScratchToolboxDefinition,
@@ -245,7 +250,7 @@ class ScratchToolboxBuilder {
         : Object.entries(block.fields ?? {})
             .map(
               ([name, value]) =>
-                `<field name="${this.escapeAttribute(name)}">${this.escapeText(String(value))}</field>`,
+                `<field name="${this.escapeAttribute(name)}"${name === 'VARIABLE' ? ` id="${this.escapeAttribute(scratchVariableId(String(value)))}"` : ''}>${this.escapeText(String(value))}</field>`,
             )
             .join('')
     const inputs =
@@ -342,6 +347,26 @@ class ScratchWorkspaceAdapter {
       if (event.isUiEvent) return
       onChange()
     })
+    this.createToolboxVariables(toolbox)
+  }
+
+  /**
+   * Les blocs `data_variable` (étiquettes de variable) n'affichent leur nom
+   * que si la variable existe dans l'espace de travail et qu'ils la désignent
+   * par son identifiant : on crée donc les variables de la boîte à outils.
+   */
+  private createToolboxVariables(toolbox?: ScratchToolboxDefinition): void {
+    const names = new Set<string>()
+    for (const category of toolbox?.categories ?? []) {
+      for (const block of category.blocks) {
+        const name = typeof block === 'string' ? null : block.fields?.VARIABLE
+        if (name != null) names.add(String(name))
+      }
+    }
+    for (const name of names) {
+      this.workspace.createVariable(name, '', scratchVariableId(name))
+    }
+    if (names.size > 0) this.workspace.getToolbox()?.refreshSelection()
   }
 
   exportXml(): string {
@@ -352,10 +377,32 @@ class ScratchWorkspaceAdapter {
 
   loadXml(xml: string): void {
     this.workspace.clear()
-    scratchBlocks.Xml.domToWorkspace(
-      scratchBlocks.utils.xml.textToDom(xml),
-      this.workspace,
-    )
+    const dom = scratchBlocks.utils.xml.textToDom(xml)
+    for (const field of Array.from(dom.querySelectorAll('field')).filter(
+      (element) =>
+        element.getAttribute('name') === 'VARIABLE' &&
+        !element.hasAttribute('id'),
+    )) {
+      field.setAttribute(
+        'id',
+        scratchVariableId((field.textContent ?? '').trim()),
+      )
+    }
+    scratchBlocks.Xml.domToWorkspace(dom, this.workspace)
+    this.moveBlocksOutOfFlyout()
+  }
+
+  /**
+   * Le panneau de blocs recouvre la gauche de l'espace de travail : on décale
+   * les programmes chargés pour qu'ils restent visibles à côté de celui-ci.
+   */
+  private moveBlocksOutOfFlyout(): void {
+    const flyout = this.workspace.getFlyout()
+    if (flyout == null) return
+    const left = flyout.getWidth() / this.workspace.scale + 16
+    for (const block of this.workspace.getTopBlocks(false)) {
+      block.moveBy(left, 0)
+    }
   }
 
   resize(): void {
@@ -570,6 +617,7 @@ export class ScratchEditorElement extends MathaleaCustomElement {
         }
         scratch-editor .scratch-editor-area .blocklyFlyoutBackground {
           fill: #f7f8fb;
+          fill-opacity: 1;
           stroke: #d8dee9;
           stroke-width: 1px;
         }
