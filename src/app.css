@@ -926,8 +926,10 @@ ol.alpha {
 ol.alpha > li {
   margin-top: 0.5em;
 }
-ol.alpha.alpha-parenthesis > li::marker {
+/* Même repère que numAlpha() et la sortie Typst : « a) » en gras. */
+ol.alpha > li::marker {
   content: counter(list-item, lower-alpha) ') ';
+  font-weight: bold;
 }
 ol.Alpha {
   @apply list-[upper-alpha] list-outside ml-4  marker:text-coopmaths-struct;

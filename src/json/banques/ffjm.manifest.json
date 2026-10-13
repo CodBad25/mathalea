@@ -45,6 +45,24 @@
       "texCor": "tex/bonne-cuisson_cor.tex"
     },
     {
+      "id": "chemin-ecole",
+      "titre": "Le chemin de l'école",
+      "categorie": "Chrono-logique",
+      "tags": [
+        "aller-retour",
+        "durée",
+        "conversion",
+        "2016D4"
+      ],
+      "etoiles": 2,
+      "png": "png/chemin-ecole.png",
+      "pngCor": "png/chemin-ecole_cor.png",
+      "typ": "typ/chemin-ecole.typ",
+      "typCor": "typ/chemin-ecole_cor.typ",
+      "tex": "tex/chemin-ecole.tex",
+      "texCor": "tex/chemin-ecole_cor.tex"
+    },
+    {
       "id": "decalage-horaire",
       "titre": "Décalage horaire",
       "categorie": "Chrono-logique",
@@ -134,6 +152,24 @@
       "typCor": "typ/mur-de-couleur_cor.typ",
       "tex": "tex/mur-de-couleur.tex",
       "texCor": "tex/mur-de-couleur_cor.tex"
+    },
+    {
+      "id": "seize-disques",
+      "titre": "Les seize disques",
+      "categorie": "Coloriage",
+      "sousCategorie": "Conditionnel",
+      "tags": [
+        "coloriage",
+        "maximum",
+        "2009D8"
+      ],
+      "etoiles": 3,
+      "png": "png/seize-disques.png",
+      "pngCor": "png/seize-disques_cor.png",
+      "typ": "typ/seize-disques.typ",
+      "typCor": "typ/seize-disques_cor.typ",
+      "tex": "tex/seize-disques.tex",
+      "texCor": "tex/seize-disques_cor.tex"
     },
     {
       "id": "trois-ronds",
@@ -697,6 +733,25 @@
       "texCor": "tex/emplette-de-maleficine_cor.tex"
     },
     {
+      "id": "la_fraction",
+      "titre": "La fraction",
+      "categorie": "Dénombrement",
+      "sousCategorie": "Scénarios",
+      "tags": [
+        "fraction",
+        "ensemble",
+        "simplification",
+        "2000Q12"
+      ],
+      "etoiles": 4,
+      "png": "png/la_fraction.png",
+      "pngCor": "png/la_fraction_cor.png",
+      "typ": "typ/la_fraction.typ",
+      "typCor": "typ/la_fraction_cor.typ",
+      "tex": "tex/la_fraction.tex",
+      "texCor": "tex/la_fraction_cor.tex"
+    },
+    {
       "id": "somme-annee",
       "titre": "La somme de l'année",
       "categorie": "Dénombrement",
@@ -996,6 +1051,44 @@
       "texCor": "tex/bonbon_cor.tex"
     },
     {
+      "id": "cercle-menteurs",
+      "titre": "Le cercle des menteurs",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Menteur",
+      "tags": [
+        "menteur",
+        "cercle",
+        "2024F9"
+      ],
+      "etoiles": 3,
+      "png": "png/cercle-menteurs.png",
+      "pngCor": "png/cercle-menteurs_cor.png",
+      "typ": "typ/cercle-menteurs.typ",
+      "typCor": "typ/cercle-menteurs_cor.typ",
+      "tex": "tex/cercle-menteurs.tex",
+      "texCor": "tex/cercle-menteurs_cor.tex"
+    },
+    {
+      "id": "deux-menteurs-sur-trois",
+      "titre": "Deux menteurs sur trois",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Menteur",
+      "tags": [
+        "logique",
+        "raisonnement",
+        "menteur",
+        "essai erreur",
+        "2013Q3"
+      ],
+      "etoiles": 1,
+      "png": "png/deux-menteurs-sur-trois.png",
+      "pngCor": "png/deux-menteurs-sur-trois_cor.png",
+      "typ": "typ/deux-menteurs-sur-trois.typ",
+      "typCor": "typ/deux-menteurs-sur-trois_cor.typ",
+      "tex": "tex/deux-menteurs-sur-trois.tex",
+      "texCor": "tex/deux-menteurs-sur-trois_cor.tex"
+    },
+    {
       "id": "grenouille-prince-charmant",
       "titre": "Les grenouilles et le prince charmant",
       "categorie": "Enigme à texte",
@@ -1014,6 +1107,43 @@
       "typCor": "typ/grenouille-prince-charmant_cor.typ",
       "tex": "tex/grenouille-prince-charmant.tex",
       "texCor": "tex/grenouille-prince-charmant_cor.tex"
+    },
+    {
+      "id": "qui-a-vole-l-orange",
+      "titre": "Qui a volé l’orange ?",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Menteur",
+      "tags": [
+        "menteur",
+        "raisonnement",
+        "2020F5"
+      ],
+      "etoiles": 2,
+      "png": "png/qui-a-vole-l-orange.png",
+      "pngCor": "png/qui-a-vole-l-orange_cor.png",
+      "typ": "typ/qui-a-vole-l-orange.typ",
+      "typCor": "typ/qui-a-vole-l-orange_cor.typ",
+      "tex": "tex/qui-a-vole-l-orange.tex",
+      "texCor": "tex/qui-a-vole-l-orange_cor.tex"
+    },
+    {
+      "id": "six-amis",
+      "titre": "Les six amis",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Menteur",
+      "tags": [
+        "menteur",
+        "âge",
+        "ordonner",
+        "2019D10"
+      ],
+      "etoiles": 3,
+      "png": "png/six-amis.png",
+      "pngCor": "png/six-amis_cor.png",
+      "typ": "typ/six-amis.typ",
+      "typCor": "typ/six-amis_cor.typ",
+      "tex": "tex/six-amis.tex",
+      "texCor": "tex/six-amis_cor.tex"
     },
     {
       "id": "4desserts-1",
@@ -1256,6 +1386,23 @@
       "texCor": "tex/8desserts-1_cor.tex"
     },
     {
+      "id": "concours-peche",
+      "titre": "Le concours de pêche",
+      "categorie": "Méli-Mélo",
+      "tags": [
+        "enchainement d'operation",
+        "équation",
+        "2003D6"
+      ],
+      "etoiles": 2,
+      "png": "png/concours-peche.png",
+      "pngCor": "png/concours-peche_cor.png",
+      "typ": "typ/concours-peche.typ",
+      "typCor": "typ/concours-peche_cor.typ",
+      "tex": "tex/concours-peche.tex",
+      "texCor": "tex/concours-peche_cor.tex"
+    },
+    {
       "id": "courses",
       "titre": "Les courses",
       "categorie": "Méli-Mélo",
@@ -1272,24 +1419,6 @@
       "typCor": "typ/courses_cor.typ",
       "tex": "tex/courses.tex",
       "texCor": "tex/courses_cor.tex"
-    },
-    {
-      "id": "la_fraction",
-      "titre": "La fraction",
-      "categorie": "Méli-Mélo",
-      "tags": [
-        "fraction",
-        "ensemble",
-        "simplification",
-        "2000Q12"
-      ],
-      "etoiles": 4,
-      "png": "png/la_fraction.png",
-      "pngCor": "png/la_fraction_cor.png",
-      "typ": "typ/la_fraction.typ",
-      "typCor": "typ/la_fraction_cor.typ",
-      "tex": "tex/la_fraction.tex",
-      "texCor": "tex/la_fraction_cor.tex"
     },
     {
       "id": "petite-grenouille",

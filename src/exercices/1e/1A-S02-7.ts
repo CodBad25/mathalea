@@ -71,7 +71,7 @@ export default class MoyenneEcartTypeClasseQCM extends ExerciceQcmA {
 
       switch (scenario) {
         case 0:
-          // Même moyenne, mais série B plus dispersée
+          // Même moyenne, mais série F plus dispersée
           serieA = genereSerie(10, 1)
           serieB = genereSerie(10, 3)
           break
@@ -100,10 +100,10 @@ export default class MoyenneEcartTypeClasseQCM extends ExerciceQcmA {
 
     // Liste standardisée des 4 réponses possibles
     const toutesLesReponses = [
-      'La moyenne de la série B est strictement supérieure à la moyenne de la série A.',
-      'La moyenne de la série A est strictement supérieure à la moyenne de la série B.',
-      "L'écart-type de la série A est strictement supérieur à l'écart-type de la série B.",
-      "L'écart-type de la série B est strictement supérieur à l'écart-type de la série A.",
+      'La moyenne de la série F est strictement supérieure à la moyenne de la série E.',
+      'La moyenne de la série E est strictement supérieure à la moyenne de la série F.',
+      "L'écart-type de la série E est strictement supérieur à l'écart-type de la série F.",
+      "L'écart-type de la série F est strictement supérieur à l'écart-type de la série E.",
     ]
 
     // Détection automatique de la bonne réponse
@@ -112,13 +112,13 @@ export default class MoyenneEcartTypeClasseQCM extends ExerciceQcmA {
 
     if (moyB > moyA) {
       bonnePhrase = toutesLesReponses[0]
-      explication = `La moyenne de la série B est ${texNombre(moyB, 2)}, celle de la série A est ${texNombre(moyA, 2)}.<br>
-      On peut conclure que la seule réponse acceptable est que ${texteEnCouleurEtGras('la moyenne de la série B est strictement supérieure à la moyenne de la série A')}.<br>
+      explication = `La moyenne de la série F est ${texNombre(moyB, 2)}, celle de la série E est ${texNombre(moyA, 2)}.<br>
+      On peut conclure que la seule réponse acceptable est que ${texteEnCouleurEtGras('la moyenne de la série F est strictement supérieure à la moyenne de la série E')}.<br>
       Il n'est pas nécessaire de calculer l'écart-type pour répondre à cette question.`
     } else if (moyA > moyB) {
       bonnePhrase = toutesLesReponses[1]
-      explication = `La moyenne de la série A est ${texNombre(moyA, 2)}, celle de la série B est ${texNombre(moyB, 2)}.
-      <br>On peut conclure que la seule réponse acceptable est que ${texteEnCouleurEtGras('la moyenne de la série A est strictement supérieure à la moyenne de la série B')}.<br>
+      explication = `La moyenne de la série E est ${texNombre(moyA, 2)}, celle de la série F est ${texNombre(moyB, 2)}.
+      <br>On peut conclure que la seule réponse acceptable est que ${texteEnCouleurEtGras('la moyenne de la série E est strictement supérieure à la moyenne de la série F')}.<br>
       Il n'est pas nécessaire de calculer l'écart-type pour répondre à cette question.`
     } else if (etA > etB) {
       bonnePhrase = toutesLesReponses[2]
@@ -145,10 +145,10 @@ export default class MoyenneEcartTypeClasseQCM extends ExerciceQcmA {
 
       explication = `On calcule les moyennes des deux séries qui sont toutes les deux égales à ${texNombre(moyA, 2)}.<br>
       Les moyennes sont égales, on calcule les écarts-types :<br>
-      $\\sigma_A = \\sqrt{\\dfrac{${termesA}}{${serieA.length}}} = \\sqrt{\\dfrac{${sommeCarresA}}{${serieA.length}}} = \\sqrt{${texNombre(varianceA, 2)}}$<br>
-      $\\sigma_B = \\sqrt{\\dfrac{${termesB}}{${serieB.length}}} = \\sqrt{\\dfrac{${sommeCarresB}}{${serieB.length}}} = \\sqrt{${texNombre(varianceB, 2)}}$<br>
-      On a donc $\\sigma_A > \\sigma_B$.<br>
-      ${texteEnCouleurEtGras("L'écart-type de la série A est strictement supérieur à celui de la série B")}.`
+      $\\sigma_E = \\sqrt{\\dfrac{${termesA}}{${serieA.length}}} = \\sqrt{\\dfrac{${sommeCarresA}}{${serieA.length}}} = \\sqrt{${texNombre(varianceA, 2)}}$<br>
+      $\\sigma_F = \\sqrt{\\dfrac{${termesB}}{${serieB.length}}} = \\sqrt{\\dfrac{${sommeCarresB}}{${serieB.length}}} = \\sqrt{${texNombre(varianceB, 2)}}$<br>
+      On a donc $\\sigma_E > \\sigma_F$.<br>
+      ${texteEnCouleurEtGras("L'écart-type de la série E est strictement supérieur à celui de la série F")}.`
     } else {
       bonnePhrase = toutesLesReponses[3]
 
@@ -174,10 +174,10 @@ export default class MoyenneEcartTypeClasseQCM extends ExerciceQcmA {
 
       explication = `On calcule les moyennes des deux séries qui sont toutes les deux égales à ${texNombre(moyA, 2)}.<br>
       Les moyennes sont égales, on calcule les écarts-types :<br>
-      $\\sigma_A = \\sqrt{\\dfrac{${termesA}}{${serieA.length}}} = \\sqrt{\\dfrac{${sommeCarresA}}{${serieA.length}}} = \\sqrt{${texNombre(varianceA, 2)}}$<br>
-      $\\sigma_B = \\sqrt{\\dfrac{${termesB}}{${serieB.length}}} = \\sqrt{\\dfrac{${sommeCarresB}}{${serieB.length}}} = \\sqrt{${texNombre(varianceB, 2)}}$<br>
-      On a donc $\\sigma_B > \\sigma_A$.<br>
-      ${texteEnCouleurEtGras("L'écart-type de la série B est strictement supérieur à celui de la série A")}.`
+      $\\sigma_E = \\sqrt{\\dfrac{${termesA}}{${serieA.length}}} = \\sqrt{\\dfrac{${sommeCarresA}}{${serieA.length}}} = \\sqrt{${texNombre(varianceA, 2)}}$<br>
+      $\\sigma_F = \\sqrt{\\dfrac{${termesB}}{${serieB.length}}} = \\sqrt{\\dfrac{${sommeCarresB}}{${serieB.length}}} = \\sqrt{${texNombre(varianceB, 2)}}$<br>
+      On a donc $\\sigma_F > \\sigma_E$.<br>
+      ${texteEnCouleurEtGras("L'écart-type de la série F est strictement supérieur à celui de la série E")}.`
     }
 
     // Réorganiser les réponses pour mettre la bonne en premier
@@ -186,8 +186,8 @@ export default class MoyenneEcartTypeClasseQCM extends ExerciceQcmA {
 
     // Construire l'énoncé
     this.enonce = `On considère les deux séries suivantes :  <br>
-${texteGras('Série A :')} $${serieA.join(' ; ')} $ <br>
-${texteGras('Série B :')} $${serieB.join(' ; ')} $ <br>
+${texteGras('Série E :')} $${serieA.join(' ; ')} $ <br>
+${texteGras('Série F :')} $${serieB.join(' ; ')} $ <br>
 
 Laquelle des quatre propositions suivantes est vraie ?`
 

@@ -96,7 +96,8 @@ texte += createList({
 | `'qcm'` | carré vide |
 | `'fleches'` | triangle orienté vers la droite |
 | `'nombres'` | 1. 2. 3. |
-| `'alpha'` / `'Alpha'` | a. b. c. / A. B. C. |
+| `'alpha'` | a) b) c), repères en gras comme `numAlpha()` |
+| `'Alpha'` | A. B. C. |
 | `'roman'` / `'Roman'` | i. ii. iii. / I. II. III. |
 
 Options :
@@ -121,6 +122,10 @@ texte += createList({
   classOptions: 'space-y-4 pt-4',
 })
 ```
+
+Pour des sous-questions avec un champ de réponse et une correction par
+item, utiliser [`createQuestion()`](sous-questions.md), qui s'appuie sur
+`createList()`.
 
 Le troisième paramètre de `createList()` donne le numéro de départ d'une liste
 numérotée.

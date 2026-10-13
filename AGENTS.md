@@ -32,6 +32,16 @@ exactly what the student must type (no units if the input field doesn't
 expect them). See `documentation/developpement/auteurs-exercices/rediger-un-exercice.md`
 for the full rules and examples.
 
+## Questions and sub-questions a), b), c)
+
+`createQuestion(this, i, { question, correction, answer | subQuestions })`
+(`src/lib/interactif/createQuestion.ts`) fills a question, its correction and
+its answers. With `subQuestions`, each answer field sits in its item and each
+correction under the same label. Do not write "a)" by hand nor group the
+fields at the end of the question. Model:
+`src/exercices/modèlesExos/40_questions_et_sous_questions.ts`; see
+`documentation/developpement/auteurs-exercices/complements/sous-questions.md`.
+
 ## Interactive exercises: fixed points per question (mandatory)
 
 A given question of an exercise must always be worth the same number of

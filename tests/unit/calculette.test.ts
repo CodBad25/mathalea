@@ -18,7 +18,7 @@ function type(keys: string, start = initialCalculetteState) {
 describe('calculette : calcul', () => {
   it.each([
     ['4×3=', '12'],
-    ['2+3×4=', '14'],
+    ['2+3×4=', '20'],
     ['10−2−3=', '5'],
     ['8÷2÷2=', '2'],
     ['0,1+0,2=', '0,3'],
@@ -41,6 +41,25 @@ describe('calculette : calcul', () => {
     expect(state.error).toBe(true)
     expect(state.result).toBeNull()
     expect(type('7', state)).toMatchObject({ expression: '7', error: false })
+  })
+
+  it('le 2e opérateur effectue le calcul en cours et passe à la ligne', () => {
+    expect(type('4+3×')).toMatchObject({
+      previous: '4+3 = 7',
+      expression: '7×',
+      result: null,
+    })
+    expect(type('2+3×4−5÷3=').result).toBe('5')
+    expect(type('2+3×4−5÷3=').previous).toBe('20−5 = 15')
+  })
+
+  it('le 2e opérateur gère un nombre négatif et le signe moins', () => {
+    expect(type('3×−2+').expression).toBe('−6+')
+    expect(type('−3+2×').expression).toBe('−1×')
+  })
+
+  it('un 2e opérateur après une division par zéro affiche une erreur', () => {
+    expect(type('5÷0+')).toMatchObject({ error: true, result: null })
   })
 
   it('un opérateur final est ignoré au calcul', () => {
@@ -91,10 +110,11 @@ describe('calculette : saisie', () => {
 
   it('un opérateur après « = » poursuit avec le résultat', () => {
     expect(type('4×3=+1=').result).toBe('13')
+    expect(type('4×3=+')).toMatchObject({ previous: '4×3 = 12', expression: '12+' })
   })
 
   it('un chiffre après « = » démarre un nouveau calcul', () => {
-    expect(type('4×3=7').expression).toBe('7')
+    expect(type('4×3=7')).toMatchObject({ previous: null, expression: '7' })
   })
 
   it('effacer après « = » revient à la modification du calcul', () => {

@@ -570,6 +570,9 @@ function handleIntervalle(saisie: string, answer: string): ResultType {
   if (mathbbMatch) {
     const lettre = mathbbMatch[1]
     if (localSaisie === localAnswer) return ok()
+    // $\mathbb{R}$ s'écrit aussi $]-\infty;+\infty[$
+    if (lettre === 'R' && /^\]-\\infty;\+?\\infty\[$/.test(localSaisie))
+      return ok()
     if (localSaisie === lettre)
       return fail(
         `La bonne réponse était $\\mathbb{${lettre}}$ et non ${lettre}.`,

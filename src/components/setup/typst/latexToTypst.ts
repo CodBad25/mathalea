@@ -1946,6 +1946,7 @@ function renderTypstTable(
   insetY: number,
   vlines: number[],
   hlineYs: number[],
+  rowHeightEm?: number,
 ): string {
   const columns = aligns.length
   const uniform = aligns.every((align) => align === aligns[0])
@@ -1960,6 +1961,8 @@ function renderTypstTable(
     `inset: (x: 5pt, y: ${insetY.toFixed(1)}pt)`,
     `stroke: ${fullBorder ? '0.5pt' : 'none'}`,
   ]
+  // hauteur commune à toutes les lignes (la dernière taille est répétée)
+  if (rowHeightEm != null) header.push(`rows: (${rowHeightEm}em,)`)
 
   const strokes: string[] = []
   if (!fullBorder) {
@@ -2063,7 +2066,15 @@ function htmlTableToTypst(
   const aligns = Array.from({ length: maxColumns }, () => 'center' as const)
   const vlines = Array.from({ length: maxColumns + 1 }, (_, index) => index)
   const hlineYs = Array.from({ length: rows.length + 1 }, (_, index) => index)
-  return renderTypstTable(aligns, rows, 4, vlines, hlineYs)
+  const rowHeightEm = Number(table.getAttribute('data-hauteur-ligne'))
+  return renderTypstTable(
+    aligns,
+    rows,
+    4,
+    vlines,
+    hlineYs,
+    rowHeightEm > 0 ? rowHeightEm : undefined,
+  )
 }
 
 function latexSegmentToTypst(

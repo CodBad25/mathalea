@@ -22,7 +22,7 @@
     type PreviewPageGeometry,
   } from '../shared/typstPreview'
   import { MATH_FONTS, TEXT_FONTS } from '../typst/buildTypstDocument'
-  import { minimalCorrection } from '../typst/minimalCorrection'
+  import { getShortAnswer, minimalCorrection } from '../typst/minimalCorrection'
   import type { TypstAnchor } from '../typst/typstCompiler'
   import {
     buildFlashcardsDocument,
@@ -169,11 +169,17 @@
       const corrections = exercise.listeCorrections ?? []
       for (const [i, question] of questions.entries()) {
         const correction = format(corrections[i] ?? '')
+        const shortAnswer = getShortAnswer(exercise, i)
         cards.push({
           front: format(
             intro.length > 0 ? `${intro}<br>${question}` : question,
           ),
-          back: minimalCorrections ? minimalCorrection(correction) : correction,
+          back: minimalCorrections
+            ? minimalCorrection(
+                correction,
+                shortAnswer == null ? shortAnswer : format(shortAnswer),
+              )
+            : correction,
         })
       }
     }

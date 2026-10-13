@@ -15,7 +15,8 @@ const labelsByStyle = new Map([
   ['qcm', '$\\square$'],
   ['fleches', '\\tiny$\\blacktriangleright$'],
   ['nombres', '\\arabic*.'],
-  ['alpha', '\\alph*.'],
+  // Même repère que numAlpha() et la sortie Typst : « a) » en gras.
+  ['alpha', '\\textbf{\\alph*)}'],
   ['Alpha', '\\Alph*.'],
   ['roman', '\\roman*.'],
   ['Roman', '\\Roman*.'],

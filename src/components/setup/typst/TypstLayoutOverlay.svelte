@@ -1,4 +1,6 @@
 <script lang="ts" module>
+  import type { SectionKey } from './overlaySections'
+
   /** Contrôle flottant, positionné en % du conteneur de l'aperçu */
   export interface OverlayWidget {
     /**
@@ -34,6 +36,12 @@
     top: number
     /** Marge de page où placer les contrôles des questions */
     side?: 'left' | 'right'
+    /**
+     * Sections (énoncé/correction d'un exercice) auxquelles le contrôle se
+     * rattache : il n'est affiché que lorsque l'une d'elles est survolée
+     * (`activeSection`). Absent : contrôle commun à la fiche, toujours affiché.
+     */
+    sections?: SectionKey[]
   }
 
   /** Mise en page courante des questions d'un exercice (lue dans le code) */
@@ -222,6 +230,11 @@
      * code d'un exercice, lignes pour écrire).
      */
     canMode?: boolean
+    /**
+     * Section survolée dans l'aperçu (voir `locateSectionAnchor`) : seuls
+     * ses contrôles sont affichés, en plus de ceux communs à la fiche.
+     */
+    activeSection?: SectionKey | null
     onChangeQuestionCount: (num: number, delta: number) => void
     onDeleteExercise: (num: number) => void
     /** Duplique l'exercice : la copie se place juste après lui */
@@ -263,6 +276,10 @@
     defaultExerciseTitles?: Record<number, string>
     /** Modifie (`value`, vide pour aucun titre) ou rétablit (`null`) le titre de l'exercice num */
     onSetExerciseTitle?: (num: number, value: string | null) => void
+    /** Points de chaque exercice, quand la fiche les affiche (vide sinon) */
+    exercisePoints?: Record<number, number>
+    /** Modifie les points de l'exercice num */
+    onSetExercisePoints?: (num: number, value: number) => void
   }
 
   let {
@@ -316,6 +333,7 @@
     mergedExercises = [],
     mergeExercisesEnabled = true,
     canMode = false,
+    activeSection = null,
     onChangeQuestionCount,
     onDeleteExercise,
     onDuplicateExercise,
@@ -342,6 +360,8 @@
     exerciseTitles = {},
     defaultExerciseTitles = {},
     onSetExerciseTitle,
+    exercisePoints = {},
+    onSetExercisePoints,
   }: Props = $props()
 
   /** Espace des insertions : `exo` (entre les exercices) ou `corr` (avant une correction) */
@@ -717,6 +737,7 @@
       insertionKind = 'section'
     }
     openWritingLines = null
+    openPoints = null
   }
 
   function submitInsertion() {
@@ -772,10 +793,36 @@
   let openTitle: number | null = $state(null)
   let titleDraft = $state('')
 
+  /** Numéro de l'exercice dont le panneau des points est ouvert */
+  let openPoints: number | null = $state(null)
+  let pointsDraft: number | null = $state(null)
+
+  function togglePoints(num: number) {
+    openPoints = openPoints === num ? null : num
+    openInsertion = null
+    openWritingLines = null
+    openTitle = null
+    if (openPoints != null) pointsDraft = exercisePoints[num] ?? null
+  }
+
+  /** Enregistre les points saisis (une seule régénération, à la validation) */
+  function submitPoints(num: number) {
+    if (
+      pointsDraft != null &&
+      Number.isFinite(pointsDraft) &&
+      pointsDraft >= 0 &&
+      pointsDraft !== exercisePoints[num]
+    ) {
+      onSetExercisePoints?.(num, pointsDraft)
+    }
+    openPoints = null
+  }
+
   function toggleTitle(num: number) {
     openTitle = openTitle === num ? null : num
     openInsertion = null
     openWritingLines = null
+    openPoints = null
     if (openTitle != null) titleDraft = exerciseTitles[num] ?? ''
   }
 
@@ -791,6 +838,7 @@
     openWritingLines = openWritingLines === num ? null : num
     openInsertion = null
     openTitle = null
+    openPoints = null
     if (openWritingLines != null) {
       writingLinesDraft = writingLinesValues[num] ?? {
         ...WRITING_LINES_DEFAULT,
@@ -1026,6 +1074,36 @@
   {/if}
 {/snippet}
 
+{#snippet pointsPanel(num: number)}
+  <!-- panneau des points de l'exercice `num` (barème de la fiche) -->
+  {#if openPoints === num}
+    <div
+      class="absolute top-6 right-0 z-30 flex w-44 items-center gap-2 typst-panel p-2"
+    >
+      <input
+        type="number"
+        step="0.5"
+        min="0"
+        class="w-16 rounded border border-gray-300 px-1 py-0.5 text-xs"
+        aria-label="Points de l'exercice {num}"
+        bind:value={pointsDraft}
+        onkeydown={(e) => {
+          if (e.key === 'Enter') submitPoints(num)
+          if (e.key === 'Escape') openPoints = null
+        }}
+      />
+      <span class="text-xs">pts</span>
+      <button
+        type="button"
+        class="ml-auto px-2 py-0.5 text-xs hover:text-coopmaths-action"
+        onclick={() => submitPoints(num)}
+      >
+        Valider
+      </button>
+    </div>
+  {/if}
+{/snippet}
+
 {#snippet writingLinesPanel(num: number)}
   <!-- panneau de réglage des lignes (pour que l'élève y écrive) de
        l'exercice `num` : emplacement, rendu, nombre
@@ -1110,6 +1188,12 @@
 
 <div class="pointer-events-none absolute inset-0 z-10 text-xs text-gray-700">
   {#each widgets as widget, i (i)}
+    <!-- contrôle d'un autre exercice que celui survolé : masqué (mais
+         toujours atteignable au clavier, voir .typst-pill-idle) ; ceux de
+         l'exercice survolé sont pleinement visibles -->
+    {@const idle =
+      widget.sections != null &&
+      (activeSection == null || !widget.sections.includes(activeSection))}
     {#if widget.kind === 'tasks' && widget.target != null}
       {@const target = widget.target}
       <!-- num 0 : la liste des corrections du mode « Course aux nombres »,
@@ -1133,6 +1217,8 @@
       <!-- contrôles des questions, dans la marge la plus proche -->
       <div
         class="pointer-events-auto absolute flex -translate-y-1/2 flex-col typst-pill typst-pill-box"
+        class:typst-pill-idle={idle}
+        class:typst-pill-current={widget.sections != null && !idle}
         style="top: {widget.top}%; {widget.side === 'right'
           ? 'right: 0.3%'
           : 'left: 0.3%'}"
@@ -1610,14 +1696,18 @@
            réglages, nouvelles données, nombre de questions, suppression -->
       <div
         class="pointer-events-auto absolute flex -translate-x-full -translate-y-1/2 items-center gap-0.5 typst-pill typst-pill-round px-1"
+        class:typst-pill-idle={idle}
+        class:typst-pill-current={widget.sections != null && !idle}
         class:typst-pill-force-visible={(openInsertion?.space === 'exo' &&
           openInsertion.num === insertGapNum) ||
           openWritingLines === widget.num ||
-          openTitle === widget.num}
+          openTitle === widget.num ||
+          openPoints === widget.num}
         class:z-20={(openInsertion?.space === 'exo' &&
           openInsertion.num === insertGapNum) ||
           openWritingLines === widget.num ||
-          openTitle === widget.num}
+          openTitle === widget.num ||
+          openPoints === widget.num}
         style="top: {widget.top}%; left: {columnRight - 0.3}%;"
         data-testid="typst-overlay-exo"
       >
@@ -1720,6 +1810,19 @@
           </button>
           {@render titlePanel(widget.num)}
         {/if}
+        {#if exercisePoints[widget.num] != null && !mergedExercises.includes(widget.num)}
+          <button
+            type="button"
+            title="Modifier les points de cet exercice"
+            aria-label="Points de l'exercice {widget.num}"
+            aria-expanded={openPoints === widget.num}
+            data-testid="typst-overlay-points"
+            onclick={() => togglePoints(widget.num)}
+          >
+            <i class="bx bx-medal"></i>
+          </button>
+          {@render pointsPanel(widget.num)}
+        {/if}
         {#if !canMode}
           <button
             type="button"
@@ -1793,6 +1896,8 @@
            sujets B, C..., seule la nouvelle graine est locale à la version. -->
       <div
         class="pointer-events-auto absolute flex -translate-x-full -translate-y-1/2 items-center gap-0.5 typst-pill typst-pill-round px-1"
+        class:typst-pill-idle={idle}
+        class:typst-pill-current={widget.sections != null && !idle}
         style="top: {widget.top}%; left: {widget.left - 0.3}%;"
         data-testid="typst-overlay-version-exo"
       >
@@ -1820,6 +1925,8 @@
       {@const hasColumnBreak = corrInsertions.includes(COLUMN_BREAK_SNIPPET)}
       <div
         class="pointer-events-auto absolute flex -translate-x-full -translate-y-1/2 items-center gap-0.5 typst-pill typst-pill-round px-1"
+        class:typst-pill-idle={idle}
+        class:typst-pill-current={widget.sections != null && !idle}
         class:typst-pill-force-visible={openInsertion?.space === 'corr' &&
           openInsertion.num === widget.num}
         class:z-20={openInsertion?.space === 'corr' &&
@@ -1931,6 +2038,8 @@
       {@const figAlign = figureAlignValues[widget.num] ?? 'center'}
       <div
         class="pointer-events-auto absolute flex -translate-x-full -translate-y-full items-center gap-0.5 typst-pill typst-pill-round px-1"
+        class:typst-pill-idle={idle}
+        class:typst-pill-current={widget.sections != null && !idle}
         style="left: {widget.left}%; top: {widget.top}%;"
         data-testid="typst-overlay-figure"
       >
@@ -2011,6 +2120,8 @@
         !hasFollowingExo
           ? 'translate-y-2'
           : '-translate-y-[135%]'} items-center gap-0.5 typst-pill typst-pill-round px-1"
+        class:typst-pill-idle={idle}
+        class:typst-pill-current={widget.sections != null && !idle}
         class:typst-pill-force-visible={openInsertion?.space === 'exo' &&
           openInsertion.num === widget.num}
         class:z-20={openInsertion?.space === 'exo' &&
@@ -2135,8 +2246,17 @@
   }
   .typst-pill:hover,
   .typst-pill:focus-within,
+  .typst-pill-current,
   .typst-pill-force-visible {
     opacity: 1;
+  }
+  /* Contrôle d'un exercice non survolé : invisible et transparent aux clics
+     (on clique l'aperçu dessous), mais reste dans le DOM pour la navigation
+     au clavier, qui le fait réapparaître (:focus-within). Un panneau ouvert
+     (.typst-pill-force-visible) le garde affiché. */
+  .typst-pill-idle:not(:focus-within):not(.typst-pill-force-visible) {
+    opacity: 0;
+    pointer-events: none;
   }
   .typst-pill-round {
     border-radius: 999px;

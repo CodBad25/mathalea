@@ -100,7 +100,7 @@ Côté interface (`Typst.svelte`) :
 Un double-clic sur l'aperçu (`jumpToSourceFromClick` dans `Typst.svelte`) bascule en « Côte à côte » (si on était en « Aperçu ») et amène le curseur sur l'exercice ou la correction affiché au point cliqué :
 
 1. le clic est converti en coordonnées SVG (mêmes unités que les repères de la palette de mise en page, voir `computeOverlayWidgets`) ;
-2. la page cliquée est retrouvée dans `previewPages`, puis le dernier repère `exo`/`corr` (parmi ceux publiés par `buildTypstDocument`, voir la section « Palette de mise en page ») rencontré au-dessus du point cliqué détermine l'exercice ;
+2. la page cliquée est retrouvée dans `previewPages`, puis le dernier repère `exo`/`corr` (parmi ceux publiés par `buildTypstDocument`, voir la section « Palette de mise en page ») rencontré avant le point cliqué dans l'ordre de lecture (page, colonne, ordonnée — `locateSectionAnchor` dans `overlaySections.ts`) détermine l'exercice ; au-dessus du premier exercice (en-tête), c'est le premier exercice qui suit ;
 3. `findExerciseSourceLine` cherche la ligne où le contenu est réellement éditable. Pour un énoncé, c'est le titre `// ----- Exercice N -----` de sa définition (`#let exN = exo.with(...)`) : le repère `#mathalea-anchor("exo", N)` ne précède que l'appel `#exN()` de la section « Énoncés », où il n'y a rien à modifier. À défaut de définition (mode fusionné, où le contenu suit le repère) — et toujours pour une correction, qui n'a pas de définition séparée — la ligne visée est celle du repère `#mathalea-anchor("exo"|"corr", N)` ;
 4. `revealPosition` (dans `editor/typstEditorSetup.ts`) y place le curseur, en dépliant d'abord tout bloc replié qui la contiendrait (`foldedRanges`/`unfoldEffect`).
 
@@ -119,6 +119,34 @@ Le bouton « Mise en page » de la barre d'outils affiche des contrôles par-des
 - en haut de la page de garde (quand un modèle est choisi) : édition de l'intitulé, de la session, de la matière, de la durée, de la mention de bas de page et des consignes — même mécanisme que le titre de la fiche, voir [Page de garde](#page-de-garde) ;
 - sur le pied de la première page (si affiché) : édition de son texte — voir [En-tête et pied de page](#en-tête-et-pied-de-page) ;
 - à côté de l'étiquette « Sujet A/B... » de l'en-tête (fiche à plusieurs versions) : icône masquant/affichant cette étiquette (`hideVersionLabel`) — voir [En-tête et pied de page](#en-tête-et-pied-de-page).
+
+**Seuls les contrôles de l'exercice survolé sont affichés**, pour que les
+barres de plusieurs exercices (voisins, ou côte à côte en document
+multicolonne) ne se superposent jamais :
+
+- au mouvement du pointeur sur l'aperçu (et au toucher), `Typst.svelte`
+  détermine la section survolée — énoncé `exo-N` ou correction `corr-N` —
+  avec `locateSectionAnchor` (`overlaySections.ts`) : dernier repère
+  `exo`/`version-exo`/`corr` rencontré avant le pointeur dans l'ordre de
+  lecture (page, puis colonne, puis ordonnée). Le haut d'une page appartient
+  donc à l'exercice commencé sur la précédente, et le haut d'une colonne à
+  celui commencé en bas de la colonne précédente. Tant que le pointeur est sur
+  une barre ou un panneau de la palette, la section courante est conservée
+  (une barre peut déborder sur la section voisine) ;
+- chaque contrôle porte les sections auxquelles il se rattache
+  (`OverlayWidget.sections`, calculé par `anchorSections`) : barre et liste de
+  questions de l'exercice, barre et liste de questions de sa correction,
+  figures (rattachées à la section qui les contient), barre entre deux
+  exercices (rattachée aux deux). Les contrôles communs à la fiche (en-tête,
+  page de garde, pied de page, QR-code, ligne « Course aux nombres », barre
+  « Ajouter un exercice » après le dernier exercice) n'en ont pas et restent
+  toujours affichés, à demi transparents ;
+- ceux de la section survolée sont pleinement opaques (`.typst-pill-current`)
+  ; les autres sont invisibles et transparents aux clics
+  (`.typst-pill-idle`), mais restent dans le DOM : la navigation au clavier
+  les fait réapparaître (`:focus-within`), un panneau ouvert
+  (`.typst-pill-force-visible`) garde sa barre affichée, et la visite guidée
+  les rend visibles quand elle les cible (`tour.css`).
 
 Fonctionnement :
 
@@ -712,6 +740,15 @@ précédente.
 
 ## Correction minimale
 
+`TypstExerciseInput.shortAnswers` transporte les réponses explicites de
+`listeReponsesCourtes` et les déclarations d'absence (`null`). Elles sont
+résolues par `getShortAnswer`, puis passées en second argument à
+`minimalCorrection` : une réponse non vide est prioritaire, `null` conserve
+le corrigé complet, `undefined` déclenche l’extraction orange. Ces réponses
+restent associées aux questions figées lors d'un changement de leur nombre.
+Le même contrat sert aux autres vues et exports ; voir le
+[guide auteur](../../auteurs-exercices/rediger-un-exercice.md#réponse-courte-et-correction-minimale).
+
 Case à cocher des Réglages du document (`TypstDocumentOptions.minimalCorrections`, désactivée quand la correction n'est pas affichée) : quand une correction met sa réponse en évidence en orange, seule cette réponse est imprimée — le raisonnement disparaît. Une correction sans mise en évidence, ou dont la mise en évidence utilise une autre couleur (choisie justement pour ne pas désigner la réponse, voir `lib/outils/ecritures.ts`), est conservée telle quelle.
 
 `minimalCorrection` (`components/setup/typst/minimalCorrection.ts`) reconnaît les **deux** façons de mettre une réponse en évidence :
@@ -721,9 +758,9 @@ Case à cocher des Réglages du document (`TypstDocumentOptions.minimalCorrectio
 
 `reponsesMisesEnEvidence` renvoie les réponses trouvées dans leur ordre d'apparition, dédoublonnées ; le tableau des réponses du diaporama s'en sert aussi (voir [Vue Diaporama](diaporama.md#tableau-des-réponses)). `minimalCorrection` les réémet telles quelles (donc toujours en orange) séparées par un cadratin `&emsp;`. Le réglage s'applique au seul endroit où les corrections passent dans le code généré : `computeGeneratedExercises` (fiche normale, fusionnée, code autonome de la modale d'édition) et `buildCanVersionContent` (tableau « Course aux nombres »). Dans les deux cas les corrections sont dans un environnement `tasks` en `auto-fit` : une fois réduites à leur réponse, elles se répartissent d'elles-mêmes sur plusieurs colonnes, réglables depuis la palette de l'aperçu.
 
-## Titres et exemples corrigés
+## Titres, points et exemples corrigés
 
-Avec [exercise-bank 0.6.5](https://typst.app/universe/package/exercise-bank/),
+Avec [exercise-bank 0.7.0](https://typst.app/universe/package/exercise-bank/),
 la case « Afficher le titre des exercices » des réglages du document ajoute
 l'intitulé MathALÉA après « Exercice N » (`showExerciseTitles`, `title:`).
 Elle est décochée par défaut. Un groupe fusionné reprend le titre de son
@@ -748,7 +785,23 @@ survit à la régénération, au partage par URL et aux déplacements ; une copi
 hérite du réglage. Il est commun aux sujets A, B… et s'applique à tout un
 groupe fusionné si l'un de ses membres est un exemple corrigé.
 
-Ces deux réglages sont désactivés dans les modes de fusion globale et
+La case « Afficher les points des exercices » (`showExercisePoints`) écrit
+« …… / 5 pts » au bout de la ligne de titre de chaque exercice, ou sous le
+titre à gauche selon « Position des points » (`exercisePointsPosition`)
+(`points: exo-N-points`, `exo-setup(points-position: "right" | "below",
+points-format: "score")`) ; les corrections ne répètent pas les points. Les points viennent du
+barème de la page de garde (`coverPage.bareme`), seule source des points, tant
+qu'il compte autant de lignes que d'exercices ; sinon un point par question
+(`exercisePoints`). Ils sont déclarés dans le préambule (`#let exo-N-points`,
+puis `#let exo-points-total`), un groupe fusionné vaut la somme de ses membres.
+Le bouton « Points » (`bx-medal`) de la barre d'outils de l'exercice modifie
+le barème (`setExercisePoints`) et régénère la fiche : page de garde, points
+des exercices et note restent d'accord. Sans page de garde, la ligne d'en-tête
+se termine par « Note : …… / 8 » (`MATHALEA_SCORE_CELL`), avant l'étiquette de
+version ; une page de garde a déjà sa case de note. L'habillage d'en-tête
+« aucun » n'affiche pas de note globale.
+
+Ces trois réglages sont désactivés dans les modes de fusion globale et
 « Course aux nombres », qui n'utilisent pas de bloc `exo` par exercice.
 
 ## Styles d'exercice (badges exercise-bank)
@@ -829,10 +882,10 @@ Un jeton rejeté (`401`) est effacé du localStorage et le champ de saisie du je
 
 ### Fichiers touchés
 
-| Fichier | Rôle dans cette fonctionnalité |
-| --- | --- |
-| `buildTypstDocument.ts` | `ficheUrl` exportée (était privée) pour être réutilisée hors génération du document |
-| `Typst.svelte` | `ficheUrlForVersion(version)` : recalcule l'URL longue à la volée ; props `ficheTitle` et `onGetFicheLongUrl` passées à `TypstLayoutOverlay` |
+| Fichier                     | Rôle dans cette fonctionnalité                                                                                                                                                            |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `buildTypstDocument.ts`     | `ficheUrl` exportée (était privée) pour être réutilisée hors génération du document                                                                                                       |
+| `Typst.svelte`              | `ficheUrlForVersion(version)` : recalcule l'URL longue à la volée ; props `ficheTitle` et `onGetFicheLongUrl` passées à `TypstLayoutOverlay`                                              |
 | `TypstLayoutOverlay.svelte` | Clé localStorage `mathalea-edurl-token`, appel `fetch` vers le relais, composition du titre, UI du popover (bouton, spinner, formulaire de jeton, « Oublier le jeton », message d'erreur) |
 
 ## Impression recto-verso (démarrage sur page impaire)
@@ -852,6 +905,43 @@ Le `set page` est **scopé au bloc de code** : la page blanche éventuellement i
 - `to: "odd"` regarde le **compteur de pages**, que chaque sujet remet à 1 juste après le saut. Comme le premier sujet démarre à la page physique 1 et que chaque sujet suivant démarre sur une page impaire, la parité du compteur reste celle des pages physiques — la parité ne dérive donc pas de sujet en sujet ;
 - une variante « manuelle » (`context if calc.odd(here().page())` puis saut) a été écartée : le repère d'introspection est résolu de l'autre côté du saut de page faible, la parité lue n'est pas celle attendue ;
 - les pages de garde (`#mathalea-couverture-*`) gardent leur `pagebreak()` simple : la fiche suit volontairement au dos de sa couverture.
+
+## Plusieurs sujets sur une page
+
+Pour les sujets courts, deux réglages du document placent plusieurs sujets sur
+une même page, à découper :
+
+- « Plusieurs sujets sur une page » (`chainSubjects`, à partir de deux sujets) :
+  les sujets A, B… se suivent ;
+- « Exemplaires par page » (`copiesPerPage`, 1 à 4) : chaque sujet est répété.
+
+Les sujets d'une même page s'en partagent la hauteur à parts égales, séparées
+par un trait pointillé. Un sujet qui ne tient pas dans sa part commence une
+nouvelle page ; un exemplaire qui ne tient pas est omis. Les corrections sont
+regroupées après tous les sujets. Possible sans page de garde ou avec le
+bandeau compact (`recitation`), qui se répète en tête de chaque part ; les
+autres modèles occupent une page entière.
+
+Mise en œuvre (`buildTypstDocument.ts`) : chaque sujet devient une variable de
+contenu (`#let mathalea-sujet-N = [...]`, les exemplaires `-copie` sans
+repères de la palette) et `MATHALEA_CHAIN_HELPER` (`#mathalea-enchainement`)
+mesure leur hauteur dans le corps de page (`pageBodySize`) pour former les
+groupes. Les hauteurs sont mesurées, pas lues sur la position courante : la
+mise en page converge en une passe. Le document n'a alors pas de repère de
+sujet (`// mathalea:sujet(N)`) : l'aperçu montre la fiche entière, et le
+sélecteur « Aperçu » des sujets est masqué.
+
+Les réglages ne sont proposés que si deux sujets tiennent sur une page. Les
+repères `subject-start`/`subject-end` (début et fin des énoncés de chaque
+sujet) donnent leur hauteur à l'aperçu (`subjectsPerPage` dans
+`Typst.svelte`), le plus haut décidant. Quand les sujets sont enchaînés, la
+palette ne garde que les repères du premier sujet (`paletteAnchors`, bornés
+par `subject-start`/`subject-end` et `subject-corr`) : ses réglages sont
+communs aux sujets.
+
+Limite connue : le zoom d'une figure (`fig-N-zoom`) est propre à chaque sujet ;
+réduire les figures du sujet A ne réduit pas celles du sujet B, qui peut alors
+ne plus tenir dans sa part.
 
 ## Persistance dans l'URL
 
@@ -880,6 +970,7 @@ Deux précautions, sans lesquelles driver.js reste bloqué à attendre une cible
 | `src/components/setup/typst/Typst.svelte`                             | La vue : barre d'outils, éditeur, aperçu, exports                                    |
 | `src/lib/onboarding/typstTour.ts`                                     | Visite guidée de la vue (driver.js)                                                  |
 | `src/components/setup/typst/TypstLayoutOverlay.svelte`                | Palette de mise en page dessinée par-dessus l'aperçu                                 |
+| `src/components/setup/typst/overlaySections.ts`                       | Section (exercice/correction) survolée et sections de chaque contrôle de la palette  |
 | `src/components/setup/typst/addExercise/TypstAddExerciseModal.svelte` | Modale « Ajouter un exercice » (navigation dans les référentiels)                    |
 | `src/components/setup/typst/addExercise/TypstExercisePreview.svelte`  | Aperçu d'un exercice dans cette modale (réglages et ajout)                           |
 | `src/components/setup/typst/buildTypstDocument.ts`                    | Génère le code Typst complet (en-tête, exercices, corrections)                       |

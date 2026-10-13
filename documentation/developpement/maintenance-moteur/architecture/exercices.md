@@ -54,6 +54,53 @@ Les exercices classiques héritent de la classe commune `Exercice` définie dans
 
 ## Interactivité et correction
 
+### Introduction et questions affichées séparément
+
+`Exercice.introduction` contient le contexte commun placé entre la consigne
+et les questions ; il reste distinct de `listeQuestions`. La vue élève
+classique (`ExerciceMathaleaVueEleve.svelte`) affiche ces deux propriétés avant
+la liste.
+
+`composeQuestionContext()` (`src/lib/components/questionContext.ts`) compose
+les parties non vides dans l'ordre consigne, introduction, puis énoncé éventuel,
+avec un saut de ligne entre elles.
+
+La vue `QuestionParPage.svelte` affiche ce contexte pour chaque question :
+`splitExercisesIntoQuestions()` (`src/lib/components/exercisesUtils.ts`)
+prépare une entrée de `consignes` par question. `QuestionContext.svelte` affiche
+uniquement le contexte de la page active, au-dessus de l'énoncé. Les exercices
+de type `html` suivent une autre voie et sont confiés à `Exercice.svelte`.
+
+Le contexte est monté une seule fois dans le DOM. Lors du passage entre deux
+questions du même exercice partageant exactement le même contexte, la figure
+dynamique éventuelle conserve son instance et son état. Un changement de
+contexte ou d'exercice détruit l'ancien bloc et monte le nouveau : les custom
+elements exécutent leurs callbacks de déconnexion et de connexion. Revenir à
+un contexte quitté le reconstruit ; son brouillon dynamique est réinitialisé.
+Cela évite de dupliquer les identifiants d'une introduction dans les pages
+masquées.
+
+Le bouton « Recommencer » régénère uniquement la question ciblée : énoncé,
+correction, réponse, consigne, introduction et consigne de correction sont
+actualisés ensemble. Le contexte des autres questions reste celui de leur
+tirage initial ; il ne faut donc pas remplacer l'introduction globale de
+l'exercice par celle du tirage temporaire.
+
+`MetaExerciceCan.ts` réhéberge une question par sous-exercice. Il ajoute le
+contexte du sous-exercice une seule fois après la construction de l'énoncé,
+y compris pour les simples, classiques, custom elements et QCM. La version
+QCM d'un exercice simple applique également cette composition avant sa sortie
+anticipée. Les identifiants des composants du contexte et les index des
+figures apiGeom sont réindexés vers la question hôte. Les énoncés CAN
+(`canEnonce` et `listeCanEnonces`) restent un contenu distinct, rédigé par le
+sous-exercice pour les tableaux CAN.
+
+Les tests `tests/unit/metaQuestionContext.test.ts` et
+`tests/unit/components/questionParPageContext.test.ts` couvrent la transmission
+et la régénération du contexte ;
+`tests/unit/components/questionContext.test.ts` vérifie la conservation et la
+destruction de l'instance dynamique.
+
 L'interactivité moderne passe par `handleAnswers()` dans
 `src/lib/interactif/gestionInteractif.ts`. Les formats et le pipeline sont
 décrits dans [système d'interactivité](../interactivite/systeme-interactivite.md).

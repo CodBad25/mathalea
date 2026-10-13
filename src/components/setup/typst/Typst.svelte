@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { getShortAnswer } from './minimalCorrection'
   import { EditorState } from '@codemirror/state'
   import { EditorView } from '@codemirror/view'
   import JSZip from 'jszip'
@@ -58,8 +59,11 @@
     getGeneratedCorrectionCode,
     getGeneratedExerciseCode,
     exerciseTitleLine,
+    exercisePoints,
     harvestCarryOver,
     swapExerciseFigures,
+    MAX_COPIES_PER_PAGE,
+    pageBodySize,
     subjectEditorCode,
     normalizeTypstLayoutOptions,
     parseNumberingLiteral,
@@ -114,6 +118,13 @@
     type PreviewPageGeometry,
   } from '../shared/typstPreview'
   import { typstLanguage } from './editor/typstLanguage'
+  import {
+    anchorSections,
+    locateSectionAnchor,
+    pageIndexAt,
+    sectionKeyOf,
+    type SectionKey,
+  } from './overlaySections'
   import { applyCodePatch, createCodePatch } from './codePatch'
   import {
     hasSeenTypstTour,
@@ -284,6 +295,18 @@
           ) {
             restoredDocumentOptions.nbVersions =
               defaultTypstDocumentOptions.nbVersions
+          }
+          if (
+            !Number.isInteger(restoredDocumentOptions.copiesPerPage) ||
+            restoredDocumentOptions.copiesPerPage < 1 ||
+            restoredDocumentOptions.copiesPerPage > MAX_COPIES_PER_PAGE
+          ) {
+            restoredDocumentOptions.copiesPerPage =
+              defaultTypstDocumentOptions.copiesPerPage
+          }
+          if (typeof restoredDocumentOptions.chainSubjects !== 'boolean') {
+            restoredDocumentOptions.chainSubjects =
+              defaultTypstDocumentOptions.chainSubjects
           }
           // graines épinglées par sujet : liste de listes de chaînes (ou null)
           if (
@@ -911,6 +934,14 @@
   let codeOverrideCorrectionValues: Record<number, string> = $state({})
   /** Lignes en pointillés réglées par exercice (palette), lues dans le code */
   let writingLinesValues: Record<number, WritingLinesSetting> = $state({})
+  /** Points de chaque exercice affichés sur la fiche (palette de l'aperçu) */
+  const exercisePointValues = $derived(
+    Object.fromEntries(
+      (
+        exercisePoints(exercises.map(defaultCoverPoints), documentOptions) ?? []
+      ).map((points, k) => [k + 1, points]),
+    ),
+  )
   /** Titres d'exercice modifiés dans la palette (`TypstCarryOver.exerciseTitles`) */
   let exerciseTitleValues: Record<number, string> = $state({})
   /** Numéro de l'exercice dont la modale d'édition du code Typst est ouverte */
@@ -988,6 +1019,8 @@
     anchorList: TypstAnchor[],
     pages: PreviewPageGeometry[],
     viewBox: { width: number; height: number },
+    columns: number,
+    exerciseCount: number,
   ): OverlayWidget[] {
     if (viewBox.width <= 0 || viewBox.height <= 0) return []
     const widgets: OverlayWidget[] = []
@@ -1022,13 +1055,89 @@
         // les contrôles des questions vont dans la marge la plus proche :
         // à gauche pour la colonne de gauche, à droite sinon
         side: anchor.x < page.width / 2 ? 'left' : 'right',
+        sections: anchorSections(
+          anchor,
+          anchorList,
+          pages,
+          columns,
+          exerciseCount,
+        ),
       })
     }
     return widgets
   }
+  /**
+   * Repères utilisés par la palette. Sujets enchaînés : la fiche entière est
+   * compilée, chaque sujet porte les mêmes repères ; la palette agit sur des
+   * réglages communs aux sujets et ne garde que ceux du premier (énoncés et
+   * corrections). Les repères arrivent dans l'ordre du document.
+   */
+  function paletteAnchors(all: TypstAnchor[]): TypstAnchor[] {
+    if (!chainActive) return all
+    let skip = false
+    return all.filter((anchor) => {
+      if (anchor.kind === 'subject-start') skip = anchor.num > 0
+      else if (anchor.kind === 'subject-corr') skip = anchor.num > 0
+      else if (anchor.kind === 'subject-end' && anchor.num > 0) {
+        skip = false
+        return false
+      }
+      return !skip
+    })
+  }
   const overlayWidgets = $derived(
-    computeOverlayWidgets(anchors, previewPages, previewViewBox),
+    computeOverlayWidgets(
+      paletteAnchors(anchors),
+      previewPages,
+      previewViewBox,
+      documentColumns,
+      exercises.length,
+    ),
   )
+  /**
+   * Section (énoncé ou correction d'un exercice) sous le pointeur : la
+   * palette n'affiche que les contrôles de celle-ci, pour que les barres de
+   * plusieurs exercices (voisins, ou côte à côte en multicolonne) ne se
+   * superposent pas.
+   */
+  let hoveredSection: SectionKey | null = $state(null)
+
+  /** Convertit la position du pointeur en point de l'aperçu (page 1-based, pt) */
+  function previewPointFromEvent(
+    event: MouseEvent,
+  ): { page: number; x: number; y: number } | null {
+    if (previewViewBox.width <= 0 || previewViewBox.height <= 0) return null
+    const container = event.currentTarget as HTMLElement
+    const rect = container.getBoundingClientRect()
+    if (rect.width <= 0 || rect.height <= 0) return null
+    const x = ((event.clientX - rect.left) / rect.width) * previewViewBox.width
+    const y = ((event.clientY - rect.top) / rect.height) * previewViewBox.height
+    const pageIndex = pageIndexAt(previewPages, y)
+    if (pageIndex === -1) return null
+    return { page: pageIndex + 1, x, y: y - previewPages[pageIndex].y }
+  }
+
+  function updateHoveredSection(event: PointerEvent) {
+    // pointeur sur un contrôle de la palette (barre, panneau ouvert) : on
+    // garde la section courante, même si la barre déborde sur la section
+    // voisine, sans quoi elle disparaîtrait sous le pointeur
+    const target = event.target as HTMLElement
+    if (target.closest('.typst-pill, .typst-panel') != null) return
+    const point = previewPointFromEvent(event)
+    const anchor =
+      point == null
+        ? null
+        : locateSectionAnchor(
+            anchors,
+            previewPages,
+            documentColumns,
+            point.page,
+            point.x,
+            point.y,
+          )
+    const key = anchor == null ? null : sectionKeyOf(anchor)
+    if (key !== hoveredSection) hoveredSection = key
+  }
 
   /**
    * Relit dans le code les données de la palette : valeurs
@@ -1310,6 +1419,23 @@
     })
   }
 
+  /**
+   * Points de l'exercice `num` saisis dans la palette : ils vont dans le
+   * barème de la page de garde (source unique des points, voir
+   * `exercisePoints`), réaligné au besoin sur les exercices de la fiche.
+   */
+  function setExercisePoints(num: number, value: number) {
+    const bareme = exercisePoints(
+      exercises.map(defaultCoverPoints),
+      documentOptions,
+    )
+    if (bareme == null || !Number.isFinite(value) || value < 0) return
+    documentOptions.coverPage.bareme = bareme.map((points, k) =>
+      k === num - 1 ? value : points,
+    )
+    applyDocumentOptions()
+  }
+
   function adjustExerciseZoom(num: number, delta: number) {
     if (editorView == null) return
     const doc = subjectEditorCode(currentCode(), previewVersion)
@@ -1471,6 +1597,7 @@
         introCorrection: current.introCorrection,
         questions: current.questions,
         corrections: current.corrections,
+        shortAnswers: current.shortAnswers ?? [],
         canQuestions: current.canQuestions ?? [],
         canAnswers: current.canAnswers ?? [],
       })
@@ -3043,6 +3170,7 @@
       introCorrection: string
       questions: string[]
       corrections: string[]
+      shortAnswers: (string | null | undefined)[]
       /** Énoncés et réponses du tableau « Course aux nombres » */
       canQuestions: string[]
       canAnswers: string[]
@@ -3158,6 +3286,10 @@
         mathaleaFormatExercice(text).replaceAll('{zoomFactor}', '1')
       input.questions = (exercise.listeQuestions ?? []).map(format)
       input.corrections = (exercise.listeCorrections ?? []).map(format)
+      input.shortAnswers = input.questions.map((_, i) => {
+        const answer = getShortAnswer(exercise, i)
+        return answer == null ? answer : format(answer)
+      })
       input.introCorrection = mathaleaFormatExercice(
         exercise.consigneCorrection ?? '',
       )
@@ -3200,6 +3332,9 @@
         )
         input.corrections = input.corrections.map(
           (correction, i) => frozen.corrections[i] ?? correction,
+        )
+        input.shortAnswers = input.shortAnswers?.map((answer, i) =>
+          i < frozen.questions.length ? frozen.shortAnswers[i] : answer,
         )
         input.canQuestions = input.canQuestions?.map(
           (question, i) => frozen.canQuestions[i] ?? question,
@@ -3447,60 +3582,26 @@
       target.closest('button, input, select')
     )
       return
-    if (previewViewBox.width <= 0 || previewViewBox.height <= 0) return
-    const container = event.currentTarget as HTMLElement
-    const rect = container.getBoundingClientRect()
-    if (rect.width <= 0 || rect.height <= 0) return
-    const clickX =
-      ((event.clientX - rect.left) / rect.width) * previewViewBox.width
-    const clickY =
-      ((event.clientY - rect.top) / rect.height) * previewViewBox.height
-
-    let pageIndex = previewPages.findIndex(
-      (page) => clickY >= page.y && clickY <= page.y + page.height,
-    )
-    if (pageIndex === -1) {
-      // clic dans l'espacement entre deux pages : la page la plus proche
-      let bestDistance = Infinity
-      previewPages.forEach((page, index) => {
-        const distance = Math.min(
-          Math.abs(clickY - page.y),
-          Math.abs(clickY - (page.y + page.height)),
-        )
-        if (distance < bestDistance) {
-          bestDistance = distance
-          pageIndex = index
-        }
-      })
-    }
-    if (pageIndex === -1) return
-    const pageNum = pageIndex + 1
-    const localY = clickY - previewPages[pageIndex].y
-
+    const point = previewPointFromEvent(event)
+    if (point == null) return
     const sectionAnchors = anchors.filter(
       (anchor) => anchor.kind === 'exo' || anchor.kind === 'corr',
     )
-    let candidate: TypstAnchor | null = null
-    for (const anchor of sectionAnchors) {
-      const isBeforeClick =
-        anchor.page < pageNum || (anchor.page === pageNum && anchor.y <= localY)
-      if (!isBeforeClick) continue
-      if (
-        candidate == null ||
-        anchor.page > candidate.page ||
-        (anchor.page === candidate.page && anchor.y > candidate.y)
-      ) {
-        candidate = anchor
-      }
-    }
-    // clic au-dessus du premier repère de la page (ex. dans l'en-tête) :
-    // on vise plutôt le premier exercice qui suit
-    if (candidate == null) {
-      candidate =
-        sectionAnchors.find((anchor) => anchor.page >= pageNum) ??
-        sectionAnchors[0] ??
-        null
-    }
+    // dernier repère `exo`/`corr` avant le clic dans l'ordre de lecture
+    // (colonnes comprises) ; clic au-dessus du premier repère de la fiche
+    // (ex. dans l'en-tête) : on vise plutôt le premier exercice qui suit
+    const candidate =
+      locateSectionAnchor(
+        sectionAnchors,
+        previewPages,
+        documentColumns,
+        point.page,
+        point.x,
+        point.y,
+      ) ??
+      sectionAnchors.find((anchor) => anchor.page >= point.page) ??
+      sectionAnchors[0] ??
+      null
     if (candidate == null) return
 
     const line = findExerciseSourceLine(
@@ -3589,6 +3690,50 @@
    * les exports, qui portent toujours tous les sujets.
    */
   let previewVersion = $state(0)
+
+  /**
+   * Les sujets sont enchaînés : l'aperçu montre la fiche entière. Possible
+   * sans page de garde ou avec le bandeau compact (`recitation`), qui tient
+   * en tête de page ; les autres modèles occupent une page entière.
+   */
+  const chainActive = $derived(
+    (documentOptions.copiesPerPage > 1 ||
+      (documentOptions.chainSubjects && documentOptions.nbVersions > 1)) &&
+      ['aucune', 'recitation'].includes(
+        documentOptions.coverPage?.template ?? 'aucune',
+      ),
+  )
+
+  /**
+   * Nombre de sujets (ou d'exemplaires) qui tiennent sur une page, d'après la
+   * hauteur des sujets mesurée à la dernière compilation (repères
+   * `subject-start`/`subject-end`) ; 1 tant qu'elle est inconnue ou qu'un
+   * sujet déborde sur une seconde page. Les réglages « Enchaîner les sujets »
+   * et « Exemplaires par page » ne sont proposés qu'à partir de 2.
+   */
+  const subjectsPerPage = $derived.by(() => {
+    // le sujet le plus haut décide (tous sont compilés quand ils sont
+    // enchaînés ; sinon seul le sujet affiché a ses repères)
+    let height = 0
+    for (const start of anchors) {
+      if (start.kind !== 'subject-start') continue
+      const end = anchors.find(
+        (anchor) => anchor.kind === 'subject-end' && anchor.num === start.num,
+      )
+      if (end == null || start.page !== end.page) return 1
+      height = Math.max(height, end.y - start.y)
+    }
+    if (height <= 0) return 1
+    const pointsPerMm = 72 / 25.4
+    const body = pageBodySize(documentOptions, 10).height * pointsPerMm
+    // parts égales de la page, chacune avec 1,2 em sous le trait pointillé
+    // (voir MATHALEA_CHAIN_HELPER)
+    const gap = 1.2 * documentOptions.fontSize
+    return Math.max(
+      1,
+      Math.min(MAX_COPIES_PER_PAGE, Math.floor((body - 1) / (height + gap))),
+    )
+  })
 
   /**
    * Source réellement compilée pour l'aperçu : sur une fiche à plusieurs
@@ -4417,7 +4562,7 @@
            et le code de l'éditeur portent toujours tous les sujets. Les
            contrôles de mise en page sont disponibles pour chaque sujet, qui peut
            porter les repères de la palette. -->
-      {#if documentOptions.nbVersions > 1}
+      {#if documentOptions.nbVersions > 1 && !chainActive}
         <label
           class="flex items-center gap-2 text-sm"
           title="Sujet montré dans l’aperçu — les exports contiennent toujours tous les sujets"
@@ -4609,6 +4754,52 @@
               </span>
             </label>
 
+            {#if documentOptions.nbVersions > 1}
+              <label class="flex items-center gap-2 text-sm cursor-pointer">
+                <input
+                  type="checkbox"
+                  bind:checked={documentOptions.chainSubjects}
+                  disabled={subjectsPerPage < 2 &&
+                    !documentOptions.chainSubjects}
+                  onchange={applyDocumentOptions}
+                />
+                <span
+                  class:opacity-50={subjectsPerPage < 2 &&
+                    !documentOptions.chainSubjects}
+                  title={subjectsPerPage < 2 && !documentOptions.chainSubjects
+                    ? 'Les sujets sont trop longs pour tenir à deux sur une page.'
+                    : 'Les sujets se suivent sur une même page, séparés par un trait pointillé, quand ils y tiennent. Les corrections sont regroupées à la fin.'}
+                >
+                  Plusieurs sujets sur une page
+                </span>
+              </label>
+            {/if}
+
+            <div class="flex items-center justify-between gap-4 text-sm">
+              <label
+                for="typst-copies-input"
+                class:opacity-50={subjectsPerPage < 2 &&
+                  documentOptions.copiesPerPage < 2}
+                title={subjectsPerPage < 2 && documentOptions.copiesPerPage < 2
+                  ? 'Le sujet est trop long pour tenir deux fois sur une page.'
+                  : 'Le sujet est répété sur la page, séparé par un trait pointillé, autant de fois qu’il y tient.'}
+              >
+                Exemplaires par page
+              </label>
+              <select
+                id="typst-copies-input"
+                class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                bind:value={documentOptions.copiesPerPage}
+                disabled={subjectsPerPage < 2 &&
+                  documentOptions.copiesPerPage < 2}
+                onchange={applyDocumentOptions}
+              >
+                {#each Array(Math.max(subjectsPerPage, documentOptions.copiesPerPage)) as _, i (i)}
+                  <option value={i + 1}>{i + 1}</option>
+                {/each}
+              </select>
+            </div>
+
             <label class="flex items-center gap-2 text-sm cursor-pointer">
               <input
                 type="checkbox"
@@ -4699,6 +4890,36 @@
                 Afficher le titre des exercices
               </span>
             </label>
+
+            <label class="flex items-center gap-2 text-sm cursor-pointer">
+              <input
+                type="checkbox"
+                bind:checked={documentOptions.showExercisePoints}
+                disabled={documentOptions.mergeExercises ||
+                  documentOptions.canMode}
+                onchange={applyDocumentOptions}
+              />
+              <span
+                class:opacity-50={documentOptions.mergeExercises ||
+                  documentOptions.canMode}
+              >
+                Afficher les points des exercices
+              </span>
+            </label>
+
+            {#if documentOptions.showExercisePoints && !documentOptions.mergeExercises && !documentOptions.canMode}
+              <label class="flex items-center justify-between gap-4 text-sm">
+                Position des points
+                <select
+                  class="rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+                  bind:value={documentOptions.exercisePointsPosition}
+                  onchange={applyDocumentOptions}
+                >
+                  <option value="right">À droite du titre</option>
+                  <option value="below">Sous le titre</option>
+                </select>
+              </label>
+            {/if}
 
             <label class="flex items-center gap-2 text-sm cursor-pointer">
               <input
@@ -5286,12 +5507,16 @@
                 class="typst-svg-container relative mx-auto"
                 title="Double-cliquez sur un exercice pour éditer son code"
                 ondblclick={jumpToSourceFromClick}
+                onpointermove={updateHoveredSection}
+                onpointerdown={updateHoveredSection}
+                onpointerleave={() => (hoveredSection = null)}
               >
                 <!-- eslint-disable-next-line svelte/no-at-html-tags -->
                 {@html svgContent}
                 {#if showOverlay && overlayWidgets.length > 0}
                   <TypstLayoutOverlay
                     widgets={overlayWidgets}
+                    activeSection={hoveredSection}
                     layoutValues={tasksLayoutValues}
                     insertions={insertionValues}
                     insertionsCorrection={insertionCorrectionValues}
@@ -5342,6 +5567,8 @@
                       ]),
                     )}
                     onSetExerciseTitle={setExerciseTitle}
+                    exercisePoints={exercisePointValues}
+                    onSetExercisePoints={setExercisePoints}
                     onCutImage={openImageCuts}
                     onAdjustExerciseCorrectionZoom={adjustExerciseCorrectionZoom}
                     onSetFigureAlign={setFigureAlign}

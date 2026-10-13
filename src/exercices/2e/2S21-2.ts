@@ -6,6 +6,7 @@ import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../lib/2d/textes'
 import { vide2d } from '../../lib/2d/Vide2d'
 import { bleuMathalea } from '../../lib/colors'
+import { createQuestion } from '../../lib/interactif/createQuestion'
 import { choice } from '../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
@@ -388,35 +389,48 @@ export default class ComparerPrecipitations extends Exercice {
     )
     const rappelBoite = traceRappelBoite()
 
-    this.listeQuestions[0] = `Les deux diagrammes en boîte ci-dessous représentent les cumuls mensuels des précipitations, en mm, à ${scenario.villeConcentree} et à ${scenario.villeReguliere} au cours d'une année.<br>
+    createQuestion(this, 0, {
+      question: `Les deux diagrammes en boîte ci-dessous représentent les cumuls mensuels des précipitations, en mm, à ${scenario.villeConcentree} et à ${scenario.villeReguliere} au cours d'une année.<br>
     ${figure}<br>
     À ${scenario.villeConcentree}, ${scenario.descriptionConcentree}.<br>
-    À ${scenario.villeReguliere}, ${scenario.descriptionReguliere}.<br><br>
-    1. Quel diagramme en boîte représente la pluviométrie de ${scenario.villeConcentree} ? Justifier.<br><br>
-    2. Estimer l'étendue des précipitations à ${scenario.villeReguliere}. Justifier.<br><br>
-    3. Dans quelle ville l'écart interquartile des précipitations est-il le plus grand ? Justifier.<br><br>
-    4. « Il y a au moins trois mois dans l'année où le cumul des précipitations est inférieur à $${texNombre(seuil)}$ mm à ${scenario.villeReguliere} », affirme ${prenom1}. Cette affirmation est-elle correcte ? Justifier.<br><br>
-    5. ${prenom2} compare le troisième quartile des précipitations à ${scenario.villeConcentree} et la médiane des précipitations à ${scenario.villeReguliere}. Estimer ces deux nombres et interpréter ces résultats.`
-
-    this.listeCorrections[0] = `${rappelBoite}<br>
-    <b>1.</b> D'après l'énoncé, à ${scenario.villeConcentree}, plusieurs mois sont relativement secs, mais les mois pluvieux peuvent recevoir des précipitations nettement plus importantes. On s'attend donc à observer un minimum faible, un maximum élevé et ainsi une étendue importante.<br>
+    À ${scenario.villeReguliere}, ${scenario.descriptionReguliere}.`,
+      correction: `${rappelBoite}<br>`,
+      subQuestions: [
+        {
+          question: `Quel diagramme en boîte représente la pluviométrie de ${scenario.villeConcentree} ? Justifier.`,
+          correction: `D'après l'énoncé, à ${scenario.villeConcentree}, plusieurs mois sont relativement secs, mais les mois pluvieux peuvent recevoir des précipitations nettement plus importantes. On s'attend donc à observer un minimum faible, un maximum élevé et ainsi une étendue importante.<br>
     L'étendue du diagramme ${numeroConcentre} vaut $${texNombre(resumeConcentre.max)}-${texNombre(resumeConcentre.min)}=${texNombre(etendueConcentree)}$ mm, contre $${texNombre(resumeRegulier.max)}-${texNombre(resumeRegulier.min)}=${texNombre(etendueReguliere)}$ mm pour l'autre diagramme.<br>
-    Il s'agit du ${texteEnCouleurEtGras(`diagramme ${numeroConcentre}`)}.<br><br>
-    <b>2.</b> Sur le diagramme ${numeroRegulier}, on lit un minimum de $${texNombre(resumeRegulier.min)}$ mm et un maximum de $${texNombre(resumeRegulier.max)}$ mm.<br>
+    Il s'agit du ${texteEnCouleurEtGras(`diagramme ${numeroConcentre}`)}.`,
+        },
+        {
+          question: `Estimer l'étendue des précipitations à ${scenario.villeReguliere}. Justifier.`,
+          correction: `Sur le diagramme ${numeroRegulier}, on lit un minimum de $${texNombre(resumeRegulier.min)}$ mm et un maximum de $${texNombre(resumeRegulier.max)}$ mm.<br>
     L'étendue est la différence entre le maximum et le minimum. Elle vaut donc<br>
-    $${texNombre(resumeRegulier.max)}-${texNombre(resumeRegulier.min)}=${miseEnEvidence(texNombre(etendueReguliere))}$ mm.<br><br>
-    <b>3.</b> L'écart interquartile est la différence $Q_3-Q_1$ ; il correspond à la longueur de la boîte.<br>
+    $${texNombre(resumeRegulier.max)}-${texNombre(resumeRegulier.min)}=${miseEnEvidence(texNombre(etendueReguliere))}$ mm.`,
+        },
+        {
+          question: `Dans quelle ville l'écart interquartile des précipitations est-il le plus grand ? Justifier.`,
+          correction: `L'écart interquartile est la différence $Q_3-Q_1$ ; il correspond à la longueur de la boîte.<br>
     Pour ${scenario.villeConcentree}, il vaut
     $${texNombre(resumeConcentre.q3)}-${texNombre(resumeConcentre.q1)}=${texNombre(eiqConcentre)}$ mm.<br>
     Pour ${scenario.villeReguliere}, il vaut
     $${texNombre(resumeRegulier.q3)}-${texNombre(resumeRegulier.q1)}=${texNombre(eiqRegulier)}$ mm.<br>
-    L'écart interquartile est donc ${texteEnCouleurEtGras(`plus grand à ${villePlusDispersee}`)}.<br><br>
-    <b>4.</b> Pour ${scenario.villeReguliere}, on lit $Q_1=${texNombre(resumeRegulier.q1)}$ mm. Par définition du premier quartile, au moins $25\\,\\%$ des valeurs lui sont inférieures ou égales.<br>
+    L'écart interquartile est donc ${texteEnCouleurEtGras(`plus grand à ${villePlusDispersee}`)}.`,
+        },
+        {
+          question: `« Il y a au moins trois mois dans l'année où le cumul des précipitations est inférieur à $${texNombre(seuil)}$ mm à ${scenario.villeReguliere} », affirme ${prenom1}. Cette affirmation est-elle correcte ? Justifier.`,
+          correction: `Pour ${scenario.villeReguliere}, on lit $Q_1=${texNombre(resumeRegulier.q1)}$ mm. Par définition du premier quartile, au moins $25\\,\\%$ des valeurs lui sont inférieures ou égales.<br>
     Or $25\\,\\%$ de douze mois représentent $0{,}25\\times12=3$ mois. Au moins trois mois ont donc reçu au plus $${texNombre(resumeRegulier.q1)}$ mm de pluie. Comme $${texNombre(resumeRegulier.q1)}<${texNombre(seuil)}$, ces mois ont reçu moins de $${texNombre(seuil)}$ mm.<br>
-    ${texteEnCouleurEtGras(`L'affirmation de ${prenom1} est correcte.`)}<br><br>
-    <b>5.</b> Le troisième quartile est représenté par le côté droit de la boîte : on lit $Q_3=${texNombre(resumeConcentre.q3)}$ mm à ${scenario.villeConcentree}. La médiane est représentée par le trait situé dans la boîte : on lit $${texNombre(resumeRegulier.mediane)}$ mm à ${scenario.villeReguliere}.<br>
+    ${texteEnCouleurEtGras(`L'affirmation de ${prenom1} est correcte.`)}`,
+        },
+        {
+          question: `${prenom2} compare le troisième quartile des précipitations à ${scenario.villeConcentree} et la médiane des précipitations à ${scenario.villeReguliere}. Estimer ces deux nombres et interpréter ces résultats.`,
+          correction: `Le troisième quartile est représenté par le côté droit de la boîte : on lit $Q_3=${texNombre(resumeConcentre.q3)}$ mm à ${scenario.villeConcentree}. La médiane est représentée par le trait situé dans la boîte : on lit $${texNombre(resumeRegulier.mediane)}$ mm à ${scenario.villeReguliere}.<br>
     Le troisième quartile des précipitations à ${scenario.villeConcentree} est donc ${comparaisonQuartileMediane} la médiane des précipitations à ${scenario.villeReguliere}.<br>
-    Par définition, au moins $75\\,\\%$ des mois à ${scenario.villeConcentree}, soit au moins neuf mois, ont reçu au plus $${texNombre(resumeConcentre.q3)}$ mm de pluie. Au moins $50\\,\\%$ des mois à ${scenario.villeReguliere}, soit au moins six mois, ont reçu au plus $${texNombre(resumeRegulier.mediane)}$ mm.`
+    Par définition, au moins $75\\,\\%$ des mois à ${scenario.villeConcentree}, soit au moins neuf mois, ont reçu au plus $${texNombre(resumeConcentre.q3)}$ mm de pluie. Au moins $50\\,\\%$ des mois à ${scenario.villeReguliere}, soit au moins six mois, ont reçu au plus $${texNombre(resumeRegulier.mediane)}$ mm.`,
+        },
+      ],
+    })
 
     listeQuestionsToContenu(this)
   }

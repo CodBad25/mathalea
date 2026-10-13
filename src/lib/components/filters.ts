@@ -11,6 +11,7 @@ import {
   isStaticType,
   EXAMS,
   isExamItemInReferentiel,
+  isBanqueExterneType,
   resourceHasMonth,
 } from '../types/referentiels'
 import { stringWithNoAccent } from './textUtils'
@@ -431,8 +432,12 @@ export function subjectCriterion(
           ).includes(subjectToLowerCaseWithoutAccent)
         }
         // on rechercher dans le titre
-        if (isExerciceItemInReferentiel(item.resource)) {
-          // la ressource est un exercice : elle a donc un titre
+        if (
+          isExerciceItemInReferentiel(item.resource) ||
+          isBanqueExterneType(item.resource)
+        ) {
+          // la ressource est un exercice (ou un exercice de banque externe,
+          // comme la FFJM, qui n'a pas de `features`) : elle a donc un titre
           if (
             stringWithNoAccent(item.resource.titre.toLowerCase()).includes(
               subjectToLowerCaseWithoutAccent,

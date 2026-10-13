@@ -38,6 +38,7 @@ export async function sendActivityParams() {
       titre = exercice.titre
     }
     exercices.push({
+      id: param.id,
       titre,
       url: paramUrl,
     })

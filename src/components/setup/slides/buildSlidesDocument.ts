@@ -30,6 +30,7 @@ export interface SlideInput {
   question: string
   /** Correction correspondante */
   correction: string
+  shortAnswer?: string | null
   /**
    * Autres versions de la même question, affichées côte à côte sur la même
    * diapositive (réglage « multivue », comme dans le diaporama en direct).
@@ -339,7 +340,7 @@ export function buildSlidesDocument(
     // correction de la diapositive plutôt que de la convertir une seconde
     // fois (contenu et figures ne sont pas dupliqués).
     const minimalAnswer = options.recapAnswers
-      ? minimalCorrection(slide.correction)
+      ? minimalCorrection(slide.correction, slide.shortAnswer)
       : slide.correction
     return {
       question: htmlToTypst(slide.question, figures),

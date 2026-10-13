@@ -71,8 +71,8 @@ export default class IntegralePolynome extends ExerciceSimple {
   \\end{aligned}$<br>
 `
     }
-    this.correction += `On peut conclure que $I=\\displaystyle\\int_{${borneinf}}^{${bornesup}} \\left( ${derivee3.toLatex()} \\right)\\mathrm{d}x=${miseEnEvidence(`${resultat} `)}$.`
+    this.correction += `On peut conclure que $I=\\displaystyle\\int_{${borneinf}}^{${bornesup}} \\left( ${derivee3.toLatex()} \\right)\\mathrm{d}x=${miseEnEvidence(`${resultat}`)}$.`
 
-    this.reponse = `\\ln(${resultat})`
+    this.reponse = resultat
   }
 }

@@ -22,14 +22,14 @@ it.each(Array.from({ length: 6 }, (_, i) => i + 3))(
         const answers = exercise.autoCorrection[0].valeur!
         const sign = direction === 0 ? 1 : -1
         const letters = 'ABCDEFGH'
-        expect(answers.champ1.value).toBe(
+        expect(answers.field0!.value).toBe(
           letters[(sides - 1 + sign * remainder + sides) % sides],
         )
-        expect(answers.champ2.value).toBe(
+        expect(answers.field1!.value).toBe(
           letters[(sides - 1 - sign * remainder + sides) % sides],
         )
-        expect(answers.bareme!([1, 1])).toEqual([1, 1])
-        expect(answers.bareme!([1, 0])).toEqual([0, 1])
+        expect(answers.bareme!([1, 1])).toEqual([2, 2])
+        expect(answers.bareme!([1, 0])).toEqual([1, 2])
         expect(exercise.listeQuestions[0]).toContain(
           `$${sides}$ arcs identiques`,
         )

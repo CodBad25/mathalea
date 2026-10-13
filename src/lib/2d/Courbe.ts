@@ -329,3 +329,35 @@ export function courbe(
     fLatex,
   })
 }
+
+/**
+ * Parties des intervalles sur lesquelles la courbe de `f` reste entre `yMin` et `yMax`.
+ * Le tracé s'arrête ainsi exactement au bord du repère (et non au dernier point calculé avant d'en sortir),
+ * ce qui évite aussi de relier les deux branches d'une asymptote verticale.
+ */
+export function intervallesDansLaFenetre(
+  f: (x: number) => number,
+  intervalles: [number, number][],
+  yMin: number,
+  yMax: number,
+  pas = 0.005,
+): [number, number][] {
+  const resultat: [number, number][] = []
+  for (const [xMin, xMax] of intervalles) {
+    let debut: number | null = null
+    let dernier = xMin
+    for (let n = 0; xMin + n * pas <= xMax + pas / 2; n++) {
+      const x = Math.min(xMin + n * pas, xMax)
+      const y = f(x)
+      if (isFinite(y) && y >= yMin && y <= yMax) {
+        if (debut === null) debut = x
+        dernier = x
+      } else if (debut !== null) {
+        resultat.push([debut, dernier])
+        debut = null
+      }
+    }
+    if (debut !== null) resultat.push([debut, dernier])
+  }
+  return resultat
+}

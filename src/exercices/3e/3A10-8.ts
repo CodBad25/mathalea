@@ -1,469 +1,400 @@
-import { createList } from '../../lib/format/lists'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-
-import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
-import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { toutPourUnPoint } from '../../lib/interactif/fonctionsBaremes'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
-  choice,
-  combinaisonListes,
-  enleveDoublonNum,
-  shuffle,
-} from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+  ajouteChampTexteMathLive,
+  remplisLesBlancs,
+} from '../../lib/interactif/questionMathLive'
+import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import {
-  listeDesDiviseurs,
-  pgcd,
-  texFactorisation,
-} from '../../lib/outils/primalite'
+  miseEnEvidence,
+  texteEnCouleur,
+} from '../../lib/outils/embellissements'
+import { listeDesDiviseurs, pgcd } from '../../lib/outils/primalite'
 import { texNombre } from '../../lib/outils/texNombre'
-import type { OptionsComparaisonType } from '../../lib/types'
-import { gestionnaireFormulaireTexte } from '../../modules/outils'
+import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre =
-  'Decomposer et rechercher le plus grand diviseur commun de deux nombres'
+  'Résoudre un problème de répartition avec le plus grand diviseur commun'
 export const interactifReady = true
 
-export const dateDePublication = '13/11/2024'
-export const dateDeModifImportante = '12/04/2026'
-export const uuid = 'eb844'
+export const dateDePublication = '12/10/2026'
+export const uuid = '90bbe'
 export const refs = {
   'fr-fr': ['3A10-8'],
   'fr-ch': ['10NO1A-8'],
 }
+
 /**
- * @author Jean-Claude LHOTE
- * Ajout de this.sup 7 et 8 par Guillaume Valmont le 12/04/2025
- * Refactorisation des paramètres et passage en multiMathfield par Éric Elter le 12/04/2026
+ * Répartir deux effectifs en groupes identiques : liste des diviseurs de chaque effectif,
+ * plus grand diviseur commun, nombre maximal de groupes puis composition d'un groupe.
+ * Les effectifs sont de la forme k×a et k×b avec a et b premiers entre eux et supérieurs à 5,
+ * pour que le PGCD ne se lise pas directement sur les deux nombres.
+ * @author Rémi Angot
  */
 
-type OptionsComparaisonAvecClavier = OptionsComparaisonType & {
-  keyboard?: string | undefined
+type Situation = {
+  qui: string
+  faitQuoi: string
+  ou: string
+  pourQui: string
+  objet1: string
+  objet2: string
+  groupement: string
+  groupements: string
+  deGroupements: string
 }
 
-type Reponse = [string, OptionsComparaisonAvecClavier]
+const situations: Situation[] = [
+  {
+    qui: 'professeur',
+    faitQuoi: 'organise une sortie scolaire',
+    ou: 'au Futuroscope',
+    pourQui: 'pour ses élèves de 3e',
+    objet1: 'garçons',
+    objet2: 'filles',
+    groupement: 'groupe',
+    groupements: 'groupes',
+    deGroupements: 'de groupes',
+  },
+  {
+    qui: 'fleuriste',
+    faitQuoi: 'assemble des fleurs',
+    ou: 'dans son atelier',
+    pourQui: 'pour une commande',
+    objet1: 'roses',
+    objet2: 'tulipes',
+    groupement: 'bouquet',
+    groupements: 'bouquets',
+    deGroupements: 'de bouquets',
+  },
+  {
+    qui: 'pâtissier',
+    faitQuoi: 'prépare des gâteaux',
+    ou: 'dans sa pâtisserie',
+    pourQui: 'pour un mariage',
+    objet1: 'gâteaux au chocolat',
+    objet2: 'gâteaux à la vanille',
+    groupement: 'plat',
+    groupements: 'plats',
+    deGroupements: 'de plats',
+  },
+  {
+    qui: 'boulanger',
+    faitQuoi: 'cuit des viennoiseries',
+    ou: 'dans sa boulangerie',
+    pourQui: 'pour ses clients',
+    objet1: 'brioches',
+    objet2: 'croissants',
+    groupement: 'assortiment',
+    groupements: 'assortiments',
+    deGroupements: 'd’assortiments',
+  },
+  {
+    qui: 'collectionneur',
+    faitQuoi: 'organise sa collection',
+    ou: 'dans un musée',
+    pourQui: 'pour une exposition',
+    objet1: 'soldats de plomb',
+    objet2: 'figurines en plastique',
+    groupement: 'vitrine',
+    groupements: 'vitrines',
+    deGroupements: 'de vitrines',
+  },
+  {
+    qui: 'producteur',
+    faitQuoi: 'plante des arbres',
+    ou: 'dans son terrain',
+    pourQui: 'pour son entreprise',
+    objet1: 'pommiers',
+    objet2: 'poiriers',
+    groupement: 'allée',
+    groupements: 'allées',
+    deGroupements: 'd’allées',
+  },
+  {
+    qui: 'maître-nageur',
+    faitQuoi: 'organise des cours de natation',
+    ou: 'à la piscine',
+    pourQui: 'pour ses élèves',
+    objet1: 'garçons',
+    objet2: 'filles',
+    groupement: 'groupe',
+    groupements: 'groupes',
+    deGroupements: 'de groupes',
+  },
+  {
+    qui: 'cuisinier',
+    faitQuoi: 'prépare des plats',
+    ou: 'dans sa cuisine',
+    pourQui: 'pour un banquet',
+    objet1: 'portions de viande',
+    objet2: 'portions de légume',
+    groupement: 'plat',
+    groupements: 'plats',
+    deGroupements: 'de plats',
+  },
+  {
+    qui: 'décorateur',
+    faitQuoi: 'fait des compositions florales',
+    ou: 'dans son atelier',
+    pourQui: 'pour un mariage',
+    objet1: 'fleurs rouges',
+    objet2: 'fleurs blanches',
+    groupement: 'bouquet',
+    groupements: 'bouquets',
+    deGroupements: 'de bouquets',
+  },
+]
+
+const couplesPremiersEntreEux = [
+  [5, 6],
+  [5, 7],
+  [5, 8],
+  [5, 9],
+  [6, 7],
+  [7, 8],
+  [7, 9],
+  [7, 11],
+  [8, 9],
+]
 
 /**
- * Construit la configuration pour un composant multiMathfield à partir
- * d'une liste d'items (énoncés) et de leurs réponses associées.
- *
- * Génère automatiquement :
- * - un `dataTemplate` avec préfixes a), b), c), ...
- * - un objet `dataOptions` contenant les champs %{champX} nécessaires
- *
- * IMPORTANT :
- * L’ordre des champs %{champX} doit correspondre exactement à l’ordre
- * des réponses dans `itemsReponses`.
- *
- * Exemple de correspondance :
- * itemsReponses = [
- *   [rep1, rep2], // → champ1, champ2
- *   [rep3],       // → champ3
- *   [rep4, rep5]  // → champ4, champ5
- * ]
- *
- * @param items Liste des énoncés (chaque item correspond à une ligne a), b), c)...)
- * @param itemsReponses Tableau des réponses associées à chaque item.
- * Chaque item contient une liste de couples [valeur attendue, options de comparaison].
- * @param keyboard Type de clavier à utiliser pour tous les champs (optionnel)
- *
- * @returns Un objet contenant :
- * - `dataTemplate` : string formatée pour multiMathfield
- * - `dataOptions` : configuration des champs (champ1, champ2, ...)
- *
+ * Tire deux effectifs k×a et k×b de 400 au plus, ayant chacun entre 8 et 20 diviseurs,
+ * avec un PGCD k supérieur ou égal à 8.
  */
-export function buildMultiMathfield(
-  items: string[],
-  itemsReponses: Reponse[][],
-  keyboard: string | undefined = KeyboardType.clavierNumbers,
-) {
-  const lettres = 'abcdefghijklmnopqrstuvwxyz'
-
-  // 🔹 1. Génération du template (a), b), c)...
-  const dataTemplate = items
-    .map((item, index) => {
-      const prefix = items.length > 1 ? `${lettres[index]}) ` : ''
-      return `${prefix}${item}`
-    })
-    .join('\n\n')
-
-  const dataOptions: Record<string, { keyboard: string | undefined }> = {}
-
-  let compteur = 1
-
-  itemsReponses.forEach((item) => {
-    item.forEach(([, options]) => {
-      dataOptions[`champ${compteur}`] = {
-        keyboard: options.keyboard ?? keyboard,
-      }
-      compteur++
-    })
-  })
-
-  return {
-    dataTemplate,
-    dataOptions,
+function tirerEffectifs() {
+  for (let cpt = 0; cpt < 200; cpt++) {
+    const [a, b] = choice(couplesPremiersEntreEux)
+    const k = choice([2, 3, 5]) * choice([2, 3]) * choice([2, 3, 5])
+    const effectifs = [k * a, k * b]
+    if (
+      k >= 8 &&
+      effectifs.every((n) => {
+        const nbDiviseurs = listeDesDiviseurs(n).length
+        return n <= 400 && nbDiviseurs >= 8 && nbDiviseurs <= 20
+      })
+    ) {
+      return shuffle(effectifs)
+    }
   }
+  return [60, 84]
 }
 
-export default class LireUnePuissance extends Exercice {
+/**
+ * Justifie que n n'est pas divisible par d, sans passer par la décomposition en facteurs premiers.
+ */
+function raisonNonDivisible(n: number, d: number): string {
+  const chiffres = String(n).split('')
+  const somme = chiffres.reduce((acc, c) => acc + Number(c), 0)
+  const texSomme = `$${chiffres.join('+')}=${somme}$`
+  switch (d) {
+    case 2:
+      return 'car il est impair'
+    case 3:
+      return `car la somme de ses chiffres, ${texSomme}, n’est pas divisible par $3$`
+    case 5:
+      return 'car son chiffre des unités n’est ni $0$ ni $5$'
+    case 4:
+      if (n % 2 !== 0) return 'car il n’est pas divisible par $2$'
+      return `car le nombre formé par ses deux derniers chiffres, $${n % 100}$, n’est pas divisible par $4$`
+    case 9:
+      if (n % 3 !== 0) return 'car il n’est pas divisible par $3$'
+      return `car la somme de ses chiffres, ${texSomme}, n’est pas divisible par $9$`
+  }
+  for (let e = d - 1; e > 1; e--) {
+    if (d % e === 0 && n % e !== 0) {
+      return `car il n’est pas divisible par $${e}$`
+    }
+  }
+  const q = Math.floor(n / d)
+  return `car $${d}\\times ${q}=${d * q}$ et $${d}\\times ${q + 1}=${d * (q + 1)}$`
+}
+
+/**
+ * Recherche des diviseurs de n en testant les entiers dans l'ordre croissant,
+ * jusqu'à ce que le carré de l'entier testé dépasse n.
+ */
+function texRechercheDesDiviseurs(n: number) {
+  const texN = texNombre(n, 0)
+  const lignes: string[] = []
+  let d = 1
+  for (; d * d <= n; d++) {
+    lignes.push(
+      n % d === 0
+        ? `$${texN}=${d}\\times ${texNombre(n / d, 0)}$`
+        : `$${texN}$ n’est pas divisible par $${d}$ ${raisonNonDivisible(n, d)}.`,
+    )
+  }
+  const debut = texteEnCouleur(
+    'On teste les entiers dans l’ordre croissant à partir de $1$ :',
+    bleuMathalea,
+  )
+  const fin = texteEnCouleur(
+    `$${d}\\times ${d}=${texNombre(d * d, 0)}$ et $${texNombre(d * d, 0)}>${texN}$, donc on peut s’arrêter : les produits suivants seraient les mêmes que ceux déjà trouvés.`,
+    bleuMathalea,
+  )
+  return `${debut}<br>${lignes.join('<br>')}<br>${fin}`
+}
+
+const texListe = (nombres: number[]) =>
+  nombres.map((x) => texNombre(x, 0)).join('\\text{ ; }')
+
+export default class RepartirEnGroupesIdentiques extends Exercice {
   constructor() {
     super()
-    this.nbQuestions = 1
-    this.spacing = 1.5
-    this.spacingCorr = 1.5
-    this.besoinFormulaireTexte = [
-      'Type de questions',
-      [
-        'Nombres séparés par des tirets  :',
-        '1 : Décomposition',
-        '2 : Liste des diviseurs',
-        '3 : PGCD',
-        '4 : Conclusion',
-        '5 : Toutes les questions',
-      ].join('\n'),
-    ]
-    this.sup = '5'
+    this.nbQuestionsModifiable = false
+    this.besoinFormulaireCaseACocher = ['Liste des diviseurs', true]
+    this.besoinFormulaire2CaseACocher = ['Plus grand diviseur commun', true]
+    this.besoinFormulaire3CaseACocher = ['Répartition', true]
+    this.sup = true
+    this.sup2 = true
+    this.sup3 = true
   }
 
-  situations = [
-    {
-      qui: 'professeur',
-      faitQuoi: 'organise une sortie scolaire',
-      ou: 'au Futuroscope',
-      pourQui: 'pour ses élèves de 3e',
-      espece1: 'garçon',
-      espece2: 'fille',
-      especePluriel: 's',
-      groupement: 'groupe',
-      groupementDet: 'de ',
-      premiers: [
-        [5, 7],
-        [7, 11],
-        [3, 5],
-      ],
-    },
-    {
-      qui: 'fleuriste',
-      faitQuoi: 'assemble des fleurs',
-      ou: 'dans son atelier',
-      pourQui: 'pour une commande',
-      espece1: 'rose',
-      espece2: 'tulipe',
-      especePluriel: 's',
-      groupement: 'bouquet',
-      groupementDet: 'de ',
-      premiers: [
-        [5, 7],
-        [7, 11],
-        [11, 13],
-        [17, 19],
-      ],
-    },
-    {
-      qui: 'pâtissier',
-      faitQuoi: 'prépare des gâteaux',
-      ou: 'dans sa pâtisserie',
-      pourQui: 'pour un mariage',
-      espece1: 'gateaux au chocolat',
-      espece2: 'gâteaux à la vanille',
-      especePluriel: '',
-      groupement: 'plat',
-      groupementDet: 'de ',
-      premiers: [
-        [5, 7],
-        [2, 3],
-        [3, 5],
-        [5, 6],
-        [3, 4],
-      ],
-    },
-    {
-      qui: 'boulanger',
-      faitQuoi: 'cuit des viennoiseries',
-      ou: 'dans sa boulangerie',
-      pourQui: 'pour ses clients',
-      espece1: 'brioche',
-      espece2: 'croissant',
-      especePluriel: 's',
-      groupement: 'assortiment',
-      groupementDet: "d'",
-      premiers: [
-        [5, 7],
-        [5, 6],
-        [3, 4],
-        [6, 7],
-        [7, 8],
-      ],
-    },
-    {
-      qui: 'collectionneur',
-      faitQuoi: 'organise sa collection',
-      ou: 'dans un musée',
-      pourQui: 'pour une exposition',
-      espece1: 'soldats de plomb',
-      espece2: 'figurines en plastique',
-      especePluriel: '',
-      groupement: 'vitrine',
-      groupementDet: 'de ',
-      premiers: [
-        [9, 8],
-        [6, 7],
-        [7, 8],
-      ],
-    },
-    {
-      qui: 'producteur',
-      faitQuoi: 'plante des arbres',
-      ou: 'dans son terrain',
-      pourQui: 'pour son entreprise',
-      espece1: 'pommier',
-      espece2: 'poirier',
-      especePluriel: 's',
-      groupement: 'allée',
-      groupementDet: "d'",
-      premiers: [
-        [5, 7],
-        [5, 6],
-        [3, 4],
-        [6, 7],
-        [7, 8],
-      ],
-    },
-    {
-      qui: 'maitre-nageur',
-      faitQuoi: 'organise des cours de natation',
-      ou: 'à la piscine',
-      pourQui: 'pour ses élèves',
-      espece1: 'garçon',
-      espece2: 'fille',
-      especePluriel: 's',
-      groupement: 'groupe',
-      groupementDet: 'de ',
-      premiers: [
-        [2, 3],
-        [5, 6],
-        [3, 4],
-      ],
-    },
-    {
-      qui: 'cuisinier',
-      faitQuoi: 'prépare des plats',
-      ou: 'dans sa cuisine',
-      pourQui: 'pour un banquet',
-      espece1: 'portions de viande',
-      espece2: 'portions de légume',
-      especePluriel: '',
-      groupement: 'plat',
-      groupementDet: 'de ',
-      premiers: [
-        [10, 12],
-        [8, 9],
-        [5, 6],
-        [6, 7],
-        [7, 8],
-      ],
-    },
-    {
-      qui: 'décorateur',
-      faitQuoi: 'fait des compositions florales',
-      ou: 'dans son atelier',
-      pourQui: 'pour un mariage',
-      espece1: 'fleurs rouge',
-      espece2: 'fleurs blanche',
-      especePluriel: 's',
-      groupement: 'bouquet',
-      groupementDet: 'de ',
-      premiers: [
-        [4, 6],
-        [5, 7],
-        [3, 4],
-        [6, 8],
-        [2, 4],
-      ],
-    },
-  ]
+  nouvelleVersion() {
+    const s = choice(situations)
+    const effectifs = tirerEffectifs()
+    const [nb1, nb2] = effectifs
+    const [texNb1, texNb2] = effectifs.map((n) => texNombre(n, 0))
+    const diviseurs = effectifs.map((n) => listeDesDiviseurs(n))
+    const communs = diviseurs[0].filter((d) => diviseurs[1].includes(d))
+    const leGcd = pgcd(nb1, nb2)
+    const texGcd = texNombre(leGcd, 0)
 
-  nouvelleVersion(): void {
-    const typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
-      saisie: this.sup,
-      max: 4,
-      melange: 5,
-      defaut: 5,
-      nbQuestions: 4,
-      shuffle: false,
-    }).map(Number)
+    this.introduction = `Un ${s.qui} ${s.faitQuoi} ${s.ou} ${s.pourQui}.<br>
+      Il souhaite répartir la totalité des $${texNb1}$ ${s.objet1} et des $${texNb2}$ ${s.objet2} dans des ${s.groupements}.<br>
+      Chaque ${s.groupement} doit comporter le même nombre de ${s.objet1} et le même nombre de ${s.objet2}.`
 
-    const listeTypeDeQuestions = enleveDoublonNum(typesDeQuestionsDisponibles)
+    // La question sur le nombre maximal de groupes est toujours posée
+    const avecDiviseurs = Boolean(this.sup)
+    const avecPgcd = Boolean(this.sup2)
+    const avecRepartition = Boolean(this.sup3)
+    this.nbQuestions =
+      (avecDiviseurs ? 2 : 0) +
+      (avecPgcd ? 1 : 0) +
+      1 +
+      (avecRepartition ? 1 : 0)
+    // Numéro de la prochaine question, pour les champs et les réponses interactives
+    let numero = 0
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
-      const situation = choice(this.situations)
-      const [unPremier, unSecond] = shuffle(choice(situation.premiers))
-      const facteurs1 = combinaisonListes([2, 3, 2, 3, 5, 2], 5).slice(0, 3)
-      const nb1 = facteurs1.reduce((acc, val) => acc * val, unPremier)
-      const nb2 = facteurs1.reduce((acc, val) => acc * val, unSecond)
-      const listDiv1 = listeDesDiviseurs(nb1)
-      const listDiv2 = listeDesDiviseurs(nb2)
-      const pgcd12 = pgcd(nb1, nb2)
-      const nb1parGroupe = nb1 / pgcd12
-      const nb2parGroupe = nb2 / pgcd12
-      let texte = `Un ${situation.qui} ${situation.faitQuoi} ${situation.ou} ${situation.pourQui}.<br>
-      Il souhaite répartir les $${nb1}$ ${situation.espece1}${situation.especePluriel} et les $${nb2}$ ${situation.espece2}${situation.especePluriel} dans des ${situation.groupement}s.<br>
-      Il souhaite que chaque ${situation.groupement} comporte le même nombre de ${situation.espece1}${situation.especePluriel} et le même nombre de ${situation.espece2}${situation.especePluriel}.<br><br>`
-      let indice = 1
-      const items: string[] = []
-      const itemsCorr: string[] = []
-      const itemsReponses: Reponse[][] = []
+    const corrDiviseurs = effectifs.map((n, i) => {
+      const texN = texNombre(n, 0)
+      return `${texRechercheDesDiviseurs(n)}<br><br>Les diviseurs de $${texN}$ sont : $${miseEnEvidence(texListe(diviseurs[i]))}$.`
+    })
+    const corrCommuns = texteEnCouleur(
+      `Les diviseurs communs à $${texNb1}$ et $${texNb2}$ sont les nombres qui apparaissent dans les deux listes : $${texListe(communs)}$.`,
+      bleuMathalea,
+    )
+    const corrGcd = `Le plus grand diviseur commun à $${texNb1}$ et $${texNb2}$ est donc $${miseEnEvidence(texGcd)}$.`
+    // Démarche à rappeler dans la correction quand les questions qui la détaillent ne sont pas posées
+    const rappelDiviseurs = avecDiviseurs
+      ? ''
+      : `${corrDiviseurs.join('<br><br>')}<br><br>`
+    const rappelPgcd = avecPgcd
+      ? ''
+      : `${rappelDiviseurs}${corrCommuns}<br>${corrGcd}<br><br>`
 
-      if (listeTypeDeQuestions.includes(1)) {
-        items.push(
-          `Décomposer, en produit de facteurs premiers, les nombres $${nb1}$ et $${nb2}$.${
-            this.interactif
-              ? `
-          $${texNombre(nb1, 0)}=$%{champ${indice}}
-          $${texNombre(nb2, 0)}=$%{champ${indice + 1}}`
-              : ''
-          }`,
-        )
-        itemsCorr.push(`La décomposition en produit de facteurs premiers de $${texNombre(nb1, 0)}$ est $${miseEnEvidence(texFactorisation(nb1, false))}$
-                        et celle de $${texNombre(nb2, 0)}$ est $${miseEnEvidence(texFactorisation(nb2, false))}$, soit respectivement : $${miseEnEvidence(texFactorisation(nb1, true))}$
-                        et $${miseEnEvidence(texFactorisation(nb2, true))}$.`)
-        itemsReponses.push([
-          [
-            texFactorisation(nb1, true),
+    // Questions 1 et 2 : liste des diviseurs de chaque effectif
+    if (avecDiviseurs) {
+      effectifs.forEach((n, i) => {
+        const texN = texNombre(n, 0)
+        let texte = `Trouver tous les entiers positifs qui divisent $${texN}$.`
+        if (this.interactif) {
+          texte += ` Écrire la liste de ces diviseurs en les séparant par des points-virgules.<br>${ajouteChampTexteMathLive(
+            this,
+            numero,
+            KeyboardType.clavierEnsemble,
             {
-              nbFacteursIdentiquesFactorisation: true,
-              keyboard: KeyboardType.clavierDeBase,
+              texteAvant: `La liste des diviseurs de $${texN}$ est `,
+              texteApres: '.',
             },
-          ],
-          [
-            texFactorisation(nb2, true),
-            {
-              nbFacteursIdentiquesFactorisation: true,
-              keyboard: KeyboardType.clavierDeBase,
-            },
-          ],
-        ])
-        indice = indice + 2
-      }
-
-      if (listeTypeDeQuestions.includes(2)) {
-        items.push(`Trouver tous les entiers positifs qui divisent $${nb1}$ et $${nb2}$.
-                    Écrire la liste des diviseurs en les séparant par des points-virgules.${
-                      this.interactif
-                        ? `
-                    $${texNombre(nb1, 0)}=$%{champ${indice}}
-                    $${texNombre(nb2, 0)}=$%{champ${indice + 1}}`
-                        : ''
-                    }`)
-
-        itemsCorr.push(`Les diviseurs de $${texNombre(nb1, 0)}$ sont $${miseEnEvidence(listDiv1.join('~;~'))}$.<br>
-                        Et ceux de $${texNombre(nb2, 0)}$ sont $${miseEnEvidence(listDiv2.join('~;~'))}$.`)
-
-        itemsReponses.push([
-          [
-            listDiv1.join(';'),
-            {
-              suiteDeNombres: true,
-              keyboard: KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
-            },
-          ],
-          [
-            listDiv2.join(';'),
-            {
-              suiteDeNombres: true,
-              keyboard: KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
-            },
-          ],
-        ])
-        indice = indice + 2
-      }
-
-      if (listeTypeDeQuestions.includes(3)) {
-        const verbe =
-          listeTypeDeQuestions.includes(1) || listeTypeDeQuestions.includes(2)
-            ? 'En déduire'
-            : 'Trouver'
-        items.push(
-          `${verbe} le plus grand nombre ${situation.groupementDet}${situation.groupement}s que le ${situation.qui} pourra constituer. ${
-            this.interactif ? `%{champ${indice}}` : ''
-          }`,
-        )
-
-        itemsCorr.push(
-          `Le plus grand diviseur commun à $${texNombre(nb1, 0)}$ et $${texNombre(nb2, 0)}$ est $${miseEnEvidence(texNombre(pgcd12, 0))}$.`,
-        )
-
-        itemsReponses.push([[String(pgcd12), { nombreDecimalSeulement: true }]])
-        indice++
-      }
-
-      if (listeTypeDeQuestions.includes(4)) {
-        items.push(
-          `Combien de ${situation.espece1}${situation.especePluriel} et de ${situation.espece2}${situation.especePluriel} y aura-t-il dans chaque ${situation.groupement} ?${
-            this.interactif
-              ? `
-          Il y aura %{champ${indice}} ${situation.espece1}${situation.especePluriel}.
-          Il y aura %{champ${indice + 1}} ${situation.espece2}${situation.especePluriel}.`
-              : ''
-          }`,
-        )
-        itemsCorr.push(`Il y aura $${texNombre(nb1, 0)}\\div ${texNombre(pgcd12, 0)}=${miseEnEvidence(texNombre(nb1parGroupe, 0))}$ ${situation.espece1}${situation.especePluriel}
-                        et $${texNombre(nb2, 0)}\\div ${texNombre(pgcd12, 0)}=${miseEnEvidence(texNombre(nb2parGroupe, 0))}$ ${situation.espece2}${situation.especePluriel}
-                        dans chaque ${situation.groupement}.`)
-
-        itemsReponses.push([
-          [String(nb1parGroupe), { nombreDecimalSeulement: true }],
-          [String(nb2parGroupe), { nombreDecimalSeulement: true }],
-        ])
-      }
-
-      const config = buildMultiMathfield(items, itemsReponses)
-
-      texte += addMultiMathfield(this, i, config)
-
-      const champs: Record<
-        string,
-        { value: string; options: OptionsComparaisonType }
-      > = {}
-
-      let compteur = 1
-
-      itemsReponses.forEach((item) => {
-        item.forEach(([value, options]) => {
-          champs[`champ${compteur}`] = {
-            value,
-            options,
-          }
-          compteur++
+          )}`
+        }
+        handleAnswers(this, numero, {
+          reponse: {
+            value: diviseurs[i].join(';'),
+            options: { suiteDeNombres: true },
+          },
         })
+        this.listeQuestions.push(texte)
+        this.listeCorrections.push(corrDiviseurs[i])
+        numero++
       })
-
-      handleAnswers(
-        this,
-        i,
-        {
-          bareme: toutAUnPoint,
-          ...champs,
-        },
-        { formatInteractif: 'multi-mathfield' },
-      )
-
-      const listeCorr =
-        items.length > 1
-          ? createList({
-              items: itemsCorr,
-              style: 'alpha',
-            })
-          : itemsCorr[0]
-      const texteCorr = listeCorr
-      if (this.questionJamaisPosee(i, nb1, nb2)) {
-        this.listeQuestions[i] = texte
-        this.listeCorrections[i] = texteCorr
-        i++
-      }
-      cpt++
     }
+
+    // Question 3 : plus grand diviseur commun
+    if (avecPgcd) {
+      let texte3 = `${avecDiviseurs ? 'En déduire le' : 'Déterminer le'} plus grand diviseur commun à $${texNb1}$ et $${texNb2}$.`
+      if (this.interactif) {
+        texte3 += `<br>${ajouteChampTexteMathLive(
+          this,
+          numero,
+          KeyboardType.clavierNumbers,
+          {
+            texteAvant: `Le plus grand diviseur commun à $${texNb1}$ et $${texNb2}$ est `,
+            texteApres: '.',
+          },
+        )}`
+      }
+      handleAnswers(this, numero, { reponse: { value: leGcd } })
+      this.listeQuestions.push(texte3)
+      this.listeCorrections.push(
+        `${rappelDiviseurs}${corrCommuns}<br>${corrGcd}`,
+      )
+      numero++
+    }
+
+    // Question 4 : nombre maximal de groupes
+    let texte4 = `Quel est le plus grand nombre ${s.deGroupements} que le ${s.qui} pourra constituer ?`
+    if (this.interactif) {
+      texte4 += `<br>${ajouteChampTexteMathLive(
+        this,
+        numero,
+        KeyboardType.clavierNumbers,
+        {
+          texteAvant: 'Il pourra constituer au maximum ',
+          texteApres: ` ${s.groupements}.`,
+        },
+      )}`
+    }
+    handleAnswers(this, numero, { reponse: { value: leGcd } })
+    numero++
+    const texteCorr4 = `${rappelPgcd}${texteEnCouleur(
+      `Chaque ${s.groupement} contient le même nombre de ${s.objet1} et la totalité des ${s.objet1} est répartie : le nombre de ${s.groupements} divise donc $${texNb1}$. Pour la même raison, il divise $${texNb2}$, c’est donc un diviseur commun à $${texNb1}$ et $${texNb2}$.<br>
+      Pour en constituer le plus possible, on prend le plus grand diviseur commun à $${texNb1}$ et $${texNb2}$, qui vaut $${texGcd}$${avecPgcd ? ' d’après la question précédente' : ''}.`,
+      bleuMathalea,
+    )}<br>Le ${s.qui} pourra constituer au maximum $${miseEnEvidence(texGcd)}$ ${s.groupements}.`
+    this.listeQuestions.push(texte4)
+    this.listeCorrections.push(texteCorr4)
+
+    if (avecRepartition) {
+      // Question 5 : composition d'un groupe
+      let texte5 = `Combien de ${s.objet1} et de ${s.objet2} y aura-t-il dans chaque ${s.groupement} ?`
+      if (this.interactif) {
+        texte5 += `<br>${remplisLesBlancs(
+          this,
+          numero,
+          `\\text{Il y aura }%{champ1}\\text{ ${s.objet1} et }%{champ2}\\text{ ${s.objet2}.}`,
+          KeyboardType.clavierNumbers,
+        )}`
+      }
+      handleAnswers(this, numero, {
+        bareme: toutPourUnPoint,
+        champ1: { value: String(nb1 / leGcd) },
+        champ2: { value: String(nb2 / leGcd) },
+      })
+      const texteCorr5 = `${texteEnCouleur(
+        `Il y a $${texNb1}$ ${s.objet1} et $${texNb2}$ ${s.objet2} à répartir dans $${texGcd}$ ${s.groupements}.`,
+        bleuMathalea,
+      )}<br>$${texNb1}\\div ${texGcd}=${miseEnEvidence(texNombre(nb1 / leGcd, 0))}$ ${s.objet1}
+      et $${texNb2}\\div ${texGcd}=${miseEnEvidence(texNombre(nb2 / leGcd, 0))}$ ${s.objet2} dans chaque ${s.groupement}.`
+
+      this.listeQuestions.push(texte5)
+      this.listeCorrections.push(texteCorr5)
+    }
+    listeQuestionsToContenu(this)
   }
 }

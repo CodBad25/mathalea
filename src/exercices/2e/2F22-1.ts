@@ -89,11 +89,13 @@ export default class ImageFonctionsRefs extends Exercice {
     const listeTypeQuestionsDansLOrdre = typeQuestionsDisponibles.filter((x) =>
       listeTypeQuestions.includes(x),
     )
+    // Il y a jusqu'à 5 fonctions de référence : il faut autant de noms.
+    const nomsFonctions = ['f', 'g', 'h', 'i', 'j']
 
     this.consigne =
       (typeQuestionsDisponibles.length >= 2 ? 'Soient ' : 'Soit ') +
       listeTypeQuestionsDansLOrdre
-        .map((x, i) => '$' + ['f', 'g', 'h', 'i'][i] + '$ la fonction ' + x)
+        .map((x, i) => '$' + nomsFonctions[i] + '$ la fonction ' + x)
         .join(', ')
         .replace(/,([^,]*$)/, ' et$1') +
       '.'
@@ -102,9 +104,10 @@ export default class ImageFonctionsRefs extends Exercice {
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       let texte = ''
       let texteCorr = ''
-      const nom = ['f', 'g', 'h', 'i'][
-        listeTypeQuestionsDansLOrdre.indexOf(listeTypeQuestions[i])
-      ]
+      const nom =
+        nomsFonctions[
+          listeTypeQuestionsDansLOrdre.indexOf(listeTypeQuestions[i])
+        ]
       let nombre: number
       let solution: FractionEtendue
       let calcul: number

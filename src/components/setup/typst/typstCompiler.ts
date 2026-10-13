@@ -279,6 +279,10 @@ export interface TypstAnchor {
    * `diapo-garde` : page de garde de cette même vue (édition de son contenu) ;
    * `can-row` : ligne du tableau « Course aux nombres » (édition de son
    * énoncé/réponse), num = numéro de ligne (1-based, colonne « # »)
+   * `subject-start` / `subject-end` : début et fin des énoncés d'un sujet,
+   * num = sujet (0-based) ; leur écart donne la hauteur du sujet, qui décide
+   * si deux sujets (ou exemplaires) tiennent sur une page ; `subject-corr` :
+   * début des corrections d'un sujet quand les sujets sont enchaînés
    */
   kind:
     | 'tasks'
@@ -299,6 +303,9 @@ export interface TypstAnchor {
     | 'diapo-correction'
     | 'diapo-garde'
     | 'can-row'
+    | 'subject-start'
+    | 'subject-end'
+    | 'subject-corr'
   /** Numéro de l'exercice concerné (0 = avant le premier exercice), ou de la figure */
   num: number
   page: number
@@ -325,6 +332,9 @@ const ANCHOR_KINDS = new Set([
   'diapo-correction',
   'diapo-garde',
   'can-row',
+  'subject-start',
+  'subject-end',
+  'subject-corr',
 ])
 
 /** Valide et filtre les métadonnées renvoyées par `query(<mathalea-anchor>)` */

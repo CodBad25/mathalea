@@ -1,14 +1,21 @@
-import { choice } from '../../lib/outils/arrayOutils'
+import seedrandom from 'seedrandom'
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
   texteEnCouleurEtGras,
 } from '../../lib/outils/embellissements'
+import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceQcmACourt from '../ExerciceQcmACourt'
 
 export const dateDePublication = '22/07/2025'
-export const uuid = '28d47'
+export const dateDeModifImportante = '12/10/2026'
+
+export const uuid = '73f3e'
 /**
  * @author Claude (ia) et un peu Gilles Mora
  *
@@ -23,25 +30,50 @@ export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Comparer des proportions (sous différentes formes)'
 
-export default class ElectionPourcentages extends ExerciceQcmA {
+export default class ElectionPourcentages extends ExerciceQcmACourt {
   versionOriginale: () => void = () => {
     this.enonce =
-      "Lors d'une élection, le quart des électeurs a voté pour X, $20\\,\\%$ a voté pour Y, un tiers a voté pour Z, et le reste a voté pour T.<br>Le candidat ayant recueilli le moins de votes est :"
+      "Lors d'une élection, le quart des électeurs a voté pour Léa, $20\\,\\%$ a voté pour Hugo, un tiers a voté pour Inès, et le reste a voté pour Karim.<br>La personne ayant recueilli le moins de votes est :"
     this.spacingCorr = 2.5
     this.correction = `Exprimons chaque proportion sous forme de fraction :<br>
-    • Candidat X : $\\dfrac{1}{4}$<br>
-    • Candidat Y : $20\\,\\% = \\dfrac{20}{100} = \\dfrac{1}{5}$<br>
-    • Candidat Z : $\\dfrac{1}{3}$<br>
-    • Candidat T : $1 - \\dfrac{1}{4} - \\dfrac{1}{5} - \\dfrac{1}{3} = \\dfrac{60 - 15 - 12 - 20}{60} = \\dfrac{13}{60}$<br>
+    • Léa : $\\dfrac{1}{4}$<br>
+    • Hugo : $20\\,\\% = \\dfrac{20}{100} = \\dfrac{1}{5}$<br>
+    • Inès : $\\dfrac{1}{3}$<br>
+    • Karim : $1 - \\dfrac{1}{4} - \\dfrac{1}{5} - \\dfrac{1}{3} = \\dfrac{60 - 15 - 12 - 20}{60} = \\dfrac{13}{60}$<br>
     En comparant les fractions, on a : $\\dfrac{1}{5} < \\dfrac{13}{60} < \\dfrac{1}{4} < \\dfrac{1}{3}$.<br>
-    Le candidat ayant recueilli le moins de votes est donc $${miseEnEvidence('Y')}$.`
+    La personne ayant recueilli le moins de votes est donc ${miseEnEvidence('Hugo')}.`
 
-    this.reponses = [
-      'le candidat Y',
-      'le candidat X',
-      'le candidat Z',
-      'le candidat T',
+    this.reponses = ['Hugo', 'Léa', 'Inès', 'Karim']
+  }
+
+  /**
+   * Choisit quatre prénoms distincts pour les candidats.
+   * Le tirage utilise un générateur local initialisé par les données de
+   * l'énoncé : il ne consomme pas le générateur global, donc les valeurs
+   * tirées pour une graine donnée restent celles des liens déjà partagés.
+   */
+  private choisirCandidats(...cle: (string | number | boolean)[]): string[] {
+    const prenomsCandidats = [
+      'Léa',
+      'Hugo',
+      'Inès',
+      'Karim',
+      'Manon',
+      'Lucas',
+      'Yasmine',
+      'Théo',
+      'Zoé',
+      'Mehdi',
+      'Sofia',
+      'Paul',
     ]
+    const rng = seedrandom(`candidats-${cle.join('-')}`)
+    const melanges = [...prenomsCandidats]
+    for (let k = melanges.length - 1; k > 0; k--) {
+      const j = Math.floor(rng() * (k + 1))
+      ;[melanges[k], melanges[j]] = [melanges[j], melanges[k]]
+    }
+    return melanges.slice(0, 4)
   }
 
   // Fonction pour convertir une fraction en fraction de dénominateur 60
@@ -148,7 +180,14 @@ export default class ElectionPourcentages extends ExerciceQcmA {
           propC.val < Math.max(propA.val, pB / 100, fD.valeurDecimale)
         )
 
-        this.enonce = `Lors d'une élection, ${propA.tex} des électeurs ${propA.singulier ? 'a' : 'ont'} voté pour X, $${pB}\\,\\%$ ont voté pour Y, ${propC.tex} ${propC.singulier ? 'a' : 'ont'} voté pour Z, et le reste a voté pour T.<br>Le candidat ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est :`
+        const [nX, nY, nZ, nT] = this.choisirCandidats(
+          propA.tex,
+          pB,
+          propC.tex,
+          choix,
+        )
+
+        this.enonce = `Lors d'une élection, ${propA.tex} des électeurs ${propA.singulier ? 'a' : 'ont'} voté pour ${nX}, $${pB}\\,\\%$ ont voté pour ${nY}, ${propC.tex} ${propC.singulier ? 'a' : 'ont'} voté pour ${nZ}, et le reste a voté pour ${nT}.<br>La personne ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est :`
 
         const comparaison1 = creerComparaison(
           [fA, fB, fC, fD],
@@ -164,16 +203,14 @@ export default class ElectionPourcentages extends ExerciceQcmA {
         const numD60 = Math.round(fD.valeurDecimale * 60)
 
         this.correction = `Exprimons chaque proportion sous forme de fraction :<br>
-• Candidat X : ${propA.tex} $= \\dfrac{${propA.frac[0]}}{${propA.frac[1]}} = \\dfrac{${numA60}}{60}$<br>
-• Candidat Y : ${this.formaterPourcentage(pB)}<br>
-• Candidat Z : ${propC.tex} $= \\dfrac{${propC.frac[0]}}{${propC.frac[1]}} = \\dfrac{${numC60}}{60}$<br>
-• Candidat T : $1 - \\dfrac{${propA.frac[0]}}{${propA.frac[1]}} - \\dfrac{${pB}}{100} - \\dfrac{${propC.frac[0]}}{${propC.frac[1]}} = \\dfrac{${numD60}}{60}$<br>
+• ${nX} : ${propA.tex} $= \\dfrac{${propA.frac[0]}}{${propA.frac[1]}} = \\dfrac{${numA60}}{60}$<br>
+• ${nY} : ${this.formaterPourcentage(pB)}<br>
+• ${nZ} : ${propC.tex} $= \\dfrac{${propC.frac[0]}}{${propC.frac[1]}} = \\dfrac{${numC60}}{60}$<br>
+• ${nT} : $1 - \\dfrac{${propA.frac[0]}}{${propA.frac[1]}} - \\dfrac{${pB}}{100} - \\dfrac{${propC.frac[0]}}{${propC.frac[1]}} = \\dfrac{${numD60}}{60}$<br>
 En comparant les fractions, on a : $${comparaison1}$.<br>
-Le candidat ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est donc ${texteEnCouleurEtGras(choix ? 'le candidat X' : 'le candidat Z')}.`
+La personne ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est donc ${texteEnCouleurEtGras(choix ? nX : nZ)}.`
 
-        this.reponses = choix
-          ? ['le candidat X', 'le candidat Y', 'le candidat Z', 'le candidat T']
-          : ['le candidat Z', 'le candidat Y', 'le candidat X', 'le candidat T']
+        this.reponses = choix ? [nX, nY, nZ, nT] : [nZ, nY, nX, nT]
 
         break
       }
@@ -206,7 +243,14 @@ Le candidat ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est donc 
           fD.valeurDecimale <= Math.max(propA.val, pB / 100, propC.val)
         )
 
-        this.enonce = `Lors d'une élection, ${propA.tex} des électeurs ${propA.singulier ? 'a' : 'ont'} voté pour X, $${pB}\\,\\%$ ont voté pour Y, ${propC.tex} ${propC.singulier ? 'a' : 'ont'} voté pour Z, et le reste a voté pour T.<br>Le candidat ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est :`
+        const [nX, nY, nZ, nT] = this.choisirCandidats(
+          propA.tex,
+          pB,
+          propC.tex,
+          choix,
+        )
+
+        this.enonce = `Lors d'une élection, ${propA.tex} des électeurs ${propA.singulier ? 'a' : 'ont'} voté pour ${nX}, $${pB}\\,\\%$ ont voté pour ${nY}, ${propC.tex} ${propC.singulier ? 'a' : 'ont'} voté pour ${nZ}, et le reste a voté pour ${nT}.<br>La personne ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est :`
 
         const comparaison2 = creerComparaison(
           [fA, fB, fC, fD],
@@ -222,16 +266,14 @@ Le candidat ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est donc 
         const numD60Case2 = Math.round(fD.valeurDecimale * 60)
 
         this.correction = `Exprimons chaque proportion sous forme de fraction :<br>
-• Candidat X : ${propA.tex} $= \\dfrac{${propA.frac[0]}}{${propA.frac[1]}} = \\dfrac{${numA60Case2}}{60}$<br>
-• Candidat Y : ${this.formaterPourcentage(pB)}<br>
-• Candidat Z : ${propC.tex} $= \\dfrac{${propC.frac[0]}}{${propC.frac[1]}} = \\dfrac{${numC60Case2}}{60}$<br>
-• Candidat T : $1 - \\dfrac{${propA.frac[0]}}{${propA.frac[1]}} - \\dfrac{${pB}}{100} - \\dfrac{${propC.frac[0]}}{${propC.frac[1]}} = \\dfrac{${numD60Case2}}{60}$<br>
+• ${nX} : ${propA.tex} $= \\dfrac{${propA.frac[0]}}{${propA.frac[1]}} = \\dfrac{${numA60Case2}}{60}$<br>
+• ${nY} : ${this.formaterPourcentage(pB)}<br>
+• ${nZ} : ${propC.tex} $= \\dfrac{${propC.frac[0]}}{${propC.frac[1]}} = \\dfrac{${numC60Case2}}{60}$<br>
+• ${nT} : $1 - \\dfrac{${propA.frac[0]}}{${propA.frac[1]}} - \\dfrac{${pB}}{100} - \\dfrac{${propC.frac[0]}}{${propC.frac[1]}} = \\dfrac{${numD60Case2}}{60}$<br>
 En comparant les fractions, on a : $${comparaison2}$.<br>
-Le candidat ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est donc ${texteEnCouleurEtGras(choix ? 'le candidat Y' : 'le candidat T')}.`
+La personne ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est donc ${texteEnCouleurEtGras(choix ? nY : nT)}.`
 
-        this.reponses = choix
-          ? ['le candidat Y', 'le candidat X', 'le candidat Z', 'le candidat T']
-          : ['le candidat T', 'le candidat Y', 'le candidat X', 'le candidat Z']
+        this.reponses = choix ? [nY, nX, nZ, nT] : [nT, nY, nX, nZ]
         break
       }
       case 3: {
@@ -263,7 +305,14 @@ Le candidat ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est donc 
           pB / 100 <= Math.max(propA.val, propC.val, fD.valeurDecimale)
         )
 
-        this.enonce = `Lors d'une élection, ${propA.tex} des électeurs ${propA.singulier ? 'a' : 'ont'} voté pour X, $${pB}\\,\\%$ ont voté pour Y, ${propC.tex} ${propC.singulier ? 'a' : 'ont'} voté pour Z, et le reste a voté pour T.<br>Le candidat ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est :`
+        const [nX, nY, nZ, nT] = this.choisirCandidats(
+          propA.tex,
+          pB,
+          propC.tex,
+          choix,
+        )
+
+        this.enonce = `Lors d'une élection, ${propA.tex} des électeurs ${propA.singulier ? 'a' : 'ont'} voté pour ${nX}, $${pB}\\,\\%$ ont voté pour ${nY}, ${propC.tex} ${propC.singulier ? 'a' : 'ont'} voté pour ${nZ}, et le reste a voté pour ${nT}.<br>La personne ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est :`
 
         const comparaison3 = creerComparaison(
           [fA, fB, fC, fD],
@@ -279,16 +328,14 @@ Le candidat ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est donc 
         const numD60Case3 = Math.round(fD.valeurDecimale * 60)
 
         this.correction = `Exprimons chaque proportion sous forme de fraction :<br>
-• Candidat X : ${propA.tex} $= \\dfrac{${propA.frac[0]}}{${propA.frac[1]}} = \\dfrac{${numA60Case3}}{60}$<br>
-• Candidat Y : ${this.formaterPourcentage(pB)}<br>
-• Candidat Z : ${propC.tex} $= \\dfrac{${propC.frac[0]}}{${propC.frac[1]}} = \\dfrac{${numC60Case3}}{60}$<br>
-• Candidat T : $1 - \\dfrac{${propA.frac[0]}}{${propA.frac[1]}} - \\dfrac{${pB}}{100} - \\dfrac{${propC.frac[0]}}{${propC.frac[1]}} = \\dfrac{${numD60Case3}}{60}$<br>
+• ${nX} : ${propA.tex} $= \\dfrac{${propA.frac[0]}}{${propA.frac[1]}} = \\dfrac{${numA60Case3}}{60}$<br>
+• ${nY} : ${this.formaterPourcentage(pB)}<br>
+• ${nZ} : ${propC.tex} $= \\dfrac{${propC.frac[0]}}{${propC.frac[1]}} = \\dfrac{${numC60Case3}}{60}$<br>
+• ${nT} : $1 - \\dfrac{${propA.frac[0]}}{${propA.frac[1]}} - \\dfrac{${pB}}{100} - \\dfrac{${propC.frac[0]}}{${propC.frac[1]}} = \\dfrac{${numD60Case3}}{60}$<br>
 En comparant les fractions, on a : $${comparaison3}$.<br>
-Le candidat ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est donc ${texteEnCouleurEtGras(choix ? 'le candidat Z' : 'le candidat Y')}.`
+La personne ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est donc ${texteEnCouleurEtGras(choix ? nZ : nY)}.`
 
-        this.reponses = choix
-          ? ['le candidat Z', 'le candidat X', 'le candidat Y', 'le candidat T']
-          : ['le candidat Y', 'le candidat Z', 'le candidat X', 'le candidat T']
+        this.reponses = choix ? [nZ, nX, nY, nT] : [nY, nZ, nX, nT]
         break
       }
       case 4:
@@ -321,7 +368,14 @@ Le candidat ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est donc 
           propA.val <= Math.max(pB / 100, propC.val, fD.valeurDecimale)
         )
 
-        this.enonce = `Lors d'une élection, ${propA.tex} des électeurs ${propA.singulier ? 'a' : 'ont'} voté pour X, $${pB}\\,\\%$ ont voté pour Y, ${propC.tex} ${propC.singulier ? 'a' : 'ont'} voté pour Z, et le reste a voté pour T.<br>Le candidat ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est :`
+        const [nX, nY, nZ, nT] = this.choisirCandidats(
+          propA.tex,
+          pB,
+          propC.tex,
+          choix,
+        )
+
+        this.enonce = `Lors d'une élection, ${propA.tex} des électeurs ${propA.singulier ? 'a' : 'ont'} voté pour ${nX}, $${pB}\\,\\%$ ont voté pour ${nY}, ${propC.tex} ${propC.singulier ? 'a' : 'ont'} voté pour ${nZ}, et le reste a voté pour ${nT}.<br>La personne ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est :`
 
         const comparaison4 = creerComparaison(
           [fA, fB, fC, fD],
@@ -337,18 +391,72 @@ Le candidat ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est donc 
         const numD60Case4 = Math.round(fD.valeurDecimale * 60)
 
         this.correction = `Exprimons chaque proportion sous forme de fraction :<br>
-• Candidat X : ${propA.tex} $= \\dfrac{${propA.frac[0]}}{${propA.frac[1]}} = \\dfrac{${numA60Case4}}{60}$<br>
-• Candidat Y : ${this.formaterPourcentage(pB)}<br>
-• Candidat Z : ${propC.tex} $= \\dfrac{${propC.frac[0]}}{${propC.frac[1]}} = \\dfrac{${numC60Case4}}{60}$<br>
-• Candidat T : $1 - \\dfrac{${propA.frac[0]}}{${propA.frac[1]}} - \\dfrac{${pB}}{100} - \\dfrac{${propC.frac[0]}}{${propC.frac[1]}} = \\dfrac{${numD60Case4}}{60}$<br>
+• ${nX} : ${propA.tex} $= \\dfrac{${propA.frac[0]}}{${propA.frac[1]}} = \\dfrac{${numA60Case4}}{60}$<br>
+• ${nY} : ${this.formaterPourcentage(pB)}<br>
+• ${nZ} : ${propC.tex} $= \\dfrac{${propC.frac[0]}}{${propC.frac[1]}} = \\dfrac{${numC60Case4}}{60}$<br>
+• ${nT} : $1 - \\dfrac{${propA.frac[0]}}{${propA.frac[1]}} - \\dfrac{${pB}}{100} - \\dfrac{${propC.frac[0]}}{${propC.frac[1]}} = \\dfrac{${numD60Case4}}{60}$<br>
 En comparant les fractions, on a : $${comparaison4}$.<br>
-Le candidat ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est donc ${texteEnCouleurEtGras(choix ? 'le candidat T' : 'le candidat X')}.`
+La personne ayant recueilli ${choix ? 'le moins' : 'le plus'} de votes est donc ${texteEnCouleurEtGras(choix ? nT : nX)}.`
 
-        this.reponses = choix
-          ? ['le candidat T', 'le candidat X', 'le candidat Y', 'le candidat Z']
-          : ['le candidat X', 'le candidat T', 'le candidat Y', 'le candidat Z']
+        this.reponses = choix ? [nT, nX, nY, nZ] : [nX, nT, nY, nZ]
         break
       }
+    }
+  }
+
+  /**
+   * Version sans QCM : l'élève choisit la personne dans une liste déroulante.
+   * La case « Version QCM » (`sup3`) réactive le QCM d'origine.
+   */
+  nouvelleVersion() {
+    if (this.sup3) {
+      super.nouvelleVersion()
+      return
+    }
+    if (context.isAmc) {
+      // L'export AMC reste un QCM : on court-circuite ExerciceQcmACourt
+      ExerciceQcmA.prototype.nouvelleVersion.call(this)
+      return
+    }
+
+    this.consigne = ''
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 30; cpt++) {
+      if (this.sup && this.versionOriginale != null) this.versionOriginale()
+      else this.versionAleatoire()
+
+      const bonneReponse = this.reponses[0]
+      if (this.questionJamaisPosee(i, this.enonce, bonneReponse)) {
+        const choices = [
+          { label: 'Choisir une personne', value: '' },
+          ...shuffle([...this.reponses]).map((reponse) => ({
+            label: reponse,
+            value: reponse,
+          })),
+        ]
+
+        // En non interactif, pas de liste déroulante : on reformule la phrase
+        // en vraie question plutôt que de laisser « … est : » sans réponse.
+        const enonceAffiche = this.interactif
+          ? this.enonce
+          : this.enonce.replace(
+              /La personne ayant recueilli (le moins|le plus) de votes est :$/,
+              'Quelle personne a recueilli $1 de votes ?',
+            )
+
+        this.listeQuestions[i] =
+          enonceAffiche +
+          (this.interactif ? `<br>${choixDeroulant(this, i, { choices })}` : '')
+        this.listeCorrections[i] = this.correction ?? ''
+
+        handleAnswers(
+          this,
+          i,
+          { reponse: { value: bonneReponse } },
+          { formatInteractif: 'liste-deroulante' },
+        )
+        i++
+      }
+      if (this.sup) break
     }
   }
 

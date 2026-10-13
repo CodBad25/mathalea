@@ -1152,6 +1152,15 @@ describe('htmlToTypst', () => {
     expect(result).toContain('[$f(x)$]')
   })
 
+  it('reporte la hauteur de ligne commune (data-hauteur-ligne) dans le tableau natif', () => {
+    const result = htmlToTypst(
+      '<table class="tableauMathlive" data-hauteur-ligne="3.6">' +
+        '<tr><th><span>$x$</span></th><td><span>$1$</span></td></tr>' +
+        '</table>',
+    )
+    expect(result).toContain('rows: (3.6em,)')
+  })
+
   describe('protection des `&` bruts (tableau LaTeX) contre le round-trip DOM', () => {
     // régression : protectQcm/protectSchemaContainers/protectHtmlTables font
     // `template.innerHTML = html` puis renvoient `template.innerHTML` dès

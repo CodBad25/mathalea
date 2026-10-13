@@ -29,6 +29,7 @@ export const refs = {
 export default class SignesTabGSpline extends Exercice {
   constructor() {
     super()
+    this.reponseCourteDisponible = false // La réponse est une figure ou un tableau.
     this.nbQuestions = 1
   }
 

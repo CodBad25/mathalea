@@ -137,6 +137,16 @@ export function sp(nb = 1) {
   return s
 }
 
+/**
+ * Texte affiché après un champ de réponse (unité, ponctuation…) : il est
+ * toujours séparé du champ par une seule espace, que l'auteur en ait mis
+ * une ou non.
+ */
+export function texteApresChamp(texte: string) {
+  const sansEspace = texte.replace(/^(?:\s|&nbsp;|\\,)+/, '')
+  return sansEspace === '' ? '' : sp() + sansEspace
+}
+
 export function insertCharInString(str: string, index: number, char: string) {
   return str.substring(0, index) + char + str.substring(index, str.length)
 }

@@ -44,6 +44,8 @@ export function exportedNouvelleVersionWrapper(
 export function exportedReinit(this: IExerciceSimple) {
   this.listeQuestions = []
   this.listeCorrections = []
+  this.listeReponsesCourtes = []
+  this.reponseCourteExplicite = undefined
   this.listeCanEnonces = []
   this.listeCanReponsesACompleter = []
   this.listeCanLiees = []

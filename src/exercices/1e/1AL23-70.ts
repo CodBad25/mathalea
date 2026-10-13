@@ -214,6 +214,8 @@ ${f(x1) - f(-x1)}=${2 * x1}b
       if (this.questionJamaisPosee(i, a, b, c)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
+        this.listeReponsesCourtes[i] =
+          `$${fName[i]}(x)=${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}$`
         i++
       }
       cpt++

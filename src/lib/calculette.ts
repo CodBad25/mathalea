@@ -1,7 +1,11 @@
 /**
  * Logique de la « calculette » : une calculatrice très basique (quatre
  * opérations, écriture en ligne sans parenthèses, virgule décimale, valeur
- * approchée du résultat). Fonctions pures, indépendantes de l'interface.
+ * approchée du résultat). Comme sur une calculatrice simple, il n'y a pas de
+ * priorité des opérations : dès la saisie du 2e opérateur, le calcul en cours
+ * est effectué (comme si on avait tapé « = »), on passe à la ligne et
+ * l'opérateur s'applique au résultat. Fonctions pures, indépendantes de
+ * l'interface.
  */
 
 export type CalculetteOperator = '+' | '−' | '×' | '÷'
@@ -24,7 +28,9 @@ export type CalculetteKey =
   | 'tout-effacer'
 
 export interface CalculetteState {
-  /** Calcul saisi, en écriture en ligne (ex. « 4×3,5 ») */
+  /** Ligne précédente, calcul déjà effectué (ex. « 4+3 = 7 »), ou null */
+  previous: string | null
+  /** Calcul saisi sur la ligne courante (ex. « 4×3,5 ») */
   expression: string
   /** Résultat affiché après « = » (null tant que le calcul n'est pas validé) */
   result: string | null
@@ -39,6 +45,7 @@ export const CALCULETTE_MAX_LENGTH = 80
 export const CALCULETTE_SIGNIFICANT_DIGITS = 10
 
 export const initialCalculetteState: CalculetteState = {
+  previous: null,
   expression: '',
   result: null,
   error: false,
@@ -54,6 +61,12 @@ function isOperator(char: string | undefined): boolean {
 function lastNumber(expression: string): string {
   const match = expression.match(/[0-9,]*$/)
   return match ? match[0] : ''
+}
+
+/** Vrai si l'expression est un calcul complet (« a op b ») prêt à être effectué */
+function isCompleteOperation(expression: string): boolean {
+  const tokens = tokenize(expression)
+  return tokens !== null && tokens.length >= 3
 }
 
 /** Retire tous les opérateurs qui terminent l'expression */
@@ -101,31 +114,26 @@ function tokenize(expression: string): (number | CalculetteOperator)[] | null {
   return tokens
 }
 
-/** Valeur exacte (en flottant) du calcul, ou null si impossible (÷0, syntaxe) */
+/**
+ * Valeur exacte (en flottant) du calcul, ou null si impossible (÷0, syntaxe).
+ * Les opérations sont effectuées de gauche à droite, sans priorité.
+ */
 export function evaluateExpression(expression: string): number | null {
   const tokens = tokenize(expression)
   if (tokens === null) return null
 
-  // priorité de × et ÷ sur + et −
-  const terms: number[] = [tokens[0] as number]
-  const signs: ('+' | '−')[] = []
+  let total = tokens[0] as number
   for (let i = 1; i < tokens.length; i += 2) {
     const operator = tokens[i] as CalculetteOperator
     const value = tokens[i + 1] as number
-    if (operator === '+' || operator === '−') {
-      signs.push(operator)
-      terms.push(value)
-    } else if (operator === '×') {
-      terms[terms.length - 1] *= value
-    } else {
+    if (operator === '+') total += value
+    else if (operator === '−') total -= value
+    else if (operator === '×') total *= value
+    else {
       if (value === 0) return null
-      terms[terms.length - 1] /= value
+      total /= value
     }
   }
-  let total = terms[0]
-  signs.forEach((operator, i) => {
-    total = operator === '+' ? total + terms[i + 1] : total - terms[i + 1]
-  })
   return Number.isFinite(total) ? total : null
 }
 
@@ -171,6 +179,7 @@ export function pressCalculetteKey(
 
   if (key === 'effacer') {
     return {
+      previous: state.previous,
       expression: state.expression.slice(0, -1),
       result: null,
       error: false,
@@ -181,15 +190,38 @@ export function pressCalculetteKey(
     const expression = stripTrailingOperators(state.expression)
     if (expression === '' || state.result !== null) return state
     const value = evaluateExpression(expression)
-    if (value === null) return { expression, result: null, error: true }
-    return { expression, result: formatCalculetteResult(value), error: false }
+    if (value === null) {
+      return { previous: state.previous, expression, result: null, error: true }
+    }
+    return {
+      previous: state.previous,
+      expression,
+      result: formatCalculetteResult(value),
+      error: false,
+    }
   }
 
   // après « = », un opérateur poursuit avec le résultat, un chiffre (ou la
   // virgule) démarre un nouveau calcul
   let expression = state.expression
+  let lastLine = state.previous
   if (state.result !== null) {
-    expression = isOperator(key) ? state.result : ''
+    if (isOperator(key)) {
+      lastLine = `${expression} = ${state.result}`
+      expression = state.result
+    } else {
+      lastLine = null
+      expression = ''
+    }
+  } else if (isOperator(key) && isCompleteOperation(expression)) {
+    // 2e opérateur : le calcul en cours est effectué, on passe à la ligne
+    const value = evaluateExpression(expression)
+    if (value === null) {
+      return { previous: lastLine, expression, result: null, error: true }
+    }
+    const result = formatCalculetteResult(value)
+    lastLine = `${expression} = ${result}`
+    expression = result
   }
 
   if (isOperator(key)) {
@@ -217,7 +249,7 @@ export function pressCalculetteKey(
   }
 
   if (expression.length > CALCULETTE_MAX_LENGTH) return state
-  return { expression, result: null, error: false }
+  return { previous: lastLine, expression, result: null, error: false }
 }
 
 /** Touche de la calculette correspondant à une touche du clavier physique */

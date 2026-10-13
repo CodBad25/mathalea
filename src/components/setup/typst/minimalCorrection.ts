@@ -1,3 +1,4 @@
+import type { IExercice } from '../../../lib/types'
 import { orangeMathalea } from '../../../lib/colors'
 
 /**
@@ -216,11 +217,29 @@ export function reponsesMisesEnEvidence(
   return resultat
 }
 
+/** Résout la déclaration de la question avant toute extraction automatique. */
+export function getShortAnswer(
+  exercise: Partial<
+    Pick<IExercice, 'listeReponsesCourtes' | 'reponseCourteDisponible'>
+  >,
+  index: number,
+): string | null | undefined {
+  const answer = exercise.listeReponsesCourtes?.[index]
+  if (answer === null || (typeof answer === 'string' && answer.trim() !== ''))
+    return answer
+  return exercise.reponseCourteDisponible === false ? null : undefined
+}
+
 /**
- * Correction réduite à ses réponses mises en évidence en orange, séparées par
- * un cadratin. Renvoie la correction inchangée quand elle n'en contient aucune.
+ * Réponse explicite en priorité, puis extraction orange séparée par un cadratin.
+ * `null` ou l'absence d'orange conserve la correction complète.
  */
-export function minimalCorrection(correction: string): string {
+export function minimalCorrection(
+  correction: string,
+  shortAnswer?: string | null,
+): string {
+  if (shortAnswer === null) return correction
+  if (shortAnswer?.trim()) return shortAnswer
   const reponses = reponsesMisesEnEvidence(correction)
   if (reponses.length === 0) return correction
   return reponses.map(({ extrait }) => extrait).join(SEPARATEUR)

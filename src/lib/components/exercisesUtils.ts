@@ -1,3 +1,4 @@
+import { composeQuestionContext } from './questionContext'
 import seedrandom from 'seedrandom'
 import { get } from 'svelte/store'
 import Exercice from '../../exercices/Exercice'
@@ -274,9 +275,7 @@ export const splitExercisesIntoQuestions = (
       exercice.listeCorrections = []
     }
     for (let i = 0; i < exercice.listeQuestions.length; i++) {
-      consignes.push(
-        `${exercice?.consigne} ${exercice?.consigne && exercice?.introduction ? '<br>\n' : ''} ${exercice?.introduction}`,
-      )
+      consignes.push(composeQuestionContext(exercice))
       indiceExercice.push(k)
       indiceQuestionInExercice.push(i)
       if (exercice.consigneCorrection !== undefined) {

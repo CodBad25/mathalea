@@ -1,6 +1,9 @@
 import { splitSubQuestions } from '../../components/setup/typst/buildTypstDocument'
 import { htmlToTypst } from '../../components/setup/typst/latexToTypst'
-import { minimalCorrection } from '../../components/setup/typst/minimalCorrection'
+import {
+  getShortAnswer,
+  minimalCorrection,
+} from '../../components/setup/typst/minimalCorrection'
 import { normalizeAMCNumBlocks } from '../amc/amcNormalize'
 import type { AMCNumBlock, AutoCorrectionAMC } from '../amc/amcTypes'
 import type {
@@ -33,6 +36,8 @@ export interface ExercicePourOmr {
   amcType?: string
   listeQuestions: string[]
   listeCorrections?: string[]
+  listeReponsesCourtes?: (string | null | undefined)[]
+  reponseCourteDisponible?: boolean
   autoCorrection?: unknown[]
   /** Structure de réponse normalisée par l'inférence AMC */
   autoCorrectionAMC?: unknown[]
@@ -203,6 +208,7 @@ function commun(
   correctionSource: string | undefined,
   pointsQuestion: number,
   figures?: string[],
+  shortAnswer?: string | null,
 ): Commun {
   return {
     qid,
@@ -214,7 +220,10 @@ function commun(
     correctionMinimale:
       correctionSource == null
         ? undefined
-        : htmlToTypst(minimalCorrection(correctionSource), figures),
+        : htmlToTypst(
+            minimalCorrection(correctionSource, shortAnswer),
+            figures,
+          ),
     points: pointsQuestion,
   }
 }
@@ -330,6 +339,12 @@ function questionsDepuisBlocs(
         correctionSource,
         points(exercice),
         figures,
+        // Une réponse de l'énoncé entier n'est pas celle de chaque sous-bloc.
+        correctionSource === exercice.listeCorrections?.[contexte.indexEnonce]
+          ? getShortAnswer(exercice, contexte.indexEnonce)
+          : getShortAnswer(exercice, contexte.indexEnonce) === null
+            ? null
+            : undefined,
       ),
       figures,
     )
@@ -463,6 +478,7 @@ function questionsDepuisReponse(
     texteOuRien(exercice.listeCorrections?.[contexte.indexEnonce]),
     points(exercice),
     figures,
+    getShortAnswer(exercice, contexte.indexEnonce),
   )
   const question =
     itemAmc != null && exercice.amcType != null
@@ -561,6 +577,7 @@ function questionOuvertePourDefaut(
         texteOuRien(exercice.listeCorrections?.[contexte.indexEnonce]),
         points(exercice),
         contexte.figures,
+        getShortAnswer(exercice, contexte.indexEnonce),
       ),
       type: 'AMCOpen',
     },

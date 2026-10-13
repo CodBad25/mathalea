@@ -13,6 +13,14 @@ const slides = [
 ]
 
 describe('buildSlidesDocument', () => {
+  it('utilise la réponse explicite dans le récapitulatif, sans modifier la correction', () => {
+    const code = buildSlidesDocument([
+      { question: 'Calculer.', correction: 'Calcul détaillé.', shortAnswer: '$42$' },
+    ], { ...defaultSlidesDocumentOptions, recapAnswers: true })
+    expect(code).toContain('Calcul détaillé.')
+    expect(code).toContain('$42$')
+  })
+
   it('génère une page 16/9 par question, puis les corrections', () => {
     const code = buildSlidesDocument(slides)
     expect(code).toContain('#set page(paper: "presentation-16-9"')

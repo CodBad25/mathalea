@@ -1,7 +1,6 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { createQuestion } from '../../lib/interactif/createQuestion'
 import { toutPourUnPoint } from '../../lib/interactif/fonctionsBaremes'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -38,34 +37,6 @@ export default class DivisionEuclidienneOppose extends Exercice {
       const quotientPositif = q + 1
       const quotientNegatif = -quotientPositif - 1
       const resteNegatif = b - r
-      let enonce = `Sachant que $${texNombre(a)}=${texNombre(q)}\\times ${texNombre(b)}+${texNombre(resteDonne)}$, en déduire le quotient $q$ et le reste $r$ des divisions euclidiennes suivantes.<br>`
-      const dividendes = [a, -a]
-      const quotients = [quotientPositif, quotientNegatif]
-      const restes = [r, resteNegatif]
-      for (let i = 0; i < 2; i++) {
-        let texte = `${i === 0 ? 'a' : 'b'}) Division euclidienne de $${texNombre(dividendes[i])}$ par $${texNombre(b)}$.`
-        if (this.interactif) {
-          texte +=
-            '<br>' +
-            remplisLesBlancs(
-              this,
-              exercice,
-              i === 0
-                ? 'q=%{champ1}\\quad r=%{champ2}'
-                : 'q=%{champ3}\\quad r=%{champ4}',
-              KeyboardType.clavierDeBase,
-            )
-        }
-        enonce += texte + (i === 0 ? '<br><br>' : '')
-      }
-      this.listeQuestions[exercice] = enonce
-      handleAnswers(this, exercice, {
-        bareme: toutPourUnPoint,
-        champ1: { value: quotients[0] },
-        champ2: { value: restes[0] },
-        champ3: { value: quotients[1] },
-        champ4: { value: restes[1] },
-      })
       const correctionPositive = `Dans la division euclidienne de $${texNombre(a)}$ par $${texNombre(b)}$, le reste doit vérifier $0\\leqslant r<${texNombre(b)}$. Le nombre $${texNombre(resteDonne)}$ ne peut donc pas être le reste de cette division, car il est supérieur au diviseur $${texNombre(b)}$.<br>
     $\\begin{aligned}
     ${texNombre(a)}&=${texNombre(b)}\\times ${texNombre(q)}+${texNombre(resteDonne)} &&\\text{mais } ${texNombre(resteDonne)}>${texNombre(b)}\\\\
@@ -74,7 +45,7 @@ export default class DivisionEuclidienneOppose extends Exercice {
     ${texNombre(a)}&=${texNombre(b)}\\times ${texNombre(quotientPositif)}+${texNombre(r)}
     \\end{aligned}$<br>
     Comme $0\\leqslant ${texNombre(r)}<${texNombre(b)}$, il s’agit bien de la division euclidienne de $${texNombre(a)}$ par $${texNombre(b)}$.<br>
-    Le quotient est donc $q=${miseEnEvidence(texNombre(quotientPositif))}$ et le reste est $r=${miseEnEvidence(texNombre(r))}$`
+    Le quotient est donc $q=${miseEnEvidence(texNombre(quotientPositif))}$ et le reste est $r=${miseEnEvidence(texNombre(r))}$.`
       const correctionNegative = `En prenant l’opposé de l’égalité de l’énoncé, on a :<br>
     $\\begin{aligned}
     ${texNombre(-a)}&=${texNombre(b)}\\times (${texNombre(-q)})-${texNombre(resteDonne)} &&\\text{mais } -${texNombre(resteDonne)}<0\\\\
@@ -85,9 +56,29 @@ export default class DivisionEuclidienneOppose extends Exercice {
     ${texNombre(-a)}&=${texNombre(b)}\\times (${texNombre(quotientNegatif)})+${texNombre(resteNegatif)}
     \\end{aligned}$<br>
     Comme $0\\leqslant ${texNombre(resteNegatif)}<${texNombre(b)}$, il s’agit bien de la division euclidienne de $${texNombre(-a)}$ par $${texNombre(b)}$.<br>
-    Le quotient est donc $q=${miseEnEvidence(texNombre(quotientNegatif))}$ et le reste est $r=${miseEnEvidence(texNombre(resteNegatif))}$`
-      this.listeCorrections[exercice] =
-        'a) ' + correctionPositive + '<br><br>b) ' + correctionNegative
+    Le quotient est donc $q=${miseEnEvidence(texNombre(quotientNegatif))}$ et le reste est $r=${miseEnEvidence(texNombre(resteNegatif))}$.`
+      const champs = {
+        keyboard: KeyboardType.clavierDeBase,
+      }
+      createQuestion(this, exercice, {
+        question: `Sachant que $${texNombre(a)}=${texNombre(q)}\\times ${texNombre(b)}+${texNombre(resteDonne)}$, en déduire le quotient $q$ et le reste $r$ des divisions euclidiennes suivantes.`,
+        // Chaque question vaut un point, quel que soit le tirage.
+        bareme: toutPourUnPoint,
+        subQuestions: [
+          {
+            question: `Division euclidienne de $${texNombre(a)}$ par $${texNombre(b)}$.<br>$q=$ %{0}$\\quad r=$ %{1}`,
+            answer: [{ value: quotientPositif }, { value: r }],
+            field: [champs, champs],
+            correction: correctionPositive,
+          },
+          {
+            question: `Division euclidienne de $${texNombre(-a)}$ par $${texNombre(b)}$.<br>$q=$ %{0}$\\quad r=$ %{1}`,
+            answer: [{ value: quotientNegatif }, { value: resteNegatif }],
+            field: [champs, champs],
+            correction: correctionNegative,
+          },
+        ],
+      })
       exercice++
     }
     listeQuestionsToContenu(this)
