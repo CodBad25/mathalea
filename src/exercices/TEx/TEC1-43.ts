@@ -1,6 +1,7 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
+import { verifieDeuxChampsSansOrdre } from '../../lib/interactif/verifieDeuxChampsSansOrdre'
 import { Complexe } from '../../lib/mathFonctions/Complexe'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -176,6 +177,11 @@ export default class EquationSecondDegreComplexe extends Exercice {
           : {
               champ1: { value: solutions[0].tex() },
               champ2: { value: solutions[1].tex() },
+              // Les deux solutions peuvent être saisies dans n'importe quel ordre.
+              callback: verifieDeuxChampsSansOrdre([
+                solutions[0].tex(),
+                solutions[1].tex(),
+              ]),
             },
         { formatInteractif: 'fill-in-the-blank' },
       )
