@@ -362,7 +362,7 @@ export default class ExerciceConversions extends Exercice {
         if (context.isHtml) {
           texte = texte.replace(
             '\\dotfill',
-            '................................................',
+            '................',
           )
         }
         this.listeQuestions[i] = texte
