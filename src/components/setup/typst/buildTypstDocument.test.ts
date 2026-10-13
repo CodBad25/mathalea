@@ -7,6 +7,7 @@ import {
   buildTypstDocument,
   COVER_TEMPLATE_DEFAULTS,
   defaultTypstDocumentOptions,
+  exercisePoints,
   exerciseTitleLine,
   getGeneratedCanRowCode,
   getGeneratedExerciseCode,
@@ -3472,6 +3473,72 @@ describe('zoom des figures commun aux sujets', () => {
   })
 })
 
+describe('points des exercices', () => {
+  const inputs = [
+    exercise({ questions: ['$1+1$', '$2+2$'] }),
+    exercise({ questions: ['$3+3$'] }),
+  ]
+  const options = { ...defaultTypstDocumentOptions, showExercisePoints: true }
+
+  it('reprend le barème, ou un point par question à défaut', () => {
+    expect(exercisePoints([2, 1], options)).toEqual([2, 1])
+    const withBareme = {
+      ...options,
+      coverPage: { ...options.coverPage, bareme: [5, 3.5] },
+    }
+    expect(exercisePoints([2, 1], withBareme)).toEqual([5, 3.5])
+    // barème raccourci (exercices groupés) : il ne suit plus la fiche
+    expect(
+      exercisePoints([2, 1], {
+        ...withBareme,
+        coverPage: { ...options.coverPage, bareme: [8] },
+      }),
+    ).toEqual([2, 1])
+    expect(exercisePoints([2, 1], defaultTypstDocumentOptions)).toBeNull()
+    expect(exercisePoints([2, 1], { ...options, canMode: true })).toBeNull()
+  })
+
+  it('déclare les points, les passe aux exercices et met la note en en-tête', () => {
+    const code = buildTypstDocument(inputs, {
+      ...options,
+      coverPage: { ...options.coverPage, bareme: [5, 3] },
+    })
+    expect(code).toContain('#let exo-1-points = 5')
+    expect(code).toContain('#let exo-2-points = 3')
+    expect(code).toContain(
+      '#let exo-points-total = exo-1-points + exo-2-points',
+    )
+    expect(code).toContain('  points: exo-1-points,')
+    expect(code).toContain('  points-position: "right",')
+    expect(code).toContain('  points-format: "score",')
+    expect(code).toContain(
+      'Note : #box(width: 2.5em, repeat[.]) / #exo-points-total',
+    )
+  })
+
+  it('place les points sous le titre sur demande', () => {
+    const code = buildTypstDocument(inputs, {
+      ...options,
+      exercisePointsPosition: 'below',
+    })
+    expect(code).toContain('  points-position: "below",')
+  })
+
+  it("n'ajoute rien quand les points ne sont pas affichés", () => {
+    const code = buildTypstDocument(inputs, defaultTypstDocumentOptions)
+    expect(code).not.toContain('points')
+  })
+
+  it('laisse la note à la page de garde quand il y en a une', () => {
+    const code = buildTypstDocument(inputs, {
+      ...options,
+      coverPage: { ...options.coverPage, template: 'evaluation' },
+    })
+    expect(code).toContain('  points: exo-1-points,')
+    expect(code).not.toContain('Note : #box')
+  })
+})
+
 describe('titres des exercices', () => {
   const options = { ...defaultTypstDocumentOptions, showExerciseTitles: true }
   const inputs = [
@@ -3515,5 +3582,120 @@ describe('titres des exercices', () => {
     expect(exerciseTitleLine(3, 'Titre', '')).toBe(
       '#let exo-3-titre = none // mathalea:titre-perso',
     )
+  })
+})
+
+describe('plusieurs sujets sur une page', () => {
+  const inputs = [
+    exercise({ questions: ['$1+1$'], corrections: ['$2$'] }),
+    exercise({ questions: ['$2+2$'], corrections: ['$4$'] }),
+  ]
+  const options = { ...defaultTypstDocumentOptions, showCorrections: true }
+
+  it('repère le début et la fin des énoncés de chaque sujet pour mesurer sa hauteur', () => {
+    const code = buildTypstDocument(inputs, { ...options, nbVersions: 2 }, {}, [
+      inputs,
+    ])
+    for (const n of [0, 1]) {
+      expect(code).toContain(`#mathalea-anchor("subject-start", ${n})`)
+      expect(code).toContain(`#mathalea-anchor("subject-end", ${n})`)
+    }
+    expect(code).not.toContain('mathalea-enchainement(')
+  })
+
+  it("n'émet aucun repère de sujet en mode export", () => {
+    const code = buildTypstDocument(
+      inputs,
+      { ...options, nbVersions: 2 },
+      {},
+      [inputs],
+      {
+        exportMode: true,
+      },
+    )
+    expect(code).not.toContain('subject-start')
+    expect(code).not.toContain('subject-end')
+  })
+
+  it('enchaîne les sujets et regroupe les corrections à la fin', () => {
+    const code = buildTypstDocument(
+      inputs,
+      { ...options, nbVersions: 2, chainSubjects: true },
+      {},
+      [inputs],
+    )
+    expect(code).toContain('#let mathalea-sujet-0 = [')
+    expect(code).toContain('#let mathalea-sujet-1 = [')
+    expect(code).toContain(
+      '#mathalea-enchainement(((mathalea-sujet-0, false), (mathalea-sujet-1, false),), corps: (190mm, 267mm))',
+    )
+    // pas de repère de sujet : l'aperçu montre la fiche entière
+    expect(code).not.toContain('// mathalea:sujet(')
+    // les corrections suivent l'appel, dans l'ordre des sujets
+    const call = code.indexOf('#mathalea-enchainement(')
+    const corrections = [...code.matchAll(/\/\/ ----- Corrections -----/g)]
+    expect(corrections).toHaveLength(2)
+    expect(corrections.every((match) => (match.index ?? 0) > call)).toBe(true)
+    // repère de début des corrections de chaque sujet (palette de l'aperçu)
+    expect(code).toContain('#mathalea-anchor("subject-corr", 0)')
+    expect(code).toContain('#mathalea-anchor("subject-corr", 1)')
+  })
+
+  it('répète un sujet sans repère de la palette sur les exemplaires', () => {
+    const code = buildTypstDocument(inputs, { ...options, copiesPerPage: 3 })
+    expect(code).toContain(
+      '#mathalea-enchainement(((mathalea-sujet-0, false), (mathalea-sujet-0-copie, true), (mathalea-sujet-0-copie, true),), corps: (190mm, 267mm))',
+    )
+    const copy = code.slice(
+      code.indexOf('#let mathalea-sujet-0-copie = ['),
+      code.indexOf('#mathalea-enchainement('),
+    )
+    expect(copy).not.toContain('mathalea-anchor(')
+    // la ligne d'en-tête (Nom, Prénom, Classe) reste, sans son repère
+    expect(copy).toContain('#entete')
+  })
+
+  it('ne fait rien avec un seul sujet et un seul exemplaire, ni avec une page de garde', () => {
+    expect(
+      buildTypstDocument(inputs, { ...options, chainSubjects: true }),
+    ).not.toContain('mathalea-enchainement(')
+    expect(
+      buildTypstDocument(inputs, {
+        ...options,
+        copiesPerPage: 2,
+        coverPage: {
+          ...defaultTypstDocumentOptions.coverPage,
+          template: 'evaluation',
+        },
+      }),
+    ).not.toContain('mathalea-enchainement(')
+  })
+})
+
+describe('plusieurs sujets sur une page avec le bandeau compact', () => {
+  it('place le bandeau en tête de chaque sujet enchaîné', () => {
+    const inputs = [exercise({ questions: ['$1+1$'] })]
+    const code = buildTypstDocument(
+      inputs,
+      {
+        ...defaultTypstDocumentOptions,
+        nbVersions: 2,
+        chainSubjects: true,
+        coverPage: {
+          ...defaultTypstDocumentOptions.coverPage,
+          template: 'recitation',
+        },
+      },
+      {},
+      [inputs],
+    )
+    expect(code).toContain('#mathalea-enchainement(')
+    for (const n of [0, 1]) {
+      const start = code.indexOf(`#let mathalea-sujet-${n} = [`)
+      const subject = code.slice(start, code.indexOf('\n]\n', start))
+      expect(subject).toContain('mathalea-couverture-recitation(')
+      expect(subject).toContain(`#mathalea-anchor("subject-start", ${n})`)
+      expect(subject).toContain('#mathalea-anchor("cover", 0)')
+    }
   })
 })
