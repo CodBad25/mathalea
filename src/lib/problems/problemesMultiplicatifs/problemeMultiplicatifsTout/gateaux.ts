@@ -9,13 +9,13 @@ import ProblemeMultiplicatifs from './problemesMultiplicatifsTout'
 /**
  * @author Jean-claude Lhote
  */
-export function gateaux1(decimal = false): Probleme {
+export function gateaux1(_decimal = false): Probleme {
   const personnage = prenomPronom()
   const nbPaquets = randint(2, 9)
   const nbGateauxParPaquet = choice([10, 12, 15, 16, 18, 20, 24, 30])
   const data = { nbFois: nbPaquets, facteur: nbGateauxParPaquet }
   const enonce = `Pour son goûter d'anniversaire, ${personnage.prenom} a acheté ${nbPaquets} paquets de gâteaux. Chaque paquet contient ${nbGateauxParPaquet} gâteaux. Combien de gâteaux a-t-${personnage.pronom} au total ?`
-  const correction = `${personnage.prenom} a acheté ${nbPaquets} paquets de gâteaux, chacun contenant ${nbGateauxParPaquet} gâteaux. <br>Donc, au total, ${personnage.pronom} a ${miseEnEvidence(texNombre(nbPaquets * nbGateauxParPaquet, 0))} gâteaux.`
+  const correction = `${personnage.prenom} a acheté ${nbPaquets} paquets de gâteaux, chacun contenant ${nbGateauxParPaquet} gâteaux. <br>Donc, au total, ${personnage.pronom} a $${miseEnEvidence(texNombre(nbPaquets * nbGateauxParPaquet, 0))}$ gâteaux.`
   const probleme = new ProblemeMultiplicatifs('gateaux1', data)
   probleme.enonce = enonce
   probleme.correction = correction
