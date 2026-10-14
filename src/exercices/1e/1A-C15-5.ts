@@ -1,7 +1,8 @@
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { texNombre } from '../../lib/outils/texNombre'
+import { texNombre, texPrix } from '../../lib/outils/texNombre'
 // import ExerciceQcmA from '../../ExerciceQcmA'
+import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { arrondi } from '../../lib/outils/nombres'
 import { prenom } from '../../lib/outils/Personne'
@@ -51,26 +52,23 @@ export default class Auto1C15r extends ExerciceQcmACourt {
     // Calculer la bonne réponse en euros et centimes
     const coutTotalEuros = energie * cout
     let coutEuros: string
-    let coutCentimes: string
-
+    let coutCentimes: number
     if (coutTotalEuros < 0.01) {
-      coutEuros = `$${texNombre(coutTotalEuros, 3)}\\text{ €}$`
-      coutCentimes = `$${texNombre(coutTotalEuros * 100, 2)}\\text{ centimes d'euro}$`
+      coutEuros = texNombre(coutTotalEuros, 3)
+      coutCentimes = coutTotalEuros * 100
     } else if (coutTotalEuros === 0.01) {
-      coutEuros = '$0,01\\text{ €}$'
-      coutCentimes = "$1\\text{ centime d'euro}$"
+      coutEuros = '0,01'
+      coutCentimes = 1
     } else if (coutTotalEuros < 0.1) {
-      coutEuros = `$${texNombre(coutTotalEuros, 2)}\\text{ €}$`
-      const centimes = Math.round(coutTotalEuros * 100)
-      coutCentimes =
-        centimes === 1
-          ? "$1\\text{ centime d'euro}$"
-          : `$${centimes}\\text{ centimes d'euro}$`
+      coutEuros = texNombre(coutTotalEuros, 2)
+      coutCentimes = Math.round(coutTotalEuros * 100)
     } else {
       coutEuros = `$${texNombre(coutTotalEuros, 1)}\\text{ €}$`
-      const centimes = Math.round(coutTotalEuros * 100)
-      coutCentimes = `$${centimes}\\text{ centimes d'euro}$`
+      coutCentimes = Math.round(coutTotalEuros * 100)
     }
+
+    const coutEurosAvecUnites = `$${coutEuros}\\text{ €}$`
+    const coutCentimesAvecUnites = `$${texNombre(coutCentimes, 0)}$ centime${coutCentimes === 1 ? 's' : ''} d'euro`
 
     // Générer les distracteurs
     const distracteurs = [
@@ -80,8 +78,8 @@ export default class Auto1C15r extends ExerciceQcmACourt {
     ]
 
     // Bonne réponse en premier (choisir aléatoirement euros ou centimes)
-    const reponseTiree = choice([coutEuros, coutCentimes])
-    const bonneReponse = this.sup3 ? reponseTiree : coutEuros
+    const reponseTiree = choice([coutEurosAvecUnites, coutCentimesAvecUnites])
+    const bonneReponse = this.sup3 ? reponseTiree : coutEurosAvecUnites
 
     // Conserver les valeurs exactes jusqu'à la conclusion.
     const puissanceExacte = new FractionEtendue(puissance, 1000)
@@ -99,16 +97,22 @@ export default class Auto1C15r extends ExerciceQcmACourt {
     while (denominateur % 2 === 0) denominateur /= 2
     while (denominateur % 5 === 0) denominateur /= 5
     if (denominateur === 1) {
-      const enCentimes = bonneReponse === coutCentimes
+      const enCentimes = bonneReponse === coutCentimesAvecUnites
       const valeur = coutExact.valeurDecimale * (enCentimes ? 100 : 1)
       const unite = enCentimes
         ? valeur === 1
           ? "centime d'euro"
           : "centimes d'euro"
         : '€'
-      correctionFinale += `Le coût est donc $${miseEnEvidence(`${texNombre(valeur, 3)}\\,\\text{${unite}}`)}$.`
+      correctionFinale += `Le coût est donc `
+      correctionFinale += this.sup3
+        ? `$${miseEnEvidence(`${texPrix(valeur)}\\,\\text{${unite}}`)}$.`
+        : `$${miseEnEvidence(`${texPrix(valeur)}`)}\\,\\text{${unite}}$.`
     } else {
-      correctionFinale += `Ce coût n'a pas d'écriture décimale finie. La réponse proposée, $${miseEnEvidence(bonneReponse.slice(1, -1))}$, est une valeur approchée arrondie ${bonneReponse === coutCentimes ? 'au centime' : "au centième d'euro"}.`
+      correctionFinale += `Ce coût n'a pas d'écriture décimale finie. La réponse proposée, `
+      correctionFinale += this.sup3
+        ? `$${miseEnEvidence(bonneReponse.slice(1, -1))}$, est une valeur arrondie ${bonneReponse === coutCentimesAvecUnites ? 'au centime' : "au centième d'euro"}.`
+        : `$${miseEnEvidence(coutEuros)}\\text{ €}$, est une valeur arrondie ${bonneReponse === coutCentimesAvecUnites ? 'au centime' : "au centième d'euro"}.`
     }
 
     this.correction = correctionFinale
@@ -158,9 +162,13 @@ export default class Auto1C15r extends ExerciceQcmACourt {
     this.enonceCourt = () =>
       this.enonce.replace(
         'Le coût en électricité pour cette utilisation est :',
-        'Calculer le coût en euros de cette utilisation.',
+        'Calculer le coût en euros de cette utilisation. On arrondira, si besoin, au centime près.',
       )
     this.versionAleatoire()
     this.spacing = 1.5
+    this.spacingCorr = 2.5
+    this.texteApresReponseCourte = ' €'
+    this.compareReponseCourte = (saisie, reponse) =>
+      fonctionComparaison(saisie, reponse, { nombreDecimalSeulement: true })
   }
 }

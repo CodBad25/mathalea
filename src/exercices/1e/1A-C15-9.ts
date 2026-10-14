@@ -1,7 +1,7 @@
 import { choice } from '../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
-  texteEnCouleur,
+  texteEnCouleurEtGras,
 } from '../../lib/outils/embellissements'
 
 // import ExerciceQcmA from '../../ExerciceQcmA'
@@ -47,69 +47,70 @@ export default class Auto1C15h extends ExerciceQcmACourt {
       if (unite1L === 'g') {
         explicationCalcul = `La masse d'un litre est de $${texNombre(masse1L)}$ g.<br>
 Pour $100$ mL (soit un dixième de litre), on divise par $10$ :<br>
-$${texNombre(masse1L)} \\div 10 = ${texNombre(masse1L / 10)}$ g`
+$${texNombre(masse1L)} \\div 10 = ${texNombre(masse1L / 10)}$ `
       } else {
         explicationCalcul = `La masse d'un litre est de $${texNombre(masse1L)}$ kg.<br>
 Pour $100$ mL (soit un dixième de litre), on divise par $10$ :<br>
-$${texNombre(masse1L)} \\div 10 = ${texNombre(masse1L / 10)}$ kg`
+$${texNombre(masse1L)} \\div 10 = ${texNombre(masse1L / 10)}$ `
       }
     } else if (volume === 200) {
       // 200 mL = 1/5 de litre
       if (unite1L === 'g') {
         explicationCalcul = `La masse d'un litre est de $${texNombre(masse1L)}$ g.<br>
 Pour $200$ mL (soit un cinquième de litre), on divise par $5$ :<br>
-$${texNombre(masse1L)} \\div 5 = ${texNombre(masse1L / 5)}$ g`
+$${texNombre(masse1L)} \\div 5 = ${texNombre(masse1L / 5)}$ `
       } else {
         explicationCalcul = `La masse d'un litre est de $${texNombre(masse1L)}$ kg.<br>
 Pour $200$ mL (soit un cinquième de litre), on divise par $5$ :<br>
-$${texNombre(masse1L)} \\div 5 = ${texNombre(masse1L / 5)}$ kg`
+$${texNombre(masse1L)} \\div 5 = ${texNombre(masse1L / 5)}$ `
       }
     } else if (volume === 250) {
       // 250 mL = 1/4 de litre
       if (unite1L === 'g') {
         explicationCalcul = `La masse d'un litre est de $${texNombre(masse1L)}$ g.<br>
 Pour $250$ mL (soit un quart de litre), on divise par $4$ :<br>
-$${texNombre(masse1L)} \\div 4 = ${texNombre(masse1L / 4)}$ g`
+$${texNombre(masse1L)} \\div 4 = ${texNombre(masse1L / 4)}$ `
       } else {
         explicationCalcul = `La masse d'un litre est de $${texNombre(masse1L)}$ kg.<br>
 Pour $250$ mL (soit un quart de litre), on divise par $4$ :<br>
-$${texNombre(masse1L)} \\div 4 = ${texNombre(masse1L / 4)}$ kg`
+$${texNombre(masse1L)} \\div 4 = ${texNombre(masse1L / 4)}$ `
       }
     } else if (volume === 500) {
       // 500 mL = 1/2 litre
       if (unite1L === 'g') {
         explicationCalcul = `La masse d'un litre est de $${texNombre(masse1L)}$ g.<br>
 Pour $500$ mL (soit un demi-litre), on divise par $2$ :<br>
-$${texNombre(masse1L)} \\div 2 = ${texNombre(masse1L / 2)}$ g`
+$${texNombre(masse1L)} \\div 2 = ${texNombre(masse1L / 2)}$ `
       } else {
         explicationCalcul = `La masse d'un litre est de $${texNombre(masse1L)}$ kg.<br>
 Pour $500$ mL (soit un demi-litre), on divise par $2$ :<br>
-$${texNombre(masse1L)} \\div 2 = ${texNombre(masse1L / 2)}$ kg`
+$${texNombre(masse1L)} \\div 2 = ${texNombre(masse1L / 2)}$ `
       }
     } else if (volume === 750) {
       // 750 mL = 3/4 de litre
       if (unite1L === 'g') {
         explicationCalcul = `La masse d'un litre est de $${texNombre(masse1L)}$ g.<br>
 Pour $750$ mL (soit trois quarts de litre, $0,75$ L), on multiplie par $0,75$ :<br>
-$${texNombre(masse1L)} \\times 0,75 = ${texNombre(masse1L * 0.75)}$ g`
+$${texNombre(masse1L)} \\times 0,75 = ${texNombre(masse1L * 0.75)}$ `
       } else {
         explicationCalcul = `La masse d'un litre est de $${texNombre(masse1L)}$ kg.<br>
 Pour $750$ mL (soit trois quarts de litre, $0,75$ L), on multiplie par $0,75$ :<br>
-$${texNombre(masse1L)} \\times 0,75 = ${texNombre(masse1L * 0.75)}$ kg`
+$${texNombre(masse1L)} \\times 0,75 = ${texNombre(masse1L * 0.75)}$ `
       }
     }
 
     // Conversion si nécessaire
     let explicationConversion = ''
-    if (unite1L === 'g' && uniteReponse === 'kg') {
-      const masseEnG = masse1L * (volume / 1000)
-      explicationConversion = `<br>La masse obtenue est $${texNombre(masseEnG)}$ g.<br>
-Pour convertir en kg : $${texNombre(masseEnG)}$ g $= ${texNombre(bonneReponse)}$ kg`
-    } else if (unite1L === 'kg' && uniteReponse === 'g') {
-      const masseEnKg = masse1L * (volume / 1000)
-      explicationConversion = `<br>La masse obtenue est $${texNombre(masseEnKg)}$ kg.<br>
-Pour convertir en g : $${texNombre(masseEnKg)}$ kg $= ${texNombre(bonneReponse)}$ g`
-    }
+    if (this.sup3 || this.interactif)
+      if (unite1L === 'g' && uniteReponse === 'kg') {
+        const masseEnG = masse1L * (volume / 1000)
+        explicationConversion = `${uniteReponse}.<br>La masse obtenue est $${texNombre(masseEnG)}$ g.<br>
+Pour convertir en kg : $${texNombre(masseEnG)}$ g $= ${texNombre(bonneReponse)}$ `
+      } else if (unite1L === 'kg' && uniteReponse === 'g') {
+        const masseEnKg = masse1L * (volume / 1000)
+        explicationConversion = `${uniteReponse}.<br>La masse obtenue est $${texNombre(masseEnKg)}$ kg.<br>
+Pour convertir en g : $${texNombre(masseEnKg)}$ kg $= ${texNombre(bonneReponse)}$ `
+      }
 
     this.enonce = `La masse d'un litre d'huile est égale à $${texNombre(masse1L)}$ ${unite1L}.<br>
 Calculer la masse de $${volume}$ millilitres de cette huile.`
@@ -118,9 +119,22 @@ Calculer la masse de $${volume}$ millilitres de cette huile.`
 <br>
 $${volume}$ mL $= ${texNombre(volume / 1000)}$ L
 <br>
-${explicationCalcul}${explicationConversion}
-<br>
-La bonne réponse est donc : $${miseEnEvidence(`${texNombre(bonneReponse)}`)}$ ${texteEnCouleur(`${uniteReponse}`)}.`
+${explicationCalcul}${explicationConversion}`
+    // Uniformisation : Mise en place de la réponse attendue en interactif en orange et gras
+    const textCorrSplit = this.correction.split('=')
+    let aRemplacer = textCorrSplit[textCorrSplit.length - 1]
+    aRemplacer = aRemplacer.replace('$', '')
+
+    this.correction = ''
+    for (let ee = 0; ee < textCorrSplit.length - 1; ee++) {
+      this.correction += textCorrSplit[ee] + '='
+    }
+    this.correction += `${miseEnEvidence(aRemplacer)}$`
+    // Fin de cette uniformisation
+
+    this.correction += this.sup3
+      ? ` ${texteEnCouleurEtGras(`${uniteReponse}`)}`
+      : ` ${uniteReponse}`
 
     this.reponses = [
       `$${texNombre(bonneReponse)}\\text{ ${uniteReponse}}$`,
@@ -128,7 +142,8 @@ La bonne réponse est donc : $${miseEnEvidence(`${texNombre(bonneReponse)}`)}$ $
       `$${texNombre(dist2)}\\text{ ${unite2}}$`,
       `$${texNombre(dist3)}\\text{ ${unite3}}$`,
     ]
-    this.enonceCourt = () => `${this.enonce}<br>Exprimer la réponse en $\\text{${uniteReponse}}$.`
+
+    this.texteApresReponseCourte = ' ' + uniteReponse
   }
 
   versionOriginale: () => void = () => {
