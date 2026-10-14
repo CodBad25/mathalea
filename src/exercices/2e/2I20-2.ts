@@ -33,6 +33,177 @@ export const refs = {
   'fr-fr': ['2I20-2', 'BP2AutoB2'],
   'fr-ch': ['10FA2B-13'],
 }
+type TypeDeQuestion = 'finale' | 'evolution' | 'initiale'
+
+// Taux dont le coefficient multiplicateur n'a qu'une décimale (1,1 ; 0,8 ; 1,5…) :
+// diviser par ce coefficient revient à diviser 10 fois la valeur finale par un entier
+const tauxFacilesPourLaValeurInitiale = [10, 20, 30, 40, 50]
+
+const pgcd = (a: number, b: number): number => (b === 0 ? a : pgcd(b, a % b))
+
+/**
+ * Tire une valeur initiale et un taux d'évolution simples, calculables sans calculatrice :
+ * taux usuels et valeurs « rondes » pour que la variation soit entière et facile à obtenir de tête.
+ * Pour retrouver la valeur initiale, le coefficient multiplicateur n'a qu'une décimale
+ * et la valeur initiale un seul chiffre significatif : la division se fait sans fraction.
+ * @returns [valeur initiale, taux d'évolution en %]
+ */
+function valeursSansCalculatrice(
+  situation: string,
+  typeDeQuestion: TypeDeQuestion,
+): [number, number] {
+  const mantisse = (n: number) => {
+    let m = n
+    while (m % 10 === 0) m /= 10
+    return m
+  }
+  const tirer = (listeTaux: number[], listeDeparts: number[]) => {
+    const tauxPossibles =
+      typeDeQuestion === 'initiale'
+        ? listeTaux.filter((t) => tauxFacilesPourLaValeurInitiale.includes(t))
+        : listeTaux
+    const taux = choice(tauxPossibles)
+    const departsPossibles = listeDeparts.filter((depart) => {
+      const variation = (depart * taux) / 100
+      // Variation entière, avec au plus deux chiffres significatifs (pas 375 ni 6 250)
+      if (!Number.isInteger(variation) || mantisse(variation) >= 100)
+        return false
+      // Valeur initiale à un seul chiffre significatif : 10 × Vf se divise de tête par 10 × CM
+      return typeDeQuestion !== 'initiale' || mantisse(depart) < 10
+    })
+    return [choice(departsPossibles), taux * choice([-1, 1])] as [
+      number,
+      number,
+    ]
+  }
+  switch (situation) {
+    case 'prix':
+      return tirer(
+        [5, 10, 15, 20, 25, 30, 40, 50],
+        [20, 40, 60, 80, 100, 120, 150, 200, 250, 300, 400],
+      )
+    case 'etablissement':
+      return tirer(
+        [5, 10, 15, 20, 25],
+        [200, 300, 400, 500, 600, 800, 1000, 1200],
+      )
+    case 'facture':
+      return tirer(
+        [5, 10, 15, 20, 25, 30],
+        [400, 500, 600, 800, 1000, 1200, 1500, 2000],
+      )
+    case 'population':
+      return tirer(
+        [5, 10, 15, 20, 25],
+        [2000, 4000, 5000, 8000, 10000, 12000, 20000, 25000, 40000, 50000],
+      )
+    case 'chiffreAffaires':
+      return tirer(
+        [5, 10, 15, 20, 25, 30, 40],
+        [50000, 80000, 100000, 120000, 150000, 200000, 250000, 300000, 400000],
+      )
+    case 'abonnement':
+    default:
+      return tirer([10, 20, 25], [10, 12, 16, 20, 24, 30, 40, 50])
+  }
+}
+
+/**
+ * Calcul mental de taux % de valeur, présenté étape par étape.
+ * @returns [texte de la démarche, résultat]
+ */
+function pourcentageDeTete(taux: number, valeur: number): [string, number] {
+  const resultat = (taux * valeur) / 100
+  const v = texNombre(valeur, 2)
+  const r = texNombre(resultat, 2)
+  const pourcent = `$${taux}\\,\\%$`
+  const dix = texNombre(valeur / 10, 2)
+  switch (taux) {
+    case 50:
+      return [
+        `Prendre ${pourcent} d'une quantité, c'est en prendre la moitié : $${v} \\div 2 = ${r}$.`,
+        resultat,
+      ]
+    case 25:
+      return [
+        `Prendre ${pourcent} d'une quantité, c'est en prendre le quart : $${v} \\div 4 = ${r}$.`,
+        resultat,
+      ]
+    case 10:
+      return [
+        `Prendre ${pourcent} d'une quantité, c'est la diviser par $10$ : $${v} \\div 10 = ${r}$.`,
+        resultat,
+      ]
+    case 5:
+      return [
+        `$10\\,\\%$ de $${v}$, c'est $${v} \\div 10 = ${dix}$.<br>${pourcent}, c'est la moitié de $10\\,\\%$ : $${dix} \\div 2 = ${r}$.`,
+        resultat,
+      ]
+    case 15: {
+      const cinq = texNombre(valeur / 20, 2)
+      return [
+        `$10\\,\\%$ de $${v}$, c'est $${v} \\div 10 = ${dix}$ et $5\\,\\%$, c'est la moitié : $${cinq}$.<br>${pourcent}, c'est $10\\,\\% + 5\\,\\%$ : $${dix} + ${cinq} = ${r}$.`,
+        resultat,
+      ]
+    }
+    default:
+      return [
+        `$10\\,\\%$ de $${v}$, c'est $${v} \\div 10 = ${dix}$.<br>${pourcent}, c'est $${taux / 10}$ fois plus : $${dix} \\times ${taux / 10} = ${r}$.`,
+        resultat,
+      ]
+  }
+}
+
+/**
+ * Démarche de calcul mental pour la correction « Sans calculatrice ».
+ * Le résultat final est laissé à la phrase de conclusion de la situation.
+ */
+function correctionDeTete(
+  typeDeQuestion: TypeDeQuestion,
+  depart: number,
+  taux: number,
+): string {
+  const t = Math.abs(taux)
+  const variation = (t * depart) / 100
+  const arrive = taux > 0 ? depart + variation : depart - variation
+  const vi = texNombre(depart, 2)
+  const vf = texNombre(arrive, 2)
+  const va = texNombre(variation, 2)
+  switch (typeDeQuestion) {
+    case 'finale': {
+      const [demarche] = pourcentageDeTete(t, depart)
+      return taux > 0
+        ? `${demarche}<br>L'augmentation est donc de $${va}$, d'où $${vi} + ${va} = ${vf}$.`
+        : `${demarche}<br>La diminution est donc de $${va}$, d'où $${vi} - ${va} = ${vf}$.`
+    }
+    case 'initiale': {
+      // Coefficient multiplicateur à une décimale : diviser par CM, c'est diviser 10 × Vf par 10 × CM
+      const coeff = texNombre((100 + taux) / 100, 1)
+      const diviseur = (100 + taux) / 10
+      const verbe = taux > 0 ? 'Augmenter' : 'Diminuer'
+      const signe = taux > 0 ? '+' : '-'
+      let texte = `${verbe} de $${t}\\,\\%$ revient à multiplier par $1 ${signe} ${texNombre(t / 100, 2)} = ${coeff}$.`
+      texte += `<br>La valeur initiale $V_i$ vérifie donc $V_i \\times ${coeff} = ${vf}$, d'où $V_i = \\dfrac{${vf}}{${coeff}} = \\dfrac{${texNombre(arrive * 10, 2)}}{${diviseur}} = ${vi}$.`
+      return texte
+    }
+    case 'evolution':
+    default: {
+      // Fraction variation / valeur initiale simplifiée, puis ramenée à un dénominateur 100
+      const d = pgcd(t, 100)
+      const a = t / d
+      const b = 100 / d
+      const moins = taux > 0 ? '' : '-'
+      const ecart = texNombre(arrive - depart, 2)
+      const etapes = [`\\dfrac{${ecart}}{${vi}}`]
+      if (depart !== 100 && b !== depart)
+        etapes.push(`${moins}\\dfrac{${a}}{${b}}`)
+      if (depart !== 100 && b !== 100) etapes.push(`${moins}\\dfrac{${t}}{100}`)
+      const fractions = etapes.join(' = ')
+      return `$V_f - V_i = ${vf} - ${vi} = ${ecart}$.<br>On utilise la formule du cours : $t = \\dfrac{V_f - V_i}{V_i} = ${fractions}$.`
+    }
+  }
+}
+
 export default class EvolutionsEnPourcentage extends Exercice {
   onlyMoney = false
   constructor() {
@@ -47,6 +218,8 @@ export default class EvolutionsEnPourcentage extends Exercice {
       4,
       "1 : Déterminer le résultat après une évolution en pourcentage\n2 : Calculer un taux d'évolution\n3 : Calculer la valeur initiale en connaissant le taux d'évolution et la valeur finale\n4 : Mélange",
     ]
+    this.besoinFormulaire2CaseACocher = ['Sans calculatrice', false]
+    this.sup2 = false
   }
 
   nouvelleVersion() {
@@ -95,20 +268,27 @@ export default class EvolutionsEnPourcentage extends Exercice {
       let reponse: number
       switch (typesDeSituations[i]) {
         case 'prix':
-          switch (randint(1, 3)) {
-            case 1:
-              depart = randint(11, 99) / 10
-              taux = randint(1, 7) * 10 * choice([-1, 1])
-              break
-            case 2:
-              depart = randint(11, 99)
-              taux = randint(5, 60) * choice([-1, 1])
-              break
-            case 3:
-            default:
-              depart = randint(11, 99) * 10
-              taux = randint(5, 60) * choice([-1, 1])
-              break
+          if (this.sup2) {
+            ;[depart, taux] = valeursSansCalculatrice(
+              typesDeSituations[i],
+              listeTypeDeQuestions[i],
+            )
+          } else {
+            switch (randint(1, 3)) {
+              case 1:
+                depart = randint(11, 99) / 10
+                taux = randint(1, 7) * 10 * choice([-1, 1])
+                break
+              case 2:
+                depart = randint(11, 99)
+                taux = randint(5, 60) * choice([-1, 1])
+                break
+              case 3:
+              default:
+                depart = randint(11, 99) * 10
+                taux = randint(5, 60) * choice([-1, 1])
+                break
+            }
           }
           tauxDec = taux / 100
           coeff = tauxDec + 1
@@ -228,20 +408,27 @@ export default class EvolutionsEnPourcentage extends Exercice {
           // Multiple de 50 et multiple de 2%
           // Multiple de 20 et multiple de 5%
           // Multiple de 100 et n%
-          switch (randint(1, 3)) {
-            case 1:
-              depart = 50 * randint(7, 24)
-              taux = 2 * randint(1, 5) * choice([-1, 1])
-              break
-            case 2:
-              depart = 20 * randint(17, 60)
-              taux = 5 * randint(1, 3) * choice([-1, 1])
-              break
-            case 3:
-            default:
-              depart = 100 * randint(4, 12)
-              taux = randint(1, 11) * choice([-1, 1])
-              break
+          if (this.sup2) {
+            ;[depart, taux] = valeursSansCalculatrice(
+              typesDeSituations[i],
+              listeTypeDeQuestions[i],
+            )
+          } else {
+            switch (randint(1, 3)) {
+              case 1:
+                depart = 50 * randint(7, 24)
+                taux = 2 * randint(1, 5) * choice([-1, 1])
+                break
+              case 2:
+                depart = 20 * randint(17, 60)
+                taux = 5 * randint(1, 3) * choice([-1, 1])
+                break
+              case 3:
+              default:
+                depart = 100 * randint(4, 12)
+                taux = randint(1, 11) * choice([-1, 1])
+                break
+            }
           }
           tauxDec = taux / 100
           coeff = tauxDec + 1
@@ -341,8 +528,15 @@ export default class EvolutionsEnPourcentage extends Exercice {
           }
           break
         case 'facture': {
-          depart = randint(700, 1400)
-          taux = randint(2, 30) * choice([-1, 1])
+          if (this.sup2) {
+            ;[depart, taux] = valeursSansCalculatrice(
+              typesDeSituations[i],
+              listeTypeDeQuestions[i],
+            )
+          } else {
+            depart = randint(700, 1400)
+            taux = randint(2, 30) * choice([-1, 1])
+          }
           tauxDec = taux / 100
           coeff = tauxDec + 1
           arrive = coeff * depart
@@ -448,8 +642,15 @@ export default class EvolutionsEnPourcentage extends Exercice {
           break
         }
         case 'population':
-          depart = choice([randint(11, 99) * 1000, randint(11, 99) * 10000])
-          taux = randint(5, 35) * choice([-1, 1])
+          if (this.sup2) {
+            ;[depart, taux] = valeursSansCalculatrice(
+              typesDeSituations[i],
+              listeTypeDeQuestions[i],
+            )
+          } else {
+            depart = choice([randint(11, 99) * 1000, randint(11, 99) * 10000])
+            taux = randint(5, 35) * choice([-1, 1])
+          }
           tauxDec = taux / 100
           coeff = tauxDec + 1
           arrive = coeff * depart
@@ -512,7 +713,7 @@ export default class EvolutionsEnPourcentage extends Exercice {
                 texteCorr =
                   "On utilise la formule du cours qui exprime le taux d'évolution $t$ en fonction de la valeur initiale $V_i$ et la valeur finale $V_f$ : $t=\\dfrac{V_f-V_i}{V_i}$."
                 texteCorr += `<br><br>Ici : $t=\\dfrac{${texNombre(arrive, 2)}-${texNombre(depart, 0)}}{${texPrix(depart)}}=${texNombre(tauxDec, 2)}=\\dfrac{${taux}}{100}$.`
-                texteCorr += `<br>Le taux d'évolution de la population est $${miseEnEvidence(taux)}~\\%$<br><br>`
+                texteCorr += `<br>Le taux d'évolution de la population est $${miseEnEvidence(taux)}~\\%$.<br><br>`
                 texteCorr +=
                   'Méthode $2$ : On arrive aussi au même résultat en passant par le coefficient multiplicateur : '
                 texteCorr += `<br>$CM=\\dfrac{V_f}{V_i}=\\dfrac{${texNombre(arrive, 2)}}{${texNombre(depart, 2)}} = ${texNombre(coeff, 2)}$<br>
@@ -523,7 +724,7 @@ export default class EvolutionsEnPourcentage extends Exercice {
                 texteCorr =
                   "On utilise la formule du cours qui exprime le taux d'évolution $t$ en fonction de la valeur initiale $V_i$ et la valeur finale $V_f$ : $t=\\dfrac{V_f-V_i}{V_i}$."
                 texteCorr += `<br><br>Ici : $t=\\dfrac{${texNombre(arrive, 2)}-${texNombre(depart, 0)}}{${texPrix(depart)}}=${texNombre(tauxDec, 2)}=\\dfrac{${taux}}{100}$.`
-                texteCorr += `<br>Le taux d'évolution de la population est $${miseEnEvidence(taux)}~\\%$<br><br>`
+                texteCorr += `<br>Le taux d'évolution de la population est $${miseEnEvidence(taux)}~\\%$.<br><br>`
                 texteCorr +=
                   'Méthode $2$ : On arrive aussi au même résultat en passant par le coefficient multiplicateur : '
                 texteCorr += `<br>$CM=\\dfrac{V_f}{V_i}=\\dfrac{${texNombre(arrive, 2)}}{${texNombre(depart, 2)}} = ${texNombre(coeff, 2)}$<br>
@@ -545,20 +746,27 @@ export default class EvolutionsEnPourcentage extends Exercice {
 
         case 'chiffreAffaires': {
           // Chiffre d'affaires entre 50k€ et 500k€
-          switch (randint(1, 3)) {
-            case 1:
-              depart = randint(5, 20) * 10000 // 50k à 200k
-              taux = randint(2, 8) * 5 * choice([-1, 1]) // -40% à +40% par pas de 10
-              break
-            case 2:
-              depart = randint(20, 50) * 10000 // 200k à 500k
-              taux = randint(1, 6) * 5 * choice([-1, 1]) // -30% à +30% par pas de 5
-              break
-            case 3:
-            default:
-              depart = randint(10, 30) * 10000 // 100k à 300k
-              taux = randint(2, 12) * choice([-1, 1]) // -12% à +12%
-              break
+          if (this.sup2) {
+            ;[depart, taux] = valeursSansCalculatrice(
+              typesDeSituations[i],
+              listeTypeDeQuestions[i],
+            )
+          } else {
+            switch (randint(1, 3)) {
+              case 1:
+                depart = randint(5, 20) * 10000 // 50k à 200k
+                taux = randint(2, 8) * 5 * choice([-1, 1]) // -40% à +40% par pas de 10
+                break
+              case 2:
+                depart = randint(20, 50) * 10000 // 200k à 500k
+                taux = randint(1, 6) * 5 * choice([-1, 1]) // -30% à +30% par pas de 5
+                break
+              case 3:
+              default:
+                depart = randint(10, 30) * 10000 // 100k à 300k
+                taux = randint(2, 12) * choice([-1, 1]) // -12% à +12%
+                break
+            }
           }
           tauxDec = taux / 100
           coeff = tauxDec + 1
@@ -656,20 +864,27 @@ export default class EvolutionsEnPourcentage extends Exercice {
         case 'abonnement':
         default: {
           // Prix d'abonnement entre 5€ et 50€
-          switch (randint(1, 3)) {
-            case 1:
-              depart = randint(5, 15) // 5€ à 15€
-              taux = randint(1, 6) * 5 * choice([-1, 1]) // -30% à +30% par pas de 5
-              break
-            case 2:
-              depart = randint(10, 30) // 10€ à 30€
-              taux = randint(2, 10) * choice([-1, 1]) // -10% à +10%
-              break
-            case 3:
-            default:
-              depart = randint(20, 50) // 20€ à 50€
-              taux = randint(1, 4) * 5 * choice([-1, 1]) // -20% à +20% par pas de 5
-              break
+          if (this.sup2) {
+            ;[depart, taux] = valeursSansCalculatrice(
+              typesDeSituations[i],
+              listeTypeDeQuestions[i],
+            )
+          } else {
+            switch (randint(1, 3)) {
+              case 1:
+                depart = randint(5, 15) // 5€ à 15€
+                taux = randint(1, 6) * 5 * choice([-1, 1]) // -30% à +30% par pas de 5
+                break
+              case 2:
+                depart = randint(10, 30) // 10€ à 30€
+                taux = randint(2, 10) * choice([-1, 1]) // -10% à +10%
+                break
+              case 3:
+              default:
+                depart = randint(20, 50) // 20€ à 50€
+                taux = randint(1, 4) * 5 * choice([-1, 1]) // -20% à +20% par pas de 5
+                break
+            }
           }
           tauxDec = taux / 100
           coeff = tauxDec + 1
@@ -761,6 +976,19 @@ export default class EvolutionsEnPourcentage extends Exercice {
           }
           break
         }
+      }
+      if (this.sup2) {
+        // Correction « Sans calculatrice » : démarche de calcul mental, puis la conclusion de la situation
+        const type = listeTypeDeQuestions[i]
+        const marque = miseEnEvidence(taux)
+        const conclusion =
+          type === 'evolution'
+            ? '<br>' +
+              (texteCorr
+                .split('<br>')
+                .find((ligne) => ligne.includes(marque)) ?? '')
+            : texteCorr.slice(texteCorr.lastIndexOf('<br>'))
+        texteCorr = correctionDeTete(type, depart, taux) + conclusion
       }
       handleAnswers(this, i, { reponse: { value: arrondi(reponse) } })
       if (this.interactif) texte += '<br><br>'
