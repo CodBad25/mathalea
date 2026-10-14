@@ -4,14 +4,14 @@ export const amcReady = true
 export const amcType = 'AMCHybride'
 export const interactifReady = true
 
-export const dateDePublication = '30/07/2026'
+export const dateDeModifImportante = '14/10/2026'
 
 /**
  * Clone de 2G11-4 pour le Bac Pro Première.
  * Seulement volume d'un cube, d'un pavé droit et d'un cylindre.
  */
 
-export const uuid = 'aeca7'
+export const uuid = 'aecae'
 
 export const refs = {
   'fr-fr': ['BP1AUTO091'],

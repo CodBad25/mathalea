@@ -4,8 +4,8 @@ export const amcReady = true
 export const amcType = 'AMCHybride'
 export const interactifReady = true
 
-export const dateDeModifImportante = '17/04/2025'
-export const uuid = '65bed'
+export const dateDeModifImportante = '14/10/2026'
+export const uuid = '65bee'
 
 export const refs = {
   'fr-fr': ['2G11-4', 'BP2G23'],

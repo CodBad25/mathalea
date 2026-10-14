@@ -1,14 +1,13 @@
-import CalculDeVolumes from './5M20-1'
+import CalculDeVolumes from './5M20-1Old'
 export const titre = 'Calculer des volumes de solides (cylindres notamment)'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const interactifReady = true
 
-export const dateDePublication = '27/06/2026'
-export const uuid = 'dc629'
+export const dateDeModifImportante = '14/10/2026'
+export const uuid = 'dc62e'
 export const refs = {
   'fr-fr': ['5G2E-6'],
-  'fr-2016': ['5M20-3'],
   'fr-ch': ['10GM2B-1'],
 }
 export default class CalculDeVolumes5eCylindre extends CalculDeVolumes {
