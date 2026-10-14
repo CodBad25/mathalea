@@ -1,4 +1,5 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { all, extractedRadicands } from '../../../lib/interactif/checks'
 import { extraireRacineCarree } from '../../../lib/outils/calculs'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -24,7 +25,7 @@ export default class SimplificationsRacinesCarrees extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.formatChampTexte = KeyboardType.clavierFullOperations
-    this.optionsDeComparaison = { texteSansCasse: true }
+    this.compare = all([extractedRadicands()])
   }
 
   nouvelleVersion() {
@@ -41,10 +42,6 @@ export default class SimplificationsRacinesCarrees extends ExerciceSimple {
    Ainsi, $\\sqrt{${a}}=\\sqrt{${reduction[0]}^2\\times ${reduction[1]}} =
     \\sqrt{${reduction[0]}^2}\\times \\sqrt{${reduction[1]}} =
     ${miseEnEvidence(`${reduction[0]}\\sqrt{${reduction[1]}`)}}$.<br>`
-    this.reponse = [
-      `${reduction[0]}\\sqrt${reduction[1]}`,
-      `${reduction[0]}\\times\\sqrt${reduction[1]}`,
-      `\\sqrt${reduction[1]}\\times${reduction[0]}`,
-    ]
+    this.reponse = `${reduction[0]}\\sqrt{${reduction[1]}}`
   }
 }
