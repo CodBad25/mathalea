@@ -526,7 +526,7 @@ export default class PrioritesEtRelatifs extends Exercice {
       }
       texte += addPossibleMultiLinesAnswer(this, i, {
         prefix: `${lettreDepuisChiffre(i + 1)} =`,
-        style: KeyboardType.clavierDeBase,
+        style: KeyboardType.clavierDeBaseAvecFraction,
         bareme: baremeMultiLignes(this.sup3),
       })
       if (this.questionJamaisPosee(i, listeTypeDeQuestions[i], a, b, c)) {

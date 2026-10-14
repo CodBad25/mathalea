@@ -171,7 +171,7 @@ export default class CalculerUneExpressionSimple extends Exercice {
         handleAnswers(this, i, { reponse: { value: answer } })
         texte += addPossibleMultiLinesAnswer(this, i, {
           prefix: `${lettreDepuisChiffre(i + 1)} =`,
-          style: KeyboardType.clavierDeBase,
+          style: KeyboardType.clavierDeBaseAvecFraction,
           bareme: baremeMultiLignes(this.sup5),
         })
       }
