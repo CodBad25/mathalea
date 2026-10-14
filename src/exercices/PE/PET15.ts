@@ -98,7 +98,7 @@ export default class FormuleApresRecopie extends Exercice {
         'Nombres séparés par des tirets :',
         '1 : Aucune référence bloquée',
         '2 : Références mixtes (colonne ou ligne bloquée)',
-        '3 : Une référence entièrement bloquée ($A$1) et une référence libre (B2)',
+        `3 : Une référence entièrement bloquée ($${formuleEnTex('$A$1')}$) et une référence libre (B2)`,
         '4 : Mélange',
       ].join('\n'),
     ]
