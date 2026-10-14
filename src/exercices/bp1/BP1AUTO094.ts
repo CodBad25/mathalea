@@ -4,14 +4,14 @@ export const amcReady = true
 export const amcType = 'AMCHybride'
 export const interactifReady = true
 
-export const dateDePublication = '30/07/2026'
+export const dateDeModifImportante = '14/10/2026'
 
 /**
  * Clone de 3G43 pour le Bac Pro Première.
  * Seulement volume d'un cube, d'un pavé droit et d'un cylindre.
  */
 
-export const uuid = 'c188c'
+export const uuid = 'c188e'
 
 export const refs = {
   'fr-fr': ['BP1AUTO094'],

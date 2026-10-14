@@ -1,4 +1,4 @@
-import CalculDeVolumes from '../5e/5M20-1'
+import CalculDeVolumes from './5M20-1Old'
 export const titre = 'Calculer des volumes de solides'
 export const amcReady = true
 export const amcType = 'AMCHybride'
@@ -10,7 +10,7 @@ export const refs = {
   'fr-fr': [],
   'fr-ch': ['NR'],
 }
-export default class CalculDeVolumes5e extends CalculDeVolumes {
+export default class CalculDeVolumes5eOld extends CalculDeVolumes {
   constructor() {
     super()
     this.sup = 1

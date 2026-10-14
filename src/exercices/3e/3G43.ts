@@ -4,8 +4,8 @@ export const amcReady = true
 export const amcType = 'AMCHybride'
 export const interactifReady = true
 
-export const dateDeModifImportante = '17/04/2025'
-export const uuid = 'acb80'
+export const dateDeModifImportante = '14/10/2026'
+export const uuid = 'acb8e'
 export const refs = {
   'fr-fr': ['3G43', 'BP2G20', '3AutoM07-1'],
   'fr-ch': ['11GM2A-3', '11GM2B-4', '11GM2C-3'],
