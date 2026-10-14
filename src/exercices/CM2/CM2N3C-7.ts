@@ -40,6 +40,11 @@ export default class DiviserPar4Ou8 extends Exercice {
       // Le quotient est un entier ou un nombre se terminant par ,5
       const a = diviseur === 4 ? randint(3, 49) * 2 : randint(3, 40) * 4
       const quotient = new Decimal(a).div(diviseur)
+      // On évite les quotients entiers de 1 à 12 qui relèvent des tables de multiplication
+      if (quotient.isInteger() && quotient.lte(12)) {
+        cpt++
+        continue
+      }
 
       let texte = `$${a}\\div${diviseur}$`
       const moitie1 = new Decimal(a).div(2)
