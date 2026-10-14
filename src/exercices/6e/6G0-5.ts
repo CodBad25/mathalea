@@ -159,7 +159,7 @@ export default class constructionElementaire extends Exercice {
         (context.vue === 'diap' ? '</center>' : '')
 
       colonne2 = 'Compléter avec $\\in$ ou $\\notin$. <br>'
-      let correction2 = colonne2
+      let correction2 = ''
       let questind = 0
       const points = [A, AA, BB, CC, DD, B, C, D]
       const tirage = []
@@ -258,7 +258,7 @@ export default class constructionElementaire extends Exercice {
         }
         correction2 +=
           numAlpha(questind++) +
-          `$${points[ind].nom} ${miseEnEvidence(sol)} ${lettre[0]}${points[ind1].nom}${points[ind2].nom}${lettre[1]}$<br>`
+          `$${points[ind].nom}${sp(3)}${miseEnEvidence(sol)}${sp(3)}${lettre[0]}${points[ind1].nom}${points[ind2].nom}${lettre[1]}$<br>`
       }
 
       const options = {
