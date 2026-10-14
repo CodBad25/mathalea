@@ -34,6 +34,46 @@ export const refs = {
   'fr-2016': ['5R10-1'],
   'fr-ch': ['9NO2B-2'],
 }
+/**
+ * Liste toutes les valeurs absolues vérifiant l'énoncé du type 3 :
+ * chiffre des unités imposé, produit des trois chiffres et ordre des chiffres des dixièmes et centièmes.
+ */
+function solutionsProduit(
+  unite: number,
+  produit: number,
+  centiemeSuperieur: boolean,
+): number[] {
+  const solutions: number[] = []
+  for (let d = 0; d <= 9; d++) {
+    for (let c = 0; c <= 9; c++) {
+      if (unite * d * c !== produit) continue
+      if (centiemeSuperieur ? d >= c : d < c) continue
+      solutions.push(arrondi(unite + d / 10 + c / 100, 2))
+    }
+  }
+  return solutions
+}
+
+/**
+ * Accepte toute saisie appartenant à la liste des solutions (signe compris).
+ */
+function compareSolutions(signe: number, valeursAbsolues: number[]) {
+  return (input: string): { isOk: boolean; feedback?: string } => {
+    const saisie = Number(
+      input
+        .replaceAll('\\,', '')
+        .replaceAll('{,}', '.')
+        .replaceAll(',', '.')
+        .replaceAll('−', '-')
+        .replaceAll(' ', ''),
+    )
+    if (Number.isNaN(saisie)) return { isOk: false }
+    return {
+      isOk: valeursAbsolues.some((v) => Math.abs(saisie - signe * v) < 1e-9),
+    }
+  }
+}
+
 export default class DevinerNombreRelatif extends Exercice {
   constructor() {
     super()
@@ -57,12 +97,14 @@ export default class DevinerNombreRelatif extends Exercice {
     let somme
     let produit
     let facteurs
+    let solutions: number[] = []
     const type = ['négatif', 'nul', 'positif']
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
     ) {
       signe = choice([-1, 1])
+      solutions = []
       switch (listeTypeDeQuestions[i]) {
         case 1:
           unite = randint(1, 9)
@@ -106,9 +148,15 @@ export default class DevinerNombreRelatif extends Exercice {
               'Mon chiffre des centièmes est inférieur à mon chiffre des dixièmes.'
           }
           texte += ' Qui suis-je ?'
+          solutions = solutionsProduit(unite, produit, dixieme < centieme)
           break
       }
       texteCorr = `Je suis $${miseEnEvidence(texNombre(signe * (unite + dixieme / 10 + centieme / 100)))}$.`
+      if (solutions.length > 1) {
+        texteCorr = `Je peux être ${solutions
+          .map((v) => `$${miseEnEvidence(texNombre(signe * v))}$`)
+          .join(' ou ')}.`
+      }
       texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)
 
       handleAnswers(
@@ -117,6 +165,9 @@ export default class DevinerNombreRelatif extends Exercice {
         {
           reponse: {
             value: arrondi(signe * (unite + dixieme / 10 + centieme / 100), 3),
+            ...(solutions.length > 1
+              ? { compare: compareSolutions(signe, solutions) }
+              : {}),
           },
         },
         { signe: true },
