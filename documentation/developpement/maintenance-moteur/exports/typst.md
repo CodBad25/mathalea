@@ -1384,6 +1384,15 @@ des underscores. Un titre vide après nettoyage utilise `fiche`. Cette règle
 s'applique aux PDF, aux fichiers `.typ` et aux archives `.zip` ; les PDF
 séparés ajoutent les suffixes `_enonce.pdf` et `_corrige.pdf`.
 
+Le bouton **Énoncé + corrigé séparés** transforme le code courant via
+`enonceCode` et `corrigeCode` (`typstExport.ts`), sans régénérer les exercices.
+Avec la banque, le corrigé utilise `display: "sol"`. Dans les présentations
+fusionnée et « Course aux nombres », il retire les blocs d’énoncés et active
+les sections Corrections, même si « Afficher la correction » est décoché.
+Cette séparation conserve les retouches des corrections et tous les sujets.
+L’enchaînement et les exemplaires répétés ne sont imprimés que dans le PDF
+des énoncés pour les présentations sans banque.
+
 ### Coût de démarrage
 
 Les gros fichiers passent par un cache persistant du navigateur (Cache API,
@@ -1526,7 +1535,7 @@ nombre de sujets tronque la liste (`applyDocumentOptions`).
 
 - `src/components/setup/typst/latexToTypst.test.ts` : conversion des formules et du HTML ;
 - `src/components/setup/typst/typstHighlights.test.ts` : factorisation de la mise en évidence et comparaison du rendu SVG avec le CLI Typst ;
-- `src/components/setup/typst/typstExport.test.ts` : conservation des retouches libres, nettoyage des repères et comparaison du rendu SVG de plusieurs sujets ;
+- `src/components/setup/typst/typstExport.test.ts` : conservation des retouches libres, nettoyage des repères, comparaison du rendu SVG de plusieurs sujets et vérification des PDF séparés dans les trois présentations (CLI Typst et `pdftotext` pour lire les PDF) ;
 - `src/components/setup/typst/imageCuts.test.ts` : découpage des images, conservation par sujet et partie, export et compilation des fragments sur plusieurs pages ;
 - `src/components/setup/typst/typstDiagnostics.test.ts` : lecture du format « unix » et traduction des messages ;
 - `src/components/setup/typst/buildTypstDocument.test.ts` : structure du document généré. Les cas qui lancent le binaire externe `typst compile` sont exécutés en local quand le CLI `typst` est installé, ignorés en CI par défaut, et réactivables avec `TYPST_CLI_TESTS=1` pour un job dédié ;
