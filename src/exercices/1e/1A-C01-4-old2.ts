@@ -216,7 +216,7 @@ export default class OrdonnerCroissantOld2 extends ExerciceSimple {
       // (champs à remplir) ; en Typst et en LaTeX, ils servent de blancs à compléter.
       this.question =
         context.isHtml && !context.isTypst && !this.interactif
-          ? ''
+          ? '&nbsp;'
           : '%{champ1}<%{champ2}<%{champ3}'
       this.reponse = {
         bareme: toutPourUnPoint,
