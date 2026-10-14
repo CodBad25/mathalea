@@ -14,13 +14,15 @@ Pour créer un exercice sans modifier ces contrats, commencez par
 | [Architecture des exercices](architecture/exercices.md)       | Cycle de génération, classes et sorties                                  |
 | [JSON du menu des exercices](architecture/menu-exercices.md)  | Fichiers générés et consommés par le menu                                |
 | [Vue mobile](architecture/vue-mobile.md)                      | Vue par défaut sur téléphone : tuiles, menus plein écran                 |
+| [Moteur embarquable](architecture/moteur-embarquable.md)      | Build séparé du moteur pour l'application mobile                         |
+| [Publier le moteur](architecture/publication-moteur.md)       | Publication signée sur mathalea.fr/releases, clé à créer                 |
 | [Vitrine de l'association](architecture/vitrine-accueil.md)   | Accueil sans exercice : fragment HTML publié par le projet `www`         |
 | [Apps externes](architecture/apps-externes.md)                | Iframes tierces, protocole `postMessage` et remontée des scores          |
 | [Questions de cours](architecture/questions-de-cours.md)      | Banque de questions partagée avec l'app et exercice natif                |
 | [Série aléatoire](architecture/serie-aleatoire.md)            | App qui compose un lien vers des exercices tirés au sort                 |
 | [Plein écran dans Moodle](architecture/moodle-plein-ecran.md) | Bouton plein écran des vues intégrées, natif ou délégué à la page hôte   |
 | [Signalement de bug](architecture/signalement-bug.md)         | Bouton bug des vues prof et élève, modale mail/forge et texte pré-rempli |
-| [Statistiques Matomo](architecture/statistiques.md)          | URL réversibles, ouverture directe des liens Matomo et pages vues      |
+| [Statistiques Matomo](architecture/statistiques.md)           | URL réversibles, ouverture directe des liens Matomo et pages vues        |
 
 ## Interactivité
 
@@ -33,7 +35,7 @@ Pour créer un exercice sans modifier ces contrats, commencez par
 | [Tableur](interactivite/tableur.md)                                | Rendu HTML, sérialisation et sortie imprimable       |
 | [Relier les étiquettes](interactivite/relier-etiquettes.md)        | Appariement interactif et ses sorties LaTeX et Typst |
 | [Schéma en barre](interactivite/schema-en-barre.md)                | Modélisation d'un problème, choix et complétion      |
-| [Claviers virtuels](interactivite/claviers.md)                      | Types de claviers, blocs et touches                  |
+| [Claviers virtuels](interactivite/claviers.md)                     | Types de claviers, blocs et touches                  |
 
 ## Scratch
 
@@ -63,10 +65,10 @@ classes, objets 2D et représentations partagés.
 
 ## Contribution
 
-| Sujet                                                       | Rôle                                         |
-| ----------------------------------------------------------- | -------------------------------------------- |
-| [Workflows de contribution](contribution/workflows.md)      | Git, build, tests globaux et diagnostic      |
-| [Maintenir la documentation](contribution/documentation.md) | Source canonique et protocole de mise à jour |
+| Sujet                                                       | Rôle                                          |
+| ----------------------------------------------------------- | --------------------------------------------- |
+| [Workflows de contribution](contribution/workflows.md)      | Git, build, tests globaux et diagnostic       |
+| [Maintenir la documentation](contribution/documentation.md) | Source canonique et protocole de mise à jour  |
 | [Dépannage](contribution/depannage.md)                      | Erreurs Git, dépendances, dépendances locales |
 | [Annales](contribution/annales.md)                          | Découpage des annales et dictionnaires        |
 

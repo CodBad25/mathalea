@@ -1,6 +1,10 @@
 let localVersion: string = ''
 
-if (!import.meta.env.VITEST) {
+// Dans le moteur embarqué (vite.moteur.config.ts), l'application hôte gère
+// elle-même les versions : pas de version.txt à interroger.
+const isMoteurEmbarque = import.meta.env.VITE_MOTEUR_EMBARQUE === '1'
+
+if (!import.meta.env.VITEST && !isMoteurEmbarque) {
   fetchServerVersion()
     .then((version) => {
       localVersion = version
@@ -40,6 +44,7 @@ export function forceLocalVersion(): void {
 
 // Fonction pour vérifier si le serveur a été mis à jour
 export async function checkForServerUpdate(): Promise<boolean> {
+  if (isMoteurEmbarque) return false
   try {
     const serverVersion = await fetchServerVersion()
     // console.log('Server updated from', localVersion, 'to', serverVersion)
