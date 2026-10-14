@@ -370,10 +370,10 @@ export class ListeDeroulanteElement extends MathaleaCustomElement {
   display: inline-flex;
   align-items: center;
   background: #fff;
-  color: #333;
-  border: 1px solid #d1d5db; /* gris clair moderne */
+  color: #111827;
+  border: 2px solid #4b5563; /* contraste fort, lisible en vidéoprojection */
   border-radius: 0.5rem;
-  font-size: 0.95rem;
+  font-size: 1rem;
   line-height: 1.5;
   transition: all 0.2s ease;
   cursor: pointer;
@@ -398,8 +398,8 @@ export class ListeDeroulanteElement extends MathaleaCustomElement {
   padding: 6px 8px;
   font-weight: bold;
   font-size: 0.9em;
-  color: #6b7280; /* gris neutre */
-  border-left: 1px solid #e5e7eb;
+  color: #374151;
+  border-left: 2px solid #9ca3af;
   transition: color 0.2s ease;
 }
 
@@ -462,13 +462,13 @@ export class ListeDeroulanteElement extends MathaleaCustomElement {
 
 .listeDeroulante.disabled {
   cursor: not-allowed;
-  background: #f9fafb;
-  border-color: #e5e7eb;
-  color: #9ca3af;
+  background: #f3f4f6;
+  border-color: #4b5563;
+  color: #111827;
 }
 
 .listeDeroulante.disabled .trigger {
-  color: #d1d5db;
+  color: #6b7280;
 }
 
 .listeDeroulante.disabled span.currentChoice {
@@ -517,7 +517,7 @@ export class ListeDeroulanteElement extends MathaleaCustomElement {
     this.renderChoice(current, this.selectedChoice ?? this.initialChoice)
     if (this.value === '') {
       current.style.fontStyle = 'italic'
-      current.style.color = 'Grey'
+      current.style.color = '#4b5563'
     }
     current.addEventListener('keydown', (event) => this.handleKeydown(event))
     const trigger = document.createElement('span')
