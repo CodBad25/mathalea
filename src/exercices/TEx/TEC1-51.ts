@@ -5,7 +5,6 @@ import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { Complexe } from '../../lib/mathFonctions/Complexe'
 import {
   miseEnEvidence,
-  texteEnCouleur,
   texteEnCouleurEtGras,
 } from '../../lib/outils/embellissements'
 import {
@@ -236,7 +235,14 @@ export default class RealiteQuotientComplexes extends Exercice {
         \\overline{Z}&=%{champ1}\\\\
         ${formatReponsePartie2},\\quad z\\neq %{champ3}.
         \\end{aligned}`,
-          KeyboardType.complexesAvecVariable,
+          KeyboardType.clavierEntierementPersonnalisable,
+          '\\ldots',
+          {
+            dataKeys: [
+              ['7', '8', '9', '4', '5', '6', '1', '2', '3', '0', '+', '-'],
+              ['x', 'y', 'z', '\\mathrm{i}', '\\overline{z}', '\\frac{#@}{#0}'],
+            ],
+          },
         )}`
       }
 
