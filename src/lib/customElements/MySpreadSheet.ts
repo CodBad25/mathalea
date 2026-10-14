@@ -3,6 +3,9 @@ import 'jspreadsheet-ce/src/jspreadsheet.css'
 import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
 import { toutPourUnPoint } from '../interactif/fonctionsBaremes'
+import { formuleAnglaise } from '../outils/tableurFormules'
+import { installFormulaPointing } from '../outils/tableurPointage'
+import { installReadOnlyFeedback } from '../outils/tableurLectureSeule'
 import type { GoodAnswersFormulas, IExercice, SheetTestDatas } from '../types'
 import MathaleaCustomElement, {
   registerMathaleaCustomElement,
@@ -36,6 +39,8 @@ export type MySpreadsheetOptions = {
   nbLignesCachees?: number
   nbColonnesCachees?: number
   readOnlyCells?: string[]
+  barreFormule?: boolean
+  arrondiAffichage?: boolean
 }
 
 export type MySpreadsheetCreateOptions = MySpreadsheetOptions & {
@@ -76,6 +81,8 @@ export type RenderSheetMarkupOptions = {
   nbLignesCachees?: number
   nbColonnesCachees?: number
   readOnlyCells?: string[]
+  barreFormule?: boolean
+  arrondiAffichage?: boolean
   appendFeedbackBlocks?: boolean
 }
 
@@ -95,6 +102,7 @@ type SpreadsheetLike = {
   setData: (data: unknown[]) => void
   setStyle: (style: SpreadsheetStyle) => void
   setReadOnly: (cellRef: string, value: boolean) => void
+  isReadOnly: (column: number, row: number) => boolean
   showRow: (rowIndex: number) => void
   hideRow: (rowIndex: number) => void
   showColumn: (colIndex: number) => void
@@ -254,6 +262,8 @@ export class MySpreadsheetElement extends MathaleaCustomElement {
     nbLignesCachees,
     nbColonnesCachees,
     readOnlyCells,
+    barreFormule,
+    arrondiAffichage,
   }: MySpreadsheetCreateOptions = {}): string {
     const computedId =
       id ??
@@ -273,7 +283,22 @@ export class MySpreadsheetElement extends MathaleaCustomElement {
       nbColonnesCachees,
       readOnlyCells:
         readOnlyCells && readOnlyCells.length > 0 ? readOnlyCells : undefined,
+      barreFormule,
+      arrondiAffichage,
     })
+  }
+
+  /**
+   * Compare deux valeurs de cellules en tolérant les écarts d'arrondi des
+   * nombres à virgule flottante (`37*(1+13/100)` et `37*113/100`).
+   */
+  private static memesValeurs(a: unknown, b: unknown): boolean {
+    if (a === b) return true
+    const x = typeof a === 'string' && a.trim() !== '' ? Number(a) : a
+    const y = typeof b === 'string' && b.trim() !== '' ? Number(b) : b
+    if (typeof x !== 'number' || typeof y !== 'number') return false
+    if (Number.isNaN(x) || Number.isNaN(y)) return false
+    return Math.abs(x - y) <= 1e-9 * Math.max(1, Math.abs(x), Math.abs(y))
   }
 
   static compareSheetFunction(
@@ -316,7 +341,7 @@ export class MySpreadsheetElement extends MathaleaCustomElement {
         }
       } else if (cellData.value !== undefined) {
         const userValue = userSheet.getCellValue(col, row)
-        if (userValue === cellData.value) {
+        if (MySpreadsheetElement.memesValeurs(userValue, cellData.value)) {
           const style: Record<string, string> = {}
           style[cellRef] =
             'background-color: #ccffcc; border: 2px solid #008000; border-radius: 8px; padding: 4px;'
@@ -416,7 +441,9 @@ export class MySpreadsheetElement extends MathaleaCustomElement {
             col,
             row,
           )
-          if (goodAnswerValue !== userAnswerValue) {
+          if (
+            !MySpreadsheetElement.memesValeurs(goodAnswerValue, userAnswerValue)
+          ) {
             const style: Record<string, string> = {}
             style[cellRef] =
               'background-color: #ffcccc; border: 2px solid #ff0000; border-radius: 8px; padding: 4px;'
@@ -437,7 +464,9 @@ export class MySpreadsheetElement extends MathaleaCustomElement {
             col,
             row,
           )
-          if (goodAnswerValue !== userAnswerValue) {
+          if (
+            !MySpreadsheetElement.memesValeurs(goodAnswerValue, userAnswerValue)
+          ) {
             const style: Record<string, string> = {}
             style[cellRef] =
               'background-color: #ffcccc; border: 2px solid #ff0000; border-radius: 8px; padding: 4px;'
@@ -578,10 +607,13 @@ export class MySpreadsheetElement extends MathaleaCustomElement {
   }
 
   private _spreadsheet: SpreadsheetLike | null = null
+  private _cleanupFormulaPointing: (() => void) | null = null
+  private _cleanupReadOnlyFeedback: (() => void) | null = null
   private _buttonListener?: EventListener
   private _customListeners: { [eventName: string]: EventListener } = {}
   private showVerifyButton: boolean = true
   private _readOnlyCursorObserver: MutationObserver | null = null
+  private _barreFormuleObserver: ResizeObserver | null = null
 
   private normalizeData(value: unknown): SpreadsheetData {
     if (!Array.isArray(value)) return []
@@ -656,6 +688,8 @@ export class MySpreadsheetElement extends MathaleaCustomElement {
     interactif = false,
     showVerifyButton = true,
     readOnlyCells = [],
+    barreFormule = false,
+    arrondiAffichage = false,
   }: {
     id?: string
     data?: (string | number)[][]
@@ -665,6 +699,8 @@ export class MySpreadsheetElement extends MathaleaCustomElement {
     interactif?: boolean
     showVerifyButton?: boolean
     readOnlyCells?: string[]
+    barreFormule?: boolean
+    arrondiAffichage?: boolean
   } = {}) {
     const elt = document.createElement(
       MySpreadsheetElement.elementTag,
@@ -677,6 +713,12 @@ export class MySpreadsheetElement extends MathaleaCustomElement {
     elt.setAttribute('interactif', interactif ? 'true' : 'false')
     if (readOnlyCells.length > 0) {
       elt.setAttribute('readonly-cells', JSON.stringify(readOnlyCells))
+    }
+    if (barreFormule) {
+      elt.setAttribute('barre-formule', 'true')
+    }
+    if (arrondiAffichage) {
+      elt.setAttribute('arrondi-affichage', 'true')
     }
     if (showVerifyButton !== undefined) {
       elt.setAttribute(
@@ -692,6 +734,8 @@ export class MySpreadsheetElement extends MathaleaCustomElement {
     this.innerHTML = '<div></div>'
     const container = (this.firstElementChild ??
       document.createElement('div')) as HTMLDivElement
+    const barreFormule = this.getAttribute('barre-formule') === 'true'
+    const arrondiAffichage = this.getAttribute('arrondi-affichage') === 'true'
 
     let data: (number | string)[][] = []
     let minDimensions: [number, number] = [5, 5]
@@ -799,9 +843,137 @@ export class MySpreadsheetElement extends MathaleaCustomElement {
       })
       return expanded
     }
+    // Barre de formule (comme dans Excel) : cellule sélectionnée + contenu brut
+    let selectedCell: { col: number; row: number } | null = null
+    let nameBox: HTMLInputElement | null = null
+    let formulaInput: HTMLInputElement | null = null
+    let boutons: (HTMLButtonElement | null)[] = []
+    let validePourSelection: () => void = () => {}
+    const activeBouton = (b: HTMLButtonElement, actif: boolean) => {
+      b.disabled = !actif
+      b.style.opacity = actif ? '1' : '0.4'
+      b.style.cursor = actif ? 'pointer' : 'not-allowed'
+    }
+    const refreshFormulaBar = () => {
+      if (!nameBox || !formulaInput) return
+      if (selectedCell == null || this._spreadsheet == null) {
+        nameBox.value = ''
+        formulaInput.value = ''
+        formulaInput.readOnly = true
+        boutons.forEach((b) => b && activeBouton(b, false))
+        return
+      }
+      const { col, row } = selectedCell
+      nameBox.value = MySpreadsheetElement.toCellRef(col, row)
+      const raw = this._spreadsheet.getValueFromCoords(col, row, false)
+      formulaInput.value = raw == null ? '' : String(raw)
+      formulaInput.readOnly =
+        shouldBeReadOnly || this._spreadsheet.isReadOnly(col, row)
+      boutons.forEach((b) => b && activeBouton(b, !formulaInput!.readOnly))
+    }
+    if (barreFormule) {
+      this.insertBefore(this.createFormulaBar(), container)
+      nameBox = this.querySelector<HTMLInputElement>('.barre-formule-nom')
+      formulaInput = this.querySelector<HTMLInputElement>(
+        '.barre-formule-saisie',
+      )
+      const boutonValider = this.querySelector<HTMLButtonElement>(
+        '.barre-formule-valider',
+      )
+      const boutonAnnuler = this.querySelector<HTMLButtonElement>(
+        '.barre-formule-annuler',
+      )
+      // Reporte la saisie de la barre dans la cellule sélectionnée
+      const valideSaisie = () => {
+        if (selectedCell == null || formulaInput == null) return
+        if (shouldBeReadOnly || this._spreadsheet == null) return
+        const { col, row } = selectedCell
+        if (this._spreadsheet.isReadOnly(col, row)) return
+        const actuel = this._spreadsheet.getValueFromCoords(col, row, false)
+        const saisie = formulaInput.value.trim()
+        if (saisie === (actuel == null ? '' : String(actuel))) return
+        this._spreadsheet.setValueFromCoords(col, row, saisie, true)
+      }
+      validePourSelection = valideSaisie
+      const annuleSaisie = () => refreshFormulaBar()
+      const termineSaisie = () => {
+        valideSaisie()
+        formulaInput?.blur()
+      }
+      const termineAnnulation = () => {
+        annuleSaisie()
+        formulaInput?.blur()
+      }
+      if (formulaInput) {
+        this._cleanupFormulaPointing?.()
+        this._cleanupFormulaPointing = installFormulaPointing(
+          container,
+          formulaInput,
+        )
+      }
+      formulaInput?.addEventListener('blur', valideSaisie)
+      // Les touches tapées dans la barre ne doivent pas atteindre les
+      // gestionnaires clavier de jspreadsheet (Entrée, flèches, Suppr…)
+      ;['keydown', 'keyup', 'keypress'].forEach((type) => {
+        formulaInput?.addEventListener(type, (e) => e.stopPropagation())
+      })
+      formulaInput?.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          e.preventDefault()
+          termineAnnulation()
+        } else if (e.key === 'Enter' && !e.isComposing) {
+          e.preventDefault()
+          termineSaisie()
+        }
+      })
+      // mousedown : garde le focus dans le champ et la saisie intacte avant la validation
+      boutonValider?.addEventListener('mousedown', (e) => e.preventDefault())
+      boutonValider?.addEventListener('click', termineSaisie)
+      boutonAnnuler?.addEventListener('mousedown', (e) => e.preventDefault())
+      boutonAnnuler?.addEventListener('click', termineAnnulation)
+      boutons = [boutonValider, boutonAnnuler]
+      refreshFormulaBar()
+    }
+    // Masque les écarts d'arrondi (0.1+0.2) et les décimales infinies des formules
+    const arrondiLesFormules = () => {
+      if (!arrondiAffichage || this._spreadsheet == null) return
+      container.querySelectorAll<HTMLElement>('td[data-x]').forEach((td) => {
+        const col = Number(td.dataset.x)
+        const row = Number(td.dataset.y)
+        const brut = this._spreadsheet?.getValueFromCoords(col, row, false)
+        if (typeof brut !== 'string' || !brut.startsWith('=')) return
+        const calculee = String(
+          this._spreadsheet?.getValueFromCoords(col, row, true) ?? '',
+        )
+        const nombre = Number(calculee)
+        if (calculee === 'NaN') {
+          td.textContent = '#VALUE!'
+        } else if (calculee.trim() !== '' && Number.isFinite(nombre)) {
+          td.textContent = String(Math.round(nombre * 1e9) / 1e9)
+        }
+      })
+    }
     this._spreadsheet = jspreadsheet(container, {
       tabs: false,
       toolbar: false,
+      // Accepte les noms français des fonctions (=RACINE(A1), =somme(A1;B1))
+      onbeforeformula: (_worksheet, expression) => {
+        const traduite = formuleAnglaise(expression)
+        return traduite === expression ? undefined : traduite
+      },
+      onselection: (_worksheet, col, row) => {
+        // une saisie en cours dans la barre est validée avant de changer de cellule
+        validePourSelection()
+        selectedCell = { col, row }
+        refreshFormulaBar()
+      },
+      onload: () => {
+        arrondiLesFormules()
+      },
+      onafterchanges: () => {
+        refreshFormulaBar()
+        arrondiLesFormules()
+      },
       worksheets: [
         {
           data,
@@ -814,6 +986,20 @@ export class MySpreadsheetElement extends MathaleaCustomElement {
       ],
     })[0] as unknown as SpreadsheetLike
     const spreadsheet = this.spreadsheet
+    arrondiLesFormules()
+    // La barre de formule ne dépasse pas la largeur du tableau
+    const barre = this.querySelector<HTMLElement>('.barre-formule')
+    const contenuTableau = container.querySelector<HTMLElement>('.jss_content')
+    if (barre && contenuTableau) {
+      const ajusteLargeur = () => {
+        barre.style.width = `${contenuTableau.offsetWidth}px`
+        barre.style.maxWidth = '100%'
+      }
+      ajusteLargeur()
+      this._barreFormuleObserver?.disconnect()
+      this._barreFormuleObserver = new ResizeObserver(ajusteLargeur)
+      this._barreFormuleObserver.observe(contenuTableau)
+    }
     container.addEventListener('contextmenu', (e) => {
       e.preventDefault()
       e.stopPropagation()
@@ -859,11 +1045,23 @@ export class MySpreadsheetElement extends MathaleaCustomElement {
     container.appendChild(feedBackElt)
     const resultCheck = document.createElement('span')
     resultCheck.id = `resultatCheckEx${numeroExercice}Q${question}`
+    // espace vertical entre le tableau, le smiley et le texte de feedback
+    resultCheck.className = 'resultat-check-tableur'
+    resultCheck.style.cssText = 'margin:0.5rem 0;'
+    if (!document.getElementById('style-resultat-check-tableur')) {
+      const style = document.createElement('style')
+      style.id = 'style-resultat-check-tableur'
+      // pas d'espace tant que le smiley et le feedback ne sont pas affichés
+      style.textContent =
+        '.resultat-check-tableur{display:block}.resultat-check-tableur:empty,.feedback-tableur:empty{display:none}'
+      document.head.appendChild(style)
+    }
     container.appendChild(resultCheck)
     const divFeedback = document.createElement('div')
     divFeedback.id = `feedbackEx${numeroExercice}Q${question}`
     divFeedback.className =
-      'italic text-coopmaths-warn-darkest dark:text-coopmathsdark-warn-darkest'
+      'feedback-tableur italic text-coopmaths-warn-darkest dark:text-coopmathsdark-warn-darkest'
+    divFeedback.style.cssText = 'padding-bottom:0.5rem;'
     container.appendChild(divFeedback)
 
     if (this.getAttribute('show-verify-button') === 'false') {
@@ -908,12 +1106,94 @@ export class MySpreadsheetElement extends MathaleaCustomElement {
         this._setupButton(bouton, numeroExercice, question)
       }
     }
+    arrondiLesFormules()
+    const fullyReadOnly =
+      shouldBeReadOnly ||
+      (data.every((row, y) =>
+        row.every((_, x) => spreadsheet.isReadOnly(x, y)),
+      ) &&
+        Array.from({ length: minDimensions[1] }, (_, y) =>
+          Array.from({ length: minDimensions[0] }, (_, x) =>
+            spreadsheet.isReadOnly(x, y),
+          ).every(Boolean),
+        ).every(Boolean))
+    this._cleanupReadOnlyFeedback?.()
+    this._cleanupReadOnlyFeedback = installReadOnlyFeedback(
+      this,
+      fullyReadOnly,
+      () => selectedCell,
+      (col, row) => spreadsheet.isReadOnly(col, row),
+    )
     this.dispatchEvent(new CustomEvent('spreadsheet-ready'))
   }
 
+  private createFormulaBar(): HTMLDivElement {
+    const bar = document.createElement('div')
+    bar.className = 'barre-formule'
+    bar.style.cssText =
+      'display:flex;align-items:center;gap:6px;margin-bottom:4px;font-size:0.95rem;'
+    const nameBox = document.createElement('input')
+    nameBox.type = 'text'
+    nameBox.className = 'barre-formule-nom'
+    nameBox.readOnly = true
+    nameBox.setAttribute('aria-label', 'Cellule sélectionnée')
+    nameBox.style.cssText =
+      'width:4.5em;text-align:center;border:1px solid #9ca3af;border-radius:4px;padding:3px 6px;background:#f3f4f6;color:#111827;'
+    const fx = document.createElement('span')
+    fx.textContent = 'fx'
+    fx.setAttribute('aria-hidden', 'true')
+    fx.style.cssText = 'font-style:italic;font-weight:bold;color:#4b5563;'
+    const formulaInput = document.createElement('input')
+    formulaInput.type = 'text'
+    formulaInput.className = 'barre-formule-saisie'
+    formulaInput.setAttribute(
+      'aria-label',
+      'Formule de la cellule sélectionnée',
+    )
+    formulaInput.autocomplete = 'off'
+    formulaInput.spellcheck = false
+    formulaInput.style.cssText =
+      'flex:1;min-width:0;border:1px solid #9ca3af;border-radius:4px;padding:3px 6px;font-family:monospace;background:#ffffff;color:#111827;'
+    const bouton = (
+      classe: string,
+      texte: string,
+      titre: string,
+      couleur: string,
+    ) => {
+      const b = document.createElement('button')
+      b.type = 'button'
+      b.className = classe
+      b.textContent = texte
+      b.title = titre
+      b.setAttribute('aria-label', titre)
+      b.disabled = true
+      b.style.cssText = `width:1.9em;height:1.9em;border:1px solid #9ca3af;border-radius:4px;background:#ffffff;color:${couleur};font-weight:bold;line-height:1;cursor:pointer;`
+      return b
+    }
+    bar.append(
+      nameBox,
+      bouton(
+        'barre-formule-annuler',
+        '✗',
+        'Annuler la modification',
+        '#b91c1c',
+      ),
+      bouton('barre-formule-valider', '✓', 'Valider la formule', '#15803d'),
+      fx,
+      formulaInput,
+    )
+    return bar
+  }
+
   disconnectedCallback() {
+    this._cleanupReadOnlyFeedback?.()
+    this._cleanupReadOnlyFeedback = null
+    this._cleanupFormulaPointing?.()
+    this._cleanupFormulaPointing = null
     this._readOnlyCursorObserver?.disconnect()
     this._readOnlyCursorObserver = null
+    this._barreFormuleObserver?.disconnect()
+    this._barreFormuleObserver = null
 
     if (this._spreadsheet) {
       this._spreadsheet = null
@@ -1159,6 +1439,8 @@ export function renderSheetMarkup({
   nbLignesCachees,
   nbColonnesCachees,
   readOnlyCells,
+  barreFormule,
+  arrondiAffichage,
   appendFeedbackBlocks,
 }: RenderSheetMarkupOptions): string {
   const computedId =
@@ -1176,6 +1458,8 @@ export function renderSheetMarkup({
     interactif,
     showVerifyButton,
     readOnlyCells,
+    barreFormule,
+    arrondiAffichage,
   })
 
   if (nbColonnesCachees != null) {
@@ -1199,8 +1483,8 @@ export function renderSheetMarkup({
     return (
       sheetElement.outerHTML +
       (shouldAppendFeedback && numeroExercice != null && questionIndex != null
-        ? `<div class="ml-2 py-2" id="resultatCheckEx${numeroExercice}Q${questionIndex}"></div>
-<div class ="ml-2 py-2 italic text-coopmaths-warn-darkest dark:text-coopmathsdark-warn-darkest" id="feedbackEx${numeroExercice}Q${questionIndex}"></div>`
+        ? `<div class="resultat-check-tableur ml-2 py-2" id="resultatCheckEx${numeroExercice}Q${questionIndex}"></div>
+<div class="feedback-tableur ml-2 py-2 italic text-coopmaths-warn-darkest dark:text-coopmathsdark-warn-darkest" id="feedbackEx${numeroExercice}Q${questionIndex}"></div>`
         : '')
     )
   }
