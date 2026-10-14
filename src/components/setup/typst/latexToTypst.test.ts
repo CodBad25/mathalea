@@ -8,9 +8,20 @@ import {
   setStaticImagePaths,
   svgToTypstImage,
 } from './latexToTypst'
+import { formuleEnTex } from '../../../lib/outils/tableurFormules'
 import { deuxColonnesResp } from '../../../lib/format/miseEnPage'
 
 describe('latexMathToTypst', () => {
+  it.each(['=$A$2+C6', '=B$5*$E1', '=A$1+$B2'])(
+    'conserve les dollars littéraux de la formule de tableur %s',
+    (formula) => {
+      expect(latexMathToTypst(formuleEnTex(formula))).toBe(`#txt("${formula}")`)
+      expect(htmlToTypst(`$${formuleEnTex(formula)}$`)).toBe(
+        `$#txt("${formula}")$`,
+      )
+    },
+  )
+
   it('convertit les fractions et opérations usuelles', () => {
     expect(latexMathToTypst('\\dfrac{3}{4}+2\\times x')).toBe(
       'frac(3, 4) + 2 times x',

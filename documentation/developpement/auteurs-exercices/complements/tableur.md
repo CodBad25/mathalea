@@ -126,6 +126,12 @@ calcul, sans modifier le texte saisi par l'élève. Pour ajouter un nom, complé
 - `formuleEnTex()` et `expressionNumerique()` : mise en forme pour les énoncés et
   les corrections.
 
+Pour afficher une formule littérale, utiliser `$${formuleEnTex(formule)}$`
+dans une chaîne à interpolation. Cet utilitaire échappe notamment les `$` des
+références absolues : ils restent visibles en HTML/KaTeX, LaTeX et Typst.
+Utiliser aussi cette mise en forme dans les libellés des paramètres contenant
+une référence comme `$A$1`.
+
 `src/lib/outils/tableurRendu.ts` (`rendTableur()`) construit le tableur HTML et
 son rendu papier à partir d'un dictionnaire de cellules `{ B2: '=A2*3' }` : les
 valeurs LaTeX sont calculées automatiquement. Un tableur non interactif y est
