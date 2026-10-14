@@ -146,7 +146,7 @@ export default class CalculerUneExpressionNumerique extends Exercice {
           handleAnswers(this, i, { reponse: { value: reponse } })
           texte += addPossibleMultiLinesAnswer(this, i, {
             prefix: this.sup4 ? `${lettreDepuisChiffre(i + 1)} =` : '=',
-            style: KeyboardType.clavierDeBase,
+            style: KeyboardType.clavierDeBaseAvecFraction,
             bareme: baremeMultiLignes(this.sup5),
           })
         } else if (context.isAmc) {

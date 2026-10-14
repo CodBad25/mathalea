@@ -205,7 +205,7 @@ export default class ExerciceAdditionsDe5Relatifs extends Exercice {
       if (this.interactif && !context.isAmc) {
         texte += addPossibleMultiLinesAnswer(this, i, {
           prefix: `${lettreDepuisChiffre(i + 1)} =`,
-          style: KeyboardType.clavierDeBase,
+          style: KeyboardType.clavierDeBaseAvecFraction,
           bareme: baremeMultiLignes(this.sup4),
         })
       }

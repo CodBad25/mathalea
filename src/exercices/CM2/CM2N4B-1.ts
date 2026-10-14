@@ -174,7 +174,7 @@ export default class nomExercice extends Exercice {
       })
       texte += addPossibleMultiLinesAnswer(this, i, {
         prefix: `${lettre} =`,
-        style: KeyboardType.clavierDeBase,
+        style: KeyboardType.clavierDeBaseAvecFraction,
         bareme: baremeMultiLignes(this.sup3),
       })
       if (resultat < ResultatMmax && this.questionJamaisPosee(i, texte)) {

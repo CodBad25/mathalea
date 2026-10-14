@@ -167,7 +167,7 @@ export default class ExerciceSubstituer extends Exercice {
       if (this.interactif) {
         texte += addPossibleMultiLinesAnswer(this, i, {
           prefix: `${lettreDepuisChiffre(i + 1)} =`,
-          style: KeyboardType.clavierDeBase,
+          style: KeyboardType.clavierDeBaseAvecFraction,
           bareme: baremeMultiLignes(this.sup2),
         })
       } else if (context.isAmc)
