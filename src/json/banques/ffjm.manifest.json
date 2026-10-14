@@ -86,7 +86,6 @@
       "categorie": "Chrono-logique",
       "tags": [
         "énigme",
-        "demain",
         "date",
         "2004Q4"
       ],
@@ -178,7 +177,6 @@
       "sousCategorie": "Conditionnel",
       "tags": [
         "coloriage",
-        "rond",
         "2006D1"
       ],
       "etoiles": 1,
@@ -252,7 +250,7 @@
         "raisonnement",
         "systeme",
         "somme",
-        "2006D%"
+        "2006D5"
       ],
       "etoiles": 2,
       "png": "png/9triangles.png",
@@ -268,7 +266,6 @@
       "categorie": "Diagramme de nombres",
       "sousCategorie": "Optimisation de chemin",
       "tags": [
-        "labyrinthe",
         "chemin",
         "unicité",
         "minimum",
@@ -290,7 +287,6 @@
       "categorie": "Diagramme de nombres",
       "sousCategorie": "Optimisation de chemin",
       "tags": [
-        "labyrinthe",
         "somme",
         "unicité",
         "2004Q8"
@@ -310,7 +306,6 @@
       "sousCategorie": "Optimisation de chemin",
       "tags": [
         "labyrinthe",
-        "mare",
         "nombre premier",
         "2004D8"
       ],
@@ -348,7 +343,6 @@
       "tags": [
         "labyrinthe",
         "maximum",
-        "musée",
         "2002Q4"
       ],
       "etoiles": 2,
@@ -387,7 +381,6 @@
       "tags": [
         "dénombrement",
         "espace",
-        "cubes",
         "2021Q3"
       ],
       "etoiles": 2,
@@ -405,7 +398,6 @@
       "sousCategorie": "Dans l'espace",
       "tags": [
         "dénombrement",
-        "plans",
         "intersections",
         "2021Q17"
       ],
@@ -461,7 +453,6 @@
       "sousCategorie": "Dans le plan",
       "tags": [
         "dénombrement",
-        "angles droits",
         "2006D3"
       ],
       "etoiles": 1,
@@ -479,7 +470,6 @@
       "sousCategorie": "Dans le plan",
       "tags": [
         "dénombrement",
-        "carrés",
         "2002Q1"
       ],
       "etoiles": 1,
@@ -497,7 +487,6 @@
       "sousCategorie": "Dans le plan",
       "tags": [
         "dénombrement",
-        "carrés",
         "2004Q3"
       ],
       "etoiles": 2,
@@ -515,7 +504,6 @@
       "sousCategorie": "Dans le plan",
       "tags": [
         "dénombrement",
-        "losanges",
         "2009D3"
       ],
       "etoiles": 2,
@@ -533,7 +521,6 @@
       "sousCategorie": "Dans le plan",
       "tags": [
         "dénombrement",
-        "rectangles",
         "2006Q7"
       ],
       "etoiles": 2,
@@ -551,7 +538,6 @@
       "sousCategorie": "Dans le plan",
       "tags": [
         "dénombrement",
-        "triangles",
         "2006Q2"
       ],
       "etoiles": 1,
@@ -589,7 +575,6 @@
       "sousCategorie": "Dans le plan",
       "tags": [
         "dénombrement",
-        "partage",
         "maximum",
         "2006D10"
       ],
@@ -627,7 +612,7 @@
       "tags": [
         "dénombrement",
         "triangle",
-        "cerlce",
+        "cercle",
         "maximum",
         "2006Q17"
       ],
@@ -646,7 +631,6 @@
       "sousCategorie": "Dans le plan",
       "tags": [
         "dénombrement",
-        "rectangles",
         "2021Q11"
       ],
       "etoiles": 4,
@@ -665,7 +649,6 @@
       "tags": [
         "dénombrement",
         "comptage",
-        "couleur",
         "2003D5"
       ],
       "etoiles": 2,
@@ -738,7 +721,6 @@
       "categorie": "Dénombrement",
       "sousCategorie": "Scénarios",
       "tags": [
-        "fraction",
         "ensemble",
         "simplification",
         "2000Q12"
@@ -759,7 +741,6 @@
       "tags": [
         "dénombrement",
         "comptage",
-        "somme",
         "2013D8"
       ],
       "etoiles": 2,
@@ -814,7 +795,6 @@
       "categorie": "Enigme à texte",
       "sousCategorie": "Autoréférence",
       "tags": [
-        "autoréférence",
         "logique",
         "raisonnement",
         "essai erreur",
@@ -834,7 +814,6 @@
       "categorie": "Enigme à texte",
       "sousCategorie": "Autoréférence",
       "tags": [
-        "autoréférence",
         "logique",
         "raisonnement",
         "essai erreur",
@@ -855,7 +834,6 @@
       "categorie": "Enigme à texte",
       "sousCategorie": "Autoréférence",
       "tags": [
-        "autoréférence",
         "logique",
         "raisonnement",
         "essai erreur",
@@ -875,7 +853,6 @@
       "categorie": "Enigme à texte",
       "sousCategorie": "Autoréférence",
       "tags": [
-        "autoréférence",
         "logique",
         "raisonnement",
         "essai erreur",
@@ -896,7 +873,6 @@
       "categorie": "Enigme à texte",
       "sousCategorie": "Autoréférence",
       "tags": [
-        "autoréférence",
         "logique",
         "raisonnement",
         "essai erreur",
@@ -916,7 +892,6 @@
       "categorie": "Enigme à texte",
       "sousCategorie": "Autoréférence",
       "tags": [
-        "autoréférence",
         "logique",
         "raisonnement",
         "essai erreur",
@@ -936,7 +911,6 @@
       "categorie": "Enigme à texte",
       "sousCategorie": "Autoréférence",
       "tags": [
-        "autoréférence",
         "logique",
         "raisonnement",
         "essai erreur",
@@ -956,7 +930,6 @@
       "categorie": "Enigme à texte",
       "sousCategorie": "Autoréférence",
       "tags": [
-        "autoréférence",
         "logique",
         "raisonnement",
         "essai erreur",
@@ -1056,8 +1029,7 @@
       "categorie": "Enigme à texte",
       "sousCategorie": "Menteur",
       "tags": [
-        "menteur",
-        "cercle",
+        "raisonnement",
         "2024F9"
       ],
       "etoiles": 3,
@@ -1069,6 +1041,59 @@
       "texCor": "tex/cercle-menteurs_cor.tex"
     },
     {
+      "id": "course-a-pied",
+      "titre": "La course a pied",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Menteur",
+      "tags": [
+        "menteur",
+        "ordonner",
+        "2019Q8"
+      ],
+      "etoiles": 3,
+      "png": "png/course-a-pied.png",
+      "pngCor": "png/course-a-pied_cor.png",
+      "typ": "typ/course-a-pied.typ",
+      "typCor": "typ/course-a-pied_cor.typ",
+      "tex": "tex/course-a-pied.tex",
+      "texCor": "tex/course-a-pied_cor.tex"
+    },
+    {
+      "id": "course",
+      "titre": "La course",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Menteur",
+      "tags": [
+        "menteur",
+        "ordonner",
+        "2008Q5"
+      ],
+      "etoiles": 2,
+      "png": "png/course.png",
+      "pngCor": "png/course_cor.png",
+      "typ": "typ/course.typ",
+      "typCor": "typ/course_cor.typ",
+      "tex": "tex/course.tex",
+      "texCor": "tex/course_cor.tex"
+    },
+    {
+      "id": "deduction",
+      "titre": "Déduction",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Menteur",
+      "tags": [
+        "menteur",
+        "2013D1"
+      ],
+      "etoiles": 1,
+      "png": "png/deduction.png",
+      "pngCor": "png/deduction_cor.png",
+      "typ": "typ/deduction.typ",
+      "typCor": "typ/deduction_cor.typ",
+      "tex": "tex/deduction.tex",
+      "texCor": "tex/deduction_cor.tex"
+    },
+    {
       "id": "deux-menteurs-sur-trois",
       "titre": "Deux menteurs sur trois",
       "categorie": "Enigme à texte",
@@ -1076,7 +1101,6 @@
       "tags": [
         "logique",
         "raisonnement",
-        "menteur",
         "essai erreur",
         "2013Q3"
       ],
@@ -1107,6 +1131,23 @@
       "typCor": "typ/grenouille-prince-charmant_cor.typ",
       "tex": "tex/grenouille-prince-charmant.tex",
       "texCor": "tex/grenouille-prince-charmant_cor.tex"
+    },
+    {
+      "id": "menteurs-congres",
+      "titre": "Les menteurs du congrès",
+      "categorie": "Enigme à texte",
+      "sousCategorie": "Menteur",
+      "tags": [
+        "raisonnement",
+        "2002D12"
+      ],
+      "etoiles": 3,
+      "png": "png/menteurs-congres.png",
+      "pngCor": "png/menteurs-congres_cor.png",
+      "typ": "typ/menteurs-congres.typ",
+      "typCor": "typ/menteurs-congres_cor.typ",
+      "tex": "tex/menteurs-congres.tex",
+      "texCor": "tex/menteurs-congres_cor.tex"
     },
     {
       "id": "qui-a-vole-l-orange",
@@ -1151,7 +1192,6 @@
       "categorie": "Enigme à texte",
       "sousCategorie": "Qui mange quoi",
       "tags": [
-        "dessert",
         "logique",
         "raisonnement",
         "essai erreur",
@@ -1171,7 +1211,6 @@
       "categorie": "Enigme à texte",
       "sousCategorie": "Qui mange quoi",
       "tags": [
-        "dessert",
         "logique",
         "raisonnement",
         "essai erreur",
@@ -1191,7 +1230,6 @@
       "categorie": "Enigme à texte",
       "sousCategorie": "Qui mange quoi",
       "tags": [
-        "dessert",
         "logique",
         "raisonnement",
         "essai erreur",
@@ -1211,7 +1249,6 @@
       "categorie": "Enigme à texte",
       "sousCategorie": "Qui mange quoi",
       "tags": [
-        "dessert",
         "logique",
         "raisonnement",
         "essai erreur",
@@ -1231,7 +1268,6 @@
       "categorie": "Enigme à texte",
       "sousCategorie": "Qui mange quoi",
       "tags": [
-        "dessert",
         "logique",
         "raisonnement",
         "essai erreur",
@@ -1251,7 +1287,6 @@
       "categorie": "Enigme à texte",
       "sousCategorie": "Qui mange quoi",
       "tags": [
-        "dessert",
         "logique",
         "raisonnement",
         "essai erreur",
@@ -1271,7 +1306,6 @@
       "categorie": "Enigme à texte",
       "sousCategorie": "Qui mange quoi",
       "tags": [
-        "dessert",
         "logique",
         "raisonnement",
         "essai erreur",
@@ -1291,7 +1325,6 @@
       "categorie": "Enigme à texte",
       "sousCategorie": "Qui mange quoi",
       "tags": [
-        "dessert",
         "logique",
         "raisonnement",
         "essai erreur",
@@ -1311,7 +1344,6 @@
       "categorie": "Enigme à texte",
       "sousCategorie": "Qui mange quoi",
       "tags": [
-        "dessert",
         "logique",
         "raisonnement",
         "essai erreur",
@@ -1331,7 +1363,6 @@
       "categorie": "Enigme à texte",
       "sousCategorie": "Qui mange quoi",
       "tags": [
-        "dessert",
         "logique",
         "raisonnement",
         "essai erreur",
@@ -1351,7 +1382,6 @@
       "categorie": "Enigme à texte",
       "sousCategorie": "Qui mange quoi",
       "tags": [
-        "dessert",
         "logique",
         "raisonnement",
         "essai erreur",
@@ -1371,7 +1401,6 @@
       "categorie": "Enigme à texte",
       "sousCategorie": "Qui mange quoi",
       "tags": [
-        "dessert",
         "logique",
         "raisonnement",
         "essai erreur",
@@ -1407,7 +1436,6 @@
       "titre": "Les courses",
       "categorie": "Méli-Mélo",
       "tags": [
-        "courses",
         "argent",
         "partage",
         "2004D7"
@@ -1443,7 +1471,6 @@
       "titre": "Tirelire",
       "categorie": "Méli-Mélo",
       "tags": [
-        "tirelire",
         "euro",
         "décomposition",
         "minimum",
@@ -1462,7 +1489,6 @@
       "titre": "Pesée de bijoux",
       "categorie": "Système simple",
       "tags": [
-        "Bijoux",
         "masse",
         "équations",
         "balances",
@@ -1484,7 +1510,6 @@
       "titre": "Pesée de bijoux (noir et blanc)",
       "categorie": "Système simple",
       "tags": [
-        "Bijoux",
         "masse",
         "équations",
         "balances",
@@ -1506,7 +1531,6 @@
       "titre": "Histoire de billes",
       "categorie": "Système simple",
       "tags": [
-        "billes",
         "équations",
         "systèmes",
         "2000Q5"
@@ -1524,7 +1548,6 @@
       "titre": "Histoire de famille",
       "categorie": "Système simple",
       "tags": [
-        "Famille",
         "équations",
         "âge",
         "systèmes",
@@ -1543,7 +1566,6 @@
       "titre": "Les images de Mathilde",
       "categorie": "Système simple",
       "tags": [
-        "images",
         "comptage",
         "essai-erreur",
         "systèmes",
@@ -1598,7 +1620,6 @@
       "titre": "La réserve",
       "categorie": "Système simple",
       "tags": [
-        "réserve",
         "équations",
         "systèmes",
         "2004Q9"
@@ -1616,7 +1637,6 @@
       "titre": "Les sapins",
       "categorie": "Système simple",
       "tags": [
-        "Sapins",
         "équations",
         "balances",
         "systèmes",
@@ -1635,7 +1655,6 @@
       "titre": "Les sapins (niveau 2)",
       "categorie": "Système simple",
       "tags": [
-        "Sapins",
         "équations",
         "balances",
         "systèmes",

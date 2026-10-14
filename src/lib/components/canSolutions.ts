@@ -21,18 +21,28 @@
  * question (id ou attribut caractéristique) dans les cascades ci-dessous.
  */
 
+import type MathaleaCustomElement from '../customElements/MathaleaCustomElement'
 import { mathaleaCustomElementsRegistry } from '../customElements/MathaleaCustomElement'
 /**
  * Retourne la classe du customElement utilisé par la question, ou `null`.
  *
  * La détection se fait par la présence du tag dans le HTML de la question
  * (les ids sont de la forme `interactive-clockEx0Q1`, donc contiennent le tag).
+ * Quand un customElement en contient un autre (`possible-multi-lines-answer`
+ * contient un `mathalea-mathfield`), c'est le plus extérieur, donc celui qui
+ * apparaît en premier dans le HTML, qui gère la question.
  */
 function customElementClassForQuestion(questionHtml: string) {
+  let found: typeof MathaleaCustomElement | null = null
+  let foundIndex = Infinity
   for (const [tag, elementClass] of mathaleaCustomElementsRegistry) {
-    if (questionHtml.includes(tag)) return elementClass
+    const index = questionHtml.indexOf(tag)
+    if (index !== -1 && index < foundIndex) {
+      found = elementClass
+      foundIndex = index
+    }
   }
-  return null
+  return found
 }
 
 /**

@@ -265,9 +265,11 @@ export default class TableauDeValeurs extends Exercice {
           break
       }
       const yGrecs = listeReponses.map((el) =>
-        el instanceof FractionEtendue ? el.texFractionSimplifiee : texNombre(el, 1),
+        el instanceof FractionEtendue
+          ? el.texFractionSimplifiee
+          : texNombre(el, 1),
       )
-      texte = `On considère la fonction $${nomdef}$ définie par $${nomdef}:x\\mapsto ${expression}$. ${this.interactif ? '<br>Calculer les images par $f$ suivantes.' : '<br>Compléter le tableau de valeurs suivant.<br><br>'}`
+      texte = `On considère la fonction $${nomdef}$ définie par $${nomdef}:x\\mapsto ${expression}$. ${this.interactif ? `<br>Calculer les images par $${nomdef}$ suivantes.` : '<br>Compléter le tableau de valeurs suivant.<br><br>'}`
       const ligne1: Icell[] = [
         { texte: 'x', gras: true, color: 'black', latex: true },
       ].concat(
@@ -312,7 +314,7 @@ export default class TableauDeValeurs extends Exercice {
       if (context.isHtml) {
         const tabMathlive = AddTabPropMathlive.create(
           this.numeroExercice ?? 0,
-          0,
+          i,
           { ligne1, ligne2: ligne2bis, nbColonnes: 4 },
           KeyboardType.clavierDeBaseAvecFraction ?? 'clavierDeBaseAvecFraction',
           this.interactif,
@@ -342,7 +344,7 @@ export default class TableauDeValeurs extends Exercice {
       }
       const tableauValeur = AddTabPropMathlive.create(
         this.numeroExercice ?? 0,
-        0,
+        i,
         { ligne1, ligne2, nbColonnes: 4 },
         String(KeyboardType.clavierDeBaseAvecFraction),
         false,
@@ -471,17 +473,17 @@ export default class TableauDeValeurs extends Exercice {
         this.questionsAMC[i] = amcConvert(this.autoCorrectionAMC[i])
       } else if (this.interactif) {
         const reponses = []
-        for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
           reponses.push([
-            `L1C${i + 1}`,
+            `L1C${j + 1}`,
             {
-              value: listeReponses[i],
+              value: listeReponses[j],
               options: { fractionEgale: true },
             },
           ])
         }
         reponses.push(['bareme', toutAUnPoint])
-        handleAnswers(this, 0, Object.fromEntries(reponses))
+        handleAnswers(this, i, Object.fromEntries(reponses))
       }
 
       if (this.correctionDetaillee) {

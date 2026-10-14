@@ -265,7 +265,7 @@ export default class RepartirEnGroupesIdentiques extends Exercice {
     const texGcd = texNombre(leGcd, 0)
 
     this.introduction = `Un ${s.qui} ${s.faitQuoi} ${s.ou} ${s.pourQui}.<br>
-      Il souhaite répartir la totalité des $${texNb1}$ ${s.objet1} et des $${texNb2}$ ${s.objet2} dans des ${s.groupements}.<br>
+      Il souhaite répartir la totalité des $${texNb1}$ ${s.objet1} et des $${texNb2}$ ${s.objet2} dans des ${s.groupements} : rien ne doit rester, tout doit être utilisé.<br>
       Chaque ${s.groupement} doit comporter le même nombre de ${s.objet1} et le même nombre de ${s.objet2}.`
 
     // La question sur le nombre maximal de groupes est toujours posée
@@ -348,7 +348,7 @@ export default class RepartirEnGroupesIdentiques extends Exercice {
     }
 
     // Question 4 : nombre maximal de groupes
-    let texte4 = `Quel est le plus grand nombre ${s.deGroupements} que le ${s.qui} pourra constituer ?`
+    let texte4 = `Quel est le plus grand nombre ${s.deGroupements} que le ${s.qui} pourra constituer en utilisant la totalité des ${s.objet1} et des ${s.objet2} ?`
     if (this.interactif) {
       texte4 += `<br>${ajouteChampTexteMathLive(
         this,
@@ -363,7 +363,7 @@ export default class RepartirEnGroupesIdentiques extends Exercice {
     handleAnswers(this, numero, { reponse: { value: leGcd } })
     numero++
     const texteCorr4 = `${rappelPgcd}${texteEnCouleur(
-      `Chaque ${s.groupement} contient le même nombre de ${s.objet1} et la totalité des ${s.objet1} est répartie : le nombre de ${s.groupements} divise donc $${texNb1}$. Pour la même raison, il divise $${texNb2}$, c’est donc un diviseur commun à $${texNb1}$ et $${texNb2}$.<br>
+      `Chaque ${s.groupement} contient le même nombre de ${s.objet1} et la totalité des ${s.objet1} est répartie : le nombre de ${s.groupements} divise donc $${texNb1}$. Pour la même raison (la totalité des ${s.objet2} est aussi répartie), il divise $${texNb2}$, c’est donc un diviseur commun à $${texNb1}$ et $${texNb2}$.<br>
       Pour en constituer le plus possible, on prend le plus grand diviseur commun à $${texNb1}$ et $${texNb2}$, qui vaut $${texGcd}$${avecPgcd ? ' d’après la question précédente' : ''}.`,
       bleuMathalea,
     )}<br>Le ${s.qui} pourra constituer au maximum $${miseEnEvidence(texGcd)}$ ${s.groupements}.`

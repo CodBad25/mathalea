@@ -165,10 +165,11 @@ export class PossibleMultiLinesAnswerElement extends MathaleaCustomElement {
     return MathaleaMathfieldElement.pointsMaxQuestion(exercice, i)
   }
 
+  /** Seule la dernière ligne, c'est-à-dire la réponse finale, est affichée. */
   static formatStudentAnswer(rawAnswer: string): string {
     const lines = parseLines(rawAnswer)
     if (lines == null) return `$${rawAnswer}$`
-    return lines.map((line) => `$${line}$`).join('<br>')
+    return `$${lines.at(-1) ?? ''}$`
   }
 
   static stripFromQuestionHtml(questionHtml: string): string {

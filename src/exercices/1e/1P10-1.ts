@@ -10,6 +10,7 @@ import { addMultiMathfield } from '../../lib/customElements/MultiMathfield'
 import { createList } from '../../lib/format/lists'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { arrondi } from '../../lib/outils/nombres'
 import { sp } from '../../lib/outils/outilString'
 export const titre = 'Écrire ou reconnaitre une probabilité dans un énoncé'
 export const interactifReady = true
@@ -56,6 +57,7 @@ export default class EcritureProbabilite extends Exercice {
         Pev2,
         Pev1sachantev2,
         Pev1bsachantev2,
+        Pinter,
         liste,
         intro,
         texte1,
@@ -91,12 +93,16 @@ export default class EcritureProbabilite extends Exercice {
           Pev2 = Pev1 * Pev2sachantev1 + Pev1b * Pev2sachantev1b
           Pev1sachantev2 = (Pev1 * Pev2sachantev1) / Pev2
           Pev1bsachantev2 = 1 - Pev1sachantev2
+          // Valeurs arrondies au millième : énoncé et réponses doivent afficher les mêmes nombres
+          Pev2 = Math.round((val1 * val2 + (100 - val1) * val3) / 10) / 1000
+          Pev1bsachantev2 = arrondi(Pev1bsachantev2, 3)
+          Pinter = Math.round((val1 * val2) / 10) / 1000
           liste = createList({
             items: [
               `$${texNombre(Pev2 * 100, 1)}\\,\\%$ des valises réussissent les tests ;`,
               ` Le stock contient $${texNombre(Pev1 * 100, 1)}\\,\\%$ de valises à deux roues ;`,
               ` $${texNombre(Pev2sachantev1b * 100, 1)}\\,\\%$ des valises à quatre roues réussissent les tests ; `,
-              `$${texNombre(Pev1 * Pev2sachantev1 * 100, 1)}\\,\\%$  des valises sont des valises à deux roues qui ont réussi les tests ;`,
+              `$${texNombre(Pinter * 100, 1)}\\,\\%$  des valises sont des valises à deux roues qui ont réussi les tests ;`,
               `Parmi les valises à deux roues, $${texNombre(Pev2sachantev1 * 100, 1)}\\,\\%$ ont réussi les tests ;`,
               ` $${texNombre(Pev1bsachantev2 * 100, 1)}\\,\\%$ des valises qui ont réussi les tests sont des valises à quatre roues.`,
             ],
@@ -129,12 +135,16 @@ export default class EcritureProbabilite extends Exercice {
           Pev2 = Pev1 * Pev2sachantev1 + Pev1b * Pev2sachantev1b
           Pev1sachantev2 = (Pev1 * Pev2sachantev1) / Pev2
           Pev1bsachantev2 = 1 - Pev1sachantev2
+          // Valeurs arrondies au millième : énoncé et réponses doivent afficher les mêmes nombres
+          Pev2 = Math.round((val1 * val2 + (100 - val1) * val3) / 10) / 1000
+          Pev1bsachantev2 = arrondi(Pev1bsachantev2, 3)
+          Pinter = Math.round((val1 * val2) / 10) / 1000
           liste = createList({
             items: [
               `$${texNombre(Pev2sachantev1 * 100, 1)}\\,\\%$ des adhérents qui pratiquent le judo le pratiquent en compétition ;`,
               `  $${texNombre(Pev1 * 100, 1)}\\,\\%$ des adhérents pratiquent le judo ;`,
               ` $${texNombre(Pev2sachantev1b * 100, 1)}\\,\\%$ des adhérents qui pratiquent le karaté font de la compétition ; `,
-              `$${texNombre(Pev1 * Pev2sachantev1 * 100, 1)}\\,\\%$  des adhérents sont des adhérents qui pratiquent le judo en compétition ;`,
+              `$${texNombre(Pinter * 100, 1)}\\,\\%$  des adhérents sont des adhérents qui pratiquent le judo en compétition ;`,
               `Les adhérents pratiquent la compétition pour $${texNombre(Pev2 * 100, 1)}\\,\\%$ d'entre eux ;`,
               ` $${texNombre(Pev1bsachantev2 * 100, 1)}\\,\\%$ des adhérents qui pratiquent leur sport en compétition pratiquent le karaté.`,
             ],
@@ -167,12 +177,16 @@ On choisit une fiche au hasard et on note P la probabilité associée à cette e
           Pev2 = Pev1 * Pev2sachantev1 + Pev1b * Pev2sachantev1b
           Pev1sachantev2 = (Pev1 * Pev2sachantev1) / Pev2
           Pev1bsachantev2 = 1 - Pev1sachantev2
+          // Valeurs arrondies au millième : énoncé et réponses doivent afficher les mêmes nombres
+          Pev2 = Math.round((val1 * val2 + (100 - val1) * val3) / 10) / 1000
+          Pev1bsachantev2 = arrondi(Pev1bsachantev2, 3)
+          Pinter = Math.round((val1 * val2) / 10) / 1000
           liste = createList({
             items: [
               ` $${texNombre(Pev1bsachantev2 * 100, 1)}\\,\\%$ des clients qui ont acheté un vêtement n'avaient pas un bon de réduction ;`,
               `  $${texNombre(Pev1 * 100, 1)}\\,\\%$ des clients avaient un bon de réduction ;`,
               `Parmi les clients qui ont un bon de réduction, $${texNombre(Pev2sachantev1 * 100, 1)}\\,\\%$ ont acheté un vêtement ;`,
-              `$${texNombre(Pev1 * Pev2sachantev1 * 100, 1)}\\,\\%$  des clients sont des clients qui ont acheté un vêtement et qui avaient un bon de réduction ;`,
+              `$${texNombre(Pinter * 100, 1)}\\,\\%$  des clients sont des clients qui ont acheté un vêtement et qui avaient un bon de réduction ;`,
               ` $${texNombre(Pev2sachantev1b * 100, 1)}\\,\\%$ des clients qui n'avaient pas de bons de réduction ont acheté un vêtement ; `,
               `$${texNombre(Pev2 * 100, 1)}\\,\\%$ des clients ont acheté un vêtement.`,
             ],
@@ -207,9 +221,13 @@ Cette enquête a montré que :`
           Pev2 = Pev1 * Pev2sachantev1 + Pev1b * Pev2sachantev1b
           Pev1sachantev2 = (Pev1 * Pev2sachantev1) / Pev2
           Pev1bsachantev2 = 1 - Pev1sachantev2
+          // Valeurs arrondies au millième : énoncé et réponses doivent afficher les mêmes nombres
+          Pev2 = Math.round((val1 * val2 + (100 - val1) * val3) / 10) / 1000
+          Pev1bsachantev2 = arrondi(Pev1bsachantev2, 3)
+          Pinter = Math.round((val1 * val2) / 10) / 1000
           liste = ` $${texNombre(Pev1 * 100, 1)}\\,\\%$ des animaux ont été vaccinés.<br>
 Les experts considèrent que parmi les animaux qui  contractent la maladie, $${texNombre(Pev1bsachantev2 * 100, 1)}\\,\\%$  n'ont pas été vaccinés et que parmi les animaux vaccinés $${texNombre(Pev2sachantev1 * 100, 1)}\\,\\%$ contractent la maladie.<br>
-Ils considèrent aussi que $${texNombre(Pev1 * Pev2sachantev1 * 100, 1)}\\,\\%$ des animaux sont des animaux vaccinés qui contractent la maladie et que parmi les animaux non vaccinés, $${texNombre(Pev2sachantev1b * 100, 1)}\\,\\%$ contractent la maladie.<br>
+Ils considèrent aussi que $${texNombre(Pinter * 100, 1)}\\,\\%$ des animaux sont des animaux vaccinés qui contractent la maladie et que parmi les animaux non vaccinés, $${texNombre(Pev2sachantev1b * 100, 1)}\\,\\%$ contractent la maladie.<br>
 Enfin, ils estiment que $${texNombre(Pev2 * 100, 1)}\\,\\%$ des animaux contractent la maladie.<br>`
 
           intro =
@@ -233,10 +251,10 @@ Enfin, ils estiment que $${texNombre(Pev2 * 100, 1)}\\,\\%$ des animaux contract
         calc2C = `$${miseEnEvidence(`P(${ev[1]})`)} =${texNombre(Pev2, 3)}$<br>`
         calc3C = `Dans l'énoncé, $${texNombre(Pev2sachantev1b, 3)}$ correspond à une probabilité conditionnelle : $${miseEnEvidence(`P_{\\overline{${ev[0]}}}({ ${ev[1]}})`)}=${texNombre(Pev2sachantev1b, 3)}$`
         calc4 = `$=${texNombre(Pev1bsachantev2, 3)}$`
-        calc5 = `$=${texNombre(Pev1 * Pev2sachantev1, 3)}$`
+        calc5 = `$=${texNombre(Pinter, 3)}$`
         calc6 = `$=${texNombre(Pev1, 3)}$`
         calc4C = `Dans l'énoncé, $${texNombre(Pev1bsachantev2, 3)}$ correspond à une probabilité conditionnelle : $${miseEnEvidence(`P_{${ev[1]}}(\\overline{${ev[0]}})`)}=${texNombre(Pev1bsachantev2, 3)}$.<br>`
-        calc5C = `Dans l'énoncé, $${texNombre(Pev1 * Pev2sachantev1, 3)}$ correspond à la probabilité d'une intersection : $${miseEnEvidence(`P(${ev[0]}\\cap ${ev[1]})`)} =${texNombre(Pev1 * Pev2sachantev1, 3)}$.<br>`
+        calc5C = `Dans l'énoncé, $${texNombre(Pinter, 3)}$ correspond à la probabilité d'une intersection : $${miseEnEvidence(`P(${ev[0]}\\cap ${ev[1]})`)} =${texNombre(Pinter, 3)}$.<br>`
         calc6C = `$${miseEnEvidence(`P( ${ev[0]})`)}=${texNombre(Pev1, 3)}$`
 
         texte +=
@@ -344,7 +362,7 @@ Enfin, ils estiment que $${texNombre(Pev2 * 100, 1)}\\,\\%$ des animaux contract
         calc5 = `$P({${ev[0]}}\\cap {${ev[1]}})=$`
         calc6 = `$P( ${ev[0]})=$`
         calc4C = `$P_{${ev[1]}}( \\overline{${ev[0]}})=${miseEnEvidence(`${texNombre(Pev1bsachantev2, 3)}`)}$`
-        calc5C = ` $P({${ev[0]}}\\cap {${ev[1]}})= ${miseEnEvidence(`${texNombre(Pev1 * Pev2sachantev1, 3)}`)}$`
+        calc5C = ` $P({${ev[0]}}\\cap {${ev[1]}})= ${miseEnEvidence(`${texNombre(Pinter, 3)}`)}$`
         calc6C = `$P( ${ev[0]})=${miseEnEvidence(`${texNombre(Pev1, 3)}`)}$`
 
         texte += " En utilisant les données de l'énoncé, compléter :<br>"
@@ -395,7 +413,7 @@ Enfin, ils estiment que $${texNombre(Pev2 * 100, 1)}\\,\\%$ des animaux contract
                 value: texNombre(Pev1bsachantev2, 3),
               },
               champ2: {
-                value: texNombre(Pev1 * Pev2sachantev1, 3),
+                value: texNombre(Pinter, 3),
               },
               champ3: {
                 value: texNombre(Pev1, 3),

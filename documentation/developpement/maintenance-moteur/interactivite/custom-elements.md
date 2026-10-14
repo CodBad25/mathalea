@@ -312,6 +312,8 @@ La vue des corrections de la CAN (`Solutions.svelte`, via `src/lib/components/ca
 - `static formatStudentAnswer(rawAnswer: string): string` : formate la réponse brute de l'élève (telle que stockée dans `exercice.answers`) pour la ligne « Réponse donnée : ... ». Par défaut, la valeur brute est affichée telle quelle (suffisant pour `liste-deroulante`). À surcharger si la valeur stockée n'est pas lisible directement (ex. `InteractiveClock` stocke un JSON `{hour, minute, second}`).
 - `static stripFromQuestionHtml(questionHtml: string): string` : transforme le HTML de la question pour la liste des corrections. Par défaut, le composant reste visible mais son attribut `interactivity-on` est forcé à `false` (composant désactivé, non interactif). À surcharger pour retirer le composant de l'énoncé (ex. `InteractiveClock`).
 
+Le customElement d'une question est repéré par son tag dans le HTML de la question. Si un composant en contient un autre (ex. `possible-multi-lines-answer` contient un `mathalea-mathfield`), c'est le tag le plus extérieur, donc le premier du HTML, qui gère l'affichage.
+
 Un customElement enregistré via `registerMathaleaCustomElement` est donc pris en charge par les corrections CAN sans modifier `Solutions.svelte` ni `canSolutions.ts`.
 
 ## Cas spécial : élément technique non visible

@@ -68,6 +68,8 @@ export default class NomExercice extends Exercice {
 
   nouvelleVersion() {
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
+      // Huit champs par problème : le problème i occupe les indices 8i à 8i + 7.
+      const champ0 = 8 * i
       const xA = randint(3, 6)
       const yI = randint(1, xA - 1)
       const cote = randint(xA + 1, xA + 4)
@@ -214,26 +216,26 @@ export default class NomExercice extends Exercice {
             '<br>' +
             remplisLesBlancs(
               this,
-              0,
+              champ0,
               '\\overrightarrow{OI}\\begin{pmatrix}%{champ1}\\\\%{champ2}\\end{pmatrix}\\quad ;\\quad \\overrightarrow{OC}\\begin{pmatrix}%{champ3}\\\\%{champ4}\\end{pmatrix}',
             ),
-          `En déduire le produit scalaire $\\overrightarrow{OI}\\cdot \\overrightarrow{OC}$.${ajouteChampTexteMathLive(this, 1, KeyboardType.clavierDeBase, { texteAvant: '<br>$\\overrightarrow{OI}\\cdot \\overrightarrow{OC}=$ ' })}`,
+          `En déduire le produit scalaire $\\overrightarrow{OI}\\cdot \\overrightarrow{OC}$.${ajouteChampTexteMathLive(this, champ0 + 1, KeyboardType.clavierDeBase, { texteAvant: '<br>$\\overrightarrow{OI}\\cdot \\overrightarrow{OC}=$ ' })}`,
         ],
         style: 'alpha',
       })
       const question2 = createList({
         items: [
-          `Exprimer le produit scalaire $\\overrightarrow{OI}\\cdot \\overrightarrow{OC}$ en fonction des longueurs $OH$ et $OI$.<br> ${ajouteChampTexteMathLive(this, 2, KeyboardType.clavierMajuscules + '  ' + KeyboardType.clavierFullOperations, { texteAvant: '<br>$\\overrightarrow{OI}\\cdot \\overrightarrow{OC}= $' })}`,
-          `Calculer la longueur $OI$.${ajouteChampTexteMathLive(this, 3, KeyboardType.equationsTerminale, { texteAvant: '<br>$OI=$ ' })}`,
-          `En déduire la longueur $OH$.${ajouteChampTexteMathLive(this, 4, KeyboardType.equationsTerminale, { texteAvant: '<br>$OH=$ ' })}`,
+          `Exprimer le produit scalaire $\\overrightarrow{OI}\\cdot \\overrightarrow{OC}$ en fonction des longueurs $OH$ et $OI$.<br> ${ajouteChampTexteMathLive(this, champ0 + 2, KeyboardType.clavierMajuscules + '  ' + KeyboardType.clavierFullOperations, { texteAvant: '<br>$\\overrightarrow{OI}\\cdot \\overrightarrow{OC}= $' })}`,
+          `Calculer la longueur $OI$.${ajouteChampTexteMathLive(this, champ0 + 3, KeyboardType.equationsTerminale, { texteAvant: '<br>$OI=$ ' })}`,
+          `En déduire la longueur $OH$.${ajouteChampTexteMathLive(this, champ0 + 4, KeyboardType.equationsTerminale, { texteAvant: '<br>$OH=$ ' })}`,
         ],
         style: 'alpha',
       })
       const question3 = createList({
         items: [
-          `Déterminer une équation cartésienne de la droite $(CH)$.${ajouteChampTexteMathLive(this, 5, KeyboardType.lyceeClassique, { texteAvant: '<br>Équation de $(CH)$ : ' })}`,
-          `Déterminer l'équation du cercle $\\varepsilon$ sous forme développée. ${ajouteChampTexteMathLive(this, 6, KeyboardType.lyceeClassique, { texteAvant: '<br>Équation développée de $\\varepsilon$ : ' })}`,
-          `Le point $M\\left(${xM.texFractionSimplifiee}\\,;\\,${yM.texFractionSimplifiee}\\right)$ appartient-il à l'intersection du cercle $\\varepsilon$ et de la droite $(CH)$ ?${texteJustifier}.${ajouteChampTexteMathLive(this, 7, KeyboardType.vFON, { texteAvant: '<br>Répondre O ou N : ' })}`,
+          `Déterminer une équation cartésienne de la droite $(CH)$.${ajouteChampTexteMathLive(this, champ0 + 5, KeyboardType.lyceeClassique, { texteAvant: '<br>Équation de $(CH)$ : ' })}`,
+          `Déterminer l'équation du cercle $\\varepsilon$ sous forme développée. ${ajouteChampTexteMathLive(this, champ0 + 6, KeyboardType.lyceeClassique, { texteAvant: '<br>Équation développée de $\\varepsilon$ : ' })}`,
+          `Le point $M\\left(${xM.texFractionSimplifiee}\\,;\\,${yM.texFractionSimplifiee}\\right)$ appartient-il à l'intersection du cercle $\\varepsilon$ et de la droite $(CH)$ ?${texteJustifier}.${ajouteChampTexteMathLive(this, champ0 + 7, KeyboardType.vFON, { texteAvant: '<br>Répondre O ou N : ' })}`,
         ],
         style: 'alpha',
       })
@@ -317,25 +319,25 @@ En conséquence,   $\\overrightarrow{OI}\\cdot \\overrightarrow{OC}=${xI}\\times
       })
 
       if (this.questionJamaisPosee(i, xA, yI)) {
-        handleAnswers(this, 0, {
+        handleAnswers(this, champ0, {
           champ1: { value: texNombre(xI, 1) },
           champ2: { value: texNombre(yI, 1) },
           champ3: { value: '0' },
           champ4: { value: texNombre(cote, 1) },
         })
-        handleAnswers(this, 1, {
+        handleAnswers(this, champ0 + 1, {
           reponse: { value: produitScalaire },
         })
-        handleAnswers(this, 2, {
+        handleAnswers(this, champ0 + 2, {
           reponse: { value: 'OI\\times OH' },
         })
-        handleAnswers(this, 3, {
+        handleAnswers(this, champ0 + 3, {
           reponse: { value: longueurOITex },
         })
-        handleAnswers(this, 4, {
+        handleAnswers(this, champ0 + 4, {
           reponse: { value: longueurOH },
         })
-        handleAnswers(this, 5, {
+        handleAnswers(this, champ0 + 5, {
           reponse: {
             value: equationDroiteCH,
             compare: all([
@@ -345,7 +347,7 @@ En conséquence,   $\\overrightarrow{OI}\\cdot \\overrightarrow{OC}=${xI}\\times
             ]),
           },
         })
-        handleAnswers(this, 6, {
+        handleAnswers(this, champ0 + 6, {
           reponse: {
             value: equationCercle,
             compare: all([
@@ -355,7 +357,7 @@ En conséquence,   $\\overrightarrow{OI}\\cdot \\overrightarrow{OC}=${xI}\\times
             ]),
           },
         })
-        handleAnswers(this, 7, {
+        handleAnswers(this, champ0 + 7, {
           reponse: {
             value: reponse3c,
             compare: all([stringEquals({ ignoreCase: true, trim: true })]),
