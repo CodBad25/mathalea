@@ -25,21 +25,58 @@ import { bleuMathalea } from '../../lib/colors'
 
 export const titre = "Dresser un tableau de variations à partir d'une courbe"
 export const dateDePublication = '14/02/2023'
-export const dateDeModifImportante = '28/02/2025'
+export const dateDeModifImportante = '12/10/2026'
 /**
  * Lintage et typage incomplet à cause de tableauDeVariation qui est mal typé
  * @author Gilles Mora
 
  */
-export const uuid = '05b53'
+export const uuid = '11e73'
 
 export const refs = {
   'fr-fr': ['2F40-1', 'BP1AUTO057'],
   'fr-ch': ['2mFctPoly-4'],
 }
+/**
+ * Place le nom de la courbe (C_f) à droite de celle-ci, du côté où elle ne passe pas,
+ * en cherchant depuis la droite une abscisse où la courbe reste dans la fenêtre.
+ * Les ordonnées sont converties en cm avec `yUnite`.
+ */
+function etiquetteCourbe(
+  nom: string,
+  f: (x: number) => number,
+  {
+    xMin,
+    xMax,
+    yMin,
+    yMax,
+    yUnite = 1,
+  }: {
+    xMin: number
+    xMax: number
+    yMin: number
+    yMax: number
+    yUnite?: number
+  },
+) {
+  const y = (x: number) => yUnite * f(x)
+  let x = xMax - 1.5
+  while (x > xMin + 1 && !(y(x) < yMax - 1 && y(x) > yMin + 1)) x -= 0.1
+  const pente = y(x + 0.1) - y(x)
+  // Courbe presque plate : on écarte le nom de l'axe des abscisses
+  const decalage =
+    Math.abs(pente) < 0.05 ? (y(x) > 0 ? 0.9 : -0.9) : pente > 0 ? -0.6 : 0.6
+  return latex2d(`C_{${nom}}`, x + 0.4, y(x) + decalage, {
+    color: bleuMathalea,
+    letterSize: 'normalsize',
+  })
+}
+
 export default class VariationsCourbe extends Exercice {
   constructor() {
     super()
+    // La réponse est un tableau de variations : conserver la correction complète.
+    this.reponseCourteDisponible = false
     this.nbQuestions = 1
     this.sup = 1
     this.besoinFormulaireTexte = [
@@ -67,11 +104,17 @@ export default class VariationsCourbe extends Exercice {
       nbQuestions: this.nbQuestions,
     }).map(Number)
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    this.consigne =
+      this.nbQuestions === 1
+        ? 'Dresser le tableau de variations de la fonction.'
+        : 'Dresser le tableau de variations de chaque fonction.'
+
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const nomF = choice([['f'], ['g'], ['h'], ['u'], ['v'], ['w']])
       const nom = choice(nomF)
       let texte = ''
       let texteCorr = ''
+      let domaineTex = '' // Ensemble de définition de la fonction, en LaTeX
       let choix
       let fonction // La fonction étudiée
       let derivee // Sa dérivée
@@ -79,7 +122,6 @@ export default class VariationsCourbe extends Exercice {
       let xMax // La borne droite de l'intervalle d'étude
       let substituts = [] // les valeur de substitution pour xMin ou xMax...
       let tolerance // la tolérance doit être réglée au cas par cas, car pour la dérivée de 1/x entre 17 et 19 par exemple, il y a trop peu de différence avec zéro !
-      this.consigne = `Dresser ${this.nbQuestions === 1 ? 'le tableau ' : 'les tableaux '}  de variations ${this.nbQuestions === 1 ? 'de la fonction dont on donne la représentation graphique.` ' : 'des  fonctions dont on donne les représentations graphiques.'}`
       const variables: number[] = []
       switch (listeTypeDeQuestions[i]) {
         case 1:
@@ -120,7 +162,7 @@ export default class VariationsCourbe extends Exercice {
               grilleXMax: 6,
               grilleYMax: y1 + 2,
             })
-            const nomC = latex2d(`C_{${nomF}}`, x0 + 0.7, y0 + 1, {
+            const nomC = latex2d(`C_{${nom}}`, x0 + 0.7, y0 + 1, {
               color: bleuMathalea,
               letterSize: 'normalsize',
             })
@@ -155,9 +197,10 @@ export default class VariationsCourbe extends Exercice {
               nomC,
             )
 
+            domaineTex = `[${x0}\\,;\\,${x2}]`
             texte = `${graphique}`
 
-            texteCorr = `La fonction $${nom}$ est définie sur $[${x0}\\,;\\,${x2}]$.<br>
+            texteCorr = `La fonction $${nom}$ est définie sur $${domaineTex}$.<br>
             Son tableau de variations est : <br><br>`
             texteCorr +=
               tableauDeVariation({
@@ -207,7 +250,7 @@ export default class VariationsCourbe extends Exercice {
             const o = latex2d('\\text{O}', -0.3, -0.3, {
               letterSize: 'scriptsize',
             })
-            const nomC = latex2d(`C_{${nomF}}`, x0 + 0.4, y0 + 1, {
+            const nomC = latex2d(`C_{${nom}}`, x0 + 0.4, y0 + 1, {
               color: bleuMathalea,
               letterSize: 'normalsize',
             })
@@ -261,9 +304,10 @@ export default class VariationsCourbe extends Exercice {
               nomC,
             )
 
+            domaineTex = `[${x0}\\,;\\,${x2}]`
             texte = `${graphique}`
 
-            texteCorr = `La fonction $${nom}$ est définie sur $[${x0}\\,;\\,${x2}]$.<br>
+            texteCorr = `La fonction $${nom}$ est définie sur $${domaineTex}$.<br>
         Son tableau de variations est : <br><br>`
             texteCorr +=
               tableauDeVariation({
@@ -315,7 +359,7 @@ export default class VariationsCourbe extends Exercice {
             const o = latex2d('\\text{O}', -0.3, -0.3, {
               letterSize: 'scriptsize',
             })
-            const nomC = latex2d(`C_{${nomF}}`, x0 + 0.4, y0 + 0.7, {
+            const nomC = latex2d(`C_{${nom}}`, x0 + 0.4, y0 + 0.7, {
               color: bleuMathalea,
               letterSize: 'normalsize',
             })
@@ -369,9 +413,10 @@ export default class VariationsCourbe extends Exercice {
               Tk,
               nomC,
             )
+            domaineTex = `[${x0}\\,;\\,${x3}]`
             texte = `${graphique}`
 
-            texteCorr = `La fonction $${nom}$ est définie sur $[${x0}\\,;\\,${x3}]$.<br>
+            texteCorr = `La fonction $${nom}$ est définie sur $${domaineTex}$.<br>
         Son tableau de variations est : <br><br>`
             texteCorr +=
               tableauDeVariation({
@@ -425,7 +470,7 @@ export default class VariationsCourbe extends Exercice {
             const o = latex2d('\\text{O}', -0.3, -0.3, {
               letterSize: 'scriptsize',
             })
-            const nomC = latex2d(`C_{${nomF}}`, x0 + 0.4, y0 + 0.7, {
+            const nomC = latex2d(`C_{${nom}}`, x0 + 0.4, y0 + 0.7, {
               color: bleuMathalea,
               letterSize: 'normalsize',
             })
@@ -479,9 +524,10 @@ export default class VariationsCourbe extends Exercice {
               Tk,
               nomC,
             )
+            domaineTex = `[${x0}\\,;\\,${x3}]`
             texte = `${graphique}`
 
-            texteCorr = `La fonction $${nom}$ est définie sur $[${x0}\\,;\\,${x3}]$.<br>
+            texteCorr = `La fonction $${nom}$ est définie sur $${domaineTex}$.<br>
         Son tableau de variations est : <br><br>`
             texteCorr +=
               tableauDeVariation({
@@ -538,7 +584,7 @@ export default class VariationsCourbe extends Exercice {
             const o = latex2d('\\text{O}', -0.3, -0.3, {
               letterSize: 'scriptsize',
             })
-            const nomC = latex2d(`C_{${nomF}}`, x0 + 0.4, y0 + 0.7, {
+            const nomC = latex2d(`C_{${nom}}`, x0 + 0.4, y0 + 0.7, {
               color: bleuMathalea,
               letterSize: 'normalsize',
             })
@@ -593,9 +639,10 @@ export default class VariationsCourbe extends Exercice {
               Tk,
               nomC,
             )
+            domaineTex = `[${x0}\\,;\\,${x4}]`
             texte = `${graphique}`
 
-            texteCorr = `La fonction $${nom}$ est définie sur $[${x0}\\,;\\,${x4}]$.<br>
+            texteCorr = `La fonction $${nom}$ est définie sur $${domaineTex}$.<br>
         Son tableau de variations est : <br><br>`
             texteCorr +=
               tableauDeVariation({
@@ -697,7 +744,7 @@ export default class VariationsCourbe extends Exercice {
                 xMax: x4 + 1,
               },
             )
-            const nomC = latex2d(`C_{${nomF}}`, x0 + 0.4, y0 + 0.7, {
+            const nomC = latex2d(`C_{${nom}}`, x0 + 0.4, y0 + 0.7, {
               color: bleuMathalea,
               letterSize: 'normalsize',
             })
@@ -718,9 +765,10 @@ export default class VariationsCourbe extends Exercice {
               nomC,
             )
 
+            domaineTex = `[${x0}\\,;\\,${x4}]`
             texte = `${graphique}`
 
-            texteCorr = `La fonction $${nom}$ est définie sur $[${x0}\\,;\\,${x4}]$.<br>
+            texteCorr = `La fonction $${nom}$ est définie sur $${domaineTex}$.<br>
         Son tableau de variations est : <br><br>`
             texteCorr += tableauDeVariation({
               tabInit: [
@@ -739,7 +787,7 @@ export default class VariationsCourbe extends Exercice {
                   10,
                   `$${x3}$`,
                   10,
-                 `$${x4}$`,
+                  `$${x4}$`,
                   10,
                 ],
               ],
@@ -822,12 +870,16 @@ export default class VariationsCourbe extends Exercice {
                 xMax: 6,
               },
             )
+            const nomC = latex2d(`C_{${nom}}`, x1 + 0.8, y1 + 0.8, {
+              color: bleuMathalea,
+              letterSize: 'normalsize',
+            })
             const graphique = mathalea2d(
               {
                 xmin: x0 - 1,
                 xmax: 6,
                 ymin: -5,
-                ymax: y1 + 2,
+                ymax: y1 + 2 + margeHauteNomCourbe,
                 pixelsParCm: 30,
                 scale: 0.6,
                 center: !context.isHtml,
@@ -836,11 +888,12 @@ export default class VariationsCourbe extends Exercice {
               o,
               gr,
               Tk,
+              nomC,
             )
-            texte = `  $${nom}$ est définie sur $[${x0}\\,;\\,+\\infty[$.<br>`
-            texte += `${graphique}`
+            domaineTex = `[${x0}\\,;\\,+\\infty[`
+            texte = `${graphique}`
 
-            texteCorr = `La fonction $${nom}$ est définie sur $[${x0}\\,;\\,+\\infty[$.<br>
+            texteCorr = `La fonction $${nom}$ est définie sur $${domaineTex}$.<br>
              Son tableau de variations est : <br><br>`
             texteCorr +=
               tableauDeVariation({
@@ -913,12 +966,16 @@ export default class VariationsCourbe extends Exercice {
                 xMax: 6,
               },
             )
+            const nomC = latex2d(`C_{${nom}}`, x2 - 0.6, y2 + 0.8, {
+              color: bleuMathalea,
+              letterSize: 'normalsize',
+            })
             const graphique = mathalea2d(
               {
                 xmin: -2,
                 xmax: 6,
                 ymin: y1 - 2,
-                ymax: 6,
+                ymax: 6 + margeHauteNomCourbe,
                 pixelsParCm: 30,
                 scale: 0.6,
                 center: !context.isHtml,
@@ -927,11 +984,12 @@ export default class VariationsCourbe extends Exercice {
               o,
               gr,
               Tk,
+              nomC,
             )
-            texte = `   $${nom}$ est définie sur $]-\\infty\\,;\\,${x2}]$.<br>`
-            texte += `${graphique}`
+            domaineTex = `]-\\infty\\,;\\,${x2}]`
+            texte = `${graphique}`
 
-            texteCorr = `La fonction $${nom}$ est définie sur $]-\\infty\\,;\\,${x2}]$.<br>
+            texteCorr = `La fonction $${nom}$ est définie sur $${domaineTex}$.<br>
          Son tableau de variations est : <br><br>`
             texteCorr +=
               tableauDeVariation({
@@ -1007,12 +1065,16 @@ export default class VariationsCourbe extends Exercice {
                 xMax: 10,
               },
             )
+            const nomC = latex2d(`C_{${nom}}`, x2 + 0.7, y2 + 0.8, {
+              color: bleuMathalea,
+              letterSize: 'normalsize',
+            })
             const graphique = mathalea2d(
               {
                 xmin: x0 - 1,
                 xmax: 10,
                 ymin: Math.min(y1 - 1),
-                ymax: Math.max(y2 + 1, y0 + 1),
+                ymax: Math.max(y2 + 1, y0 + 1) + margeHauteNomCourbe,
                 pixelsParCm: 30,
                 scale: 0.6,
                 center: !context.isHtml,
@@ -1021,11 +1083,12 @@ export default class VariationsCourbe extends Exercice {
               o,
               gr,
               Tk,
+              nomC,
             )
-            texte = `   $${nom}$ est définie sur $[${x0}\\,;\\,+\\infty[$. <br>`
-            texte += `${graphique}`
+            domaineTex = `[${x0}\\,;\\,+\\infty[`
+            texte = `${graphique}`
 
-            texteCorr = `La fonction $${nom}$ est définie sur $[${x0}\\,;\\,+\\infty[$.<br>
+            texteCorr = `La fonction $${nom}$ est définie sur $${domaineTex}$.<br>
          Son tableau de variations est : <br><br>`
             texteCorr +=
               tableauDeVariation({
@@ -1121,12 +1184,16 @@ export default class VariationsCourbe extends Exercice {
                 xMax: x3 + 1,
               },
             )
+            const nomC = latex2d(`C_{${nom}}`, x1 + 0.8, y1 + 0.8, {
+              color: bleuMathalea,
+              letterSize: 'normalsize',
+            })
             const graphique = mathalea2d(
               {
                 xmin: -4,
                 xmax: x3 + 1,
                 ymin: Math.min(y2 - 1, -2),
-                ymax: Math.max(y1 + 1, y3 + 1),
+                ymax: Math.max(y1 + 1, y3 + 1) + margeHauteNomCourbe,
                 pixelsParCm: 30,
                 scale: 0.5,
                 center: !context.isHtml,
@@ -1135,11 +1202,12 @@ export default class VariationsCourbe extends Exercice {
               o,
               gr,
               Tk,
+              nomC,
             )
-            texte = `   $${nom}$ est définie sur $]-\\infty\\,;\\,${x3}]$.<br>`
-            texte += `${graphique}`
+            domaineTex = `]-\\infty\\,;\\,${x3}]`
+            texte = `${graphique}`
 
-            texteCorr = `La fonction $${nom}$ est définie sur $]-\\infty\\,;\\,${x2}]$.<br>
+            texteCorr = `La fonction $${nom}$ est définie sur $${domaineTex}$.<br>
          Son tableau de variations est : <br><br>`
             texteCorr +=
               tableauDeVariation({
@@ -1240,12 +1308,16 @@ export default class VariationsCourbe extends Exercice {
                 xMax: x4 + 1,
               },
             )
+            const nomC = latex2d(`C_{${nom}}`, x1 + 0.8, y1 + 0.8, {
+              color: bleuMathalea,
+              letterSize: 'normalsize',
+            })
             const graphique = mathalea2d(
               {
                 xmin: x0 - 1,
                 xmax: x3 + 3,
                 ymin: Math.min(y2 - 1, y0 - 1, -6),
-                ymax: Math.max(y1 + 1, y3 + 1),
+                ymax: Math.max(y1 + 1, y3 + 1) + margeHauteNomCourbe,
                 pixelsParCm: 25,
                 scale: 0.5,
                 center: !context.isHtml,
@@ -1254,11 +1326,12 @@ export default class VariationsCourbe extends Exercice {
               o,
               gr,
               Tk,
+              nomC,
             )
-            texte = `  $${nom}$ est définie sur $[${x0}\\,;\\,+\\infty[$.<br>`
-            texte += `${graphique}`
+            domaineTex = `[${x0}\\,;\\,+\\infty[`
+            texte = `${graphique}`
 
-            texteCorr = `La fonction $${nom}$ est définie sur $[${x0}\\,;\\,+\\infty[$.<br>
+            texteCorr = `La fonction $${nom}$ est définie sur $${domaineTex}$.<br>
          Son tableau de variations est : <br><br>`
             texteCorr +=
               tableauDeVariation({
@@ -1360,12 +1433,16 @@ export default class VariationsCourbe extends Exercice {
                 xMax: x3 + 2,
               },
             )
+            const nomC = latex2d(`C_{${nom}}`, x0 + 0.7, y0 + 0.8, {
+              color: bleuMathalea,
+              letterSize: 'normalsize',
+            })
             const graphique = mathalea2d(
               {
                 xmin: x0 - 1,
                 xmax: x3 + 2,
                 ymin: Math.min(y1 - 2, y3 - 2),
-                ymax: Math.max(y2 + 1, y0 + 1, 6),
+                ymax: Math.max(y2 + 1, y0 + 1, 6) + margeHauteNomCourbe,
                 pixelsParCm: 25,
                 scale: 0.5,
                 center: !context.isHtml,
@@ -1374,11 +1451,12 @@ export default class VariationsCourbe extends Exercice {
               o,
               gr,
               Tk,
+              nomC,
             )
-            texte = `  $${nom}$ est définie sur $[${x0}\\,;\\,+\\infty[$. <br>`
-            texte += `${graphique}`
+            domaineTex = `[${x0}\\,;\\,+\\infty[`
+            texte = `${graphique}`
 
-            texteCorr = `La fonction $${nom}$ est définie sur $[${x0}\\,;\\,${x4}]$.<br>
+            texteCorr = `La fonction $${nom}$ est définie sur $${domaineTex}$.<br>
          Son tableau de variations est : <br><br>`
             texteCorr += tableauDeVariation({
               tabInit: [
@@ -1397,7 +1475,7 @@ export default class VariationsCourbe extends Exercice {
                   10,
                   `$${x3}$`,
                   10,
-                  `$${x4}$`,
+                  '$+\\infty$',
                   10,
                 ],
               ],
@@ -1414,7 +1492,7 @@ export default class VariationsCourbe extends Exercice {
                   10,
                   `-/$${y3}$`,
                   10,
-                  `+/$${y4}$`,
+                  '+/',
                   10,
                 ],
               ],
@@ -1475,6 +1553,12 @@ export default class VariationsCourbe extends Exercice {
                 color: bleuMathalea,
                 epaisseur: 2,
               }),
+              etiquetteCourbe(nom, fonction, {
+                xMin: -6,
+                xMax: 6,
+                yMin: -5,
+                yMax: 5.1,
+              }),
             ]
 
             const tableau = tableauVariationsFonction(
@@ -1482,11 +1566,17 @@ export default class VariationsCourbe extends Exercice {
               derivee as (x: FractionEtendue | number) => number,
               xMin,
               xMax,
-              { ligneDerivee: false, substituts, step: 1, tolerance },
+              {
+                ligneDerivee: false,
+                substituts,
+                step: 1,
+                tolerance,
+                nomFonction: `${nom}(x)`,
+              },
             )
 
-            texte = '$f$ est définie sur $\\mathbb{R}$.<br>'
-            texte += mathalea2d(
+            domaineTex = '\\mathbb{R}'
+            texte = mathalea2d(
               {
                 xmin: -6,
                 xmax: 6.1,
@@ -1497,7 +1587,7 @@ export default class VariationsCourbe extends Exercice {
               },
               objets,
             )
-            texteCorr = `La fonction $f$ est définie sur $\\mathbb{R}$.<br>
+            texteCorr = `La fonction $${nom}$ est définie sur $${domaineTex}$.<br>
          Son tableau de variations est : <br><br>`
             texteCorr += `${tableau}`
           } else if (choix === 2) {
@@ -1545,6 +1635,12 @@ export default class VariationsCourbe extends Exercice {
                 color: bleuMathalea,
                 epaisseur: 2,
               }),
+              etiquetteCourbe(nom, fonction, {
+                xMin: -6,
+                xMax: 6,
+                yMin: -5,
+                yMax: 5.1,
+              }),
             ]
 
             const tableau = tableauVariationsFonction(
@@ -1552,11 +1648,17 @@ export default class VariationsCourbe extends Exercice {
               derivee as (x: FractionEtendue | number) => number,
               xMin,
               xMax,
-              { ligneDerivee: false, substituts, step: 1, tolerance },
+              {
+                ligneDerivee: false,
+                substituts,
+                step: 1,
+                tolerance,
+                nomFonction: `${nom}(x)`,
+              },
             )
 
-            texte = '  $f$ est définie sur $\\mathbb{R}$.<br>'
-            texte += mathalea2d(
+            domaineTex = '\\mathbb{R}'
+            texte = mathalea2d(
               {
                 xmin: -6,
                 xmax: 6,
@@ -1567,7 +1669,7 @@ export default class VariationsCourbe extends Exercice {
               },
               objets,
             )
-            texteCorr = `La fonction $f$ est définie sur $\\mathbb{R}$.<br>
+            texteCorr = `La fonction $${nom}$ est définie sur $${domaineTex}$.<br>
          Son tableau de variations est : <br><br>`
             texteCorr += `${tableau}`
           } else {
@@ -1622,6 +1724,13 @@ export default class VariationsCourbe extends Exercice {
                 color: bleuMathalea,
                 epaisseur: 2,
               }),
+              etiquetteCourbe(nom, fonction, {
+                xMin: -4,
+                xMax: 4,
+                yMin: -4,
+                yMax: 4.1,
+                yUnite: 0.5,
+              }),
             ]
 
             const tableau = tableauVariationsFonction(
@@ -1629,11 +1738,17 @@ export default class VariationsCourbe extends Exercice {
               derivee as (x: FractionEtendue | number) => number,
               xMin,
               xMax,
-              { ligneDerivee: false, substituts, step: 1, tolerance },
+              {
+                ligneDerivee: false,
+                substituts,
+                step: 1,
+                tolerance,
+                nomFonction: `${nom}(x)`,
+              },
             )
 
-            texte = ' $f$ est définie sur $\\mathbb{R}$. <br>'
-            texte += mathalea2d(
+            domaineTex = '\\mathbb{R}'
+            texte = mathalea2d(
               {
                 xmin: -4,
                 xmax: 4,
@@ -1644,7 +1759,7 @@ export default class VariationsCourbe extends Exercice {
               },
               objets,
             )
-            texteCorr = `La fonction $f$ est définie sur $\\mathbb{R}$.<br>
+            texteCorr = `La fonction $${nom}$ est définie sur $${domaineTex}$.<br>
          Son tableau de variations est : <br><br>`
             texteCorr += `${tableau}`
           }
@@ -1737,6 +1852,13 @@ export default class VariationsCourbe extends Exercice {
               epaisseur: 2,
               step: 0.02,
             })
+            const nomC = etiquetteCourbe(nom, fonction, {
+              xMin: -6,
+              xMax: 6,
+              yMin: -4.1,
+              yMax: 4.1,
+              yUnite: 0.2,
+            })
             const graphique = mathalea2d(
               {
                 xmin: -6,
@@ -1749,11 +1871,12 @@ export default class VariationsCourbe extends Exercice {
               },
               r1,
               cf,
+              nomC,
             )
 
-            texte = `La fonction $${nom}$ est définie sur $\\mathbb{R} \\setminus \\{${poles.valeursInterdites.map((v) => texNombre(v, 1)).join(' ; ')}\\}$.<br>
-            ${graphique}<br>`
-            texteCorr = `La fonction $${nom}$ est définie sur $\\mathbb{R} \\setminus \\{${poles.valeursInterdites.map((v) => texNombre(v, 1)).join(' ; ')}\\}$.<br>
+            domaineTex = `\\mathbb{R} \\setminus \\{${poles.valeursInterdites.map((v) => texNombre(v, 1)).join(' ; ')}\\}`
+            texte = `${graphique}<br>`
+            texteCorr = `La fonction $${nom}$ est définie sur $${domaineTex}$.<br>
             Son tableau de variations est : <br><br>`
             if (choix === 2) {
               texteCorr +=
@@ -1832,6 +1955,7 @@ export default class VariationsCourbe extends Exercice {
           }
           break
       }
+      texte = `Soit $${nom}$ la fonction définie sur $${domaineTex}$ dont la courbe est donnée ci-dessous.<br>${texte}`
       if (this.questionJamaisPosee(i, listeTypeDeQuestions[i], texte)) {
         // Si la question n'a jamais été posée, on en créé une autre
         this.listeQuestions[i] = texte
