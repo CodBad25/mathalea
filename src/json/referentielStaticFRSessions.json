@@ -2671,6 +2671,41 @@
       "typeExercice": "crpe",
       "annee": "2026",
       "lieu": "M2 Groupement 3"
+    },
+    "crpe_l3_2024_g1": {
+      "typeExercice": "crpe",
+      "annee": "2024",
+      "lieu": "L3 Groupement 1"
+    },
+    "crpe_l3_2024_g2": {
+      "typeExercice": "crpe",
+      "annee": "2024",
+      "lieu": "L3 Groupement 2"
+    },
+    "crpe_l3_2024_g3": {
+      "typeExercice": "crpe",
+      "annee": "2024",
+      "lieu": "L3 Groupement 3"
+    },
+    "crpe_l3_2024_g4": {
+      "typeExercice": "crpe",
+      "annee": "2024",
+      "lieu": "L3 Groupement 4"
+    },
+    "crpe_l3_2025_g1": {
+      "typeExercice": "crpe",
+      "annee": "2025",
+      "lieu": "L3 Groupement 1"
+    },
+    "crpe_l3_2025_g2": {
+      "typeExercice": "crpe",
+      "annee": "2025",
+      "lieu": "L3 Groupement 2"
+    },
+    "crpe_l3_2025_g4": {
+      "typeExercice": "crpe",
+      "annee": "2025",
+      "lieu": "L3 Groupement 4"
     }
   },
   "numeroOverrides": {
