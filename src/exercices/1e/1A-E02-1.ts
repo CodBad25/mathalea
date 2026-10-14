@@ -5,7 +5,6 @@ export const amcReady = true
 export const interactifReady = true
 
 /**
- * Clone de can5P01 pour les auto 1er
  * @author Gilles Mora
  */
 
