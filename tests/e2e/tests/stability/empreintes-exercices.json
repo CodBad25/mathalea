@@ -283,7 +283,7 @@
  "1216d": {"ex":"can/canTspea-2025/canTspea-2025-Q23.ts","v":{"":"8b30a27b:f2334445"}},
  "1217e": {"ex":"can/canc3a-2025/canc3a-2025-Q29.ts","v":{"":"08f82480:626987f4"}},
  "12321": {"ex":"modèlesExos/ExempleCanListeDeroulante.ts","v":{"":"ff41d912:5cd76250"}},
- "12444": {"ex":"2e/2I20-2.ts","v":{"":"09eb0350:5264531c","s=1":"71f3bbb4:56d1c451","s=2":"23599cef:c9741e28","s=3":"ff99ce50:13e8a77f"}},
+ "12444": {"ex":"2e/2I20-2.ts","v":{"":"09eb0350:5264531c","s=1":"71f3bbb4:56d1c451","s=2":"23599cef:c9741e28","s=3":"ff99ce50:13e8a77f","s2=true":"07fab71a:3292891e"}},
  "12514": {"ex":"can/4e/can4L2-01.ts","v":{"":"af871141:d83d5fd9"}},
  "1252f": {"ex":"1e/1A-C02-2-old.ts","v":{"":"b6b6cd30:416d36d5"}},
  "125bd": {"ex":"4e/4C35.ts","v":{"":"ab6e92eb:c3880f3d","s=true":"7d44b84c:39a98b23","s2=true":"ec07d1e9:c50a34ab","s2=false":"ab6e92eb:c3880f3d"}},
