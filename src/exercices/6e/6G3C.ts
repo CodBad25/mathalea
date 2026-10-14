@@ -9,29 +9,27 @@ import { PointAbstrait, pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
-import { longueur } from '../../lib/2d/utilitairesGeometriques'
 import {
   pointAdistance,
   pointIntersectionDD,
   pointIntersectionLC,
 } from '../../lib/2d/utilitairesPoint'
 import { combinaisonListes, shuffle } from '../../lib/outils/arrayOutils'
-import { arrondi } from '../../lib/outils/nombres'
 import { creerNomDePolygone } from '../../lib/outils/outilString'
-import { texNombre } from '../../lib/outils/texNombre'
+import { stringNombre, texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const titre = "Utiliser les propriétés de la médiatrice d'un segment"
 export const dateDePublication = '05/08/2021' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
-export const dateDeModifImportante = '17/08/2023'
+export const dateDeModifImportante = '14/10/2026'
 
 /**
  * Utiliser les propriétés de la médiatrice d'un segment
  * @author Guillaume Valmont
  */
 
-export const uuid = '3acc1'
+export const uuid = '954a7'
 
 export const refs = {
   'fr-fr': ['6G3C'],
@@ -128,14 +126,18 @@ export default class ProprietesMediatrice extends Exercice {
             nomDesPoints[2],
             'above',
           ) // s'il ne doit pas être sur la médiatrice, on l'en éloigne
+        segmentAC = segment(A, C)
+        segmentBC = segment(B, C)
       } while (
         C.constructor !== PointAbstrait ||
         A.constructor !== PointAbstrait ||
-        B.constructor !== PointAbstrait
+        B.constructor !== PointAbstrait ||
+        // Hors de la médiatrice, les longueurs affichées doivent être distinctes.
+        (!listeSurLaMediatrice[i] &&
+          stringNombre(segmentAC.longueur, 1) ===
+            stringNombre(segmentBC.longueur, 1))
       )
       segmentAB = segment(A, B)
-      segmentAC = segment(A, C)
-      segmentBC = segment(B, C)
       segmentAC.pointilles = 2
       segmentBC.pointilles = 2
       // Affiche les longueurs au-dessous ou en dessous selon si C est au-dessus ou en dessous de A
@@ -163,12 +165,12 @@ export default class ProprietesMediatrice extends Exercice {
         )
         if (listeSurLaMediatrice[i]) {
           // S'il est sur la médiatrice
-          texteCorr = `$${nomDesPoints[2]}${nomDesPoints[0]} = ${nomDesPoints[2]}${nomDesPoints[1]} = ${texNombre(arrondi(longueur(C, A), 1))}$ $cm$ donc le point $${nomDesPoints[2]}$ est équidistant de $${nomDesPoints[0]}$ et de $${nomDesPoints[1]}$.<br>`
+          texteCorr = `$${nomDesPoints[2]}${nomDesPoints[0]} = ${nomDesPoints[2]}${nomDesPoints[1]} = ${texNombre(segmentAC.longueur, 1)}$ $cm$ donc le point $${nomDesPoints[2]}$ est équidistant de $${nomDesPoints[0]}$ et de $${nomDesPoints[1]}$.<br>`
           texteCorr += `Comme tout point équidistant de $${nomDesPoints[0]}$ et de $${nomDesPoints[1]}$ appartient à la médiatrice du segment [$${nomDesPoints[0]}${nomDesPoints[1]}$], `
-          texteCorr += `alors le point $${nomDesPoints[2]}$ ${texteEnCouleurEtGras("appartient à la médiatrice")} du segment [$${nomDesPoints[0]}${nomDesPoints[1]}$].`
+          texteCorr += `alors le point $${nomDesPoints[2]}$ ${texteEnCouleurEtGras('appartient à la médiatrice')} du segment [$${nomDesPoints[0]}${nomDesPoints[1]}$].`
         } else {
           // Si le point C doit ne pas être sur la médiatrice,
-          texteCorr = `$${nomDesPoints[2]}${nomDesPoints[0]} = ${texNombre(arrondi(longueur(C, A), 1))}$ alors que $${nomDesPoints[2]}${nomDesPoints[1]} = ${texNombre(arrondi(longueur(C, B), 1))}$ donc le point $${nomDesPoints[2]}$ n'est pas équidistant de $${nomDesPoints[0]}$ et de $${nomDesPoints[1]}$.<br>`
+          texteCorr = `$${nomDesPoints[2]}${nomDesPoints[0]} = ${texNombre(segmentAC.longueur, 1)}$ alors que $${nomDesPoints[2]}${nomDesPoints[1]} = ${texNombre(segmentBC.longueur, 1)}$ donc le point $${nomDesPoints[2]}$ n'est pas équidistant de $${nomDesPoints[0]}$ et de $${nomDesPoints[1]}$.<br>`
           texteCorr += `Comme tout point qui n'est pas équidistant de $${nomDesPoints[0]}$ et de $${nomDesPoints[1]}$ n'appartient pas à la médiatrice du segment [$${nomDesPoints[0]}${nomDesPoints[1]}$], `
           texteCorr += `alors le point $${nomDesPoints[2]}$ ${texteEnCouleurEtGras("n'appartient pas à la médiatrice")} du segment [$${nomDesPoints[0]}${nomDesPoints[1]}$].`
         }
@@ -193,7 +195,7 @@ export default class ProprietesMediatrice extends Exercice {
           texteCorr = `Le point $${nomDesPoints[2]}$ appartient à la médiatrice du segment [$${nomDesPoints[0]}${nomDesPoints[1]}$].<br>`
           texteCorr +=
             "Comme tout point qui appartient à la médiatrice d'un segment est équidistant des extrémités de ce segment, "
-          texteCorr += `alors le point $${nomDesPoints[2]}$ ${texteEnCouleurEtGras("est équidistant")} de $${nomDesPoints[0]}$ et de $${nomDesPoints[1]}$.`
+          texteCorr += `alors le point $${nomDesPoints[2]}$ ${texteEnCouleurEtGras('est équidistant')} de $${nomDesPoints[0]}$ et de $${nomDesPoints[1]}$.`
         } else {
           // Si le point $${nomDesPoints[2]}$ doit ne pas être sur la médiatrice,
           texteCorr = `Le point $${nomDesPoints[2]}$ n'appartient pas à la médiatrice du segment [$${nomDesPoints[0]}${nomDesPoints[1]}$].<br>`
