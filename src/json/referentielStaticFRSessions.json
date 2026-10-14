@@ -2600,11 +2600,6 @@
       "lieu": "L3 sujet0",
       "typeExercice": "crpe"
     },
-    "crpe_m2_2026_g1": {
-      "annee": "2026",
-      "lieu": "Groupement 1",
-      "typeExercice": "crpe"
-    },
     "eam_specialite_2026_04_polynesie": {
       "typeExercice": "eam",
       "annee": "2026",
@@ -2646,6 +2641,36 @@
       "lieu": "Spécifique Métropole",
       "mois": "Septembre",
       "filiere": "Specifique"
+    },
+    "crpe_l3_2026_g1": {
+      "typeExercice": "crpe",
+      "annee": "2026",
+      "lieu": "L3 Groupement 1"
+    },
+    "crpe_l3_2026_g2": {
+      "typeExercice": "crpe",
+      "annee": "2026",
+      "lieu": "L3 Groupement 2"
+    },
+    "crpe_l3_2026_g3": {
+      "typeExercice": "crpe",
+      "annee": "2026",
+      "lieu": "L3 Groupement 3"
+    },
+    "crpe_m2_2026_g1": {
+      "typeExercice": "crpe",
+      "annee": "2026",
+      "lieu": "M2 Groupement 1"
+    },
+    "crpe_m2_2026_g2": {
+      "typeExercice": "crpe",
+      "annee": "2026",
+      "lieu": "M2 Groupement 2"
+    },
+    "crpe_m2_2026_g3": {
+      "typeExercice": "crpe",
+      "annee": "2026",
+      "lieu": "M2 Groupement 3"
     }
   },
   "numeroOverrides": {
