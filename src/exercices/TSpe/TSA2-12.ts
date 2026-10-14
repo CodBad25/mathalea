@@ -28,12 +28,10 @@ export default class AsymptoteDepuisLimite extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 4
-    this.consigne = 'Compléter les phrases.'
   }
 
   nouvelleVersion(): void {
-    this.consigne =
-      this.nbQuestions === 1 ? 'Compléter la phrase.' : 'Compléter les phrases.'
+    const isInteractive = context.isHtml && this.interactif && !context.isTypst
     const questionTypes = combinaisonListes([0, 1, 2, 3], this.nbQuestions)
     const choices = [
       { label: 'Choisir…', value: '' },
@@ -67,27 +65,28 @@ export default class AsymptoteDepuisLimite extends Exercice {
       const equation = `${horizontal ? 'y' : 'x'}=${coordinate}`
       if (!this.questionJamaisPosee(i, limitExpression)) continue
 
-      const sentence =
-        context.isHtml && this.interactif && !context.isTypst
-          ? addMultiMathfield(this, i, {
-              dataTemplate: `La courbe représentative de $f$ %{field0}<span data-show-when="field0:admet"> %{field1}, d’équation %{field2}${horizontal ? ` en $${direction}$` : ''}</span>.`,
-              dataOptions: {
-                field0: {
-                  choices: [
-                    { label: 'Choisir…', value: '' },
-                    { label: 'admet une asymptote', value: 'admet' },
-                    { label: 'n’admet pas d’asymptote', value: 'non' },
-                  ],
-                },
-                field1: { choices },
-                field2: {
-                  keyboard: KeyboardType.clavierDeBaseAvecEgalEtVariable,
-                },
+      const question =
+        'Cette information permet-elle d’affirmer que la courbe représentative de $f$ admet une asymptote horizontale ou verticale ?'
+      const answer = isInteractive
+        ? addMultiMathfield(this, i, {
+            dataTemplate: `%{field0}<span data-show-when="field0:oui">, une asymptote %{field1} d’équation %{field2}${horizontal ? ` en $${direction}$` : ''}</span>.`,
+            dataOptions: {
+              field0: {
+                choices: [
+                  { label: 'Choisir…', value: '' },
+                  { label: 'Oui', value: 'oui' },
+                  { label: 'Non', value: 'non' },
+                ],
               },
-            })
-          : 'La courbe représentative de $f$ admet / n’admet pas d’asymptote dans le cas étudié. Si elle en admet une, préciser son type et son équation.'
+              field1: { choices },
+              field2: {
+                keyboard: KeyboardType.clavierDeBaseAvecEgalEtVariable,
+              },
+            },
+          })
+        : 'Si oui, préciser si cette asymptote est horizontale ou verticale et donner son équation.'
       this.listeQuestions[i] =
-        `Soit $f$ une fonction dont la courbe représentative est $\\mathcal C_f$. On sait que $${limitExpression}$.<br>${sentence}`
+        `Soit $f$ une fonction dont la courbe représentative est $\\mathcal C_f$. On sait que $${limitExpression}$.<br>${question}<br>${answer}`
       this.listeCorrections[i] = hasAsymptote
         ? `On a $${limitExpression}$.<br>
           La courbe $\\mathcal C_f$ admet donc une asymptote ${texteEnCouleurEtGras(orientation)}, d’équation $${miseEnEvidence(equation)}$${horizontal ? ` en $${direction}$` : ''}.`
@@ -103,7 +102,7 @@ export default class AsymptoteDepuisLimite extends Exercice {
         i,
         {
           bareme: toutPourUnPoint,
-          field0: { value: hasAsymptote ? 'admet' : 'non' },
+          field0: { value: hasAsymptote ? 'oui' : 'non' },
           field1: { value: orientation },
           field2: { value: equation, options: { egaliteExpression: true } },
         },
