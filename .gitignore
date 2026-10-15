@@ -56,3 +56,5 @@ variants-report.txt
 
 # Moteur embarquable (vite.moteur.config.ts)
 /dist-moteur
+
+moteur-ed25519.pem
