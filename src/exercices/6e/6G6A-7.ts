@@ -510,6 +510,7 @@ function programmeConstruction(
 export default class ConstruireUnTriangleEditeurIep extends Exercice {
   constructor() {
     super()
+    this.reponseCourteDisponible = false // La réponse est une construction.
     this.nbQuestions = 1
     this.nbQuestionsModifiable = false
     this.besoinFormulaireNumerique = [
@@ -536,6 +537,7 @@ export default class ConstruireUnTriangleEditeurIep extends Exercice {
       'codageAngleDroit',
     ]
     const editeur = addEditeurIep(this, 0, {
+      sansOutils: true,
       instructionsDisponibles,
       programmeAttendu,
       tailleLabelsPoints: 12,
@@ -563,6 +565,7 @@ export default class ConstruireUnTriangleEditeurIep extends Exercice {
         id: `IepEditeur-corr-Ex${this.numeroExercice}Q0`,
         interactivityOn: false,
         programmeInitial: programmeAttendu,
+        sansOutils: true,
         instructionsDisponibles,
         tailleLabelsPoints: 12,
       },
