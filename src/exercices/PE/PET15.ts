@@ -23,7 +23,7 @@ import {
 import Exercice from '../Exercice'
 
 export const titre =
-  'Déterminer la formule obtenue après une recopie sur tableur'
+  'Déterminer la formule obtenue après la copie d’une cellule sur tableur'
 export const dateDePublication = '14/10/2026'
 export const interactifReady = true
 export const uuid = '46e40'
@@ -38,7 +38,7 @@ export const refs = {
  * @author Rémi Angot
  */
 
-/** Explique comment une référence de la formule initiale est modifiée par la recopie. */
+/** Explique comment une référence de la formule initiale est modifiée par la copie. */
 function expliqueReference(
   avant: string,
   apres: string,
@@ -68,7 +68,7 @@ function compareFormule(formuleInitiale: string): CompareFunction {
       return {
         isOk: false,
         feedback:
-          'La formule n’est pas modifiée par la recopie : les références qui ne sont pas bloquées par le signe dollar sont décalées.',
+          'La formule n’est pas modifiée par la copie : les références qui ne sont pas bloquées par le signe dollar sont décalées.',
       }
     }
     if (!saisieNormalisee.startsWith('=')) {
@@ -83,7 +83,7 @@ export default class FormuleApresRecopie extends Exercice {
     super()
     this.nbQuestions = 4
     this.besoinFormulaireTexte = [
-      'Sens de la recopie',
+      'Sens de la copie',
       [
         'Nombres séparés par des tirets :',
         '1 : Vers la droite',
