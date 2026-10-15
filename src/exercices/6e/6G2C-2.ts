@@ -1,5 +1,6 @@
 import {
   addEditeurIep,
+  addFigureEnonceIep,
   ElementIepEditeur,
   pointsConstruitsDepuisProgramme,
   type ElementIepVerificationCallback,
@@ -319,23 +320,27 @@ export const verifierReportPerimetreAuCompas: ElementIepVerificationCallback =
       ),
     ]
     const nbBonnesReponses = criteres.filter(Boolean).length
+    // Un seul message, celui de la première étape à reprendre.
+    const bonSegmentNonBleu = segments.some(
+      (segment) => surSupport(segment) && bonneLongueur(segment),
+    )
+    let feedback =
+      'Bravo, la longueur totale est bien reportée sur la demi-droite.'
+    if (!segmentCorrect) {
+      if (bonSegmentNonBleu) {
+        feedback = 'Le segment est bien placé : le tracer en bleu.'
+      } else if (!longueurReportee) {
+        feedback =
+          'Reporter les longueurs des côtés les unes après les autres sur la demi-droite, en partant de A.'
+      } else {
+        feedback =
+          'Tracer en bleu le segment qui va de A au dernier point obtenu sur la demi-droite.'
+      }
+    }
     return {
       isOk: segmentCorrect,
       score: { nbBonnesReponses, nbReponses: 4 },
-      feedback: segmentCorrect
-        ? 'Bravo, la longueur totale est bien reportée sur la demi-droite.'
-        : [
-            !criteres[0]
-              ? 'Reporter toute la longueur sur la demi-droite.'
-              : '',
-            !criteres[1] ? 'Tracer un segment sur la demi-droite.' : '',
-            !criteres[2]
-              ? 'Donner au segment la longueur totale de la figure.'
-              : '',
-            !criteres[3] ? 'Tracer le segment demandé en bleu.' : '',
-          ]
-            .filter(Boolean)
-            .join(' '),
+      feedback,
     }
   }
 
@@ -453,30 +458,6 @@ export default class ReporterPerimetreAuCompas extends Exercice {
       p2: pointDepartReport,
       couleur: 'blue',
     })
-    const editeur = addEditeurIep(this, 0, {
-      conditionsInitiales,
-      instructionsDisponibles,
-      programmeAttendu,
-      tailleLabelsPoints: 12,
-      masquerEtapesInitiales: true,
-      sansOutils: true,
-      directionReportCompas: 0.5,
-      pointsMax: 4,
-      verifyCallbackName: VERIFICATION_REPORTER_PERIMETRE_CALLBACK_NAME,
-    })
-    handleAnswers(
-      this,
-      0,
-      {
-        reponse: { value: JSON.stringify(programmeAttendu) },
-      },
-      { formatInteractif: 'alea-iep-editeur' },
-    )
-    this.listeQuestions[0] =
-      f === 'Ligne brisée'
-        ? `Reporter la longueur totale de la ligne brisée sur la demi-droite ci-dessous, puis tracer un segment de cette longueur en bleu.<br>${editeur}`
-        : `Reporter le périmètre du ${f.toLowerCase()} sur la demi-droite ci-dessous, puis tracer un segment de cette longueur en bleu.<br>${editeur}`
-
     this.listeCorrections[0] = `Voici un programme de construction de la forme demandée :<br>
         ${addEditeurIep(this, 0, {
           id: `IepEditeur-corr-Ex${this.numeroExercice}Q0`,
@@ -489,5 +470,36 @@ export default class ReporterPerimetreAuCompas extends Exercice {
           sansOutils: true,
           directionReportCompas: 0.5,
         })}`
+    let figureOuEditeur: string
+    if (this.interactif) {
+      figureOuEditeur = addEditeurIep(this, 0, {
+        conditionsInitiales,
+        instructionsDisponibles,
+        programmeAttendu,
+        tailleLabelsPoints: 12,
+        masquerEtapesInitiales: true,
+        sansOutils: true,
+        directionReportCompas: 0.5,
+        pointsMax: 4,
+        verifyCallbackName: VERIFICATION_REPORTER_PERIMETRE_CALLBACK_NAME,
+      })
+      handleAnswers(
+        this,
+        0,
+        {
+          reponse: { value: JSON.stringify(programmeAttendu) },
+        },
+        { formatInteractif: 'alea-iep-editeur' },
+      )
+    } else {
+      figureOuEditeur = addFigureEnonceIep({
+        conditionsInitiales,
+        programmeAttendu,
+      })
+    }
+    this.listeQuestions[0] =
+      f === 'Ligne brisée'
+        ? `Reporter la longueur totale de la ligne brisée sur la demi-droite ci-dessous, puis tracer un segment de cette longueur en bleu.<br>${figureOuEditeur}`
+        : `Reporter le périmètre du ${f.toLowerCase()} sur la demi-droite ci-dessous, puis tracer un segment de cette longueur en bleu.<br>${figureOuEditeur}`
   }
 }

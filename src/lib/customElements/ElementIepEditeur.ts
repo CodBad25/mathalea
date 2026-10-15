@@ -1171,7 +1171,7 @@ export function decrireInstruction(
     case 'arcPointPointCentre':
       return `Tracer un arc de cercle de centre ${instr.p1} allant de ${instr.p2} à ${instr.p3} au compas.`
     case 'reporterLongueurCompas':
-      return `Reporter au compas la longueur ${instr.p1}${instr.p2} depuis ${instr.p3} dans la direction ${formateNombre(instr.angle)}°.`
+      return `Reporter au compas la longueur ${instr.p1}${instr.p2} depuis ${instr.p3} en traçant l’arc de cercle de centre ${instr.p3} et de rayon ${instr.p1}${instr.p2} dans la direction ${formateNombre(instr.angle)}°.`
     case 'milieu':
       return `Placer le milieu ${instr.nom} du segment [${instr.p1}${instr.p2}] à la règle graduée.`
     case 'demiTourPoint':
@@ -5346,6 +5346,27 @@ export function addEditeurIep(
   if (elementHtml === '') return ''
   if (!context.isHtml) return elementHtml
   return `${elementHtml}<span id="resultatCheckEx${exercice.numeroExercice}Q${questionIndex}"></span><div id="feedbackEx${exercice.numeroExercice}Q${questionIndex}"></div>`
+}
+
+/**
+ * Figure de l'énoncé seule (conditions initiales, cadrée comme l'éditeur),
+ * pour un exercice non interactif : ni formulaire d'ajout, ni animation.
+ */
+export function addFigureEnonceIep(
+  options: Pick<
+    EditeurIepOptions,
+    'conditionsInitiales' | 'programmeAttendu'
+  > = {},
+): string {
+  if (!context.isHtml) {
+    return ElementIepEditeur.create({ ...options, interactivityOn: true })
+  }
+  const figure = figureStatiqueDepuisOptions({
+    ...options,
+    interactivityOn: true,
+  })
+  if (figure.commandes.length === 0) return ''
+  return `<div class="flex justify-center items-center overflow-auto max-w-full bg-white">${rendreFigureStatiqueSvg(figure)}</div>`
 }
 
 registerMathaleaCustomElement(ElementIepEditeur)
