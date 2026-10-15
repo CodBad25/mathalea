@@ -7,7 +7,6 @@ export const dateDePublication = '22/02/2025'
 /**
  * @author Gilles Mora
  *
-
  */
 export const uuid = 'f1286'
 
