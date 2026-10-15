@@ -4,6 +4,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
 // import ExerciceQcmA from '../../ExerciceQcmA'
+import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
 import ExerciceQcmACourt from '../ExerciceQcmACourt'
 
 export const dateDeModifImportante = '30/09/2026'
@@ -141,6 +142,8 @@ export default class Auto1C19 extends ExerciceQcmACourt {
 
     this.versionAleatoire()
     this.texteAvantReponseCourte = '$a =$'
+    this.compareReponseCourte = (saisie, reponse) =>
+      fonctionComparaison(saisie, reponse, { expressionNumerique: true })
     this.spacing = 1.5
   }
 }

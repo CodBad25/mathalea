@@ -1,10 +1,10 @@
 import { addTableauSignesVariations } from '../lib/customElements/TableauSignesVariationsElement'
+import { KeyboardType } from '../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../lib/interactif/gestionInteractif'
 import {
   ajouteChampTexteMathLive,
   type OptionsChamp,
 } from '../lib/interactif/questionMathLive'
-import { KeyboardType } from '../lib/interactif/claviers/keyboard'
 import type { TableauSVConfig } from '../lib/interactif/tableauSignesVariations/types'
 import type { CompareFunction } from '../lib/types'
 import ExerciceQcmA from './ExerciceQcmA'
@@ -15,6 +15,7 @@ type ExerciceAvecSaisie = ExerciceQcmA & {
   correctionCourte?: () => string
   clavierReponseCourte?: string
   texteAvantReponseCourte?: string
+  texteApresReponseCourte?: string
   optionsChampReponseCourte?: OptionsChamp
   champReponseCourteEnLigne?: boolean
   compareReponseCourte?: CompareFunction
@@ -39,7 +40,7 @@ export function genereReponsesCourtes(exercice: ExerciceAvecSaisie) {
       exercice.listeQuestions[i] =
         enonce +
         (exercice.interactif
-          ? `${exercice.champReponseCourteEnLigne ? '' : '<br>'}${ajouteChampTexteMathLive(exercice, i, exercice.clavierReponseCourte ?? KeyboardType.clavierDeBase, { texteAvant: exercice.texteAvantReponseCourte ?? '', ...exercice.optionsChampReponseCourte })}`
+          ? `${exercice.champReponseCourteEnLigne ? '' : '<br>'}${ajouteChampTexteMathLive(exercice, i, exercice.clavierReponseCourte ?? KeyboardType.clavierDeBase, { texteAvant: exercice.texteAvantReponseCourte ?? '', texteApres: exercice.texteApresReponseCourte ?? '', ...exercice.optionsChampReponseCourte })}`
           : '')
       exercice.listeCorrections[i] =
         exercice.correctionCourte?.() ?? exercice.correction ?? ''
@@ -103,6 +104,7 @@ export default class ExerciceQcmACourt extends ExerciceQcmA {
   correctionCourte?: () => string
   clavierReponseCourte?: string
   texteAvantReponseCourte?: string
+  texteApresReponseCourte?: string
   optionsChampReponseCourte?: OptionsChamp
   /** Place le champ de saisie à la suite de l'énoncé, sans retour à la ligne. */
   champReponseCourteEnLigne?: boolean

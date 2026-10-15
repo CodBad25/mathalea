@@ -2,8 +2,12 @@ import { choice } from '../../lib/outils/arrayOutils'
 import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
 // import ExerciceQcmA from '../../ExerciceQcmA'
+import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 import { ppcm } from '../../lib/outils/primalite'
 import FractionEtendue from '../../modules/FractionEtendue'
 import ExerciceQcmACourt from '../ExerciceQcmACourt'
@@ -56,7 +60,10 @@ export default class Auto1C19b extends ExerciceQcmACourt {
         En février, elle rembourse $${frac2.texFraction}$ de ce qu'elle a remboursé en janvier.<br>
         Elle rembourse donc $${frac2.texFraction} \\times ${frac1.texFraction} = ${fracFevrier.texFractionSimplifiee}$ du crédit total.<br>
         Au total, en janvier et février, elle aura remboursé : $${frac1.texFraction} + ${fracFevrier.texFraction}=${frac1Equiv.texFraction} + ${fracFevrierEquiv.texFraction} = ${totalRembourse.texFractionSimplifiee}$ du crédit. <br>
-        Il lui restera à rembourser en mars : $1 - ${totalRembourse.texFractionSimplifiee} = ${miseEnEvidence(reponse.texFractionSimplifiee)}$ du crédit.`
+        Il lui restera à rembourser en mars : $1 - ${totalRembourse.texFractionSimplifiee} = ${miseEnEvidence(reponse.texFractionSimplifiee)}$ `
+    this.correction += this.sup3
+      ? `${texteEnCouleurEtGras('du crédit')}.`
+      : `du crédit.`
 
     this.reponses = [
       `$${reponse.texFractionSimplifiee}\\text{ du crédit.}$`,
@@ -131,7 +138,10 @@ export default class Auto1C19b extends ExerciceQcmACourt {
       En février, elle rembourse $${frac2.texFraction}$ de ce qu'elle a remboursé en janvier.<br>
       Elle rembourse donc $${frac2.texFraction} \\times ${frac1.texFraction} = ${fracFevrier.texFractionSimplifiee}$ du crédit total.<br>
       Au total, en janvier et février, elle aura remboursé :  $${frac1.texFraction} + ${fracFevrier.texFraction}=${frac1Equiv.texFraction} + ${fracFevrierEquiv.texFraction} = ${totalRembourse.texFractionSimplifiee}$ du crédit. <br>
-      Il lui restera à rembourser en mars : $1 - ${totalRembourse.texFractionSimplifiee} = ${miseEnEvidence(reponse.texFractionSimplifiee)}$ du crédit.`
+      Il lui restera à rembourser en mars : $1 - ${totalRembourse.texFractionSimplifiee} = ${miseEnEvidence(reponse.texFractionSimplifiee)}$ `
+      this.correction += this.sup3
+        ? `${texteEnCouleurEtGras('du crédit')}.`
+        : `du crédit.`
 
       // Génération de réponses erronées plausibles
       const fausseReponse1 = frac2
@@ -160,6 +170,8 @@ export default class Auto1C19b extends ExerciceQcmACourt {
     this.versionOriginale() // Changé de versionAleatoire() à versionOriginale()
     this.spacing = 1.5
     this.spacingCorr = 2.5
+    this.compareReponseCourte = (saisie, reponse) =>
+      fonctionComparaison(saisie, reponse, { fractionEgale: true })
     this.optionsDeComparaison = { texteSansCasse: true } // Pour le test qcm_exercice, sinon, il va croire que c'est des fractions ou unite...
   }
 }
