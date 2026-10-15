@@ -24,7 +24,7 @@
 <div
   style="break-inside:avoid"
   id="consigne{exerciseIndex}-{questionIndex}"
-  class="container max-w-full text-justify grid grid-cols-1 auto-cols-min gap-4 mb-3 lg:mb-4"
+  class="container max-w-full text-left grid grid-cols-1 auto-cols-min gap-4 mb-3 lg:mb-4"
 >
   <li
     id="exercice{exerciseIndex}Q{questionIndex}"
