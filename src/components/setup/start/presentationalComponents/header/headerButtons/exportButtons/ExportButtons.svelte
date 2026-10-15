@@ -101,6 +101,14 @@
       action: () => exportAndClose('tex'),
     },
     {
+      id: 'parcours',
+      label: 'Parcours pour l’application',
+      description:
+        'Pour préparer des parcours par paliers, avec objectifs, et les publier aux élèves qui utilisent l’application MathALÉA',
+      icon: 'bx bx-layer',
+      action: () => exportAndClose('parcours'),
+    },
+    {
       id: 'moodle',
       label: 'Moodle',
       description: 'Pour importer dans la plateforme Moodle ou ÉLÉA',

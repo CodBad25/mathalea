@@ -40,9 +40,27 @@
     /** Ajoute une ressource à la fiche (traité par `Typst.svelte`) */
     onAdd: (params: InterfaceParams) => void
     onClose: () => void
+    /** Chemin d'arrivée : [rubrique, niveau, ...clés du référentiel] (vue Parcours) */
+    initialPath?: string[]
+    /** Toute la page plutôt qu'une boîte de dialogue (vue Parcours) */
+    fullScreen?: boolean
+    /** Réglages des exercices dépliés d'emblée (vue Parcours) */
+    settingsOpen?: boolean
+    /** Ce qui reçoit les exercices, pour les libellés (« la fiche » par défaut) */
+    target?: string
+    /** Exercices déjà ajoutés, à compter sur les aperçus (la fiche par défaut) */
+    selection?: InterfaceParams[]
   }
 
-  const { onAdd, onClose }: Props = $props()
+  const {
+    onAdd,
+    onClose,
+    initialPath = [],
+    fullScreen = false,
+    settingsOpen = false,
+    target = 'la fiche',
+    selection,
+  }: Props = $props()
 
   const referentiels: ReferentielInMenu[] = $derived.by(() => {
     // dépendance explicite : les banques externes sont chargées de façon
@@ -53,7 +71,8 @@
   const typstMenuSections = typstMenuSectionsForLocale(get(referentielLocale))
 
   /** Chemin courant : [rubrique, niveau, ...clés du référentiel]. */
-  let path = $state<string[]>([])
+  // svelte-ignore state_referenced_locally
+  let path = $state<string[]>([...initialPath])
   /** Nombre d'exercices ajoutés depuis l'ouverture (retour visuel) */
   let addedCount = $state(0)
 
@@ -130,7 +149,7 @@
    * références peuvent partager un même `uuid`.
    */
   function selectedCount(ending: JSONReferentielEnding): number {
-    return $exercicesParams.filter((item) => {
+    return (selection ?? $exercicesParams).filter((item) => {
       if (item.uuid !== ending.uuid) return false
       if (isExerciceItemInReferentiel(ending) || isTool(ending)) {
         return item.id === ending.id
@@ -176,7 +195,9 @@
 
 <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
 <div
-  class="fixed inset-0 z-1100 flex items-center justify-center bg-black/50 p-4"
+  class="fixed inset-0 z-1100 flex items-center justify-center bg-black/50 {fullScreen
+    ? ''
+    : 'p-4'}"
   onclick={(e) => {
     if (e.target === e.currentTarget) onClose()
   }}
@@ -185,8 +206,9 @@
   <div
     role="dialog"
     aria-modal="true"
-    aria-label="Ajouter un exercice à la fiche"
-    class="flex h-[85vh] w-full max-w-4xl flex-col overflow-hidden rounded-lg shadow-xl
+    aria-label="Ajouter un exercice à {target}"
+    class="flex w-full flex-col overflow-hidden shadow-xl
+    {fullScreen ? 'h-full' : 'h-[85vh] max-w-4xl rounded-lg'}
     bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark"
   >
     <header
@@ -261,6 +283,8 @@
                   ending={result.resource}
                   count={selectedCount(result.resource)}
                   onAdd={handleAdd}
+                  {settingsOpen}
+                  {target}
                 />
               {/each}
             </ul>
@@ -310,6 +334,8 @@
                     {ending}
                     count={selectedCount(ending)}
                     onAdd={handleAdd}
+                    {settingsOpen}
+                    {target}
                   />
                 {/each}
               </ul>
@@ -335,11 +361,11 @@
         aria-live="polite"
       >
         {#if addedCount === 0}
-          Choisissez un exercice à ajouter à la fiche.
+          Choisissez un exercice à ajouter à {target}.
         {:else if addedCount === 1}
-          1 exercice ajouté à la fiche.
+          1 exercice ajouté à {target}.
         {:else}
-          {addedCount} exercices ajoutés à la fiche.
+          {addedCount} exercices ajoutés à {target}.
         {/if}
       </span>
       <button

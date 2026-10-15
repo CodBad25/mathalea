@@ -41,6 +41,7 @@
   import Slides from './setup/slides/Slides.svelte'
   import Tbi from './display/tbi/Tbi.svelte'
   import Omr from './setup/omr/Omr.svelte'
+  import Parcours from './setup/parcours/Parcours.svelte'
   import QuizzConf from './setup/quizz/QuizzConf.svelte'
   import Quizz from './display/quizz/Quizz.svelte'
   import QuizzMulti from './display/quizz/multi/QuizzMulti.svelte'
@@ -290,6 +291,8 @@
     {:else}
       <Quizz />
     {/if}
+  {:else if $globalOptions.v === 'parcours'}
+    <Parcours />
   {:else if $globalOptions.v === 'omr'}
     <!-- Prototype : la vue reste derrière `?beta=1` tant que la fiabilité de
          lecture n'a pas été mesurée sur de vraies copies scannées -->

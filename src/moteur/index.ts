@@ -350,6 +350,8 @@ export interface ExerciceDuReferentiel {
   niveau: string
   theme: string
   interactif: boolean
+  /** Objectif du programme sous lequel le site range l'exercice (programmes 2025 et suivants) */
+  objectif?: { code: string; libelle: string }
 }
 
 /**
@@ -382,6 +384,14 @@ export async function listerExercices(
     const t = nomsThemes[code]
     return typeof t === 'string' ? t : (t?.['fr-FR'] ?? t?.['fr-CH'] ?? code)
   }
+  // Niveau > chapitre > objectif > exercice : le troisième code est un objectif du programme
+  const objectifDe = (chemin: string[]) => {
+    // Code d'objectif : il prolonge celui du chapitre (5N2 › 5N2G) ; ailleurs (CAN…), aucun
+    const code =
+      chemin.length >= 4 && chemin[2].startsWith(chemin[1]) ? chemin[2] : ''
+    const libelle = code ? nomsChapitres[code]?.titre : undefined
+    return libelle ? { objectif: { code, libelle } } : {}
+  }
   const liste: ExerciceDuReferentiel[] = []
   const parcourir = (noeud: unknown, chemin: string[]) => {
     if (noeud == null || typeof noeud !== 'object') return
@@ -396,6 +406,7 @@ export async function listerExercices(
         niveau: chemin[0] ?? '',
         theme: nomTheme(chemin[1] ?? ''),
         interactif: features?.interactif?.isActive === true,
+        ...objectifDe(chemin),
       })
       return
     }
