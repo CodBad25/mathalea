@@ -320,6 +320,65 @@ describe('MathaleaSolveurElement', () => {
     )
   })
 
+  it.each([
+    ['evaluation', '4x=6', 'x=\\dfrac{3}{2}', 'x=\\dfrac{6}{4}', 1],
+    ['entrainement', '4x=6', 'x=\\dfrac{3}{2}', '\\dfrac{6}{4}=x', 2],
+    ['evaluation', '2x=6', 'x=3', 'x=\\dfrac{6}{2}', 1],
+    ['entrainement', '2x=-6', 'x=-3', 'x=\\dfrac{-6}{2}', 2],
+  ] as const)(
+    'termine et note une fraction non simplifiée en mode %s : %s → %s → %s',
+    (mode, initial, expected, solution, points) => {
+      document.body.innerHTML = addMathaleaSolveur(exercice, 0, {
+        initial,
+        mode,
+      })
+      exercice.autoCorrection[0].valeur = {
+        reponse: { value: expected },
+        bareme: baremeSolveur(mode),
+      }
+      const solver = document.querySelector(
+        'mathalea-solveur',
+      ) as MathaleaSolveurElement
+      const input = solver.querySelectorAll('math-field')[1] as HTMLElement & {
+        value: string
+      }
+      const termine = vi.fn()
+      solver.addEventListener('solveur-termine', termine)
+      input.value = solution
+      input.dispatchEvent(new InputEvent('input', { bubbles: true }))
+      solver.evaluate()
+
+      expect(solver.value).toBe(solution)
+      expect(solver.querySelectorAll('math-field')).toHaveLength(2)
+      expect(solver.interactivityOn).toBe(false)
+      expect(termine).toHaveBeenCalledOnce()
+      expect(MathaleaSolveurElement.verifQuestion(exercice, 0)).toEqual({
+        isOk: true,
+        feedback: '',
+        score: { nbBonnesReponses: points, nbReponses: points },
+      })
+      expect(exercice.answers?.[solver.id]).toBe(solution)
+    },
+  )
+
+  it('refuse une fraction non simplifiée de valeur incorrecte', () => {
+    document.body.innerHTML = addMathaleaSolveur(exercice, 0, {
+      initial: '4x=6',
+    })
+    exercice.autoCorrection[0].valeur = {
+      reponse: { value: 'x=\\dfrac{3}{2}' },
+    }
+    const solver = document.querySelector(
+      'mathalea-solveur',
+    ) as MathaleaSolveurElement
+    solver.value = 'x=\\dfrac{8}{4}'
+
+    expect(MathaleaSolveurElement.verifQuestion(exercice, 0)).toMatchObject({
+      isOk: false,
+      score: { nbBonnesReponses: 0, nbReponses: 1 },
+    })
+  })
+
   it('refuse une étape équivalente qui ne présente pas encore la forme attendue', () => {
     document.body.innerHTML = addMathaleaSolveur(exercice, 0, {
       initial: '2x+4=10',

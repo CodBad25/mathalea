@@ -13,6 +13,14 @@ describe('isSolvedForm', () => {
     'x=-\\frac{6}{5}',
     'x=\\dfrac{-6}{5}',
     '3=x',
+    'x=\\dfrac{6}{2}',
+    'x=\\dfrac{6}{4}',
+    'x=\\dfrac{-10}{5}',
+    'x=-\\frac{6}{4}',
+    'x=\\tfrac{6}{-4}',
+    'x=\\dfrac{0}{5}',
+    'x=\\dfrac{3}{1}',
+    '\\dfrac{6}{4}=x',
   ])('accepte %s', (value) => {
     expect(isSolvedForm(value, 'equation', 'x')).toBe(true)
   })
@@ -22,9 +30,7 @@ describe('isSolvedForm', () => {
     'x=2\\times\\dfrac{3}{5}',
     'x=\\dfrac{6+1}{5}',
     'x=3+2',
-    'x=\\dfrac{6}{2}',
-    'x=\\dfrac{6}{4}',
-    'x=\\dfrac{-10}{5}',
+    'x=\\dfrac{6}{0}',
     '2x=6',
     'x=x+1',
   ])("refuse %s tant que le calcul n'est pas fini", (value) => {
@@ -32,7 +38,7 @@ describe('isSolvedForm', () => {
   })
 
   it('gère les inéquations', () => {
-    expect(isSolvedForm('x\\leqslant\\dfrac{3}{5}', 'inequation', 'x')).toBe(
+    expect(isSolvedForm('x\\leqslant\\dfrac{6}{10}', 'inequation', 'x')).toBe(
       true,
     )
     expect(isSolvedForm('x<2\\times3', 'inequation', 'x')).toBe(false)
