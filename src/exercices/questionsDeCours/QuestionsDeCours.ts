@@ -133,11 +133,16 @@ export default class QuestionsDeCours extends Exercice {
             this,
             i,
             KeyboardType.clavierPersonnalisable,
-            { dataKeys: question.keys },
+            { dataKeys: touchesDeLaQuestion(question) },
           ),
         )
       }
 
+      // Une correction rédigée dans la banque ne met pas toujours sa réponse
+      // en évidence : fournir la réponse attendue aux exports minimaux.
+      if (question.type !== 'qcm') {
+        this.listeReponsesCourtes[i] = correctionParDefaut(question)
+      }
       this.listeQuestions[i] = texte
       this.listeCorrections[i] = texteCorr
     }
@@ -264,6 +269,20 @@ function optionsDeComparaison(
     default:
       return {}
   }
+}
+
+/**
+ * Les touches de la banque, complétées par la racine carrée quand une réponse
+ * en contient et que la banque ne l'a pas prévue.
+ */
+function touchesDeLaQuestion(question: QuestionDeCours): string[] {
+  const touches = question.keys ?? []
+  const besoinRacine = question.answers.some((reponse) =>
+    reponse.includes('\\sqrt'),
+  )
+  return besoinRacine && !touches.includes('SQRT')
+    ? [...touches, 'SQRT']
+    : touches
 }
 
 /** La correction affichée quand le JSON n'en fournit pas. */

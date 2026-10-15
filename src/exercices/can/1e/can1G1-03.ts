@@ -1,5 +1,6 @@
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import Decimal from 'decimal.js'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { afficheLongueurSegment } from '../../../lib/2d/afficheLongueurSegment'
 import { afficheMesureAngle } from '../../../lib/2d/AfficheMesureAngle'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
@@ -38,6 +39,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
     this.typeExercice = 'simple'
 
     this.nbQuestions = 1
+    this.formatChampTexte = KeyboardType.clavierFullOperations
   }
 
   nouvelleVersion() {
