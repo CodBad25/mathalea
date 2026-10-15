@@ -51,7 +51,7 @@ texte += addEditeurIep(this, i, {
 
 Le helper :
 
-- retourne une chaîne vide hors HTML ;
+- retourne une figure statique en LaTeX ou en Typst hors HTML ;
 - construit l'id avec la convention des `MathaleaCustomElement` si aucun `id`
   n'est fourni ;
 - renseigne `autoCorrection[questionIndex].formatInteractif` avec
@@ -189,7 +189,11 @@ L'instruction `reporterLongueurCompas` reporte une longueur au compas :
 `p1` et `p2` donnent l'écartement du compas, `p3` est le centre de l'arc tracé,
 et `angle` donne la direction, en degrés, du point autour duquel tracer la
 marque. L'animation utilise la macro
-`Alea2iep.reporterAuCompas2pointsCentreDirection()`.
+`Alea2iep.reporterAuCompas2pointsCentreDirection()`. Pour un report sur un
+support de direction connue, passer `directionReportCompas` à l’éditeur : le
+champ de direction et sa mention dans les descriptions sont masqués, et les
+nouveaux reports utilisent cette direction. Les programmes JSON conservés
+contiennent toujours leur angle explicite.
 
 Les instructions `polygone` et `polygoneRapide` tracent un polygone fermé avec
 les méthodes Alea2iep correspondantes :
@@ -312,6 +316,7 @@ La valeur `longueur` désigne la longueur totale du nouveau tracé.
 | `masquerProgramme` | Masque la liste du programme de construction (HTML) : seule l'animation reste visible (bouton « Voir l'animation »), par exemple pour une correction animée sans le détail des instructions. |
 | `clavier` | Blocs de touches du clavier virtuel MathALÉA pour les champs « nom », « nombre » et « sommets » du polygone (ex. `[['7', '8', '9', '4', '5', '6', '1', '2', '3', '0', ','], ['A', 'B', 'C']]`). Chaque chaîne est le texte inséré. Le champ nombre devient alors un champ texte qui accepte la virgule. Sans cette option, ce sont des champs de saisie ordinaires. Les noms de points proposés par défaut sont alors ceux des touches du clavier. |
 | `sansOutils` | Retire des intitulés et des descriptions des étapes la mention des instruments (« à la règle », « au compas », « avec la règle et l’équerre »), ainsi que « (règle + équerre) » : c'est à l'élève de choisir son instrument. Les objets référencés par une étape (« la parallèle au segment [AB] passant par C ») sont toujours désignés par leur nom et non par leur numéro d'étape lorsque c'est possible. |
+| `directionReportCompas` | Direction en degrés imposée aux nouveaux reports au compas. Masque le champ de direction et sa mention dans les descriptions. |
 | `pointsMax` | Nombre de points de la question (1 par défaut), lu par `ElementIepEditeur.pointsMaxQuestion()`. Le vérificateur doit alors renvoyer un `score` sur ce total, le même pour tous les tirages. |
 | `verifyCallbackName`             | Nom d'une callback de vérification enregistrée avec `ElementIepEditeur.registerVerificationCallback()`.                                                                            |
 
@@ -362,3 +367,10 @@ texte += addEditeurIep(this, i, {
 
 La callback reçoit `exercice`, `questionIndex`, `editor`, `studentProgram` et
 `expectedRaw`, puis retourne `{ isOk, feedback?, score? }`.
+
+Dans `6G2C-2`, le score reste sur 4 points pour chaque figure : un point pour
+le report de la longueur totale sur la demi-droite, un pour le tracé d’un
+segment sur cette demi-droite, un pour la longueur correcte du segment et un
+pour un segment de longueur correcte, sur la demi-droite et en bleu. Le report
+complet sans segment final est ainsi valorisé. La version archivée conserve
+son ancien vérificateur et son score sur 1 point.

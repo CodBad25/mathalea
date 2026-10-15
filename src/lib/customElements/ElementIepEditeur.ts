@@ -292,6 +292,8 @@ export type EditeurIepOptions = {
    * règle ») : c'est à l'élève de choisir son instrument.
    */
   sansOutils?: boolean
+  /** Direction imposée au report au compas, sans champ ni indication d’angle. */
+  directionReportCompas?: number
   tailleLabelsPoints?: number
   /**
    * Blocs de touches du clavier virtuel pour les champs nom et nombre
@@ -992,6 +994,16 @@ function nomElement(
       return `(${instr.p1}${instr.p2})`
     case 'demiDroite':
       return `[${instr.p1}${instr.p2})`
+    case 'demiDroitePointDirection':
+      return `d’origine ${instr.p1}`
+    case 'droitePointPente':
+      return `passant par ${instr.p1}`
+    case 'reporterLongueurCompas':
+      return `de centre ${instr.p3} et de rayon ${instr.p1}${instr.p2}`
+    case 'arc':
+      return `de centre ${instr.p1} passant par ${instr.p2}`
+    case 'arcPointPointCentre':
+      return `de centre ${instr.p1} et d’extrémités ${instr.p2} et ${instr.p3}`
     case 'cercle':
       return `de centre ${instr.p1} passant par ${instr.p2}`
     case 'cercleRayon':
@@ -3643,6 +3655,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     masquerProgramme = false,
     masquerEtapesInitiales = false,
     sansOutils = false,
+    directionReportCompas,
     tailleLabelsPoints,
     clavier,
     pointsMax,
@@ -3697,6 +3710,7 @@ export class ElementIepEditeur extends MathaleaCustomElement {
       masquerProgramme,
       masquerEtapesInitiales,
       sansOutils,
+      directionReportCompas,
       tailleLabelsPoints,
       clavier,
       pointsMax,
@@ -3857,9 +3871,23 @@ export class ElementIepEditeur extends MathaleaCustomElement {
   }
 
   /**
-   * Texte affiché pour un intitulé ou une description d'instruction
+   * Direction imposée au report au compas.
+   * @attr {number} [direction-report-compas]
    */
+  private get directionReportCompas(): number | undefined {
+    const valeur = this.getAttribute('direction-report-compas')
+    if (valeur === null) return undefined
+    const angle = Number(valeur)
+    return Number.isFinite(angle) ? angle : undefined
+  }
+
   private texteAffiche(texte: string): string {
+    if (
+      this.directionReportCompas !== undefined &&
+      texte.startsWith('Reporter')
+    ) {
+      texte = texte.replace(/ dans la direction [^°]+°/, '')
+    }
     return this.sansOutilsActif ? retireMentionsOutils(texte) : texte
   }
 
@@ -4581,6 +4609,12 @@ export class ElementIepEditeur extends MathaleaCustomElement {
     const noms = pointsDefinis(this.programmeComplet())
     for (const champ of catalogue[type].champs) {
       if (
+        type === 'reporterLongueurCompas' &&
+        champ.cle === 'angle' &&
+        this.directionReportCompas !== undefined
+      )
+        continue
+      if (
         type === 'intersection' &&
         champ.genre === 'choix' &&
         !this.intersectionSelectionneePeutAvoirDeuxPoints(valeursCourantes)
@@ -4664,7 +4698,15 @@ export class ElementIepEditeur extends MathaleaCustomElement {
         for (const { index: etape, type: typeElement } of elements) {
           const option = document.createElement('option')
           option.value = String(etape)
-          option.innerText = `${nomsTypesElementsIntersectables[typeElement]} ${libelleEtape(etape, this.conditionsInitiales.length)}`
+          option.innerText =
+            this.masquerEtapesInitialesActif &&
+            etape < this.conditionsInitiales.length
+              ? decrireElementPourIntersection(
+                  this.programmeComplet(),
+                  etape,
+                  this.conditionsInitiales.length,
+                ).replace(/^(de la |du |de l’)/, '')
+              : `${nomsTypesElementsIntersectables[typeElement]} ${libelleEtape(etape, this.conditionsInitiales.length)}`
           select.appendChild(option)
         }
         // Par défaut, on propose des étapes différentes pour chaque champ
@@ -4857,6 +4899,14 @@ export class ElementIepEditeur extends MathaleaCustomElement {
         HTMLInputElement | HTMLSelectElement
       >(`[data-cle="${champ.cle}"]`)
       if (element === null) {
+        if (
+          type === 'reporterLongueurCompas' &&
+          champ.cle === 'angle' &&
+          this.directionReportCompas !== undefined
+        ) {
+          instruction.angle = this.directionReportCompas
+          continue
+        }
         if (type === 'intersection' && champ.genre === 'choix') {
           instruction[champ.cle] = 1
           continue

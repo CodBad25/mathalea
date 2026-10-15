@@ -510,6 +510,7 @@ ElementIepEditeur.registerVerificationCallback(
 export default class TracerMedianeAuxInstruments extends Exercice {
   constructor() {
     super()
+    this.reponseCourteDisponible = false // La réponse est une construction.
     this.consigne = ''
     this.besoinFormulaireTexte = [
       'Type de question',
@@ -702,12 +703,16 @@ export default class TracerMedianeAuxInstruments extends Exercice {
         reponse: { value: JSON.stringify(reponseAttendue) },
       })
       texte += addEditeurIep(this, i, {
+        masquerEtapesInitiales: true,
+        sansOutils: true,
         conditionsInitiales,
         instructionsDisponibles,
         verifyCallbackName: VERIFICATION_MEDIANE_CALLBACK_NAME,
       })
       const texteCorr = `Voici un programme de construction possible :<br>
       ${addEditeurIep(this, i, {
+        masquerEtapesInitiales: true,
+        sansOutils: true,
         id: `IepEditeur-corr-Ex${this.numeroExercice}Q${i}`,
         conditionsInitiales,
         interactivityOn: false,
