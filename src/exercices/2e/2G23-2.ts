@@ -225,6 +225,8 @@ export default class SommeDeVecteurs extends Exercice {
         x: xOrigin + xSomme[i],
         y: yOrigin + ySomme[i],
         isVisible: false,
+        // Sinon ce point caché bloque la création d'un point à la bonne position
+        isSelectable: false,
       })
 
       let distanceOrigineProjOrthogonal
