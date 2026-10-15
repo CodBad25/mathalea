@@ -9,7 +9,7 @@ import {
 } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { cleanTypstExport } from './typstExport'
+import { cleanTypstExport, corrigeCode, enonceCode } from './typstExport'
 import {
   buildTypstDocument,
   defaultTypstDocumentOptions,
@@ -27,6 +27,110 @@ const input: TypstExerciseInput = {
   corrections: ['$2$', '$4$'],
   url: 'https://coopmaths.fr/alea/?uuid=98294',
 }
+
+describe('PDF Typst séparés', () => {
+  const modes = [
+    { name: 'banque', mergeExercises: false, canMode: false },
+    { name: 'fusion', mergeExercises: true, canMode: false },
+    { name: 'CAN', mergeExercises: false, canMode: true },
+  ]
+
+  it.each(modes)(
+    'sépare le code en mode $name en conservant les retouches',
+    (mode) => {
+      const source = buildTypstDocument(
+        [
+          {
+            ...input,
+            questions: ['QUESTIONUNIQUE'],
+            corrections: ['REPONSEUNIQUE'],
+          },
+        ],
+        { ...defaultTypstDocumentOptions, ...mode, showCorrections: false },
+      ).replace('REPONSEUNIQUE', 'CORRECTIONRETOUCHEE')
+      expect(enonceCode(source)).toContain('#let corrige = false')
+      const correction = corrigeCode(source)
+      expect(correction).toContain('CORRECTIONRETOUCHEE')
+      expect(correction).toContain('#let entete = ""')
+      if (mode.mergeExercises || mode.canMode) {
+        expect(correction).not.toContain('QUESTIONUNIQUE')
+        expect(correction).toContain('#let corrige = true')
+      } else {
+        expect(correction).toContain('display: "sol"')
+      }
+    },
+  )
+
+  it('protège les délimiteurs des chaînes et des commentaires dans les énoncés', () => {
+    const source = buildTypstDocument([input], {
+      ...defaultTypstDocumentOptions,
+      mergeExercises: true,
+    }).replace('$1 + 1$', '#text("Crochet ]") /* ] */')
+    const correction = corrigeCode(source)
+    expect(correction).not.toContain('Crochet')
+    expect(correction).toContain('// ----- Corrections -----')
+  })
+
+  const cliAvailable =
+    process.env.TYPST_CLI_TESTS === '1' ||
+    (process.env.CI == null &&
+      spawnSync('typst', ['--version']).status === 0 &&
+      spawnSync('pdftotext', ['-v']).status === 0)
+  it
+    .skipIf(!cliAvailable)
+    .each(
+      modes.flatMap((mode) =>
+        [false, true].map((chained) => ({ ...mode, chained })),
+      ),
+    )(
+    'compile deux PDF distincts en mode $name (enchaînement : $chained)',
+    (mode) => {
+      const primary = {
+        ...input,
+        questions: ['QUESTIONALPHA'],
+        corrections: ['REPONSEALPHA'],
+      }
+      const secondary = {
+        ...input,
+        questions: ['QUESTIONBETA'],
+        corrections: ['REPONSEBETA'],
+      }
+      const source = buildTypstDocument(
+        [primary],
+        {
+          ...defaultTypstDocumentOptions,
+          ...mode,
+          nbVersions: 2,
+          chainSubjects: mode.chained,
+          copiesPerPage: mode.chained ? 2 : 1,
+          showCorrections: false,
+        },
+        {},
+        [[secondary]],
+      )
+      const dir = mkdtempSync(join(tmpdir(), 'typst-separate-pdf-'))
+      try {
+        const render = (name: string, code: string) => {
+          const file = join(dir, `${name}.typ`)
+          const pdf = join(dir, `${name}.pdf`)
+          writeFileSync(file, code)
+          execFileSync('typst', ['compile', file, pdf], { stdio: 'pipe' })
+          return execFileSync('pdftotext', [pdf, '-'], { encoding: 'utf8' })
+        }
+        const statement = render('statement', enonceCode(source))
+        const correction = render('correction', corrigeCode(source))
+        for (const suffix of ['ALPHA', 'BETA']) {
+          expect(statement).toContain(`QUESTION${suffix}`)
+          expect(statement).not.toContain(`REPONSE${suffix}`)
+          expect(correction).toContain(`REPONSE${suffix}`)
+          expect(correction).not.toContain(`QUESTION${suffix}`)
+        }
+      } finally {
+        rmSync(dir, { recursive: true, force: true })
+      }
+    },
+  )
+})
 
 describe('export du texte actuel de l’éditeur Typst', () => {
   it('conserve les retouches libres du préambule, des énoncés et du rendu', () => {

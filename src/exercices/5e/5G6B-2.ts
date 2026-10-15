@@ -170,6 +170,7 @@ ElementIepEditeur.registerVerificationCallback(
 export default class ProgrammesConstructionsParallelogrammes extends Exercice {
   constructor() {
     super()
+    this.reponseCourteDisponible = false // La réponse est une construction.
     this.besoinFormulaireTexte = [
       'Type de questions',
       'Nombres séparés par des tirets :\n0: Mélange\n1 : Deux côtés consécutifs sont donnés\n2 : Trois sommets consécutifs sont donnés\n3 : Deux sommets consécutifs et le centre sont donnés\n4: Un angle et le sommet opposé',
@@ -385,6 +386,8 @@ export default class ProgrammesConstructionsParallelogrammes extends Exercice {
       }
 
       texte += addEditeurIep(this, i, {
+        masquerEtapesInitiales: true,
+        sansOutils: true,
         conditionsInitiales,
         instructionsDisponibles,
         verifyCallbackName: VERIFICATION_PARALLELOGRAMME_CALLBACK_NAME,
@@ -401,6 +404,8 @@ export default class ProgrammesConstructionsParallelogrammes extends Exercice {
 
       texteCorr = `Voici un programme de construction du parallélogramme $${nom}$ :<br>
         ${addEditeurIep(this, i, {
+          masquerEtapesInitiales: true,
+          sansOutils: true,
           id: `IepEditeur-corr-Ex${this.numeroExercice}Q${i}`,
           conditionsInitiales,
           interactivityOn: false,

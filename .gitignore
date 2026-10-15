@@ -53,3 +53,8 @@ src/exercices/can/TSpe/canTSpeS10.ts
 variants-report.txt
 .claude/settings.json
 .github/
+
+# Moteur embarquable (vite.moteur.config.ts)
+/dist-moteur
+
+moteur-ed25519.pem

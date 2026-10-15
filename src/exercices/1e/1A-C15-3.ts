@@ -2,6 +2,7 @@ import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 // import ExerciceQcmA from '../../ExerciceQcmA'
+import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import FractionEtendue from '../../modules/FractionEtendue'
 import ExerciceQcmACourt from '../ExerciceQcmACourt'
@@ -101,7 +102,8 @@ La fraction de la dépense totale que Alice doit donner à Louis est donc $${mis
   // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)
   constructor() {
     super()
-
+    this.compareReponseCourte = (saisie, reponse) =>
+      fonctionComparaison(saisie, reponse, { fractionEgale: true })
     this.versionAleatoire()
     this.spacing = 1.5
   }

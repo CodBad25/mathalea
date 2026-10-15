@@ -90,6 +90,11 @@ const REGLES: Regle[] = [
     satisfaitPar: ['FRAC'],
   },
   {
+    nom: 'racine carrée',
+    requiert: (_nettoyee, brut) => /\\sqrt\b/.test(brut),
+    satisfaitPar: ['SQRT'],
+  },
+  {
     nom: 'virgule',
     requiert: (nettoyee) => /,/.test(nettoyee),
     satisfaitPar: ['COMMA'],
@@ -101,6 +106,17 @@ const REGLES: Regle[] = [
     satisfaitPar: ['='],
   },
 ]
+
+/**
+ * Opérateurs saisis tels quels dans `dataKeys` (`'+'`, `'-'`...) : ils
+ * équivalent à la touche prédéfinie du même opérateur.
+ */
+const TOUCHES_LITTERALES: Record<string, string> = {
+  '+': 'ADD',
+  '-': 'SUB',
+  '\\times': 'MULT',
+  '\\div': 'DIV',
+}
 
 /**
  * Le bloc `alphanumeric` n'est pas dans `keyboardBlocks` : c'est un clavier
@@ -238,6 +254,8 @@ export function verifyKeyboardCoverage(exercice: IExercice): ResultatClavier[] {
     // (ex : une touche `"a"` satisfait la règle « variable a »).
     for (const cle of champ.touchesPersonnalisees.flat()) {
       clesDisponibles.add(cle)
+      const nomDeTouche = TOUCHES_LITTERALES[cle]
+      if (nomDeTouche) clesDisponibles.add(nomDeTouche)
     }
 
     for (const [key, answer] of Object.entries(valeur)) {

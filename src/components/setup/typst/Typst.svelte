@@ -81,7 +81,7 @@
     type WritingLinesStyle,
   } from './buildTypstDocument'
   import { swapCarryOver } from './typstCarryOver'
-  import { cleanTypstExport } from './typstExport'
+  import { cleanTypstExport, corrigeCode, enonceCode } from './typstExport'
   import { formatCoverDate } from './coverDate'
   import CoverDateField from './CoverDateField.svelte'
   import { defaultCoverPoints } from './coverBareme'
@@ -4342,34 +4342,6 @@
     } finally {
       isGeneratingPdf = false
     }
-  }
-
-  /**
-   * Code de l'énoncé seul : `corrige = false` masque le corrigé
-   * (le paquet exercise-bank passe alors en affichage « ex »).
-   */
-  function enonceCode(code: string): string {
-    return code.replace('#let corrige = true', '#let corrige = false')
-  }
-
-  /**
-   * Code du corrigé seul (mode banque exercise-bank) : affichage « sol » —
-   * chaque exercice rend sa correction à la place de l'énoncé. `corrige`
-   * repasse à false pour ignorer le bloc de corrections regroupées (sinon un
-   * titre « Corrections » vide s'ajouterait). En mode fusionné (pas de banque),
-   * la séparation n'est pas possible : on garde le document complet.
-   */
-  function corrigeCode(code: string): string {
-    const bankDisplay = 'display: if corrige { "both" } else { "ex" }'
-    if (!code.includes(bankDisplay)) return code
-    return (
-      code
-        .replace('#let corrige = true', '#let corrige = false')
-        .replace(bankDisplay, 'display: "sol"')
-        // on garde le titre mais on retire la ligne Nom/Prénom/Classe
-        // (inutile sur le corrigé) en vidant la variable `entete`
-        .replace(/#let entete = .*/, '#let entete = ""')
-    )
   }
 
   /**

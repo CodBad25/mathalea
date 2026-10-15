@@ -91,7 +91,7 @@ export default class DevinerNombreRelatif extends Exercice {
       this.nbQuestions,
     )
     let dixieme
-    let signe
+    let signe: number
     let centieme
     let unite
     let somme

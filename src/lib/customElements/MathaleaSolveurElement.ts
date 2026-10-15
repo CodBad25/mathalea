@@ -609,7 +609,7 @@ function natureTerme(terme: string, variable: string): NatureTerme | null {
   else if (corps.includes('i')) return null
   const imaginaire = coefficient != null
   const reel = `${signe}${coefficient ?? corps}`
-  if (!isFinalNumber(reel, variable, false)) return null
+  if (!isFinalNumber(reel, variable)) return null
   return { imaginaire, nul: /^[+-]?0*(?:[.,]0*)?$/.test(coefficient ?? corps) }
 }
 
@@ -618,11 +618,7 @@ function natureTerme(terme: string, variable: string): NatureTerme | null {
  * fractionnaire (ex : `-3`, `2,5`, `\\dfrac{-6}{5}`), pas d'un calcul à
  * poursuivre (ex : `2\\times\\frac{3}{5}`).
  */
-function isFinalNumber(
-  expression: string,
-  variable: string,
-  exigeIrreductible = true,
-): boolean {
+function isFinalNumber(expression: string, variable: string): boolean {
   if (containsVariable(expression, variable)) return false
   const compact = expression
     .replaceAll('\\left', '')
@@ -636,19 +632,8 @@ function isFinalNumber(
     `^[+-]?\\\\[dt]?frac\\{(${signed})\\}\\{(${signed})\\}$`,
   ).exec(compact)
   if (fraction == null) return false
-  // Une fraction n'est terminale que si elle est irréductible (`6/2` ou `6/4`
-  // restent à simplifier), sauf si `exigeIrreductible` est faux.
-  const numerateur = Math.abs(Number(fraction[1].replace(',', '.')))
-  const denominateur = Math.abs(Number(fraction[2].replace(',', '.')))
-  if (denominateur === 0) return false
-  if (!exigeIrreductible) return true
-  if (!Number.isInteger(numerateur) || !Number.isInteger(denominateur))
-    return true
-  return denominateur > 1 && pgcd(numerateur, denominateur) === 1
-}
-
-function pgcd(a: number, b: number): number {
-  return b === 0 ? a : pgcd(b, a % b)
+  // Une fraction numérique est terminale, même si elle est réductible.
+  return Number(fraction[2].replace(',', '.')) !== 0
 }
 
 function splitEquation(

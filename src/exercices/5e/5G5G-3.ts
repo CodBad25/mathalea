@@ -116,6 +116,7 @@ ElementIepEditeur.registerVerificationCallback(
 export default class ConstruireDeuxTrianglesMemeAire extends Exercice {
   constructor() {
     super()
+    this.reponseCourteDisponible = false // La réponse est une construction.
     this.consigne = ''
     this.besoinFormulaireTexte = [
       'Type de construction',
@@ -262,6 +263,8 @@ export default class ConstruireDeuxTrianglesMemeAire extends Exercice {
         reponse: { value: JSON.stringify({ typeConstruction }) },
       })
       texte += addEditeurIep(this, i, {
+        masquerEtapesInitiales: true,
+        sansOutils: true,
         conditionsInitiales,
         instructionsDisponibles,
         verifyCallbackName: VERIFICATION_MEME_AIRE_CALLBACK_NAME,
@@ -273,6 +276,8 @@ export default class ConstruireDeuxTrianglesMemeAire extends Exercice {
           : `Le point $${S[0].nom}$ est le milieu du segment $[${S[1].nom}${S[1].nom}']$. Dans le triangle $${S[2].nom}${S[1].nom}${S[1].nom}'$, la droite $(${S[2].nom}${S[0].nom})$ est donc une médiane. Une médiane dans un triangle partage ce triangle en deux triangles de même aire.`
       }<br>
       ${addEditeurIep(this, i, {
+        masquerEtapesInitiales: true,
+        sansOutils: true,
         id: `IepEditeur-corr-Ex${this.numeroExercice}Q${i}`,
         conditionsInitiales,
         interactivityOn: false,

@@ -22,22 +22,21 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Calculer le volume de solides donnés'
+export const titre = 'Calculer le volume de solides'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const interactifReady = true
 
-export const dateDeModifImportante = '10/06/2024'
+export const dateDeModifImportante = '14/10/2026'
 /**
  * Calcul de volumes.
  * @author Jean-claude Lhote (AMC par EE) // modifié par Mireille Gain pour y ajouter les décimaux
  */
 
-export const uuid = '04b0d'
+export const uuid = '04b0e'
 
 export const refs = {
   'fr-fr': ['BP1AUTO097'],
-  'fr-2016': ['6M30'],
   'fr-ch': ['9GM2A-5'],
 }
 export default class CalculDeVolumes extends Exercice {
@@ -50,11 +49,7 @@ export default class CalculDeVolumes extends Exercice {
       '1 : Sans conversion\n2 : Avec des conversions',
     ]
     this.besoinFormulaire2CaseACocher = ['Avec des décimaux', false]
-    this.besoinFormulaire3Numerique = [
-      "Type d'exercice interactif ou AMC",
-      2,
-      '1 : QCM\n2 : Numérique',
-    ] // Texte, tooltip
+    this.besoinFormulaire3CaseACocher = ['Version QCM', false]
     this.besoinFormulaire4Texte = [
       'Type de solides',
       'Nombres séparés par des tirets :\n1 : Cubes\n2 : Pavés droits\n3 : Mélange',
@@ -64,7 +59,7 @@ export default class CalculDeVolumes extends Exercice {
 
     this.sup = 1
     this.classe = 6
-    this.sup3 = 2
+    this.sup3 = false
 
     this.sup4 = 3
   }
@@ -163,7 +158,6 @@ export default class CalculDeVolumes extends Exercice {
           texteCorr = `$\\mathcal{V}= c^3 =c \\times c \\times c = ${texNombre(c, 1)}${context.isAmc ? listeUnites[j][2] : listeUnites[j][0]}\\times${texNombre(c, 1)}${context.isAmc ? listeUnites[j][2] : listeUnites[j][0]}\\times${texNombre(c, 1)}${context.isAmc ? listeUnites[j][2] : listeUnites[j][0]}=`
           texteCorr += `${miseEnEvidence(`${texNombre(volume)}${listeUnites[j][1]}`)}$`
           resultat = volume
-          //  texte += resultat C'est gentil, ça de donner la réponse ;-)
           if (!c.eq(6)) resultat2 = c.pow(2).mul(6)
           else resultat2 = c.mul(24)
           if (!c.eq(2)) resultat3 = c.mul(4)
@@ -181,17 +175,20 @@ export default class CalculDeVolumes extends Exercice {
             volume = l.mul(L).mul(h)
 
             texte += context.isAmc ? ` en$${listeUnites[j][1]}$` : ''
-            texte += !volume.eq(volume.round())
+            /* texte += !volume.eq(volume.round())
               ? `, arrondi au $${listeUnites[j][1]}$ près,`
               : ''
+            */
             texte += ` d'un pavé droit de $${texNombre(l, 1)}${listeUnites[j][0]}$ de profondeur, de $${texNombre(L, 1)}${listeUnites[j][0]}$ de longueur et de $${texNombre(h)}${listeUnites[j][0]}$ de hauteur.`
             texteCorr = `$\\mathcal{V}= l \\times L \\times h = ${texNombre(l, 1)}${context.isAmc ? listeUnites[j][2] : listeUnites[j][0]}\\times${texNombre(L, 1)}${context.isAmc ? listeUnites[j][2] : listeUnites[j][0]}\\times${texNombre(h)}${context.isAmc ? listeUnites[j][2] : listeUnites[j][0]}`
-            if (volume.eq(volume.round())) {
+            texteCorr += `=${miseEnEvidence(`${texNombre(volume)}${listeUnites[j][1]}`)}$`
+            /* if (volume.eq(volume.round())) {
               texteCorr += `=${miseEnEvidence(`${texNombre(volume)}${listeUnites[j][1]}`)}$`
             } else {
               texteCorr += `\\approx${miseEnEvidence(`${texNombre(volume.round())}${listeUnites[j][1]}`)}$`
-            }
+            } */
             resultat = volume
+            // texte += resultat
             resultat2 = l.plus(L).plus(h).mul(6)
             if (resultat2.eq(resultat)) resultat2 = resultat2.div(2)
             resultat3 = l
@@ -212,6 +209,7 @@ export default class CalculDeVolumes extends Exercice {
             texteCorr = `$\\mathcal{V}= l \\times L \\times h = ${texNombre(l, 1)}${context.isAmc ? listeUnites[j][2] : listeUnites[j][0]}\\times${texNombre(L, 1)}${listeUnites[j - 1][0]}\\times${texNombre(h, 0)}${listeUnites[j + 1][0]}=${texNombre(l, 1)}${context.isAmc ? listeUnites[j][2] : listeUnites[j][0]}\\times${texNombre(L.toNumber() * 10)}${context.isAmc ? listeUnites[j][2] : listeUnites[j][0]}\\times${texNombre(h.div(10), 1)}${context.isAmc ? listeUnites[j][2] : listeUnites[j][0]}=`
             texteCorr += `${miseEnEvidence(`${texNombre(volume)}${listeUnites[j][1]}`)}$`
             resultat = volume
+            // texte += resultat
             resultat2 = l.plus(L).plus(h).mul(6)
             resultat3 = l
               .mul(2)
@@ -574,7 +572,7 @@ export default class CalculDeVolumes extends Exercice {
       resultat3 = resultat3.toNumber()
       resultat4 = resultat4.toNumber()
       const props = propositionsQcm(this, i)
-      if (this.interactif && this.sup3 !== 2) {
+      if (this.interactif && this.sup3) {
         texte += props.texte
       } else {
         handleAnswers(
@@ -593,7 +591,7 @@ export default class CalculDeVolumes extends Exercice {
         })
       }
       if (context.isAmc) {
-        if (this.sup3 === 1) {
+        if (this.sup3) {
           this.autoCorrectionAMC[i] = {
             enonce: '',
             enonceAvant: false,

@@ -691,14 +691,13 @@ export default class LireUneAbscisseAvecZoom extends Exercice {
         reponse2B = new FractionEtendue(Math.round(1000 * pardec), 1000)
         reponse3 = new FractionEtendue(Math.round(1000 * x1), 1000)
       }
+      const mixedNumberForm = this.sup2
+        ? 'comme nombre mixte'
+        : "comme somme d'un nombre entier et d'une fraction décimale inférieure à 1"
       texte += `Donner l'abscisse de $${noms[1]} $ sous `
       texte += context.isAmc ? 'deux ' : 'trois '
       texte += 'formes : en écriture décimale, '
-      texte += context.isAmc
-        ? ''
-        : this.sup2
-          ? 'comme nombre mixte, '
-          : "comme somme d'un nombre entier et d'une fraction décimale inférieure à 1,"
+      texte += context.isAmc ? '' : `${mixedNumberForm},`
 
       texte += " et sous forme d'une seule fraction décimale.<br>"
       texte += mathalea2d(fenetreMathalea2d, objets)
@@ -720,7 +719,7 @@ export default class LireUneAbscisseAvecZoom extends Exercice {
 
         texte += addMultiMathfield(this, i, {
           dataTemplate: `Abscisse de $${noms[1]}$ en écriture décimale : %{champ1}
-          Abscisse de $${noms[1]}$ comme somme d'un nombre entier et d'une fraction décimale inférieure à 1 : %{champ2}
+          Abscisse de $${noms[1]}$ ${mixedNumberForm} : %{champ2}
           Abscisse de $${noms[1]}$ sous forme d'une fraction décimale : %{champ3}`,
           dataOptions: {
             champ1: {

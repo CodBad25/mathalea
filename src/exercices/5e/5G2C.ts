@@ -4,11 +4,10 @@ export const amcReady = true
 export const amcType = 'AMCHybride'
 export const interactifReady = true
 
-export const dateDePublication = '27/06/2026'
-export const uuid = '98a08'
+export const dateDeModifImportante = '14/10/2026'
+export const uuid = '98a0e'
 export const refs = {
   'fr-fr': ['5G2C'],
-  'fr-2016': ['5M20-2'],
   'fr-ch': ['10GM2A-4'],
 }
 export default class CalculDeVolumes5ePolyedres extends CalculDeVolumes {

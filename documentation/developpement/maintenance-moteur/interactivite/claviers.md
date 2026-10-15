@@ -57,6 +57,18 @@ les blocs voulus (`clavierDeBaseAvecXEtEgal`, `clavierDeBaseAvecEgalEtVariable`,
 La liste complète est `KEYBOARD_CATEGORIES` dans
 `src/lib/interactif/claviers/keyboard.ts`.
 
+Les touches `dataKeys` peuvent aussi compléter un clavier existant, par exemple
+`complexesAvecVariable` avec `dataKeys: ['\\overline{z}']` pour insérer le
+conjugué de $z$.
+
+## Raccourcis de saisie
+
+Les champs MathLive disposent du raccourci `barre`, défini dans
+`shortcutsByKeyboards.default` de `src/lib/interactif/claviers/keyboard.ts`.
+Taper `zbarre` place une barre au-dessus du `z` qui précède le raccourci.
+La commande insérée est `\\overline{#@}` : elle s'applique à la sélection ou,
+sans sélection, à l'élément qui précède le curseur.
+
 ## Créer un type de clavier
 
 Dans `src/lib/interactif/claviers/keyboard.ts` :

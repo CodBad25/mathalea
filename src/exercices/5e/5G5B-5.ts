@@ -175,6 +175,7 @@ ElementIepEditeur.registerVerificationCallback(
 export default class TracerTriangleAngle2cotes extends Exercice {
   constructor() {
     super()
+    this.reponseCourteDisponible = false // La réponse est une construction.
     this.consigne = ''
     this.nbQuestions = 1
     this.besoinFormulaireTexte = [
@@ -347,12 +348,16 @@ export default class TracerTriangleAngle2cotes extends Exercice {
           },
         })
         texte += addEditeurIep(this, i, {
+          masquerEtapesInitiales: true,
+          sansOutils: true,
           conditionsInitiales,
           instructionsDisponibles,
           verifyCallbackName: VERIFICATION_TRIANGLE_CALLBACK_NAME,
         })
         const texteCorr = `Voici un programme de construction possible :<br>
       ${addEditeurIep(this, i, {
+        masquerEtapesInitiales: true,
+        sansOutils: true,
         id: `IepEditeur-corr-Ex${this.numeroExercice}Q${i}`,
         conditionsInitiales,
         interactivityOn: false,

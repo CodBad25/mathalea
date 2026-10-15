@@ -589,11 +589,12 @@ function preprocessTex(tex: string): string {
   // en mode mathématique. On sort explicitement du texte pour cette partie :
   // `\text{ m$^2$/h}` → `\text{ m}^2\text{/h}` (que tex2typst convertit en
   // `" m"^2 "/h"`). Répété pour plusieurs $…$ dans un même \text{}.
+  // Les dollars échappés (formules de tableur, par exemple) restent du texte.
   let prevNested = ''
   while (prevNested !== output) {
     prevNested = output
     output = output.replace(
-      /\\text\s*\{([^{}$]*)\$([^$]+)\$([^{}$]*)\}/g,
+      /\\text\s*\{([^{}$]*)(?<!\\)\$([^$]+)(?<!\\)\$([^{}$]*)\}/g,
       // n'émet pas de \text{} vide (tex2typst échoue sur un texte vide)
       (_, before: string, math: string, after: string) =>
         `${before ? `\\text{${before}}` : ''}${math}${after ? `\\text{${after}}` : ''}`,

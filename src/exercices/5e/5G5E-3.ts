@@ -363,6 +363,7 @@ export default class TracerHauteurAuxInstruments extends Exercice {
 
   constructor() {
     super()
+    this.reponseCourteDisponible = false // La réponse est une construction.
     this.consigne = ''
     this.besoinFormulaireTexte = [
       'Type de hauteur',
@@ -537,12 +538,16 @@ export default class TracerHauteurAuxInstruments extends Exercice {
         },
       })
       texte += addEditeurIep(this, i, {
+        masquerEtapesInitiales: true,
+        sansOutils: true,
         conditionsInitiales,
         instructionsDisponibles /*: */,
         verifyCallbackName: VERIFICATION_HAUTEUR_CALLBACK_NAME,
       })
       const texteCorr = `Voici un programme le programme de construction attendu :<br>
       ${addEditeurIep(this, i, {
+        masquerEtapesInitiales: true,
+        sansOutils: true,
         id: `IepEditeur-corr-Ex${this.numeroExercice}Q${i}`,
         conditionsInitiales,
         interactivityOn: false,

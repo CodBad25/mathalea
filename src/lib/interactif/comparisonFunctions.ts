@@ -3138,10 +3138,30 @@ export function handleEntiersConsecutifs(
 //
 // from https://patorjk.com/software/taag/ // Style : ANSI Regular // C++ style Comment
 
+/**
+ * Le moteur `ce` est partagé : un symbole inconnu y est déclaré au premier
+ * usage, avec le type qu'il y avait alors (le `P` d'un périmètre devient un
+ * nombre et ne peut plus servir de fonction dans `P(A)`). Chaque comparaison
+ * se fait donc dans une portée jetable, pour que rien ne fuite d'une
+ * comparaison à la suivante.
+ */
 export function fonctionComparaison(
   saisie: string,
   answer: string,
   options: OptionsComparaisonType = {},
+): ResultType {
+  ce.pushScope()
+  try {
+    return comparaisonDansUnePortee(saisie, answer, options)
+  } finally {
+    ce.popScope()
+  }
+}
+
+function comparaisonDansUnePortee(
+  saisie: string,
+  answer: string,
+  options: OptionsComparaisonType,
 ): ResultType {
   // Si la saisie est vide, deux cas se présentent.
   // Soit nonReponseAcceptee = true et answer est vide aussi, alors cela permet d'avoir des champs vides (on pense aux fillInTheBlank qui peuvent être facultatifs, comme par exemple un facteur 1)

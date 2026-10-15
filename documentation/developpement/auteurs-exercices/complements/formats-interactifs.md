@@ -1245,9 +1245,12 @@ réponses » avec la valeur déclarée dans `handleAnswers()`.
 
 La question n'est comptée juste que si la dernière ligne est la forme résolue
 (`isSolvedForm()` : l'inconnue seule d'un côté, un nombre sans calcul à
-poursuivre ni fraction réductible de l'autre) **et** conforme à la valeur
-attendue. Une étape intermédiaire équivalente à la solution (ex : `x+3-3=7-3`)
-ne rapporte donc aucun point.
+poursuivre de l'autre) **et** conforme à la valeur attendue. Les fractions
+numériques sont acceptées même si elles ne sont pas irréductibles :
+`x=\\dfrac{6}{4}` est une réponse finale juste si la solution attendue est
+`x=\\dfrac{3}{2}`. Le dénominateur doit être non nul. Une étape
+intermédiaire équivalente à la solution (ex : `x+3-3=7-3`) ne rapporte donc
+aucun point.
 
 Lorsque tous les solveurs d'un exercice sont terminés (équation résolue, ou
 étape fausse en mode `evaluation`), l'exercice se vérifie tout seul : le

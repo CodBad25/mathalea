@@ -144,7 +144,7 @@ export default class ProduitQuotientRelatifsPoses extends Exercice {
       texte +=
         (this.interactif ? '=$' : '$') +
         (context.isHtml && this.interactif
-          ? ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
+          ? ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)
           : '')
 
       handleAnswers(this, i, { reponse: { value: reponse } })

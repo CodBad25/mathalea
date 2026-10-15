@@ -776,9 +776,8 @@ describe('ElementIepEditeur points sans coordonnées', () => {
 })
 
 describe('ElementIepEditeur step numbering', () => {
-  it('numbers initial steps and added steps separately', () => {
-    // Un arc et une droite de pente donnée n'ont pas de nom : ils sont
-    // désignés par leur numéro d'étape.
+  it('names initial supports without referring to their step numbers', () => {
+    // Les supports initiaux restent identifiables quand leurs étapes sont masquées.
     const programme: InstructionIep[] = [
       { type: 'point', nom: 'A', x: 0, y: 0 },
       { type: 'point', nom: 'B', x: 4, y: 0 },
@@ -788,7 +787,7 @@ describe('ElementIepEditeur step numbering', () => {
       { type: 'intersection', nom: 'H', etape1: 2, etape2: 4, choix: 1 },
     ]
     expect(decrireInstruction(programme[5], programme, 3)).toBe(
-      'Placer le point H, intersection de la droite de l’étape initiale 3 et de l’arc de l’étape 2.',
+      'Placer le point H, intersection de la droite passant par A et de l’arc de centre A passant par C.',
     )
   })
 
