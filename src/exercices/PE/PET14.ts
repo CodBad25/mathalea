@@ -74,10 +74,10 @@ export default class EcrireFormuleTableur extends Exercice {
       })
       texte += `<br>Écrire, dans la cellule ${s.cible}, une formule permettant de ${s.but}`
       texte += recopie
-        ? `, qui pourra ensuite être recopiée vers le bas jusqu’en ${derniereCibleDe(s)}.`
+        ? `, la cellule pouvant ensuite être étirée vers le bas jusqu’en ${derniereCibleDe(s)}.`
         : '.'
       if (this.interactif && recopie) {
-        texte += `<br>Saisir la formule dans la cellule ${s.cible} puis la recopier vers le bas.`
+        texte += `<br>Saisir la formule dans la cellule ${s.cible} puis étirer la cellule vers le bas.`
       }
 
       if (this.interactif) {
@@ -100,7 +100,7 @@ export default class EcrireFormuleTableur extends Exercice {
       }
 
       let texteCorr = `Il faut saisir dans la cellule ${s.cible} la formule $${miseEnEvidence(formuleEnTex(s.formuleJuste))}$`
-      texteCorr += recopie ? ' puis la recopier vers le bas.' : '.'
+      texteCorr += recopie ? ' puis étirer la cellule vers le bas.' : '.'
       if (s.formulesJustes.length > 1) {
         texteCorr += `<br>D’autres écritures sont possibles, par exemple $${formuleEnTex(s.formulesJustes[1])}$.`
       }

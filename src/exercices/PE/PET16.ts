@@ -33,7 +33,7 @@ import {
 import Exercice from '../Exercice'
 
 export const titre =
-  'Déterminer l’incidence du signe dollar lors d’une recopie sur tableur'
+  'Déterminer l’incidence du signe dollar lors d’un étirement de cellule sur tableur'
 export const dateDePublication = '14/10/2026'
 export const interactifReady = true
 export const uuid = 'aa5b6'
@@ -88,7 +88,7 @@ function creeTable(): TableOperation {
 }
 
 /**
- * Une saisie convient si, recopiée dans tout le corps du tableau, elle
+ * Une saisie convient si, étirée dans tout le corps du tableau, elle
  * donne partout la valeur attendue.
  */
 function compareTable(table: TableOperation): CompareFunction {
@@ -117,7 +117,7 @@ function compareTable(table: TableOperation): CompareFunction {
       ? {
           isOk: false,
           feedback:
-            'La formule donne le bon résultat en B2 mais pas dans toutes les cellules après la recopie.',
+            'La formule donne le bon résultat en B2 mais pas dans toutes les cellules après l’étirement.',
         }
       : { isOk: false }
   }
@@ -142,7 +142,7 @@ function questionTable(exercice: Exercice, i: number) {
     nbLignes: NB_LIGNES_TABLE + 1,
     largeurs: Array(NB_COLONNES_TABLE + 1).fill(60),
   }
-  let texte = `On veut construire la table ${symbole === '*' ? 'de multiplication' : 'd’addition'} ci-dessous. On saisit une formule dans la cellule B2 puis on la recopie vers la droite et vers le bas jusqu’à la cellule ${refCellule(NB_COLONNES_TABLE, NB_LIGNES_TABLE)}, de façon que chaque cellule du tableau affiche ${symbole === '*' ? 'le produit' : 'la somme'} du nombre de sa ligne et du nombre de sa colonne.<br>`
+  let texte = `On veut construire la table ${symbole === '*' ? 'de multiplication' : 'd’addition'} ci-dessous. On saisit une formule dans la cellule B2 puis on étire la cellule vers la droite et vers le bas jusqu’à la cellule ${refCellule(NB_COLONNES_TABLE, NB_LIGNES_TABLE)}, de façon que chaque cellule du tableau affiche ${symbole === '*' ? 'le produit' : 'la somme'} du nombre de sa ligne et du nombre de sa colonne.<br>`
   texte += rendTableur({
     ...parametres,
     cellules: table.cellules,
@@ -159,9 +159,9 @@ function questionTable(exercice: Exercice, i: number) {
     { reponse: { value: formule, compare: compareTable(table) } },
     { formatInteractif: 'mathalea-textfield' },
   )
-  let texteCorr = `Lors de la recopie vers la droite, il faut que la colonne $A$ reste celle du nombre de la ligne : on écrit $\\text{\\$A2}$ (colonne bloquée).<br>`
-  texteCorr += `Lors de la recopie vers le bas, il faut que la ligne $1$ reste celle du nombre de la colonne : on écrit $\\text{B\\$1}$ (ligne bloquée).<br>`
-  texteCorr += `On saisit donc $${miseEnEvidence(formuleEnTex(formule))}$ dans la cellule B2 (la formule $${formuleEnTex(`=B$1${symbole}$A2`)}$ convient aussi) puis on la recopie.<br>`
+  let texteCorr = `Lors de l’étirement vers la droite, il faut que la colonne $A$ reste celle du nombre de la ligne : on écrit $\\text{\\$A2}$ (colonne bloquée).<br>`
+  texteCorr += `Lors de l’étirement vers le bas, il faut que la ligne $1$ reste celle du nombre de la colonne : on écrit $\\text{B\\$1}$ (ligne bloquée).<br>`
+  texteCorr += `On saisit donc $${miseEnEvidence(formuleEnTex(formule))}$ dans la cellule B2 (la formule $${formuleEnTex(`=B$1${symbole}$A2`)}$ convient aussi) puis on étire la cellule.<br>`
   texteCorr += rendTableur({
     ...parametres,
     cellules: cellulesCorrection,
@@ -240,7 +240,7 @@ function questionChoix(exercice: Exercice, i: number) {
     lignesEntete: s.numero === 6 ? [2] : [1],
     couleurs: { [s.cible]: COULEUR_SAISIE },
   })
-  texte += `<br>On veut ${s.but}. On saisit une formule dans la cellule ${s.cible} puis on la recopie vers le bas jusqu’en ${derniere}.<br>`
+  texte += `<br>On veut ${s.but}. On saisit une formule dans la cellule ${s.cible} puis on étire la cellule vers le bas jusqu’en ${derniere}.<br>`
   propositions.forEach((p, k) => {
     texte += `Proposition ${lettres[k]} : $${formuleEnTex(p.formule)}$<br>`
   })
@@ -264,7 +264,7 @@ function questionChoix(exercice: Exercice, i: number) {
     )
   }
   let texteCorr = `La proposition ${texteEnCouleurEtGras(lettreJuste)} convient : `
-  texteCorr += `la référence qui doit rester fixe lors de la recopie est bloquée par le signe dollar $\\$$, alors que les autres références sont décalées.<br>`
+  texteCorr += `la référence qui doit rester fixe lors de l’étirement est bloquée par le signe dollar $\\$$, alors que les autres références sont décalées.<br>`
   propositions.forEach((p, k) => {
     if (p.formule !== juste) {
       texteCorr += `La proposition ${lettres[k]} ne convient pas : ${p.explication}.<br>`
@@ -286,8 +286,8 @@ export default class IncidenceDuDollar extends Exercice {
       [
         'Nombres séparés par des tirets :',
         '1 : Écrire la formule d’une table à double entrée',
-        '2 : Trouver la valeur affichée après une recopie',
-        '3 : Choisir parmi trois formules celle qui convient après une recopie',
+        '2 : Trouver la valeur affichée après un étirement de cellule',
+        '3 : Choisir parmi trois formules celle qui convient après un étirement de cellule',
         '4 : Mélange',
       ].join('\n'),
     ]

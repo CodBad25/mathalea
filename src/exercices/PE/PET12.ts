@@ -68,7 +68,7 @@ export default class FormuleJusteOuFausse extends Exercice {
       })
       texte += `<br>Afin de ${s.but}, un élève va saisir dans la cellule ${s.cible} la formule $${formuleEnTex(formule)}$`
       texte += recopie
-        ? `, puis la recopier vers le bas jusqu’en ${derniereCibleDe(s)}.`
+        ? `, puis étirer la cellule vers le bas jusqu’en ${derniereCibleDe(s)}.`
         : '.'
       const contientDesFormules = Object.values(s.cellules).some(
         (v) => typeof v === 'string' && v.startsWith('='),
@@ -104,7 +104,7 @@ export default class FormuleJusteOuFausse extends Exercice {
       }
       if (recopie) {
         const [, deuxieme] = formulesRecopiees(s, formule)
-        texteCorr += `<br>Quand on la recopie vers le bas, les références sont décalées : en ${s.cible.replace(/\d+/, '')}${Number(s.cible.replace(/\D+/, '')) + 1}, la formule devient $${formuleEnTex(deuxieme)}$.`
+        texteCorr += `<br>Quand on étire la cellule vers le bas, les références sont décalées : en ${s.cible.replace(/\d+/, '')}${Number(s.cible.replace(/\D+/, '')) + 1}, la formule devient $${formuleEnTex(deuxieme)}$.`
       }
       if (!estJuste) {
         texteCorr += `<br>Une formule juste est $${formuleEnTex(s.formuleJuste)}$.`
