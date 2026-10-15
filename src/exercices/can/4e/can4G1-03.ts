@@ -1,4 +1,5 @@
 import { bleuMathalea } from '../../../lib/colors'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import {
   miseEnEvidence,
   texteEnCouleur,
@@ -29,6 +30,7 @@ export default class DiagonaleCarre extends ExerciceSimple {
     this.canOfficielle = false
     this.typeExercice = 'simple'
     this.nbQuestions = 1
+    this.formatChampTexte = KeyboardType.clavierFullOperations
   }
 
   nouvelleVersion() {
