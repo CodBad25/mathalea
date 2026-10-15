@@ -1,3 +1,4 @@
+import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 
@@ -84,7 +85,10 @@ export default class TauxEvolution extends ExerciceQcmACourt {
 
     this.correction = `Si ${params.phraseEnonce.toLowerCase()}, cela signifie que le coefficient multiplicateur est $CM = ${params.cm}$.<br>
     Le taux d'évolution $T$  vérifie : $T = CM - 1 = ${params.calcul} = ${params.tauxSigne}$.<br>
-    Le prix a donc ${params.typeAction} de $${miseEnEvidence(`${pourcentageBonneReponse}\\,\\%`)}$.`
+    Le prix a donc ${params.typeAction} de `
+    this.correction += this.sup3
+      ? `$${miseEnEvidence(`${pourcentageBonneReponse}\\,\\%`)}$.`
+      : `$${miseEnEvidence(`${pourcentageBonneReponse}`)}\\,\\%$.`
 
     // Générer des distracteurs cohérents
     const bonneReponse = `$${texNombre(pourcentageBonneReponse)}\\%$`
@@ -176,5 +180,7 @@ export default class TauxEvolution extends ExerciceQcmACourt {
       )
     this.reponseCourte = () => String(this.pourcentage)
     this.optionsChampReponseCourte = { texteApres: '$\\,\\%$' }
+    this.compareReponseCourte = (saisie, reponse) =>
+      fonctionComparaison(saisie, reponse, { nombreDecimalSeulement: true })
   }
 }
