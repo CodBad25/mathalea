@@ -161,6 +161,11 @@ Le helper injecte un custom element `possible-multi-lines-answer` et pose le
 discret ⊕ (un plus dans un cercle) : un clic recopie la saisie sur une nouvelle
 ligne au-dessus et vide la ligne finale.
 
+Avant la vérification, les lignes vides sont supprimées et la dernière ligne
+remplie devient la réponse finale. Un ajout de ligne laissé sans saisie ne
+pénalise donc pas l'élève. Si toutes les lignes sont vides, la question reste
+sans réponse.
+
 Chaque ligne intermédiaire non vide doit être égale à la réponse attendue, sous
 n'importe quelle forme (comparaison par défaut avec `value` convertie en
 LaTeX). Elle est marquée d'une coche verte ou d'une croix rouge discrètes ; une

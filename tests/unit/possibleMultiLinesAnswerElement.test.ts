@@ -125,6 +125,80 @@ describe('PossibleMultiLinesAnswerElement', () => {
     expect(resultat.score).toEqual({ nbBonnesReponses: 0, nbReponses: 2 })
   })
 
+  describe.each(['toutOuRien', 'etapes'] as const)('mode %s', (bareme) => {
+    const maximum = bareme === 'etapes' ? 2 : 1
+
+    it('utilise la dernière ligne remplie après un ajout laissé vide', () => {
+      const { exercice, element, champFinal, ajouteLigne, lignes } =
+        monte(bareme)
+      ajouteLigne('3+20')
+      ajouteLigne('23')
+      const resultat = PossibleMultiLinesAnswerElement.verifQuestion(
+        exercice,
+        0,
+      )
+      expect(resultat.isOk).toBe(true)
+      expect(resultat.score).toEqual({
+        nbBonnesReponses: maximum,
+        nbReponses: maximum,
+      })
+      expect(champFinal().value).toBe('23')
+      expect(lignes()).toHaveLength(1)
+      expect(element.value).toEqual(['3+20', '23'])
+      expect(exercice.answers?.[element.id]).toBe(
+        JSON.stringify(['3+20', '23']),
+      )
+    })
+
+    it.each([[['', '3+20', '  ', '23']], [['', '3+20', '  ', '23', '', '  ']]])(
+      'supprime toutes les étapes vides de %j',
+      (values) => {
+        const { exercice, element, lignes } = monte(bareme)
+        element.value = values
+        const resultat = PossibleMultiLinesAnswerElement.verifQuestion(
+          exercice,
+          0,
+        )
+        expect(resultat.isOk).toBe(true)
+        expect(resultat.score.nbReponses).toBe(maximum)
+        expect(lignes()).toHaveLength(1)
+        expect(element.value).toEqual(['3+20', '23'])
+      },
+    )
+
+    it('conserve les erreurs précédant une dernière ligne vide', () => {
+      const { exercice, ajouteLigne, lignes } = monte(bareme)
+      ajouteLigne('24')
+      ajouteLigne('23')
+      const resultat = PossibleMultiLinesAnswerElement.verifQuestion(
+        exercice,
+        0,
+      )
+      expect(resultat.isOk).toBe(false)
+      expect(resultat.score).toEqual({
+        nbBonnesReponses: maximum - 1,
+        nbReponses: maximum,
+      })
+      expect(lignes()[0].classList.contains('pmla-barre')).toBe(true)
+    })
+
+    it('garde un champ final vide si toutes les étapes sont vides', () => {
+      const { exercice, element, champFinal, lignes } = monte(bareme)
+      element.value = ['', '', '']
+      const resultat = PossibleMultiLinesAnswerElement.verifQuestion(
+        exercice,
+        0,
+      )
+      expect(resultat.isOk).toBe(false)
+      expect(resultat.score).toEqual({
+        nbBonnesReponses: 0,
+        nbReponses: maximum,
+      })
+      expect(lignes()).toHaveLength(0)
+      expect(champFinal().value).toBe('')
+    })
+  })
+
   it('donne 0 point sur 2 si le résultat est faux', () => {
     const { exercice, champFinal, ajouteLigne } = monte('etapes')
     ajouteLigne('3+20')
