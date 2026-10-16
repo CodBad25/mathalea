@@ -50,6 +50,16 @@ depuis `src/exercices/can/6e/`, ajouter un niveau de `../`.
 - `this.reponse` : la réponse attendue, qui suffit à rendre l'exercice
   interactif.
 
+`this.consigne` est commune à toutes les questions de l'exercice : elle n'est
+pas mémorisée à chaque appel de `nouvelleVersion()`. Ne pas y placer les
+données tirées au sort propres à une question (coordonnées de points, valeurs,
+noms…). Après la génération, seule la dernière consigne affectée subsiste,
+alors que les questions, réponses et corrections ont été conservées séparément.
+Les données de chaque tirage doivent figurer dans `this.question`, avec un
+format de rendu adapté. Vérifier aussi le rendu avec plusieurs questions,
+même si le constructeur fixe `this.nbQuestions = 1` : un lien partagé peut
+demander un autre nombre de questions avec le paramètre `n`.
+
 `nouvelleVersion()` ne connaît pas l'indice de la question : ne pas écrire de
 boucle, ne pas remplir `listeQuestions`.
 
@@ -117,7 +127,7 @@ trou :
 
 ```ts
 this.formatInteractif = 'fillInTheBlank'
-this.consigne = `Encadrer $${texNombre(decimal, 1)}$ par deux entiers consécutifs.`
+this.consigne = 'Encadrer chaque nombre par deux entiers consécutifs.'
 this.question = `%{champ1}<${texNombre(decimal, 1)}<%{champ2}`
 this.reponse = {
   bareme: toutPourUnPoint,
