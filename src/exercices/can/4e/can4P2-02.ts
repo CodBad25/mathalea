@@ -78,7 +78,10 @@ export default class PourcentageARetrouver extends ExerciceSimple {
       this.correction += ` En multipliant par $${choix[2]}$, on obtient : <br>`
       this.correction += `$${choix[0]}\\,\\%$  de $${choix[1]}$ est égal à $${texNombre(valeur, 1)}$.<br>`
     }
-    this.correction += ` Ainsi $p=${miseEnEvidence(texNombre(choix[0], 2))}$.`
+    this.correction += ` Ainsi, `
+    this.correction += this.versionQcm
+      ? `$${miseEnEvidence('p = ' + texNombre(choix[0], 2))}$.`
+      : `$p=${miseEnEvidence(texNombre(choix[0], 2))}$.`
 
     if (this.interactif && !this.versionQcm) {
       this.question += '<br> $p=$'

@@ -58,7 +58,7 @@ export default class PoucentageProportion extends ExerciceSimple {
             : `Quel est le pourcentage de ${n} dans ce groupe ?`
 
           this.optionsChampTexte = { texteAvant: '<br>', texteApres: '$\\%$' }
-          this.correction = `La proportion de ${n} est donnée par $\\dfrac{${b}}{${a}}=${texFractionReduite(b, a)}=${texNombre(b / a)}$, soit $${miseEnEvidence(texNombre((b / a) * 100))}$ $\\%$.`
+          this.correction = `La proportion de ${n} est donnée par $\\dfrac{${b}}{${a}}=${texFractionReduite(b, a)}=${texNombre(b / a)}$, soit `
         } else {
           a = choice([30, 60])
           b = a === 30 ? choice([6, 12, 18, 24]) : choice([6, 12, 15, 18, 24])
@@ -69,8 +69,11 @@ export default class PoucentageProportion extends ExerciceSimple {
             ? `Le pourcentage de ${n} dans ce groupe est :`
             : `Quel est le pourcentage de ${n} dans ce groupe ?`
           this.optionsChampTexte = { texteAvant: '<br>', texteApres: '$\\%$' }
-          this.correction = `La proportion de ${n} est donnée par $\\dfrac{${b}}{${a}}=${texFractionReduite(b, a)}=${texNombre(b / a)}$, soit $${miseEnEvidence(texNombre((b / a) * 100))}$ $\\%$.`
+          this.correction = `La proportion de ${n} est donnée par $\\dfrac{${b}}{${a}}=${texFractionReduite(b, a)}=${texNombre(b / a)}$, soit `
         }
+        this.correction += this.versionQcm
+          ? `$${miseEnEvidence(texNombre((b / a) * 100) + '~\\%')}$.`
+          : `$${miseEnEvidence(texNombre((b / a) * 100))}~\\%$.`
         this.reponse = this.versionQcm
           ? `$${texNombre((b / a) * 100, 2)}\\,\\%$`
           : arrondi((b / a) * 100)
@@ -94,8 +97,10 @@ export default class PoucentageProportion extends ExerciceSimple {
 
         this.optionsChampTexte = { texteAvant: '<br>', texteApres: '$\\%$' }
         this.correction = `${choix ? 'La réduction' : 'L’augmentation'} est de $${b}$ € sur un total de $${a}$ €.<br>
-          Le pourcentage  ${choix ? 'de baisse' : 'd’augmentation'} est donné par le quotient : $\\dfrac{${b}}{${a}}${simplificationDeFractionAvecEtapes(b, a)}=${texNombre(b / a)}= ${miseEnEvidence(texNombre((b / a) * 100))}\\,\\%$.
-          `
+          Le pourcentage  ${choix ? 'de baisse' : 'd’augmentation'} est donné par le quotient : $\\dfrac{${b}}{${a}}${simplificationDeFractionAvecEtapes(b, a)}=${texNombre(b / a)}=`
+        this.correction += this.versionQcm
+          ? `${miseEnEvidence(texNombre((b / a) * 100) + '~\\%')}$`
+          : `${miseEnEvidence(texNombre((b / a) * 100))}~\\%$`
         if (b * 10 !== a) {
           this.correction += texteEnCouleur(
             `<br> Mentalement : <br>
