@@ -647,7 +647,17 @@ export default function ChoisirExpressionNumerique(
       }
       break
   }
-  let expNom = expf.split(' ')[1] // Type de l'expression
-  expNom = (expNom === 'quotient' ? 'un ' : 'une ') + expNom
+  // Type de l'expression (somme, différence, produit ou quotient) : c'est le mot qui suit l'article,
+  // sauf pour « le double », « le triple » et « le tiers » qui sont respectivement un produit, un produit et un quotient.
+  const motsSpeciaux: Record<string, string> = {
+    double: 'produit',
+    triple: 'produit',
+    tiers: 'quotient',
+  }
+  const motType = expf.split(' ')[1]
+  const typeExpression = motsSpeciaux[motType] ?? motType
+  const expNom =
+    (['produit', 'quotient'].includes(typeExpression) ? 'un ' : 'une ') +
+    typeExpression
   return [expf, expn, expc, souscas, repNum, expNom]
 }
