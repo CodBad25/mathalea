@@ -56,6 +56,7 @@ export default class defCercleDisque extends Exercice {
     this.sup = 3
     this.sup2 = 2
     this.exoCustomResultat = true
+    this.reponseCourteDisponible = false // La réponse est une construction.
     this.correctionDetaillee = false
     this.correctionDetailleeDisponible = true
   }
