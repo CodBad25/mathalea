@@ -6,6 +6,7 @@ import {
   reduirePolynomeDegre3,
   rienSi1,
 } from '../../../lib/outils/ecritures'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer la fonction dérivée d’un polynôme de degré 2'
@@ -30,6 +31,7 @@ export default class DeriveePoly2 extends ExerciceSimple {
 
     this.typeExercice = 'simple'
     this.nbQuestions = 1
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecVariable
   }
 
   nouvelleVersion() {
