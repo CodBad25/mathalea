@@ -111,7 +111,9 @@ export default class PerimetreAireEtPortionsDeDisques extends Exercice {
     \\approx
     ${miseEnEvidence(`${texNombre((r * Math.PI) / 2 + 2 * r, 1)}`)}\\text{ cm}$<br>`
             reponseL1 =
-              this.sup === 2 ? 0 : arrondi((r * Math.PI) / 2 + 2 * r, 1)
+              this.sup === 2
+                ? 0
+                : arrondi(Math.trunc(((r * Math.PI) / 2 + 2 * r) * 10) / 10)
             reponseL1bis = this.sup === 2 ? 0 : arrondi(reponseL1 + 0.1)
           }
 
@@ -266,7 +268,7 @@ export default class PerimetreAireEtPortionsDeDisques extends Exercice {
           {
             bareme: toutAUnPoint,
             ...Object.fromEntries(
-              reponses.map((r, j) => [`champ${j + 1}`, { value: r[j] }]),
+              reponses.map((r, j) => [`champ${j + 1}`, { value: r }]),
             ),
           },
           { formatInteractif: 'multi-mathfield' },
