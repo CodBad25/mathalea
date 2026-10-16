@@ -266,7 +266,7 @@ export default class PerimetreAireEtPortionsDeDisques extends Exercice {
           {
             bareme: toutAUnPoint,
             ...Object.fromEntries(
-              reponses.map((r, j) => [`champ${j + 1}`, { value: r[j] }]),
+              reponses.map((r, j) => [`champ${j + 1}`, { value: r }]),
             ),
           },
           { formatInteractif: 'multi-mathfield' },
