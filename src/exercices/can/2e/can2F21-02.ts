@@ -225,7 +225,7 @@ export default class TableauSignes extends Exercice {
         ligne1 = ['Line', 30, '', 0, '+', 20, 'z', 20, '-']
       }
       props = propositionsQcm(this, i)
-      texte = `${debutEnonce}le tableau de signes de la fonction $f$ définie sur  $\\mathbb R$ par $f(x)=${reduireAxPlusB(a, b)}$ ? `
+      texte = `${debutEnonce}le tableau de signes de la fonction $f$ définie sur  $\\mathbb R$ par $f(x)=${reduireAxPlusB(a, b)}$${this.interactif ? ' ?' : '.'} `
       if (this.interactif) texte += props.texte
       texteCorr += tableauDeVariation({
         tabInit: [

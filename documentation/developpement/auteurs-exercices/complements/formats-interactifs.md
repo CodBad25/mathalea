@@ -161,6 +161,11 @@ Le helper injecte un custom element `possible-multi-lines-answer` et pose le
 discret ⊕ (un plus dans un cercle) : un clic recopie la saisie sur une nouvelle
 ligne au-dessus et vide la ligne finale.
 
+Avant la vérification, les lignes vides sont supprimées et la dernière ligne
+remplie devient la réponse finale. Un ajout de ligne laissé sans saisie ne
+pénalise donc pas l'élève. Si toutes les lignes sont vides, la question reste
+sans réponse.
+
 Chaque ligne intermédiaire non vide doit être égale à la réponse attendue, sous
 n'importe quelle forme (comparaison par défaut avec `value` convertie en
 LaTeX). Elle est marquée d'une coche verte ou d'une croix rouge discrètes ; une
@@ -1248,7 +1253,10 @@ La question n'est comptée juste que si la dernière ligne est la forme résolue
 poursuivre de l'autre) **et** conforme à la valeur attendue. Les fractions
 numériques sont acceptées même si elles ne sont pas irréductibles :
 `x=\\dfrac{6}{4}` est une réponse finale juste si la solution attendue est
-`x=\\dfrac{3}{2}`. Le dénominateur doit être non nul. Une étape
+`x=\\dfrac{3}{2}`. Les écritures avec une barre oblique (`x=-5/7`)
+et les fractions LaTeX sans accolades autour des chiffres seuls
+(`x=-\\frac57`, `x=\\frac{-5}7`) sont également acceptées.
+Le dénominateur doit être non nul. Une étape
 intermédiaire équivalente à la solution (ex : `x+3-3=7-3`) ne rapporte donc
 aucun point.
 

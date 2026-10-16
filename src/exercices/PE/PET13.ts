@@ -73,7 +73,7 @@ export default class CorrigerFormuleTableur extends Exercice {
       })
       texte += `<br>Dans la cellule ${s.cible}, on a saisi la formule $${formuleEnTex(erreur.formule)}$`
       texte += recopie
-        ? `, puis on l’a recopiée vers le bas jusqu’en ${derniereCibleDe(s)}, `
+        ? `, puis on a étiré la cellule vers le bas jusqu’en ${derniereCibleDe(s)}, `
         : ' '
       texte += `afin de ${s.but}. `
       texte += recopie
@@ -82,11 +82,11 @@ export default class CorrigerFormuleTableur extends Exercice {
       texte += '<br>'
       if (this.interactif) {
         texte += recopie
-          ? `Corriger la formule de la cellule ${s.cible} puis la recopier vers le bas jusqu’en ${derniereCibleDe(s)}.`
+          ? `Corriger la formule de la cellule ${s.cible} puis étirer cette cellule vers le bas jusqu’en ${derniereCibleDe(s)}.`
           : `Corriger la formule de la cellule ${s.cible}.`
       } else {
         texte += recopie
-          ? `Écrire la formule corrigée qui doit être saisie dans la cellule ${s.cible} avant la recopie vers le bas.`
+          ? `Écrire la formule corrigée qui doit être saisie dans la cellule ${s.cible} avant d’étirer la cellule vers le bas.`
           : `Écrire la formule corrigée qui doit être saisie dans la cellule ${s.cible}.`
       }
 
@@ -111,7 +111,7 @@ export default class CorrigerFormuleTableur extends Exercice {
 
       let texteCorr = `La formule $${formuleEnTex(erreur.formule)}$ est fausse : ${erreur.explication}.<br>`
       texteCorr += `Il faut saisir dans la cellule ${s.cible} la formule $${miseEnEvidence(formuleEnTex(s.formuleJuste))}$`
-      texteCorr += recopie ? ' puis la recopier vers le bas.' : '.'
+      texteCorr += recopie ? ' puis étirer la cellule vers le bas.' : '.'
       texteCorr += '<br>Avec cette formule, le tableur affiche :<br>'
       texteCorr += rendTableur({
         ...parametresTableur,

@@ -95,7 +95,7 @@ export default class FactoriserIdentitesRemarquables2 extends Exercice {
         " est strictement positif, l'équation a deux solutions : "
       const choix = choice([true, false])
       if (!this.can) {
-        this.consigne = 'Résoudre, dans $\\mathbb{R}$, :'
+        this.consigne = 'Résoudre dans $\\mathbb{R}$ :'
       }
       switch (listeTypeDeQuestions[i]) {
         case 1:

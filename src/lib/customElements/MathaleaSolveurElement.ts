@@ -628,12 +628,16 @@ function isFinalNumber(expression: string, variable: string): boolean {
   const unsigned = '\\d+(?:[.,]\\d+)?'
   const signed = `[+-]?${unsigned}`
   if (new RegExp(`^${signed}$`).test(compact)) return true
-  const fraction = new RegExp(
-    `^[+-]?\\\\[dt]?frac\\{(${signed})\\}\\{(${signed})\\}$`,
+  // En LaTeX, les accolades sont facultatives autour d'un chiffre seul.
+  const latexFraction = new RegExp(
+    `^[+-]?\\\\[dt]?frac(?:\\{${signed}\\}|\\d)(?:\\{(${signed})\\}|(\\d))$`,
   ).exec(compact)
-  if (fraction == null) return false
+  const inlineFraction = new RegExp(`^${signed}/(${signed})$`).exec(compact)
+  const denominator =
+    latexFraction?.[1] ?? latexFraction?.[2] ?? inlineFraction?.[1]
+  if (denominator == null) return false
   // Une fraction numérique est terminale, même si elle est réductible.
-  return Number(fraction[2].replace(',', '.')) !== 0
+  return Number(denominator.replace(',', '.')) !== 0
 }
 
 function splitEquation(

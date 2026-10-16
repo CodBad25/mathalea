@@ -1017,7 +1017,7 @@
                   {#if isCorrectionVisible}
                     <!-- EE : remplacement de ce class pour celui du dessous class="relative border-l-coopmaths-struct dark:border-l-coopmathsdark-struct border-l-[3px] text-coopmaths-corpus dark:text-coopmathsdark-corpus mt-6 lg:mt-2 mb-6 py-2 pl-4"  -->
                     <div
-                      class="relative border-l-coopmaths-struct dark:border-l-coopmathsdark-struct border-l-[3px] text-coopmaths-corpus dark:text-coopmathsdark-corpus py-2 pl-4 mt-6 md:mt-4"
+                      class="relative text-coopmaths-corpus dark:text-coopmathsdark-corpus py-2 pl-[calc(1rem+3px)] mt-6 md:mt-4"
                       id="correction-exo{exerciseIndex}-Q{i}"
                       use:renderDiv={exercise.listeCorrections[i]}
                     >
@@ -1054,12 +1054,15 @@
                       et cela posait problème au changement des paramètres avec la correction visible -->
                       <!-- <div class="absolute border-coopmaths-struct dark:border-coopmathsdark-struct top-0 left-0 border-b-[3px] w-10" /> -->
                       <div
-                        class="absolute flex flex-row py-[1.5px] px-3 rounded-t-md justify-center items-center -left-0.75 -top-3.75 bg-coopmaths-struct dark:bg-coopmathsdark-struct font-semibold text-xs text-coopmaths-canvas dark:text-coopmathsdark-canvas"
+                        class="absolute flex flex-row py-[1.5px] px-3 rounded-t-md justify-center items-center left-0 -top-3.75 bg-coopmaths-struct dark:bg-coopmathsdark-struct font-semibold text-xs text-coopmaths-canvas dark:text-coopmathsdark-canvas"
                       >
                         Correction
                       </div>
+                      <!-- Barre verticale et petit trait du bas dessinés par un seul
+                      élément : avec une bordure gauche sur le conteneur, Firefox
+                      les décalait en affichage sur plusieurs colonnes (#9832) -->
                       <div
-                        class="absolute border-coopmaths-struct dark:border-coopmathsdark-struct bottom-0 left-0 border-b-[3px] w-4"
+                        class="absolute border-coopmaths-struct dark:border-coopmathsdark-struct inset-y-0 left-0 border-l-[3px] border-b-[3px] w-4"
                       ></div>
                     </div>
                   {/if}

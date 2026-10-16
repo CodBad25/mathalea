@@ -18,6 +18,7 @@ function creerExercice(type: string) {
   context.isHtml = true
   const exercice = new ReporterPerimetreAuCompas()
   exercice.sup = type
+  exercice.interactif = true
   exercice.nouvelleVersion()
   const container = document.createElement('div')
   container.innerHTML = exercice.listeQuestions[0]
@@ -42,6 +43,14 @@ function creerExercice(type: string) {
 }
 
 describe('6G2C-2 report de périmètre', () => {
+  it('ne propose pas l’éditeur en mode non interactif', () => {
+    context.isHtml = true
+    const exercice = new ReporterPerimetreAuCompas()
+    exercice.nouvelleVersion()
+    expect(exercice.listeQuestions[0]).not.toContain('alea-iep-editeur')
+    expect(exercice.listeQuestions[0]).toContain('<svg')
+  })
+
   it.each(['1', '2', '3', '4', '5'])(
     'attribue quatre points pour la figure %s',
     (type) => {

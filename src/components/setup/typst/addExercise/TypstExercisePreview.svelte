@@ -38,16 +38,27 @@
     /** Nombre de fois où cette ressource est déjà dans la fiche */
     count: number
     onAdd: (params: InterfaceParams) => void
+    /** Réglages dépliés dès l'affichage (vue Parcours) */
+    settingsOpen?: boolean
+    /** Ce qui reçoit l'exercice, pour les libellés (« la fiche » par défaut) */
+    target?: string
   }
 
-  const { ending, count, onAdd }: Props = $props()
+  const {
+    ending,
+    count,
+    onAdd,
+    settingsOpen = false,
+    target = 'la fiche',
+  }: Props = $props()
 
   /** Paramètres de l'exercice prévisualisé, transmis tels quels à l'ajout */
   const params: InterfaceParams = $state(initialParams())
   let exercise: IExercice | null = $state(null)
   let isLoading = $state(false)
   let errorMessage = $state('')
-  let isSettingsOpen = $state(false)
+  // svelte-ignore state_referenced_locally
+  let isSettingsOpen = $state(settingsOpen)
   /** Incrémenté à chaque régénération pour ré-injecter le HTML de l'énoncé */
   let version = $state(0)
 
@@ -241,7 +252,7 @@
     <div class="flex shrink-0 flex-row items-center gap-1">
       {#if count > 0}
         <span
-          title="Déjà présent {count} fois dans la fiche"
+          title="Déjà présent {count} fois dans {target}"
           class="inline-flex h-6 min-w-6 items-center justify-center rounded-full px-2 text-xs font-bold
           bg-coopmaths-warn dark:bg-coopmathsdark-warn
           text-coopmaths-canvas dark:text-coopmathsdark-canvas"
@@ -264,7 +275,7 @@
       {/if}
       <button
         type="button"
-        title="Ajouter cet exercice à la fiche"
+        title="Ajouter cet exercice à {target}"
         class="flex flex-row items-center gap-1 rounded-lg px-3 py-1 text-sm font-bold
         bg-coopmaths-action text-coopmaths-canvas hover:bg-coopmaths-action-lightest
         dark:bg-coopmathsdark-action dark:text-coopmathsdark-canvas dark:hover:bg-coopmathsdark-action-lightest"

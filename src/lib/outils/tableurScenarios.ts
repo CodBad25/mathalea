@@ -175,7 +175,7 @@ function creeBrouillon(numero: number): ScenarioTableur {
           {
             formule: '=$B$2*C2',
             explication:
-              'le signe $\\$$ bloque la cellule B2 : une fois recopiée vers le bas, la formule utilise toujours la quantité de la première ligne',
+              'le signe $\\$$ bloque la cellule B2 : une fois la cellule étirée vers le bas, la formule utilise toujours la quantité de la première ligne',
           },
         ],
         testes: [{ ref: `B2:C${nb + 1}`, rangeValues: [1, 20] }],
@@ -412,7 +412,7 @@ function creeBrouillon(numero: number): ScenarioTableur {
         erreurs: [
           {
             formule: `=B2/B${ligneTotal}*100`,
-            explication: `la référence B${ligneTotal} n'est pas bloquée : en recopiant vers le bas, elle devient B${ligneTotal + 1}, B${ligneTotal + 2}… au lieu de rester sur le total`,
+            explication: `la référence B${ligneTotal} n'est pas bloquée : en étirant la cellule vers le bas, elle devient B${ligneTotal + 1}, B${ligneTotal + 2}… au lieu de rester sur le total`,
           },
           {
             formule: `=B2/B$${ligneTotal}`,
@@ -421,7 +421,7 @@ function creeBrouillon(numero: number): ScenarioTableur {
           },
           {
             formule: `=B2/SOMME(B2:B${nb + 1})*100`,
-            explication: `la plage B2:B${nb + 1} n'est pas bloquée : en recopiant vers le bas, elle se décale et ne contient plus toutes les classes`,
+            explication: `la plage B2:B${nb + 1} n'est pas bloquée : en étirant la cellule vers le bas, elle se décale et ne contient plus toutes les classes`,
           },
         ],
         testes: [{ ref: `B2:B${nb + 1}`, rangeValues: [1, 30] }],
@@ -472,7 +472,7 @@ function creeBrouillon(numero: number): ScenarioTableur {
           {
             formule: '=B3*(1+B1/100)',
             explication:
-              "la référence B1 n'est pas bloquée : en recopiant vers le bas, elle devient B2, B3… au lieu de rester sur le taux de TVA",
+              "la référence B1 n'est pas bloquée : en étirant la cellule vers le bas, elle devient B2, B3… au lieu de rester sur le taux de TVA",
           },
           {
             formule: '=B3*$B$1/100',
