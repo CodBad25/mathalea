@@ -136,19 +136,19 @@ function pourcentageDeTete(taux: number, valeur: number): [string, number] {
       ]
     case 5:
       return [
-        `$10\\,\\%$ de $${v}$, c'est $${v} \\div 10 = ${dix}$.<br>${pourcent}, c'est la moitié de $10\\,\\%$ : $${dix} \\div 2 = ${r}$.`,
+        `$10\\,\\%$ de $${v}$ est égal à $${v} \\div 10 = ${dix}$.<br>${pourcent} est la moitié de $10\\,\\%$ : $${dix} \\div 2 = ${r}$.`,
         resultat,
       ]
     case 15: {
       const cinq = texNombre(valeur / 20, 2)
       return [
-        `$10\\,\\%$ de $${v}$, c'est $${v} \\div 10 = ${dix}$ et $5\\,\\%$, c'est la moitié : $${cinq}$.<br>${pourcent}, c'est $10\\,\\% + 5\\,\\%$ : $${dix} + ${cinq} = ${r}$.`,
+        `$10\\,\\%$ de $${v}$ est égal à $${v} \\div 10 = ${dix}$.<br>$5\\,\\%$ est la moitié de $10\\,\\%$ : $${cinq}$.<br>${pourcent} $=10\\,\\% + 5\\,\\%$ donc : $${dix} + ${cinq} = ${r}$.`,
         resultat,
       ]
     }
     default:
       return [
-        `$10\\,\\%$ de $${v}$, c'est $${v} \\div 10 = ${dix}$.<br>${pourcent}, c'est $${taux / 10}$ fois plus : $${dix} \\times ${taux / 10} = ${r}$.`,
+        `$10\\,\\%$ de $${v}$ est égal à $${v} \\div 10 = ${dix}$.<br>Pour prendre ${pourcent}, on multiplie par $${taux / 10}$ : $${dix} \\times ${taux / 10} = ${r}$.`,
         resultat,
       ]
   }
@@ -174,7 +174,7 @@ function correctionDeTete(
       const [demarche] = pourcentageDeTete(t, depart)
       return taux > 0
         ? `${demarche}<br>L'augmentation est donc de $${va}$, d'où $${vi} + ${va} = ${vf}$.`
-        : `${demarche}<br>La diminution est donc de $${va}$, d'où $${vi} - ${va} = ${vf}$.`
+        : `${demarche}<br>La baisse est donc de $${va}$, d'où $${vi} - ${va} = ${vf}$.`
     }
     case 'initiale': {
       // Coefficient multiplicateur à une décimale : diviser par CM, c'est diviser 10 × Vf par 10 × CM
