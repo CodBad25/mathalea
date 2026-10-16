@@ -102,9 +102,7 @@
   )
   const toSend = $derived(unpublishedCount(library))
   const ready = $derived(
-    library.entries.filter(
-      (e) => e.classes.length && !missing(e.parcours).length,
-    ).length,
+    library.entries.filter((e) => !missing(e.parcours).length).length,
   )
 
   // ---------- Exercices de la feuille composée sur le site ----------
@@ -161,6 +159,11 @@
               difficulte: d.difficulte,
               presentation: d.presentation,
               correction: d.correction,
+              // Anciennes valeurs par défaut, sans ces champs : ceux d'un nouveau parcours
+              ...(d.enTetesMasques === undefined
+                ? {}
+                : { enTetesMasques: d.enTetesMasques }),
+              ...(d.melanger === undefined ? {} : { melanger: d.melanger }),
             }
           : {},
       ),
@@ -303,8 +306,8 @@
             aria-hidden="true"
           ></i>
           {toSend === 1
-            ? 'Un parcours n’est pas encore chez les élèves'
-            : `${toSend} parcours ne sont pas encore chez les élèves`}
+            ? 'Un parcours n’est pas encore publié'
+            : `${toSend} parcours ne sont pas encore publiés`}
         {:else if ready}
           <i
             class="bx bx-check-circle text-coopmaths-action dark:text-coopmathsdark-action"
