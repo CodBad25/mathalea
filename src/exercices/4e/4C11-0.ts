@@ -29,7 +29,7 @@ export const interactifReady = true
     Case  1: Expressions imbriquées simples: a - (b + (c - d))
     Case  9: Opérations de multiplication avec addition: a × b + c × d
     Case 10: Opérations de multiplication avec soustraction: a × b - c × d
-    Case 11: Expression avec fraction et multiples opérations: d + b × c - a
+    Case 11: Expression avec fraction et multiples opérations: a/b + c × d - e
 
 2. Expressions complexes avec plusieurs niveaux de parenthèses
 
@@ -80,7 +80,7 @@ export default class PrioritesEtRelatifsComplex extends Exercice {
         '8 : a × (b × (c + d × e + f) - g) + h',
         '9 : a × b + c × d',
         '10 : a × b - c × d',
-        '11 : d + b × c - a',
+        '11 : a/b + c × d - e',
         '12 : (a - b × c) / (d × e + f)',
         '13 : Mélange',
       ].join('\n'),
@@ -352,8 +352,8 @@ export default class PrioritesEtRelatifsComplex extends Exercice {
           texteCorr = `$${lettreDepuisChiffre(i + 1)} = ${d} + ${miseEnEvidence(`${ecritureParentheseSiNegatif(b)} \\times ${ecritureParentheseSiNegatif(c)}`, bleuMathalea)} - ${ecritureParentheseSiNegatif(a)}`
           texteCorr += `= ${miseEnEvidence(`${d} + ${ecritureParentheseSiNegatif(etape1Q31)}`, bleuMathalea)} - ${ecritureParentheseSiNegatif(a)}`
           texteCorr += `= ${miseEnEvidence(`${texNombre(g)} + ${ecritureParentheseSiNegatif(etape1Q31)}`, bleuMathalea)} - ${ecritureParentheseSiNegatif(a)}`
-          texteCorr += `= ${etape2Q31} - ${ecritureParentheseSiNegatif(a)}`
-          if (a < 0) texteCorr += `= ${etape2Q31} + ${-a}`
+          texteCorr += `= ${texNombre(etape2Q31)} - ${ecritureParentheseSiNegatif(a)}`
+          if (a < 0) texteCorr += `= ${texNombre(etape2Q31)} + ${-a}`
           break
         }
         case 12: {
