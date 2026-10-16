@@ -55,7 +55,6 @@ export default class ExerciceProbleme006 extends Exercice {
       'Opération posée dans la correction',
       false,
     ]
-    this.interactif = true
     this.sup3 = false
 
     this.correctionDetailleeDisponible = true

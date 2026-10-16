@@ -136,7 +136,6 @@ function construitDroite(a: number, b: number, type?: TypeBornes) {
 export default class RepresenterIntersectionInegalites extends Exercice {
   constructor() {
     super()
-    this.interactif = true
     this.nbQuestions = 4
     this.consigne =
       'Représenter sur chaque droite graduée l’intersection des ensembles de solutions des deux inégalités.'

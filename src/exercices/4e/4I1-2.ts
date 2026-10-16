@@ -71,7 +71,6 @@ export default class AlgoTortue extends Exercice {
     ]
     this.sup2 = 2
     this.typeExercice = 'Scratch'
-    this.interactif = true
     this.listeAvecNumerotation = false
     this.indiceBonneFigure = 0
   }

@@ -31,7 +31,6 @@ export default class VitesseEtDistance extends ExerciceSimple {
   constructor() {
     super()
     this.nbQuestions = 1
-    this.interactif = true
     this.optionsDeComparaison = { estDansIntervalle: true }
     this.formatChampTexte = KeyboardType.clavierNumbers
   }
