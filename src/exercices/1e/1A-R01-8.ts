@@ -104,7 +104,11 @@ export default class PourcentagePartieRestante extends ExerciceSimple {
     La proportion ${categorieFraction[0] === 'e' ? `d'${categorieFraction}` : `de ${categorieFraction}`} est égale à $${fraction.texFraction}$, c'est-à-dire $${formatPourcentage(pourcentageFraction)}$.<br>
     Les trois catégories forment l'ensemble des salariés, donc la proportion de ${categorieDemandee} est :
     $100\\,\\%-${formatPourcentage(pourcentageEffectif)}-${formatPourcentage(pourcentageFraction)}=${formatPourcentage(pourcentageDemande)}$.<br>
-    Donc $${miseEnEvidence(formatPourcentage(pourcentageDemande))}$ des salariés sont des ${categorieDemandee}.`
+    Donc `
+    this.correction += this.versionQcm
+      ? `$${miseEnEvidence(formatPourcentage(pourcentageDemande))}$ `
+      : `$${miseEnEvidence(pourcentageDemande)}~\\%$ `
+    this.correction += `des salariés sont des ${categorieDemandee}.`
 
     this.reponse = this.versionQcm
       ? `$${formatPourcentage(pourcentageDemande)}$`
