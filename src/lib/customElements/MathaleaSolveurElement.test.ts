@@ -5,6 +5,10 @@ import type { IExercice } from '../types'
 
 describe('isSolvedForm', () => {
   it.each([
+    'x=-5/7',
+    'x=-\\frac57',
+    'x=\\frac{-5}7',
+    'x=\\frac5{7}',
     'x=3',
     'x=-3',
     'x=2,5',
@@ -30,6 +34,11 @@ describe('isSolvedForm', () => {
     'x=2\\times\\dfrac{3}{5}',
     'x=\\dfrac{6+1}{5}',
     'x=3+2',
+    'x=5/0',
+    'x=\\frac50',
+    'x=\\frac5{0}',
+    'x=(3+2)/7',
+    'x=5/7/2',
     'x=\\dfrac{6}{0}',
     '2x=6',
     'x=x+1',

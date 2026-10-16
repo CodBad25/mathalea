@@ -325,8 +325,12 @@ describe('MathaleaSolveurElement', () => {
     ['entrainement', '4x=6', 'x=\\dfrac{3}{2}', '\\dfrac{6}{4}=x', 2],
     ['evaluation', '2x=6', 'x=3', 'x=\\dfrac{6}{2}', 1],
     ['entrainement', '2x=-6', 'x=-3', 'x=\\dfrac{-6}{2}', 2],
+    ['evaluation', '7x=-5', 'x=-\\dfrac{5}{7}', 'x=-5/7', 1],
+    ['entrainement', '7x=-5', 'x=-\\dfrac{5}{7}', '-5/7=x', 2],
+    ['evaluation', '7x=-5', 'x=-\\dfrac{5}{7}', 'x=-\\frac57', 1],
+    ['entrainement', '7x=-5', 'x=-\\dfrac{5}{7}', 'x=\\frac{-5}7', 2],
   ] as const)(
-    'termine et note une fraction non simplifiée en mode %s : %s → %s → %s',
+    'termine et note une fraction en mode %s : %s → %s → %s',
     (mode, initial, expected, solution, points) => {
       document.body.innerHTML = addMathaleaSolveur(exercice, 0, {
         initial,

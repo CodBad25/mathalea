@@ -1248,7 +1248,10 @@ La question n'est comptée juste que si la dernière ligne est la forme résolue
 poursuivre de l'autre) **et** conforme à la valeur attendue. Les fractions
 numériques sont acceptées même si elles ne sont pas irréductibles :
 `x=\\dfrac{6}{4}` est une réponse finale juste si la solution attendue est
-`x=\\dfrac{3}{2}`. Le dénominateur doit être non nul. Une étape
+`x=\\dfrac{3}{2}`. Les écritures avec une barre oblique (`x=-5/7`)
+et les fractions LaTeX sans accolades autour des chiffres seuls
+(`x=-\\frac57`, `x=\\frac{-5}7`) sont également acceptées.
+Le dénominateur doit être non nul. Une étape
 intermédiaire équivalente à la solution (ex : `x+3-3=7-3`) ne rapporte donc
 aucun point.
 
