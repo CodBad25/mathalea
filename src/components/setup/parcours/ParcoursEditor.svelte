@@ -1010,6 +1010,33 @@
           >{/each}
       </select>
     </label>
+    <label class="flex items-center gap-2 {quiet}">
+      <input
+        type="checkbox"
+        checked={!parcours.enTetesMasques}
+        onchange={(e) =>
+          update(
+            (p) =>
+              (p.enTetesMasques = !(e.currentTarget as HTMLInputElement)
+                .checked),
+          )}
+      />
+      Afficher les exercices (numéro et titre) ; sinon, les questions s’enchaînent
+    </label>
+    <label class="flex items-center gap-2 {quiet}">
+      <input
+        type="checkbox"
+        disabled={parcours.presentation === 'un_exo_par_page'}
+        checked={!!parcours.melanger}
+        onchange={(e) =>
+          update(
+            (p) => (p.melanger = (e.currentTarget as HTMLInputElement).checked),
+          )}
+      />
+      {parcours.presentation === 'un_exo_par_page'
+        ? 'Mélanger les questions (sans effet avec une page par exercice)'
+        : 'Mélanger les questions (ordre propre à chaque élève)'}
+    </label>
   </section>
 
   <footer
@@ -1048,7 +1075,9 @@
     initialPath={menuPathFor(parcours.niveau, chapterCode)}
     fullScreen
     settingsOpen
-    target={withLevels ? `${parcours.style === 'ceintures' ? 'la' : 'le'} ${levelName(parcours, pickerLevel).toLowerCase()}` : 'ce parcours'}
+    target={withLevels
+      ? `${parcours.style === 'ceintures' ? 'la' : 'le'} ${levelName(parcours, pickerLevel).toLowerCase()}`
+      : 'ce parcours'}
     {selection}
   />
 {/if}

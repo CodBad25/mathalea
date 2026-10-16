@@ -26,6 +26,8 @@ export interface CreationDefaults {
   difficulte: 1 | 2 | 3
   presentation: Presentation
   correction: Validation
+  enTetesMasques?: boolean
+  melanger?: boolean
 }
 
 export interface TeacherLibrary {
@@ -44,8 +46,9 @@ export const emptyLibrary = (): TeacherLibrary => ({
 const ready = (e: LibraryEntry) =>
   e.parcours.titre.trim() !== '' && e.parcours.etapes.length > 0
 
+// Un parcours sans classe se publie aussi : il reste dans la bibliothèque du fichier
 export const toPublish = (e: LibraryEntry) =>
-  e.classes.length > 0 && ready(e) && e.published !== e.parcours.version
+  ready(e) && e.published !== e.parcours.version
 
 export const unpublishedCount = (lib: TeacherLibrary) =>
   lib.entries.filter(toPublish).length
@@ -91,6 +94,8 @@ export function saveParcours(
         difficulte: p.difficulte,
         presentation: p.presentation,
         correction: p.correction,
+        enTetesMasques: !!p.enTetesMasques,
+        melanger: !!p.melanger,
       },
     },
     id: parcours.id,

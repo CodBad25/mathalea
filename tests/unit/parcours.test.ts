@@ -163,7 +163,7 @@ describe('bibliothèque et fichier publié', () => {
         },
       ],
     }
-    expect(unpublishedCount(library)).toBe(1)
+    expect(unpublishedCount(library)).toBe(2)
     const published = publish(library)
     library = published.library
     expect(unpublishedCount(library)).toBe(0)
@@ -214,7 +214,8 @@ describe('bibliothèque et fichier publié', () => {
       'Relatifs',
     ])
     expect(library.entries[1].classes).toEqual(['5e A'])
-    expect(unpublishedCount(library)).toBe(0)
+    // Seul « À moi », jamais publié, reste à publier
+    expect(unpublishedCount(library)).toBe(1)
     library = restore(library, file)
     expect(library.entries).toHaveLength(2)
   })
@@ -233,6 +234,20 @@ describe('bibliothèque et fichier publié', () => {
         id: 'relatifs',
         paliers: [{ titre: 'x', nb: 1, acces: 'pause' }],
       }),
+    ).toBe(false)
+    // Affichage : en-têtes masqués et questions mélangées, comme dans l'application
+    expect(emptyParcours()).toMatchObject({
+      enTetesMasques: true,
+      melanger: true,
+    })
+    expect(isParcours({ ...parcours(), id: 'relatifs', melanger: false })).toBe(
+      true,
+    )
+    expect(isParcours({ ...parcours(), id: 'relatifs', melanger: 'oui' })).toBe(
+      false,
+    )
+    expect(
+      isParcours({ ...parcours(), id: 'relatifs', enTetesMasques: 1 }),
     ).toBe(false)
     expect(() => readParcoursFile('{"format":"autre"}')).toThrow(
       'fichier de parcours',

@@ -99,7 +99,9 @@ export function isParcours(v: unknown): v is Parcours {
     optional(
       v.premiereCeinture,
       (n) => isInteger(n) && (n as number) >= 0 && (n as number) < 7,
-    )
+    ) &&
+    optional(v.enTetesMasques, (b) => typeof b === 'boolean') &&
+    optional(v.melanger, (b) => typeof b === 'boolean')
   )
 }
 

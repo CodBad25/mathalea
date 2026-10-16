@@ -63,6 +63,8 @@ export interface Parcours {
   paliers?: Level[]
   style?: LevelStyle // présentation des paliers aux élèves
   premiereCeinture?: number // rang dans BELTS de la première ceinture (0 : blanche)
+  enTetesMasques?: boolean // ni numéro ni titre d'exercice : les questions s'enchaînent
+  melanger?: boolean // questions des exercices mélangées (sans effet avec un exercice par page)
 }
 
 /** Paliers numérotés, ou ceintures comme au judo (blanche, jaune…) */
@@ -169,6 +171,9 @@ export function emptyParcours(defaults: Partial<Parcours> = {}): Parcours {
     icone: 'bx-book-content',
     presentation: 'une_question_par_page',
     correction: 'question',
+    // Comme dans l'application : questions enchaînées, ordre mélangé
+    enTetesMasques: true,
+    melanger: true,
     etapes: [],
     ...defaults,
   }
