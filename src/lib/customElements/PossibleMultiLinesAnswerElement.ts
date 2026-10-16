@@ -112,6 +112,7 @@ export class PossibleMultiLinesAnswerElement extends MathaleaCustomElement {
     if (element == null)
       return MathaleaMathfieldElement.verifQuestion(exercice, i)
 
+    element.removeEmptyLines()
     const lignesFausses: number[] = []
     element.intermediateLines().forEach((line, k) => {
       if (element.corrigeLigne(line, exercice, i) === false)
@@ -306,6 +307,29 @@ export class PossibleMultiLinesAnswerElement extends MathaleaCustomElement {
     return this.querySelector(
       `[data-pmla-final] ${MathaleaMathfieldElement.elementTag}`,
     )
+  }
+
+  /** Garder la dernière saisie non vide dans le champ de réponse finale. */
+  private removeEmptyLines(): void {
+    const finalField = this.finalMathfield()
+    if (finalField == null) return
+    const lines = this.intermediateLines().filter((line) => {
+      const field = line.querySelector<MathaleaMathfieldElement>(
+        MathaleaMathfieldElement.elementTag,
+      )
+      if ((field?.value ?? '').trim() !== '') return true
+      line.remove()
+      return false
+    })
+    if (finalField.value.trim() === '') {
+      const lastLine = lines.at(-1)
+      if (lastLine == null) return
+      const field = lastLine.querySelector<MathaleaMathfieldElement>(
+        MathaleaMathfieldElement.elementTag,
+      )
+      finalField.value = field?.value ?? ''
+      lastLine.remove()
+    }
   }
 
   private applyLines(lines: string[]): void {
