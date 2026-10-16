@@ -22,7 +22,9 @@ export const dateDePublication = '07/09/2026'
 export const titre = 'Compléter des tables de multiplication effacées'
 export const interactifReady = true
 
-export const uuid = '34c33'
+export const dateDeModifImportante = '16/10/2026'
+
+export const uuid = 'eb23a'
 export const refs = {
   'fr-fr': ['EN-TablesEffacees'],
   'fr-ch': [],
@@ -52,6 +54,7 @@ function tailleDepuisSup(valeur: unknown): number {
 export default class TablesEffacees extends Exercice {
   constructor() {
     super()
+    this.reponseCourteDisponible = false // La réponse est un tableau.
     this.besoinFormulaireNumerique = [
       'Taille de la table',
       TAILLES.length,
@@ -63,7 +66,8 @@ export default class TablesEffacees extends Exercice {
       'Compléter un tableau de multiplication dont certaines cases sont ' +
       'effacées, facteurs compris. La grille a toujours une solution unique, ' +
       'atteignable sans essais : par divisions successives et en évitant de ' +
-      'répéter un nombre sur une ligne ou une colonne. Score : un point par ' +
+      'répéter un nombre sur une ligne ou une colonne. Le nombre de cases à ' +
+      'compléter ne dépend que de la taille de la table. Score : un point par ' +
       'case correctement complétée.'
   }
 
@@ -79,7 +83,7 @@ export default class TablesEffacees extends Exercice {
       'colonne.'
 
     for (let question = 0; question < this.nbQuestions; question++) {
-      const grille = genereTablesEffacees({ taille })
+      const grille = genereTablesEffacees({ taille, casesVidesFixes: true })
       const empreinte = solutionComplete(grille).join('-') + '|' + grille.donnees.join('-')
       if (!this.questionJamaisPosee(question, empreinte)) {
         question--
