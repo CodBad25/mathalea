@@ -73,7 +73,7 @@ export default class nomExercice extends Exercice {
     this.sup2 = 1
     this.sup3 = 1
     this.exoCustomResultat = true
-    this.interactif = true
+    this.reponseCourteDisponible = false // La réponse est une construction.
     this.comment =
       'Dans cet exercice, vous pouvez choisir le nombre de points visibles, le nombre de médiatrices à construire (plafonné à 4) ainsi si la construction doit se faire avec une perpendiculaire ou avec des cercles.'
   }

@@ -50,6 +50,12 @@ export type OptionsTables = {
   facteurMin?: number
   /** Plus grand facteur possible. */
   facteurMax?: number
+  /**
+   * Ramène le nombre de cases vides à `nbCasesVides(taille)`, pour un score
+   * fixe. Sans cette option, le nombre de cases vides varie d'un tirage à
+   * l'autre et les tirages restent ceux de la première version de l'exercice.
+   */
+  casesVidesFixes?: boolean
 }
 
 /** Le côté de la grille complète, en-têtes compris. */
@@ -362,13 +368,37 @@ function choisitFacteurs(
 }
 
 /**
+ * Nombre de cases à compléter, identique pour toutes les grilles d'une taille
+ * donnée : le score d'une question interactive vaut un point par case, il doit
+ * rester fixe quel que soit le tirage.
+ *
+ * Ces valeurs sont les plus petits nombres de cases vides que l'effacement
+ * glouton de `genereTablesEffacees` atteint en pratique : une grille qui en
+ * compte davantage est complétée par des cases révélées, une grille qui en
+ * compte moins est retirée.
+ */
+const CASES_VIDES_PAR_TAILLE: Record<number, number> = {
+  2: 4,
+  3: 9,
+  4: 16,
+  5: 25,
+  6: 37,
+}
+
+/** Le nombre de cases à compléter dans une grille de cette taille. */
+export function nbCasesVides(taille: number): number {
+  return CASES_VIDES_PAR_TAILLE[Math.min(6, Math.max(2, Math.round(taille)))]
+}
+
+/**
  * Une grille de « tables effacées » à solution unique et résoluble sans essais.
  *
  * On tire des facteurs de lignes et de colonnes, on part de la grille toute
  * dévoilée, puis on efface une à une les cases tant que la grille reste à
- * solution unique et déductible. L'ordre d'effacement est mélangé une fois pour
- * toutes : le nombre d'appels au générateur ne dépend que de la taille, jamais
- * des valeurs tirées.
+ * solution unique et déductible. Avec `casesVidesFixes`, le nombre de cases
+ * vides est ensuite ramené à `nbCasesVides(taille)` : révéler une case de plus
+ * conserve l'unicité et la déductibilité, alors qu'une grille trop peu effacée
+ * est tirée à nouveau.
  */
 export function genereTablesEffacees(options: OptionsTables): GrilleTables {
   const taille = Math.min(6, Math.max(2, Math.round(options.taille)))
@@ -377,24 +407,36 @@ export function genereTablesEffacees(options: OptionsTables): GrilleTables {
     facteurMin + taille - 1,
     Math.round(options.facteurMax ?? 9),
   )
-  const lignes = choisitFacteurs(facteurMin, facteurMax, taille)
-  const colonnes = choisitFacteurs(facteurMin, facteurMax, taille)
-  const grille: GrilleTables = { taille, lignes, colonnes, donnees: [] }
-
   const cases = toutesLesCases(taille)
-  const revelees = new Set(cases)
-  for (const index of shuffle(cases)) {
-    revelees.delete(index)
-    if (
-      compteSolutionsTables(grille, revelees, 2) !== 1 ||
-      !estResoluble(grille, revelees)
-    ) {
-      revelees.add(index)
-    }
-  }
+  const viseVides = options.casesVidesFixes ? nbCasesVides(taille) : 0
 
-  grille.donnees = [...revelees].sort((a, b) => a - b)
-  return grille
+  for (;;) {
+    const lignes = choisitFacteurs(facteurMin, facteurMax, taille)
+    const colonnes = choisitFacteurs(facteurMin, facteurMax, taille)
+    const grille: GrilleTables = { taille, lignes, colonnes, donnees: [] }
+
+    const revelees = new Set(cases)
+    for (const index of shuffle(cases)) {
+      revelees.delete(index)
+      if (
+        compteSolutionsTables(grille, revelees, 2) !== 1 ||
+        !estResoluble(grille, revelees)
+      ) {
+        revelees.add(index)
+      }
+    }
+
+    const vides = cases.filter((index) => !revelees.has(index))
+    if (viseVides > 0) {
+      if (vides.length < viseVides) continue
+      for (const index of shuffle(vides).slice(0, vides.length - viseVides)) {
+        revelees.add(index)
+      }
+    }
+
+    grille.donnees = [...revelees].sort((a, b) => a - b)
+    return grille
+  }
 }
 
 /**

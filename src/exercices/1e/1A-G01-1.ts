@@ -41,7 +41,6 @@ type GraduationData = {
 export default class Auto2AG10 extends ExerciceQcmA {
   constructor() {
     super()
-    this.interactif = true
     this.nbQuestions = 1
     this.options.vertical = true
     this.besoinFormulaireCaseACocher = false
@@ -145,7 +144,6 @@ export default class Auto2AG10 extends ExerciceQcmA {
   }
 
   versionAleatoire = () => {
-    this.interactif = true
     const data = this.buildGraduationData()
     const distractors = this.buildDistractors(data)
 

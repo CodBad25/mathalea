@@ -161,7 +161,6 @@ function construitDroite(a: number, type?: TypeInegalite) {
 export default class RepresenterInegaliteSurDroite extends Exercice {
   constructor() {
     super()
-    this.interactif = true
     this.nbQuestions = 4
     this.consigne =
       'Représenter sur chaque droite graduée l’ensemble des nombres réels vérifiant l’inégalité donnée.'

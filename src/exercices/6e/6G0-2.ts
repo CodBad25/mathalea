@@ -32,6 +32,20 @@ export const refs = {
   'fr-2016': ['6G10-1'],
   'fr-ch': ['9ES1A-2'],
 }
+/**
+ * Renvoie la permutation de {0, …, n-1} de rang `rang` (modulo n!) en base factorielle.
+ */
+function permutation(n: number, rang: number): number[] {
+  const restants = Array.from({ length: n }, (_, k) => k)
+  const resultat: number[] = []
+  let r = rang
+  for (let taille = n; taille > 0; taille--) {
+    resultat.push(...restants.splice(r % taille, 1))
+    r = Math.floor(r / taille)
+  }
+  return resultat
+}
+
 export default class DescriptionSegmentDroiteDemiDroite extends Exercice {
   constructor() {
     super()
@@ -151,42 +165,36 @@ export default class DescriptionSegmentDroiteDemiDroite extends Exercice {
         t2,
         labels,
       )
+      // L'ordre des descriptions et celui des notations sont mélangés sans
+      // tirage aléatoire supplémentaire (les valeurs tirées pour une graine
+      // donnée ne changent pas) : la graine locale est déduite des ordonnées
+      // de A et B. Les notations sont décalées par rapport aux descriptions
+      // pour qu'une description ne soit jamais en face de sa notation.
+      const graine = Math.round(A.y * 10) * 21 + Math.round(B.y * 10)
+      const ordreDescriptions = permutation(4, graine)
+      const decalage = 1 + (Math.floor(graine / 24) % 3)
+      const propositionsAMelanger = [
+        propsQcm.droite,
+        propsQcm.demiDroite1,
+        propsQcm.demiDroite2,
+        propsQcm.segment,
+      ]
+      const phrases = ordreDescriptions.map((k) => propositionsAMelanger[k])
+      const notations = ordreDescriptions.map(
+        (_, k) =>
+          propositionsAMelanger[
+            ordreDescriptions[(k + decalage) % ordreDescriptions.length]
+          ],
+      )
       this.autoCorrection[i] = {
         enonce: texte,
         options: { vertical: true, ordered: true },
         propositions: [
-          {
-            texte: propsQcm.droite.phrase,
-            statut: propsQcm.droite.bonneReponse,
-          },
-          {
-            texte: propsQcm.demiDroite1.phrase,
-            statut: propsQcm.demiDroite1.bonneReponse,
-          },
-          {
-            texte: propsQcm.demiDroite2.phrase,
-            statut: propsQcm.demiDroite2.bonneReponse,
-          },
-          {
-            texte: propsQcm.segment.phrase,
-            statut: propsQcm.segment.bonneReponse,
-          },
-          {
-            texte: propsQcm.droite.notation,
-            statut: propsQcm.droite.bonneReponse,
-          },
-          {
-            texte: propsQcm.demiDroite1.notation,
-            statut: propsQcm.demiDroite1.bonneReponse,
-          },
-          {
-            texte: propsQcm.demiDroite2.notation,
-            statut: propsQcm.demiDroite2.bonneReponse,
-          },
-          {
-            texte: propsQcm.segment.notation,
-            statut: propsQcm.segment.bonneReponse,
-          },
+          ...phrases.map((p) => ({ texte: p.phrase, statut: p.bonneReponse })),
+          ...notations.map((p) => ({
+            texte: p.notation,
+            statut: p.bonneReponse,
+          })),
         ],
       }
 

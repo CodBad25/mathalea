@@ -40,7 +40,6 @@ export default class ProblemeDePrix extends ExerciceSimple {
   constructor() {
     super()
     this.nbQuestions = 1
-    this.interactif = true
     this.optionsDeComparaison = { estDansIntervalle: true }
   }
 

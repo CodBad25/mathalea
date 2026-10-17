@@ -89,19 +89,9 @@ export function ficheUrl(exercises: TypstExerciseInput[]): string | undefined {
   return url.href
 }
 
-/** Largeur (et hauteur) du QR-code de fiche, en haut à droite de la première page */
+/** Largeur (et hauteur) du QR-code de fiche, à droite du bloc de titre */
 const FICHE_QRCODE_SIZE = '2cm'
 
-/**
- * QR-code en haut à droite de la première page (repère `here().page() == 1`,
- * comme `pageFooter`), pointant vers toute la sélection d'exercices en vue
- * élève. `#place` sort le contenu du flux normal : il ne prend donc aucune
- * place dans la mise en page du titre, de la page de garde ou du premier
- * exercice, quel que soit l'endroit où ces lignes sont insérées dans le
- * document — mais il peut donc atterrir par-dessus (titre, ligne d'en-tête…) :
- * le `fill: white` du `box` englobant lui garde un fond opaque quel que soit
- * ce qu'il recouvre.
- */
 function qrCodeGlobalVariableName(version: number): string {
   // Conserve le nom historique pour le sujet A : les fiches déjà éditées et
   // leurs modifications ciblées restent ainsi compatibles.
@@ -109,25 +99,17 @@ function qrCodeGlobalVariableName(version: number): string {
 }
 
 /**
- * Décalage vertical du QR-code global, vers le haut, pour qu'il ne recouvre
- * pas la ligne d'en-tête (titre, et étiquette « Sujet A/B... » sur une fiche
- * à plusieurs versions) : sans lui, le `#place` se peint par-dessus cette
- * ligne (voir le commentaire plus haut) et masque l'étiquette. Valeur
- * négative de l'ordre de la taille du QR-code lui-même (`FICHE_QRCODE_SIZE`)
- * plutôt que calculée sur la hauteur réelle du bloc de titre (variable selon
- * l'habillage) : le QR-code remonte dans la marge haute de la page, au-dessus
- * du titre plutôt que par-dessus.
+ * QR-code de fiche, pointant vers toute la sélection d'exercices en vue
+ * élève. `exo-corner` (exercise-bank) le place au bord droit, à l'endroit où
+ * il apparaît dans le flux (juste avant le bloc de titre), sans y prendre de
+ * place : le bloc de titre (`exo-corner-fit`, voir `headerBlock`), les titres
+ * d'exercices et leurs filets s'arrêtent avant lui, et les énoncés le
+ * contournent, jusqu'à ce que le flux soit passé sous le QR-code.
  */
-const FICHE_QRCODE_OFFSET_TOP = '-0.5cm'
-
 function ficheQrCodeLines(version: number, exportMode = false): string[] {
   const urlVariable = qrCodeGlobalVariableName(version)
   return [
-    `#place(top + right, dy: ${FICHE_QRCODE_OFFSET_TOP}, context [`,
-    '  #if here().page() == 1 [',
-    `    ${exportMode ? '' : `#mathalea-anchor("qr-code", ${version})`}#box(width: ${FICHE_QRCODE_SIZE}, fill: white, inset: 2pt)[#qrcode(${urlVariable}, width: 100%)]`,
-    '  ]',
-    '])',
+    `#exo-corner(box(width: ${FICHE_QRCODE_SIZE})[${exportMode ? '' : `#mathalea-anchor("qr-code", ${version})`}#qrcode(${urlVariable}, width: 100%)])`,
   ]
 }
 
@@ -156,7 +138,7 @@ const MATHALEA_LOGO_IMAGE = `image("${LOGO_CAN_VIRTUAL_PATH}", width: 100%)`
  */
 export const EXERCISE_BANK_IMPORT = typstImport(
   'exercise-bank',
-  'exo, exo-setup, exo-solution-box, exo-counter',
+  'exo, exo-setup, exo-solution-box, exo-counter, exo-corner, exo-corner-fit',
 )
 
 /**
@@ -164,9 +146,15 @@ export const EXERCISE_BANK_IMPORT = typstImport(
  * le style `underline` redéfinit `exo-solution-box` (voir
  * `MATHALEA_SOLUTION_UNDERLINE_HELPER`) pour resserrer le titre des corrections.
  */
+/** Import du seul QR-code de fiche, sans exercice habillé par exercise-bank */
+export const EXERCISE_BANK_CORNER_IMPORT = typstImport(
+  'exercise-bank',
+  'exo-corner, exo-corner-fit',
+)
+
 export const EXERCISE_BANK_IMPORT_UNDERLINE = typstImport(
   'exercise-bank',
-  'exo, exo-setup, exo-solution-box as exo-solution-box-pkg, exo-counter',
+  'exo, exo-setup, exo-solution-box as exo-solution-box-pkg, exo-counter, exo-corner, exo-corner-fit',
 )
 
 /**
@@ -4032,6 +4020,10 @@ export function buildTypstDocument(
           : EXERCISE_BANK_IMPORT,
       )
     }
+    // le QR-code de fiche passe par `exo-corner` (voir `ficheQrCodeLines`),
+    // y compris quand les exercices ne sont pas habillés par exercise-bank
+    else if (hasGlobalQrCode && !(options.canMode && coverTemplate === 'can'))
+      lines.push(EXERCISE_BANK_CORNER_IMPORT)
     if (hasGlobalQrCode) lines.push(TIAOMA_IMPORT)
     if (usesTasks) lines.push(TASKIZE_IMPORT, MATHALEA_TASKS_HELPER)
     if (options.autoVerticalSpacing) lines.push(BREATHER_IMPORT)
@@ -4471,6 +4463,9 @@ export function buildTypstDocument(
                   )),
             ]
           : []),
+        ...(globalQrCodeUrls[subject.i] != null
+          ? ficheQrCodeLines(subject.i, exportMode)
+          : []),
         ...(!exportMode && options.headerStyle !== 'aucun'
           ? ['#mathalea-anchor("header", 0)']
           : []),
@@ -4480,10 +4475,8 @@ export function buildTypstDocument(
           !exportMode,
           options.hideVersionLabel,
           scoreInHeader,
+          globalQrCodeUrls[subject.i] != null,
         ),
-        ...(globalQrCodeUrls[subject.i] != null
-          ? ficheQrCodeLines(subject.i)
-          : []),
         '',
         ...subject.enonce,
         ...(exportMode ? [] : [subjectAnchor('end', subject.i)]),
@@ -4532,6 +4525,11 @@ export function buildTypstDocument(
     lines.push('')
   }
   lines.push('// ----- En-tête -----')
+  if (globalQrCodeUrls[0] != null && !globalQrCodeOnCanCover) {
+    // avant le bloc de titre : `exo-corner` publie la place qu'il occupe, que
+    // le bloc de titre et les exercices qui suivent lisent pour l'éviter
+    lines.push(...ficheQrCodeLines(0, exportMode))
+  }
   // repère du bloc de titre : la palette de l'aperçu propose d'y modifier
   // les variables titre, sous-titre et entete (sans objet en mode export, ni
   // quand l'habillage « aucun » n'affiche justement aucun bloc à ce repère)
@@ -4545,15 +4543,9 @@ export function buildTypstDocument(
       !exportMode,
       options.hideVersionLabel,
       scoreInHeader,
+      globalQrCodeUrls[0] != null && !globalQrCodeOnCanCover,
     ),
   )
-  if (globalQrCodeUrls[0] != null && !globalQrCodeOnCanCover) {
-    // après le bloc de titre (et sa ligne d'en-tête) plutôt qu'avant : ces
-    // lignes sont ajoutées à la page dans l'ordre du document, un `#place`
-    // plus tardif se peint donc par-dessus le contenu qui précède plutôt
-    // que l'inverse (sans quoi la ligne du titre traverse le QR-code)
-    lines.push(...ficheQrCodeLines(0, exportMode))
-  }
   lines.push('')
   lines.push(...withSubjectEnd(primary.renderLines, 0, exportMode))
   for (const [i, version] of extra.entries()) {
@@ -4579,6 +4571,10 @@ export function buildTypstDocument(
       )
       lines.push('')
     }
+    const qrCodeHere =
+      globalQrCodeUrls[i + 1] != null &&
+      !(options.canMode && coverTemplate === 'can')
+    if (qrCodeHere) lines.push(...ficheQrCodeLines(i + 1, exportMode))
     if (!exportMode && options.headerStyle !== 'aucun') {
       lines.push('#mathalea-anchor("header", 0)')
     }
@@ -4589,14 +4585,9 @@ export function buildTypstDocument(
         !exportMode,
         options.hideVersionLabel,
         scoreInHeader,
+        qrCodeHere,
       ),
     )
-    if (
-      globalQrCodeUrls[i + 1] != null &&
-      !(options.canMode && coverTemplate === 'can')
-    ) {
-      lines.push(...ficheQrCodeLines(i + 1, exportMode))
-    }
     lines.push('')
     lines.push(...withSubjectEnd(version.renderLines, i + 1, exportMode))
   }
@@ -4769,6 +4760,27 @@ const MATHALEA_SCORE_CELL =
  * les réglages), selon l'habillage choisi.
  */
 function headerBlock(
+  style: HeaderStyle,
+  versionLabel?: string,
+  emitAnchor = false,
+  hideVersionLabel = false,
+  score = false,
+  besideQrCode = false,
+): string[] {
+  const lines = headerBlockLines(
+    style,
+    versionLabel,
+    emitAnchor,
+    hideVersionLabel,
+    score,
+  )
+  // à côté du QR-code de fiche (voir `ficheQrCodeLines`), le bloc de titre
+  // s'arrête avant lui plutôt que de passer dessous
+  if (!besideQrCode || lines.length === 0) return lines
+  return ['#exo-corner-fit[', ...lines.map((line) => `  ${line}`), ']']
+}
+
+function headerBlockLines(
   style: HeaderStyle,
   versionLabel?: string,
   emitAnchor = false,

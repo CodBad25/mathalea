@@ -11,6 +11,7 @@ import {
   compteSolutionsTables,
   estResoluble,
   genereTablesEffacees,
+  nbCasesVides,
   solutionComplete,
   toutesLesCases,
   valeurCase,
@@ -115,6 +116,24 @@ describe('génération', () => {
       seedrandom(`tablesTrous${taille}`, { global: true })
       const grille = genereTablesEffacees({ taille })
       expect(grille.donnees.length).toBeLessThan(toutesLesCases(taille).length)
+    }
+  })
+
+  it('laisse toujours le même nombre de cases vides pour une taille donnée', () => {
+    for (const taille of [2, 3, 4, 5, 6]) {
+      for (let graine = 0; graine < 40; graine++) {
+        seedrandom(`tablesVides${taille}-${graine}`, { global: true })
+        const grille = genereTablesEffacees({
+          taille,
+          casesVidesFixes: true,
+        })
+        expect(
+          toutesLesCases(taille).length - grille.donnees.length,
+          `taille ${taille}, graine ${graine}`,
+        ).toBe(nbCasesVides(taille))
+        expect(compteSolutionsTables(grille, grille.donnees, 2)).toBe(1)
+        expect(estResoluble(grille, grille.donnees)).toBe(true)
+      }
     }
   })
 

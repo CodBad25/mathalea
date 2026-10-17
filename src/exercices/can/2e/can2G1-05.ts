@@ -1,6 +1,7 @@
 import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { toutPourUnPoint } from '../../../lib/interactif/fonctionsBaremes'
+import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import {
   miseEnEvidence,
@@ -33,11 +34,12 @@ export default class CalculCoordonneesMilieu extends ExerciceSimple {
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
     this.typeExercice = 'simple'
     this.nbQuestions = 1
-    this.formatInteractif = 'fillInTheBlank'
+    this.formatInteractif = 'fill-in-the-blank'
   }
 
   nouvelleVersion() {
     let a, b, c, d
+    let enonce = ''
     const nom = creerNomDePolygone(2, 'MPQDO')
     switch (this.quotaChoice('type', ['a', 'b'])) {
       case 'a':
@@ -48,7 +50,7 @@ export default class CalculCoordonneesMilieu extends ExerciceSimple {
         {
           const xM = new FractionEtendue(a + b, 2)
           const yM = new FractionEtendue(c + d, 2)
-          this.consigne = `Dans un repère du plan, on donne $${nom[0]}(${a}\\,;\\,${c})$ et $${nom[1]}(${b}\\,;\\,${d})$.<br>
+          enonce = `Dans un repère du plan, on donne $${nom[0]}(${a}\\,;\\,${c})$ et $${nom[1]}(${b}\\,;\\,${d})$.<br>
         Déterminer les coordonnées du milieu $M$ de $[${nom[0] + nom[1]}]$.`
           this.question = `M\\left( %{champ1} ; %{champ2} \\right)`
           this.correction = `Les coordonnées du milieu $M$ sont données par :
@@ -81,7 +83,7 @@ export default class CalculCoordonneesMilieu extends ExerciceSimple {
         {
           const xM = new FractionEtendue(a, 2)
           const yM = new FractionEtendue(b, 2)
-          this.consigne = `Dans un repère du plan d'origine $O$, on donne $${nom[0]}(${a}\\,;\\,${b})$.<br>
+          enonce = `Dans un repère du plan d'origine $O$, on donne $${nom[0]}(${a}\\,;\\,${b})$.<br>
         Déterminer les coordonnées du milieu $M$ de $[O${nom[0]}]$.`
           this.question = `M\\left( %{champ1} \\,;\\, %{champ2} \\right)`
           this.correction = `Comme les coordonnées du point $O$ sont $(0\\,;\\,0)$, les coordonnées du milieu $M$ sont données par :
@@ -107,7 +109,16 @@ export default class CalculCoordonneesMilieu extends ExerciceSimple {
         }
         break
     }
-    this.canEnonce = this.consigne
+    this.canEnonce = enonce
+    this.question =
+      enonce +
+      '<br>' +
+      remplisLesBlancs(
+        this,
+        0,
+        this.question ?? '',
+        KeyboardType.clavierDeBaseAvecFraction,
+      )
     this.canReponseACompleter = '$M(\\ldots\\,;\\,\\ldots)$'
   }
 }

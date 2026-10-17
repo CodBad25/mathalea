@@ -1427,17 +1427,18 @@ describe('buildTypstDocument', () => {
       ],
       { ...defaultTypstDocumentOptions, showQrCodeFiche: true },
     )
-    expect(withQr).toContain('#place(top + right, dy: -0.5cm, context [')
-    expect(withQr).toContain('#if here().page() == 1 [')
+    // `exo-corner` (exercise-bank) le place à droite du bloc de titre, que
+    // le bloc de titre et les exercices évitent (`exo-corner-fit`)
+    expect(withQr).toContain('#exo-corner(box(width: 2cm)[')
+    expect(withQr.indexOf('#exo-corner(')).toBeLessThan(
+      withQr.indexOf('#exo-corner-fit['),
+    )
     expect(withQr).toContain('#import "@preview/tiaoma:0.3.0": qrcode')
     // L'URL reste une variable Typst lisible et modifiable dans le source,
     // puis tiaoma génère le QR-code pendant la compilation.
     expect(withQr).toContain('#let qr-code-global-url = "')
     expect(withQr).toContain('#qrcode(qr-code-global-url, width: 100%)')
     expect(withQr).toContain('#mathalea-anchor("qr-code", 0)')
-    // fond blanc explicite : le QR-code reste lisible quoi qu'il recouvre
-    // (titre, ligne d'en-tête…), `#place` le sortant du flux normal
-    expect(withQr).toContain('fill: white')
     // les deux exercices sont regroupés dans une seule URL, avec les mêmes
     // graines que celles imprimées, un exercice par page (1), non interactif
     // (0) mais modifiable par l'élève (1)
@@ -1453,14 +1454,14 @@ describe('buildTypstDocument', () => {
     const withoutQr = buildTypstDocument([
       exercise({ url: url1, questions: ['$1+1$'] }),
     ])
-    expect(withoutQr).not.toContain('#place(')
+    expect(withoutQr).not.toContain('#exo-corner(')
 
     // aucun exercice imprimable n'a d'URL : pas de QR-code de fiche
     const noUrl = buildTypstDocument([exercise({ questions: ['$1+1$'] })], {
       ...defaultTypstDocumentOptions,
       showQrCodeFiche: true,
     })
-    expect(noUrl).not.toContain('#place(')
+    expect(noUrl).not.toContain('#exo-corner(')
   })
 
   it('ajoute et repère un QR-code propre à chaque sujet', () => {
@@ -2316,7 +2317,7 @@ describe('mode « Course aux nombres » (canMode)', () => {
     )
     // La couverture provoque un saut de page : le QR doit être émis avant,
     // et non dans le bloc d'en-tête qui suit.
-    expect(code).not.toContain('#place(top + right, dy: -0.5cm, context [')
+    expect(code).not.toContain('#exo-corner(')
   })
 
   it('préfère les énoncés CAN (canQuestions) aux questions ordinaires', () => {

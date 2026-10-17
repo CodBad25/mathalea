@@ -88,7 +88,6 @@ function graphique(
 export default class UnionIntersectionIntervalles extends Exercice {
   constructor() {
     super()
-    this.interactif = true
     this.nbQuestions = 4
     this.consigne = 'Représenter sur la droite graduée l’ensemble demandé.'
     this.spacing = 2

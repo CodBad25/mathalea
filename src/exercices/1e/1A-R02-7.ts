@@ -1,5 +1,8 @@
 import { choice } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
@@ -41,7 +44,7 @@ ${
 }`
         explication = `La partie visible représente $${pourcentageDonne} \\,\\%$ du total.<br>
 Comme celle-ci est $${valeurDonnee}$ ${unite}, on retrouve la hauteur totale en la multipliant par $10$.<br>
-$${valeurDonnee} \\text{ ${unite}} \\times 10 = ${miseEnEvidence(texNombre(total))}$ $${miseEnEvidence(`\\text{${unite}}`)}$`
+$${valeurDonnee} \\text{ ${unite}} \\times 10 = ${miseEnEvidence(texNombre(total))}$`
         break
 
       case 'iceberg2':
@@ -54,7 +57,7 @@ ${
 }`
         explication = `La partie sous l'eau représente $${pourcentageDonne} \\,\\%$ du total.<br>
 Pour trouver la hauteur totale, on divise la hauteur sous l'eau par $${pourcentageDonne / 10}$ (pour avoir $10\\,\\%$), puis on multiplie par $10$ (pour avoir $100\\,\\%$) :<br>
-$(${texNombre(valeurDonnee)} \\div ${pourcentageDonne / 10}) \\times 10 = ${miseEnEvidence(texNombre(total))}$ $${miseEnEvidence(`\\text{${unite}}`)}$`
+$(${texNombre(valeurDonnee)} \\div ${pourcentageDonne / 10}) \\times 10 = ${miseEnEvidence(texNombre(total))}$`
         break
 
       case 'recyclage1':
@@ -67,7 +70,7 @@ ${
 }`
         explication = `Les déchets non recyclés représentent $${pourcentageDonne} \\,\\%$ du total.<br>
 Pour trouver la masse totale, on divise par $${pourcentageDonne / 10}$ (pour avoir $10\\,\\%$), puis on multiplie par $10$ (pour avoir $100\\,\\%$) :<br>
-$(${texNombre(valeurDonnee)} \\div ${pourcentageDonne / 10}) \\times 10 = ${miseEnEvidence(texNombre(total))}$ $${miseEnEvidence(`\\text{${unite}}`)}$`
+$(${texNombre(valeurDonnee)} \\div ${pourcentageDonne / 10}) \\times 10 = ${miseEnEvidence(texNombre(total))}$`
         break
 
       case 'recyclage2':
@@ -80,7 +83,7 @@ ${
 }`
         explication = `Les déchets recyclés représentent $${pourcentageDonne} \\,\\%$ du total.<br>
 Pour trouver la masse totale, on divise par $${pourcentageDonne / 10}$ (pour avoir $10\\,\\%$), puis on multiplie par $10$ (pour avoir $100\\,\\%$) :<br>
-$(${texNombre(valeurDonnee)} \\div ${pourcentageDonne / 10}) \\times 10 = ${miseEnEvidence(texNombre(total))}$ $${miseEnEvidence(`\\text{${unite}}`)}$`
+$(${texNombre(valeurDonnee)} \\div ${pourcentageDonne / 10}) \\times 10 = ${miseEnEvidence(texNombre(total))}$`
         break
 
       case 'budget1':
@@ -95,7 +98,7 @@ ${
 On cherche d'abord ce que représentent $${pourcentageCache} \\,\\%$ en divisant par $3$ :<br>
 $${texNombre(valeurDonnee)} \\div 3 = ${texNombre(valeurDonnee / 3)}$ ${unite}<br>
 Puis on multiplie par $4$ pour obtenir le total ($100 \\,\\%$) :<br>
-$${texNombre(valeurDonnee / 3)} \\times 4 = ${miseEnEvidence(texNombre(total))}$ $${miseEnEvidence(`\\text{${unite}}`)}$`
+$${texNombre(valeurDonnee / 3)} \\times 4 = ${miseEnEvidence(texNombre(total))}$`
         break
 
       case 'budget2':
@@ -108,7 +111,7 @@ ${
 }`
         explication = `Les loisirs représentent $${pourcentageDonne} \\,\\%$ du total.<br>
 Pour trouver le budget total, on multiplie par $4$ (car $25\\,\\% \\times 4 = 100\\,\\%$) :<br>
-$${texNombre(valeurDonnee)} \\times 4 = ${miseEnEvidence(texNombre(total))}$ $${miseEnEvidence(`\\text{${unite}}`)}$`
+$${texNombre(valeurDonnee)} \\times 4 = ${miseEnEvidence(texNombre(total))}$`
         break
 
       case 'deplacements1':
@@ -121,7 +124,7 @@ ${
 }`
         explication = `Les déplacements sans vélo représentent $${pourcentageDonne} \\,\\%$ du total.<br>
 Pour trouver le nombre total, on divise par $${pourcentageDonne / 10}$ (pour avoir $10\\,\\%$), puis on multiplie par $10$ (pour avoir $100\\,\\%$) :<br>
-$(${texNombre(valeurDonnee)} \\div ${pourcentageDonne / 10}) \\times 10 = ${miseEnEvidence(texNombre(total))}$ $${miseEnEvidence(`\\text{${unite}}`)}$`
+$(${texNombre(valeurDonnee)} \\div ${pourcentageDonne / 10}) \\times 10 = ${miseEnEvidence(texNombre(total))}$`
         break
 
       case 'deplacements2':
@@ -134,7 +137,7 @@ ${
 }`
         explication = `Les déplacements à vélo représentent $${pourcentageDonne} \\,\\%$ du total.<br>
 Pour trouver le nombre total, on divise par $${pourcentageDonne / 10}$ (pour avoir $10\\,\\%$), puis on multiplie par $10$ (pour avoir $100\\,\\%$) :<br>
-$(${texNombre(valeurDonnee)} \\div ${pourcentageDonne / 10}) \\times 10 = ${miseEnEvidence(texNombre(total))}$ $${miseEnEvidence(`\\text{${unite}}`)}$`
+$(${texNombre(valeurDonnee)} \\div ${pourcentageDonne / 10}) \\times 10 = ${miseEnEvidence(texNombre(total))}$`
         break
 
       case 'lecture1':
@@ -147,7 +150,7 @@ ${
 }`
         explication = `Les pages restantes représentent $${pourcentageDonne} \\,\\%$ du total.<br>
 Pour trouver le nombre total de pages, on divise le nombre de pages restantes par $${pourcentageDonne / 10}$ (pour avoir $10\\,\\%$), puis on multiplie par $10$ (pour avoir $100\\,\\%$) :<br>
-$(${valeurDonnee} \\div ${pourcentageDonne / 10}) \\times 10 = ${miseEnEvidence(texNombre(total))}$ $${miseEnEvidence(`\\text{${unite}}`)}$`
+$(${valeurDonnee} \\div ${pourcentageDonne / 10}) \\times 10 = ${miseEnEvidence(texNombre(total))}$`
         break
 
       case 'lecture2':
@@ -160,9 +163,12 @@ ${
 }`
         explication = `Les pages lues représentent $${pourcentageDonne} \\,\\%$ du total.<br>
 Pour trouver le nombre total de pages, on divise le nombre de pages déjà lues par $${pourcentageDonne / 10}$ (pour avoir $10\\,\\%$), puis on multiplie par $10$ (pour avoir $100\\,\\%$) :<br>
-$(${valeurDonnee} \\div ${pourcentageDonne / 10}) \\times 10 = ${miseEnEvidence(texNombre(total))}$ $${miseEnEvidence(`\\text{${unite}}`)}$`
+$(${valeurDonnee} \\div ${pourcentageDonne / 10}) \\times 10 = ${miseEnEvidence(texNombre(total))}$`
         break
     }
+    explication += this.versionQcm
+      ? ` ${texteEnCouleurEtGras(`${unite}`)}`
+      : ` ${unite}`
 
     this.question = situation
     this.correction = explication

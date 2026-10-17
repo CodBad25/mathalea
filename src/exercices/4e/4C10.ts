@@ -175,7 +175,7 @@ export default class ProduitsEtQuotientRelatifs extends Exercice {
             const aF = a as FractionEtendue
             const bF = b as FractionEtendue
             c = aF.produitFraction(bF)
-            texte = `$\\dfrac{${c.texFraction}}{${aF.texFraction}} = $${ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)}`
+            texte = `$\\dfrac{${c.texFraction}}{${aF.texFraction}} = $${ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBaseAvecFraction)}`
             texteCorr = texte.split('=')[0]
             b = c.produitFraction(aF.inverse())
             texteCorr += ` = ${c.texProduitFraction(aF.inverse(), true)}$`

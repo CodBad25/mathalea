@@ -220,7 +220,12 @@ export default class DevelopperExpressionsSecondDegre extends Exercice {
           : secondEstNegatif
             ? '+'
             : '-'
-      const expression = `${premier.expression}${operateur}${secondExpressionAffichee}`
+      // Une soustraction porte sur tout le trinôme, y compris si son
+      // coefficient dominant est négatif.
+      const expression =
+        signe === -1 && second.nature === 'trinome'
+          ? `${premier.expression}-\\left(${second.expression}\\right)`
+          : `${premier.expression}${operateur}${secondExpressionAffichee}`
       const coefficientsResultat = additionne(
         premier.coefficients,
         second.coefficients,
@@ -245,9 +250,8 @@ export default class DevelopperExpressionsSecondDegre extends Exercice {
               KeyboardType.clavierDeBaseAvecVariable,
             )}`
           : `$${lettre}=${expression}$`
-        const signeMoinsDevantBlocADevelopper =
-          signe === -1 && (second.nature === 'DD' || second.nature === 'IR')
-        const etapesDeDeveloppement = signeMoinsDevantBlocADevelopper
+        const signeMoinsDevantBloc = signe === -1 && second.nature !== 'DS'
+        const etapesDeDeveloppement = signeMoinsDevantBloc
           ? `&=${premier.developpee}-\\left(${second.developpee}\\right)\\\\
           &=${premier.developpee}${raccord}${developpementSecondAvecSigne}\\\\`
           : `&=${premier.developpee}${raccord}${developpementSecondAvecSigne}\\\\`

@@ -225,10 +225,10 @@ export default class Auto1AR7 extends ExerciceSimple {
       texteItalique('Méthode 1 – avec le coefficient de proportionnalité') +
       ' :<br>' +
       `On calcule $k$ avec une colonne connue : $k = ${kTex}$.<br>` +
-      `${methode1}<br>` +
+      `${methode1}<br><br>` +
       texteItalique('Méthode 2 – les produits en croix sont égaux') +
       ' :<br>' +
-      `${methode2}.<br>` +
+      `${methode2}.<br><br>` +
       `Vérification : ${verification}` +
       astuce
     )
