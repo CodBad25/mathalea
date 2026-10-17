@@ -46,7 +46,6 @@ class DerivationFonctionsUsuellesEtendue extends Exercice {
     this.nbQuestions = 5
     this.correctionDetailleeDisponible = true
     this.correctionDetaillee = false
-    this.interactif = true
   }
 
   nouvelleVersion() {

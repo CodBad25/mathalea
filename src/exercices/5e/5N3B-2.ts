@@ -47,7 +47,6 @@ export default class ExerciceAdditionnerSoustraireFractions5e extends Exercice {
     this.spacingCorr = 3
     this.nbQuestions = 4
     this.nbColsCorr = 2
-    this.interactif = true
     this.besoinFormulaireNumerique = [
       'Valeur maximale du coefficient multiplicateur',
       99999,

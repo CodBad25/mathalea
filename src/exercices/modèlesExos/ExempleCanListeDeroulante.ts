@@ -23,7 +23,6 @@ export default class TestListDeroulante extends ExerciceSimple {
     super()
     this.formatInteractif = 'liste-deroulante'
     this.typeExercice = 'simple'
-    this.interactif = true
     this.nbQuestions = 3
   }
 

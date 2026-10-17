@@ -33,7 +33,6 @@ export const refs = {
 export default class MultiplicationMentalDecimaux extends Exercice {
   constructor() {
     super()
-    this.interactif = true // Il n'existe pas de version non QCM
     this.consigne =
       'Trouver la réponse exacte du calcul parmi les réponses proposées.'
     this.nbQuestions = 4 // Ici le nombre de questions
@@ -45,7 +44,6 @@ export default class MultiplicationMentalDecimaux extends Exercice {
       typeDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    this.interactif = true // Il n'existe pas de version non QCM
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
@@ -219,9 +217,7 @@ export default class MultiplicationMentalDecimaux extends Exercice {
       }
       const props = propositionsQcm(this, i)
 
-      if (this.interactif) {
-        texte += '<br>' + props.texte
-      }
+      texte += '<br>' + props.texte
 
       if (this.questionJamaisPosee(i, a, b)) {
         // Si la question n'a jamais été posée, on la stocke dans la liste des questions
