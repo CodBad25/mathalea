@@ -3,7 +3,6 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence, texteGras } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { context } from '../../../modules/context'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer une valeur définie avec un pourcentage'
@@ -64,9 +63,11 @@ export default class ValeursDefPourcentage extends ExerciceSimple {
         $\\begin{aligned}
         ${choix[0]}\\,\\% \\text{ de } N &=  ${texNombre(valeur, 2)}\\\\
         100\\,\\% \\text{ de } N&=${choix[2]}\\times${texNombre(valeur, 2)}\\\\
-        ${choix[0] === 5 && !Number.isInteger((choix[0] * choix[1]) / 100) ? `100\\,\\% \\text{ de } N&=\\underbrace{2\\times 10}_{=20}\\times${texNombre(valeur, 2)}\\\\` : context.isHtml ? '' : '\\'}
-        ${miseEnEvidence('N')}&${miseEnEvidence(`=${texNombre(choix[1], 0)}`)}
-        \\end{aligned}$<br>`
+        ${choix[0] === 5 && !Number.isInteger((choix[0] * choix[1]) / 100) ? `100\\,\\% \\text{ de } N&=\\underbrace{2\\times 10}_{=20}\\times${texNombre(valeur, 2)}\\\\` : ''}`
+    this.correction += this.versionQcm
+      ? `${miseEnEvidence('N')}&${miseEnEvidence(`=${texNombre(choix[1], 0)}`)}`
+      : `N&=${miseEnEvidence(`${texNombre(choix[1], 0)}`)}`
+    this.correction += `\\end{aligned}$<br>`
     if (choix[0] === 5 && !Number.isInteger((choix[0] * choix[1]) / 100)) {
       this.correction += `${texteGras('Remarque : ')} <br>
               Pour multiplier un nombre par $20$, on peut le multiplier par $10$, puis par $2$.`
