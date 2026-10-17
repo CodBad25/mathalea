@@ -48,7 +48,9 @@ function getConsoleTestTimeouts(urlExercice: string): ConsoleTestTimeouts {
     url.port === '80' ||
     (url.port === '' && process.env.CI)
   const shortTimeout = 10_000
-  const forgeTimeout = 30_000
+  // Le serveur Vite des runners compile les modules à la demande : les
+  // exercices lourds (apigeom…) dépassent 30 s quand le runner est chargé.
+  const forgeTimeout = 90_000
   const timeout = isForgeLocalServer ? forgeTimeout : shortTimeout
 
   return {
