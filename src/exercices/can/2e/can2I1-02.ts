@@ -74,7 +74,7 @@ export default class CalculToutAvecPartie extends ExerciceSimple {
     const correctionCommune = `En notant $N$ le nombre total d'élèves, 
     $${taux}\\,\\%$ de $N$ est égal à $${partie}$ élèves.<br>
 Puisque $${taux}\\,\\% =\\dfrac{${taux}}{100}${taux === 1 ? '' : `=${fracTaux.texFractionSimplifiee}`}$, alors $N$ est $${fracTaux.d}$ fois plus grand que $${partie}$.<br>
-Ainsi,  $N=${multiplicateur}\\times ${partie}$ élèves soit 
+Ainsi,  $N=${multiplicateur}\\times ${partie}$ élèves, soit 
     $${miseEnEvidence(`${texNombre(total, 0)}`)}$ élèves au total.`
 
     const distracteursCommuns = [

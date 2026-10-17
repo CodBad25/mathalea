@@ -29,7 +29,7 @@
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence, texteItalique } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
-import { texNombre } from '../../lib/outils/texNombre'
+import { texPrix } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
 
@@ -481,7 +481,7 @@ export default class Auto1AR71 extends ExerciceSimple {
     // Remplacements de base
     resultat = resultat.replace(/#Q1/g, qte1.toString())
     resultat = resultat.replace(/#Q2/g, qte2.toString())
-    resultat = resultat.replace(/#PRIX1/g, `$${texNombre(prix1, 2)}$`)
+    resultat = resultat.replace(/#PRIX1/g, `$${texPrix(prix1)}$`)
 
     // Objets avec accord singulier/pluriel
     const objet1 = qte1 > 1 ? objet.pluriel : objet.nom
@@ -563,9 +563,7 @@ export default class Auto1AR71 extends ExerciceSimple {
     if (propositions.some((p) => p <= 0)) return null
 
     // Vérifier que les 4 propositions sont distinctes après formatage
-    const propositionsFormatees = propositions.map(
-      (p) => `$${texNombre(p, 2)}$`,
-    )
+    const propositionsFormatees = propositions.map((p) => `$${texPrix(p)}$`)
     if (new Set(propositionsFormatees).size !== 4) return null
 
     return {
@@ -699,36 +697,36 @@ export default class Auto1AR71 extends ExerciceSimple {
         texteItalique('Méthode 1 – par multiplication directe') +
         ' :<br>' +
         `La quantité est multipliée par $${rapport}$ (car $${qte2} = ${qte1} \\times ${rapport}$).<br>` +
-        `Donc le prix est aussi multiplié par $${rapport}$ : $${texNombre(prix1, 2)} \\times ${rapport} = ${miseEnEvidence(texNombre(bonneReponse, 2))}$ €.<br>` +
+        `Donc le prix est aussi multiplié par $${rapport}$ : $${texPrix(prix1)} \\times ${rapport} = ${miseEnEvidence(texPrix(bonneReponse))}$ €.<br><br>` +
         texteItalique('Méthode 2 – calcul du prix unitaire') +
         ' :<br>' +
-        `Le prix d'${article} ${objet.nom} est : $\\dfrac{${texNombre(prix1, 2)}}{${qte1}} = ${texNombre(prixUnitaire, 2)}$ €.<br>` +
-        `Donc le prix de $${qte2}$ ${objetsPluriel2} est : $${qte2} \\times ${texNombre(prixUnitaire, 2)} = ${miseEnEvidence(texNombre(bonneReponse, 2))}$ €.`
+        `Le prix d'${article} ${objet.nom} est : $\\dfrac{${texPrix(prix1)}}{${qte1}} = ${texPrix(prixUnitaire)}$ €.<br>` +
+        `Donc le prix de $${qte2}$ ${objetsPluriel2} est : $${qte2} \\times ${texPrix(prixUnitaire)} = ${miseEnEvidence(texPrix(bonneReponse))}$ €.`
     } else {
       // CAS GÉNÉRAL : rapport non entier
       this.correction =
         texteItalique('Méthode 1 – calcul du prix unitaire') +
         ' :<br>' +
-        `Le prix d'${article} ${objet.nom} est : $\\dfrac{${texNombre(prix1, 2)}\\text{ €}}{${qte1}} = ${texNombre(prixUnitaire, 2)}$ €.<br>` +
-        `Donc le prix de $${qte2}$ ${objetsPluriel2} est : $${qte2} \\times ${texNombre(prixUnitaire, 2)}\\text{ €} = ${miseEnEvidence(texNombre(bonneReponse, 2))}$ €.<br>` +
+        `Le prix d'${article} ${objet.nom} est : $\\dfrac{${texPrix(prix1)}\\text{ €}}{${qte1}} = ${texPrix(prixUnitaire)}$ €.<br>` +
+        `Donc le prix de $${qte2}$ ${objetsPluriel2} est : $${qte2} \\times ${texPrix(prixUnitaire)}\\text{ €} = ${miseEnEvidence(texPrix(bonneReponse))}$ €.<br><br>` +
         texteItalique('Méthode 2 – par produit en croix') +
         ' :<br>' +
-        `On a la proportion : $\\dfrac{${qte1} \\text{ ${objetsPluriel1}}}{${texNombre(prix1, 2)} \\text{ €}} = \\dfrac{${qte2} \\text{ ${objetsPluriel2}}}{? \\text{ €}}$.<br>` +
-        `Donc $${qte1} \\times ? = ${qte2} \\times ${texNombre(prix1, 2)}$,  d'où  $? = \\dfrac{${qte2} \\times ${texNombre(prix1, 2)}}{${qte1}} = ${texNombre(bonneReponse, 2)}$.<br>` +
-        `Le prix de ${qte2} ${objetsPluriel2} est $${miseEnEvidence(texNombre(bonneReponse, 2))}$ €.<br>` +
-        `Vérification : $${qte1} \\times ${texNombre(bonneReponse, 2)} = ${texNombre(qte1 * bonneReponse, 2)}$  et  $${qte2} \\times ${texNombre(prix1, 2)} = ${texNombre(qte2 * prix1, 2)}$.`
+        `On a la proportion : $\\dfrac{${qte1} \\text{ ${objetsPluriel1}}}{${texPrix(prix1)} \\text{ €}} = \\dfrac{${qte2} \\text{ ${objetsPluriel2}}}{? \\text{ €}}$.<br>` +
+        `Donc $${qte1} \\times ? = ${qte2} \\times ${texPrix(prix1)}$,  d'où  $? = \\dfrac{${qte2} \\times ${texPrix(prix1)}}{${qte1}} = ${texPrix(bonneReponse)}$.<br>` +
+        `Le prix de ${qte2} ${objetsPluriel2} est $${miseEnEvidence(texPrix(bonneReponse))}$ €.<br>` +
+        `<br>Vérification : $${qte1} \\times ${texPrix(bonneReponse)} = ${texPrix(qte1 * bonneReponse)}$  et  $${qte2} \\times ${texPrix(prix1)} = ${texPrix(qte2 * prix1)}$.`
     }
 
     // ========================================================================
     // CONSTRUCTION RÉPONSES
     // ========================================================================
     this.reponse = this.versionQcm
-      ? `$${texNombre(bonneReponse, 2)}$ €`
+      ? `$${texPrix(bonneReponse)}$ €`
       : bonneReponse
     this.distracteurs = [
-      `$${texNombre(distracteurs[0], 2)}$ €`,
-      `$${texNombre(distracteurs[1], 2)}$ €`,
-      `$${texNombre(distracteurs[2], 2)}$ €`,
+      `$${texPrix(distracteurs[0])}$ €`,
+      `$${texPrix(distracteurs[1])}$ €`,
+      `$${texPrix(distracteurs[2])}$ €`,
     ]
     this.optionsChampTexte = { texteAvant: '<br>', texteApres: ' €' }
     this.canEnonce = this.question
