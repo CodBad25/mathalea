@@ -1,6 +1,6 @@
 import { texteGras } from '../../lib/format/style'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { combinaisonListes } from '../../lib/outils/arrayOutils'
+import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -13,7 +13,7 @@ export const titre = "Déterminer un taux d'évolution global"
 export const interactifReady = true
 
 export const dateDePublication = '06/01/2022'
-export const dateDeModifImportante = '04/05/2023'
+export const dateDeModifImportante = '17/10/2026'
 /**
  * Problèmes d'évolutions successives'
  *
@@ -31,6 +31,29 @@ export const refs = {
   'fr-fr': ['2I21-1', 'BP1CF07'],
   'fr-ch': ['10FA2B-15'],
 }
+/**
+ * Tire deux taux d'évolution (en %) calculables sans calculatrice : des multiples de 10,
+ * pour que les coefficients multiplicateurs n'aient qu'une décimale.
+ * @returns [premier taux, deuxième taux]
+ */
+function tauxSansCalculatrice(): [number, number] {
+  const dizaines = [10, 20, 30, 40, 50]
+  return [
+    choice(dizaines) * choice([-1, 1]),
+    choice(dizaines) * choice([-1, 1]),
+  ]
+}
+
+/**
+ * Aide au calcul mental du produit de deux coefficients multiplicateurs à une décimale.
+ */
+function aideProduitDeTete(CM1: number, CM2: number): string {
+  const a = Math.round(CM1 * 10)
+  const b = Math.round(CM2 * 10)
+  const produit = `${texNombre(CM1, 1)} \\times ${texNombre(CM2, 1)}`
+  return `<br>Pour calculer $${produit}$ sans calculatrice, on écrit :<br>$${produit} = ${a} \\times 0{,}1 \\times ${b} \\times 0{,}1 = (${a} \\times ${b}) \\times 0{,}01 = ${a * b} \\times 0{,}01 = ${texNombre((a * b) / 100, 2)}$.`
+}
+
 export default class EvolutionsSuccesives extends Exercice {
   constructor() {
     super()
@@ -40,9 +63,12 @@ export default class EvolutionsSuccesives extends Exercice {
       '1 : Déterminer un taux global \n2 : Déterminer un taux intermédiaire\n3 : Mélange',
     ]
 
+    this.besoinFormulaire2CaseACocher = ['Sans calculatrice', false]
+
     this.nbQuestions = 1
 
     this.sup = 1 // type de question
+    this.sup2 = false
   }
 
   nouvelleVersion() {
@@ -86,8 +112,9 @@ export default class EvolutionsSuccesives extends Exercice {
       typesDeQuestions = listeTypeDeQuestions[i]
       switch (typesDeQuestions) {
         case 1:
-          taux1 = randint(-80, 80, 0)
-          taux2 = randint(-80, 80, 0)
+          ;[taux1, taux2] = this.sup2
+            ? tauxSansCalculatrice()
+            : [randint(-80, 80, 0), randint(-80, 80, 0)]
           if (taux1 > 0) {
             verbe1 = 'Augmenter'
             nom1 = 'hausse'
@@ -143,6 +170,9 @@ export default class EvolutionsSuccesives extends Exercice {
           }
 
           texteCorr += `<br>Le coefficient multiplicateur global est égal à $CM = CM_1 \\times CM_2 = ${texNombre(CM1, 2)} \\times ${texNombre(CM2, 2)} =${texNombre(CM, 4)}$.`
+          if (this.sup2 && taux1 * taux2 < 0) {
+            texteCorr += aideProduitDeTete(CM1, CM2)
+          }
           texteCorr += `<br><br>${texteGras('Évolution globale :')}<br>`
           if (CM > 1) {
             texteCorr += `
@@ -154,8 +184,9 @@ export default class EvolutionsSuccesives extends Exercice {
           handleAnswers(this, i, { reponse: { value: texNombre(taux) } })
           break
         case 2:
-          taux1 = randint(-20, 20, 0)
-          taux2 = randint(-20, 20, 0)
+          ;[taux1, taux2] = this.sup2
+            ? tauxSansCalculatrice()
+            : [randint(-20, 20, 0), randint(-20, 20, 0)]
           if (taux1 > 0) {
             verbe1 = 'Augmenter'
             nom1 = 'augmenté'
@@ -211,6 +242,9 @@ export default class EvolutionsSuccesives extends Exercice {
             texteCorr += `$CM_2 = 1 - \\dfrac{${t2}}{100} = ${texNombre(CM2, 2)}$.`
           }
           texteCorr += `<br><br>Le coefficient multiplicateur global est égal à $CM = CM_1 \\times CM_2 = ${texNombre(CM1, 2)} \\times ${texNombre(CM2, 2)} =${texNombre(CM, 4)}$.`
+          if (this.sup2 && taux1 * taux2 < 0) {
+            texteCorr += aideProduitDeTete(CM1, CM2)
+          }
           texteCorr += `<br><br>${texteGras('Évolution globale :')}<br>`
           if (CM > 1) {
             texteCorr += `
@@ -222,8 +256,9 @@ export default class EvolutionsSuccesives extends Exercice {
           handleAnswers(this, i, { reponse: { value: texNombre(taux) } })
           break
         case 3:
-          taux1 = randint(-40, 40, 0)
-          taux2 = randint(-40, 40, 0)
+          ;[taux1, taux2] = this.sup2
+            ? tauxSansCalculatrice()
+            : [randint(-40, 40, 0), randint(-40, 40, 0)]
           if (taux1 > 0) {
             verbe1 = 'Augmenter'
             nom1 = 'augmenté'
@@ -278,6 +313,9 @@ export default class EvolutionsSuccesives extends Exercice {
             texteCorr += `$CM_2 = 1 - \\dfrac{${t2}}{100} = ${texNombre(CM2, 2)}$.`
           }
           texteCorr += `<br><br>Le coefficient multiplicateur global est égal à $CM = CM_1 \\times CM_2 = ${texNombre(CM1, 2)} \\times ${texNombre(CM2, 2)} =${texNombre(CM, 4)}$.`
+          if (this.sup2 && taux1 * taux2 < 0) {
+            texteCorr += aideProduitDeTete(CM1, CM2)
+          }
           texteCorr += `<br><br>${texteGras('Évolution globale :')}<br>`
           if (CM > 1) {
             texteCorr += `
@@ -290,8 +328,9 @@ export default class EvolutionsSuccesives extends Exercice {
           break
 
         case 4:
-          taux1 = randint(-80, 80, 0)
-          taux2 = randint(-80, 80, 0)
+          ;[taux1, taux2] = this.sup2
+            ? tauxSansCalculatrice()
+            : [randint(-80, 80, 0), randint(-80, 80, 0)]
           if (taux1 > 0) {
             verbe1 = 'Augmenter'
             nom1 = 'hausse'
@@ -352,7 +391,7 @@ export default class EvolutionsSuccesives extends Exercice {
             texteCorr += `$CM = 1 - \\dfrac{${texNombre(t, 2)}}{100} = ${texNombre(CM, 4)}$.`
           }
           texteCorr += `<br><br>En notant $CM_2$ le coefficient multiplicateur de la deuxième évolution, on a : $CM = CM_1 \\times CM_2$, soit
-             $${texNombre(CM1, 2)} \\times CM_2 =${texNombre(CM, 4)}$ et par suite $CM_2 =\\dfrac{${texNombre(CM, 4)}}{${texNombre(CM1, 2)} }=${texNombre(CM2, 2)}$<br>
+             $${texNombre(CM1, 2)} \\times CM_2 =${texNombre(CM, 4)}$ et par suite $CM_2 =\\dfrac{${texNombre(CM, 4)}}{${texNombre(CM1, 2)} }${this.sup2 ? `=\\dfrac{${texNombre(CM * 10, 3)}}{${texNombre(CM1 * 10, 1)}}` : ''}=${texNombre(CM2, 2)}$<br>
              `
           if (CM2 > 1) {
             texteCorr += `<br>Or $T_2=CM_2 -1=${texNombre(CM2, 2)} -1=  ${texNombre(Math.abs(p2), 2)}$ ce qui correspond à une hausse de $${texNombre(t2, 2)}~\\%$.`
@@ -365,8 +404,9 @@ export default class EvolutionsSuccesives extends Exercice {
           break
 
         case 5:
-          taux1 = randint(-20, 20, 0)
-          taux2 = randint(-20, 20, 0)
+          ;[taux1, taux2] = this.sup2
+            ? tauxSansCalculatrice()
+            : [randint(-20, 20, 0), randint(-20, 20, 0)]
           if (taux1 > 0) {
             verbe1 = 'Augmenter'
             nom1 = 'augmenté'
@@ -430,7 +470,7 @@ export default class EvolutionsSuccesives extends Exercice {
             texteCorr += `$CM = 1 - \\dfrac{${texNombre(t, 2)}}{100} = ${texNombre(CM, 4)}$.`
           }
           texteCorr += `<br><br>En notant $CM_2$ le coefficient multiplicateur de la deuxième évolution, on a : $CM = CM_1 \\times CM_2$, soit
-             $${texNombre(CM1, 2)} \\times CM_2 =${texNombre(CM, 4)}$ et par suite $CM_2 =\\dfrac{${texNombre(CM, 4)}}{${texNombre(CM1, 2)} }=${texNombre(CM2, 2)}$<br>
+             $${texNombre(CM1, 2)} \\times CM_2 =${texNombre(CM, 4)}$ et par suite $CM_2 =\\dfrac{${texNombre(CM, 4)}}{${texNombre(CM1, 2)} }${this.sup2 ? `=\\dfrac{${texNombre(CM * 10, 3)}}{${texNombre(CM1 * 10, 1)}}` : ''}=${texNombre(CM2, 2)}$<br>
              `
           if (CM2 > 1) {
             texteCorr += `<br> $T_2=CM_2 -1=${texNombre(CM2, 2)} -1=  ${texNombre(Math.abs(p2), 2)}$ ce qui correspond à une hausse de $${texNombre(t2, 2)}~\\%$.`
@@ -444,8 +484,9 @@ export default class EvolutionsSuccesives extends Exercice {
 
         case 6:
         default:
-          taux1 = randint(-40, 40, 0)
-          taux2 = randint(-40, 40, 0)
+          ;[taux1, taux2] = this.sup2
+            ? tauxSansCalculatrice()
+            : [randint(-40, 40, 0), randint(-40, 40, 0)]
           if (taux1 > 0) {
             verbe1 = 'Augmenter'
             nom1 = 'augmenté'
@@ -512,7 +553,7 @@ export default class EvolutionsSuccesives extends Exercice {
             texteCorr += `$CM = 1 - \\dfrac{${texNombre(t, 2)}}{100} = ${texNombre(CM, 4)}$.`
           }
           texteCorr += `<br><br>En notant $CM_2$ le coefficient multiplicateur de la deuxième évolution, on a : $CM = CM_1 \\times CM_2$, soit
-             $${texNombre(CM1, 2)} \\times CM_2 =${texNombre(CM, 4)}$ et par suite $CM_2 =\\dfrac{${texNombre(CM, 4)}}{${texNombre(CM1, 2)} }=${texNombre(CM2, 2)}$<br>
+             $${texNombre(CM1, 2)} \\times CM_2 =${texNombre(CM, 4)}$ et par suite $CM_2 =\\dfrac{${texNombre(CM, 4)}}{${texNombre(CM1, 2)} }${this.sup2 ? `=\\dfrac{${texNombre(CM * 10, 3)}}{${texNombre(CM1 * 10, 1)}}` : ''}=${texNombre(CM2, 2)}$<br>
              `
           if (CM2 > 1) {
             texteCorr += `<br> $T_2=CM_2 -1=${texNombre(CM2, 2)}-1 = ${texNombre(Math.abs(p2), 2)}$ ce qui correspond à une hausse de $${texNombre(t2, 2)}~\\%$.`
