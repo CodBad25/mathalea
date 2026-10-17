@@ -2,6 +2,7 @@ import { bleuMathalea } from '../../lib/colors'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { abs } from '../../lib/outils/nombres'
 import {
   listeNombresPremiersStrictJusqua,
   premierAvec,
@@ -12,12 +13,13 @@ import Exercice from '../Exercice'
 
 export const titre = 'Comparer deux fractions (dénominateurs non multiples)'
 export const dateDePublication = '21/06/2026'
+export const dateDeModifImportante = '16/10/2026'
 
 export const interactifReady = true
 
 export const amcReady = true
 export const amcType = 'qcmMono'
-export const uuid = 'd7e12'
+export const uuid = '7cf43'
 export const refs = {
   'fr-fr': ['4C20-4'],
   'fr-ch': ['9NO3D-6'],
@@ -80,45 +82,41 @@ export default class ExerciceComparerDeuxFractionsDenominateursNonMultiples exte
       let texte = ''
       let texteCorr = ''
       if (choice([true, false])) {
-        texte = `$${f1.texFraction}$ et $${f2.texFraction}$`
+        texte = `$${f1.texFSD}$ et $${f2.texFSD}$`
       } else {
-        texte = `$${f2.texFraction}$ et $${f1.texFraction}$`
+        texte = `$${f2.texFSD}$ et $${f1.texFSD}$`
       }
       switch (listeTypeDenominateurs[i]) {
         case 1:
           texteCorr += `Les deux fractions ont des dénominateurs premiers entre eux, pour trouver un dénominateur commun, on peut multiplier les deux dénominateurs entre eux.<br>
-          $${f1.texFraction} = \\dfrac{${f1.num}\\times${f2.den}}{${f1.den}\\times${f2.den}}=${f1.reduire(f2.den).texFraction}$ et $${f2.texFraction} = \\dfrac{${f2.num}\\times${f1.den}}{${f2.den}\\times${f1.den}}=${f2.reduire(f1.den).texFSD}$<br>
-          Or $${f1.reduire(f2.den).texFSD} ${f1.num * f2.den < f2.num * f1.den ? '<' : '>'} ${f2.reduire(f1.den).texFSD}$<br>`
+          $${f1.texFSD} = ${f1.s === -1 ? '-' : ''} \\dfrac{${abs(f1.num)}\\times${f2.den}}{${f1.den}\\times${f2.den}}=${f1.reduire(f2.den).texFSD}$ et $${f2.texFSD} =${f2.s === -1 ? '-' : ''} \\dfrac{${abs(f2.num)}\\times${f1.den}}{${f2.den}\\times${f1.den}}=${f2.reduire(f1.den).texFSD}$<br>
+          Or, $${f1.reduire(f2.den).texFSD} ${f1.num * f2.den < f2.num * f1.den ? '<' : '>'} ${f2.reduire(f1.den).texFSD}$<br>`
           break
         case 2:
-          texteCorr += `Les dénominateurs sont tous les deux des multiples de $${miseEnEvidence(`\\large${autrePremier}`, bleuMathalea)}$, en effet :<br>
-          $${d1}=${miseEnEvidence(`\\large${premier1}`, bleuMathalea)}\\times${autrePremier}$ et $${d2}=${miseEnEvidence(`\\large${premier2}`, bleuMathalea)}\\times${autrePremier}$<br>
-          Donc pour trouver un dénominateur commun, il suffit de multiplier ces 3 nombresentre eux : $${miseEnEvidence(`\\large${premier1}\\times\\large${premier2}\\times\\large${autrePremier}=\\large${autrePremier * premier1 * premier2}`, bleuMathalea)}$.<br>
-          $${f1.texFraction} = \\dfrac{${f1.num}\\times${f2.den / autrePremier}}{${f1.den}\\times${f2.den / autrePremier}}=${f1.reduire(f2.den / autrePremier).texFSD}$ et $${f2.texFraction} = \\dfrac{${f2.num}\\times${f1.den / autrePremier}}{${f2.den}\\times${f1.den / autrePremier}}=${f2.reduire(f1.den / autrePremier).texFSD}$<br>
-          Or $${f1.reduire(f2.den / autrePremier).texFSD} ${f1.num * (f2.den / autrePremier) < f2.num * (f1.den / autrePremier) ? '<' : '>'} ${f2.reduire(f1.den / autrePremier).texFSD}$<br>`
+          texteCorr += `Les dénominateurs sont tous les deux des multiples de $${miseEnEvidence(`${autrePremier}`, bleuMathalea)}$, en effet :<br>
+          $${d1}=${miseEnEvidence(`${premier1}`, bleuMathalea)}\\times${autrePremier}$ et $${d2}=${miseEnEvidence(`${premier2}`, bleuMathalea)}\\times${autrePremier}$<br>
+          Donc pour trouver un dénominateur commun, il suffit de multiplier ces 3 nombres entre eux : $${miseEnEvidence(`${premier1}\\times${premier2}\\times${autrePremier}=${autrePremier * premier1 * premier2}`, bleuMathalea)}$.<br>
+          $${f1.texFSD} = ${f1.s === -1 ? '-' : ''} \\dfrac{${abs(f1.num)}\\times${f2.den / autrePremier}}{${f1.den}\\times${f2.den / autrePremier}}=${f1.reduire(f2.den / autrePremier).texFSD}$ et $${f2.texFSD} =${f2.s === -1 ? '-' : ''} \\dfrac{${abs(f2.num)}\\times${f1.den / autrePremier}}{${f2.den}\\times${f1.den / autrePremier}}=${f2.reduire(f1.den / autrePremier).texFSD}$<br>
+          Or, $${f1.reduire(f2.den / autrePremier).texFSD} ${f1.num * (f2.den / autrePremier) < f2.num * (f1.den / autrePremier) ? '<' : '>'} ${f2.reduire(f1.den / autrePremier).texFSD}$<br>`
           break
       }
-      /*   const ppcMultiple = ppcm(d1, d2)
-      texteCorr += `On obtient donc :<br>
-      $${f1.texFraction}= \\dfrac{${f1.num}\\times${ppcMultiple}}{${f1.den}\\times${ppcMultiple}}=${f1.reduire(ppcMultiple).texFraction}$ et $${f2.texFraction} = \\dfrac{${f2.num}\\times${ppcMultiple}}{${f2.den}\\times${ppcMultiple}}=${f2.reduire(ppcMultiple).texFraction}$<br>
-      */
-      texteCorr += `Donc $${miseEnEvidence(`${f1.texFraction} ${f1.inferieurstrict(f2) ? '<' : '>'} ${f2.texFraction}`)}$`
+      texteCorr += `Donc $${miseEnEvidence(`${f1.texFSD} ${f1.inferieurstrict(f2) ? '<' : '>'} ${f2.texFSD}`)}$`
 
       if (this.questionJamaisPosee(i, d1, d2, num1, num2)) {
         this.autoCorrection[i] = {
           enonce: '',
           propositions: [
             {
-              texte: `$${f1.texFraction} < ${f2.texFraction}$`,
-              statut: num1 / d1 < num2 / d2,
+              texte: `$${f1.texFSD} < ${f2.texFSD}$`,
+              statut: f1.num / f1.den < f2.num / f2.den,
             },
             {
-              texte: `$${f1.texFraction} > ${f2.texFraction}$`,
-              statut: num1 / d1 > num2 / d2,
+              texte: `$${f1.texFSD} > ${f2.texFSD}$`,
+              statut: f1.num / f1.den > f2.num / f2.den,
             },
             {
-              texte: `$${f1.texFraction} = ${f2.texFraction}$`,
-              statut: num1 / d1 === num2 / d2,
+              texte: `$${f1.texFSD} = ${f2.texFSD}$`,
+              statut: f1.num / f1.den === f2.num / f2.den,
             },
           ],
         }
