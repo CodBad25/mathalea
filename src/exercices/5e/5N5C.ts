@@ -300,10 +300,10 @@ export default class TesterUneEgalite extends Exercice {
         texte += `<br>`
         const chainePourReponses1 = `${sp(10)}Pour $x=${x1}$, d'une part, ${sp(5)} ${expression.split('=')[0]} =$ %{champ1} \n`
         const chainePourReponses2 = `${sp(10)}Pour $x=${x1}$, d'autre part, ${sp(6)} $${expression.split('=')[1]} = %{champ2}\n`
-        const chainePourReponses3 = `Conclure : l'égalité ${expression} est-elle vérifiée pour $${sp(1)}x=${x1}${sp(1)}$ ? (Oui/Non)  %{champ3}\n\n`
+        const chainePourReponses3 = `Conclure : l'égalité ${expression} est-elle vérifiée pour $${sp(1)}x=${x1}${sp(1)}$ ? (O pour oui, N pour non)  %{champ3}\n\n`
         const chainePourReponses4 = `${sp(10)}Pour $x=${x2}$, d'une part, ${sp(5)} ${expression.split('=')[0]} =$ %{champ4}\n`
         const chainePourReponses5 = `${sp(10)}Pour $x=${x2}$, d'autre part, ${sp(6)} $${expression.split('=')[1]} = %{champ5}\n`
-        const chainePourReponses6 = `Conclure : l'égalité ${expression} est-elle vérifiée pour $${sp(1)}x=${x2}${sp(1)}$ ? (Oui/Non)  %{champ6}`
+        const chainePourReponses6 = `Conclure : l'égalité ${expression} est-elle vérifiée pour $${sp(1)}x=${x2}${sp(1)}$ ? (O pour oui, N pour non)  %{champ6}`
         const chainePourReponses =
           chainePourReponses1 +
           chainePourReponses2 +
