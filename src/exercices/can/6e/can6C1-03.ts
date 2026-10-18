@@ -1,5 +1,6 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 
+import { combinaisonListes } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Connaître les tables de multiplication (de 5 à 9)'
@@ -12,7 +13,9 @@ export const amcType = 'AMCNum'
  * @author Jean-claude Lhote
  * Créé pendant l'été 2021
  */
-export const uuid = 'eae92'
+export const dateDeModifImportante = '18/10/2026'
+
+export const uuid = '47e81'
 
 export const refs = {
   'fr-fr': ['can6C1-03', '5N3autoA-6', '5N4autoA-6'],
@@ -28,8 +31,15 @@ export default class Tables5A9 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = this.quotaRandint('a', 3, 9)
-    const b = this.quotaRandint('b', 5, 9)
+    // Un seul plan pour les couples (a, b) : avec deux plans indépendants,
+    // un couple déjà posé pouvait revenir à chaque nouvel essai.
+    const [a, b] = this.fromQuestionPlan('ab', (n) => {
+      const couples: [number, number][] = []
+      for (let x = 3; x <= 9; x++) {
+        for (let y = 5; y <= 9; y++) couples.push([x, y])
+      }
+      return combinaisonListes(couples, n)
+    })
     this.reponse = a * b
     this.question = `Calculer $${a} \\times ${b}$.`
     this.correction = `$${a} \\times ${b}=${miseEnEvidence(a * b)}$`
