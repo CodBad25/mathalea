@@ -14,8 +14,8 @@ export const titre =
   'Traduire une expression par une phrase avec des étiquettes'
 export const amcReady = false
 export const interactifReady = true
-export const dateDeModifImportante = '17/09/2026'
-export const uuid = 'c8f4e'
+export const dateDeModifImportante = '18/10/2026'
+export const uuid = '3639a'
 export const refs = {
   'fr-fr': ['5N1F-2'],
   'fr-2016': [],
@@ -130,6 +130,8 @@ export default class TraduireUneExpressionParUnePhraseAvecEtiquettes extends Exe
       combinaisonListes(range(3), this.nbQuestions),
       combinaisonListes(range(9), this.nbQuestions),
       combinaisonListes(range(13), this.nbQuestions),
+      [], // niveau 4 : sous-cas au hasard
+      combinaisonListes([3, 4, 5], this.nbQuestions), // formes à 5 opérations
     ]
 
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; cpt++) {
