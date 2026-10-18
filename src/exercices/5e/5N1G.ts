@@ -7,6 +7,7 @@ import {
 } from '../../lib/customElements/PossibleMultiLinesAnswerElement'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { lettreDepuisChiffre, sp } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
@@ -27,7 +28,9 @@ export const titre = 'Calculer en respectant les priorités opératoires'
 /**
  * @author Jean-claude Lhote
  */
-export const uuid = 'e61fc'
+export const dateDeModifImportante = '18/10/2026'
+
+export const uuid = '93a6e'
 
 export const refs = {
   'fr-fr': ['5N1G'],
@@ -47,7 +50,7 @@ export default class CalculerUneExpressionNumerique extends Exercice {
     this.sup5 = 2
     this.besoinFormulaireTexte = [
       'Choix des expressions',
-      'Nombres séparés par des tirets :\n2 : Expressions à deux opérations\n3 : Expressions à 3 opérations\n4 : Expressions à 4 opérations\n5 : Expressions complexes',
+      'Nombres séparés par des tirets :\n2 : Expressions à deux opérations\n3 : Expressions à 3 opérations\n4 : Expressions à 4 opérations\n5 : Expressions à 5 opérations',
     ] // Texte, tooltip - il faut au moins deux opérations
     this.besoinFormulaire2CaseACocher = [
       'Utilisation de décimaux (pas de calcul mental)',
@@ -78,6 +81,9 @@ export default class CalculerUneExpressionNumerique extends Exercice {
       melange: 0,
     }).map(Number)
 
+    // Niveau 5 : seulement les formes à 5 opérations de choisirExpressionNumerique
+    const sousCasCinqOperations = combinaisonListes([3, 4, 5], this.nbQuestions)
+
     let expf
     let expn
     let expc
@@ -102,7 +108,7 @@ export default class CalculerUneExpressionNumerique extends Exercice {
         decimal,
         this.sup3,
         !this.sup2,
-        undefined,
+        nbOperations === 5 ? sousCasCinqOperations[i] : undefined,
       )
       expf = resultats[0]
       expn = resultats[1] as string
