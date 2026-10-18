@@ -3309,7 +3309,13 @@ function rendreFigureStatiqueLatex(figure: FigureStatiqueIep) {
     }
   }
   lignes.push('\\end{tikzpicture}')
-  return lignes.join('\n')
+  // Tracée à 1 cm par unité, la figure peut dépasser la largeur du texte
+  // (demi-droite de 6G2C-2) : elle est alors réduite à la largeur de la ligne.
+  return [
+    '{\\setbox0\\hbox{%',
+    ...lignes,
+    '}\\ifdim\\wd0>\\linewidth\\resizebox{\\linewidth}{!}{\\box0}\\else\\box0\\fi}',
+  ].join('\n')
 }
 
 function rendreFigureStatiqueSvg(figure: FigureStatiqueIep) {
