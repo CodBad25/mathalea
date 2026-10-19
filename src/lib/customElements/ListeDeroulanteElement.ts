@@ -248,6 +248,7 @@ export class ListeDeroulanteElement extends MathaleaCustomElement {
     if (spanReponseLigne) {
       spanReponseLigne.innerHTML = resultat === 'OK' ? '😎' : '☹️'
       ;(spanReponseLigne as HTMLElement).style.fontSize = 'large'
+      ;(spanReponseLigne as HTMLElement).style.marginLeft = '0.4rem'
     }
 
     return uniformiseResults(resultat)
@@ -365,8 +366,16 @@ export class ListeDeroulanteElement extends MathaleaCustomElement {
 
     const style = document.createElement('style')
     style.textContent = `
+/* En inline, la ligne ne s'agrandit pas : le cadre (plus haut que le texte)
+   venait se coller à la ligne précédente. */
+:host {
+  display: inline-block;
+  vertical-align: middle;
+}
+
 .listeDeroulante {
   position: relative;
+  margin: 4px 0;
   display: inline-flex;
   align-items: center;
   background: #fff;

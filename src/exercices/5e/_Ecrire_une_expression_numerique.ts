@@ -32,6 +32,10 @@ export const dateDeModifImportante = '21/09/2023'
 export default class EcrireUneExpressionNumerique extends Exercice {
   version: number
   litteral: boolean = false
+  /** Sous-cas tirés au niveau 5 (voir _choisirExpressionNumerique). Par défaut
+   * 0 à 3, dont trois formes n'ont que 2 ou 3 opérations : conservé pour les
+   * versions archivées. */
+  sousCasCinqOperations?: number[]
   constructor() {
     super()
     this.nbQuestions = 4
@@ -85,7 +89,10 @@ export default class EcrireUneExpressionNumerique extends Exercice {
       combinaisonListes(range(9), this.nbQuestions),
       combinaisonListes(range(13), this.nbQuestions),
       combinaisonListes(range(2), this.nbQuestions),
-      combinaisonListes(range(4), this.nbQuestions),
+      combinaisonListes(
+        this.sousCasCinqOperations ?? range(4),
+        this.nbQuestions,
+      ),
     ]
     const enoncesLitteraux = new Set<string>()
     const operationsFinalesParType = new Map<number, Set<string>>()

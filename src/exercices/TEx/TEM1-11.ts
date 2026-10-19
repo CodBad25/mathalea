@@ -34,8 +34,8 @@ export default class NomExercice extends Exercice {
     this.consigne =
       'On définit deux matrices $A$ et $B$. Si le produit $A \\times B$ est possible, effectuer le calcul. Faire de même pour $B \\times A$.'
     this.nbQuestions = 2 // Nombre de questions par défaut
-    this.nbCols = 2 // Uniquement pour la sortie LaTeX
-    this.nbColsCorr = 2 // Uniquement pour la sortie LaTeX
+    this.nbCols = 1 // Uniquement pour la sortie LaTeX
+    this.nbColsCorr = 1 // Uniquement pour la sortie LaTeX
   }
 
   nouvelleVersion() {
@@ -162,7 +162,7 @@ export default class NomExercice extends Exercice {
             ecritureParentheseSiMoins(l1.getValue(0, i).toString()) +
             '} \\times \\textcolor{red}{' +
             ecritureParentheseSiMoins(c1.getValue(i, 0).toString()) +
-            '}.'
+            '}'
           if (i < nbcolonnes[1] - 1) {
             detail += '+'
           } else {

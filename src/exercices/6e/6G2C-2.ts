@@ -358,6 +358,8 @@ export default class ReporterPerimetreAuCompas extends Exercice {
     this.reponseCourteDisponible = false // La réponse est une construction.
     this.titre = 'Reporter un périmètre au compas'
     this.nbQuestions = 1
+    this.comment =
+      'En interactif, la construction est notée sur 4 points : un point pour la longueur totale reportée sur la demi-droite, un pour un segment tracé sur la demi-droite, un pour un segment de la bonne longueur et un pour ce segment tracé en bleu. Les reports intermédiaires des côtés ne rapportent pas de point à eux seuls.'
     this.nbQuestionsModifiable = false
     this.sup = '6'
     this.besoinFormulaireTexte = [
