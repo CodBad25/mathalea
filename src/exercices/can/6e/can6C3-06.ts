@@ -1,105 +1,65 @@
+import Decimal from 'decimal.js'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
   texteEnCouleur,
 } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
-
-import Decimal from 'decimal.js'
-import { bleuMathalea } from '../../../lib/colors'
 import ExerciceSimple from '../../ExerciceSimple'
-export const titre = 'Multiplier deux décimaux'
+
+export const titre = 'Multiplier deux décimaux compris entre 0 et 1'
 export const interactifReady = true
 
 export const amcReady = true
 export const amcType = 'AMCNum'
-export const dateDePublication = '04/03/2022'
+export const dateDePublication = '19/10/2026'
 
 /**
- * @author  Gilles Mora
+ * @author Gilles Mora
  */
-export const uuid = '16ea9'
+export const uuid = '5b3e7'
 
 export const refs = {
   'fr-fr': ['can6C3-06', '6N2E-flash1', '5N2autoA-10'],
-  'fr-ch': ['NR'],
+  'fr-ch': [],
 }
-export default class MultiplierDeuxDecimaux extends ExerciceSimple {
+export default class MultiplierDeuxDecimauxEntreZeroEtUn extends ExerciceSimple {
   constructor() {
     super()
     this.nbQuestions = 1
     this.formatChampTexte = KeyboardType.clavierNumbers
+    this.optionsChampTexte = { texteAvant: '<br>' }
     this.typeExercice = 'simple'
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
   }
 
   nouvelleVersion() {
-    let a, b, c, d
-    switch (this.quotaChoice('typeDeQuestions', [1, 2, 3, 4])) {
-      case 1: // un entier par un décimal avec une chiffre après la virgule
-        a = randint(2, 9)
-        b = new Decimal(a).div(10)
-        c = randint(2, 9)
-        this.reponse = b.mul(c)
-        this.question = `Calculer $${texNombre(b, 1)}\\times ${c}$.`
-        this.correction = `$${texNombre(b, 1)}\\times ${c}=${miseEnEvidence(texNombre(Number(this.reponse), 1))}$<br>`
-
-        this.correction += texteEnCouleur(
-          `Mentalement : <br>
-   Comme $${texNombre(b, 1)}=${a}\\times 0,1$, alors $${texNombre(b, 1)}\\times ${c}=${a}\\times 0,1\\times ${c} =
-   ${a * c}\\times 0,1=${texNombre(Number(this.reponse), 1)}$ `,
-          bleuMathalea,
-        )
-        break
-      case 2: // un entier par un décimal avec deux chiffres après la virgule
-        a = randint(2, 9)
-        b = new Decimal(a).div(100)
-        c = randint(2, 9)
-        this.reponse = b.mul(c)
-        this.question = `Calculer $${texNombre(b, 2)}\\times ${c}$.`
-        this.correction = `$${texNombre(b, 2)}\\times ${c}=${miseEnEvidence(texNombre(Number(this.reponse), 2))}$<br>`
-
-        this.correction += texteEnCouleur(
-          `Mentalement : <br>
-   Comme $${texNombre(b, 2)}=${a}\\times 0,01$, alors $${texNombre(b, 2)}\\times ${c}=${a}\\times 0,01\\times ${c} =
-   ${a * c}\\times 0,01=${texNombre(Number(this.reponse), 2)}$ `,
-          bleuMathalea,
-        )
-        break
-
-      case 3: // Deux décimaux avec un chiffre après la virgule
-        a = randint(2, 9)
-        b = new Decimal(a).div(10)
-        c = randint(2, 9)
-        d = new Decimal(c).div(10)
-        this.reponse = b.mul(d)
-        this.question = `Calculer $${texNombre(b, 1)}\\times ${texNombre(d, 1)}$.`
-        this.correction = `$${texNombre(b, 1)}\\times ${texNombre(d, 1)}=${miseEnEvidence(texNombre(Number(this.reponse), 2))}$<br>`
-
-        this.correction += texteEnCouleur(
-          `Mentalement : <br>
-   Comme $${texNombre(b, 1)}=${a}\\times 0,1$ et $${texNombre(d, 1)}=${c}\\times 0,1$,
-    alors $${texNombre(b, 1)}\\times ${texNombre(d, 1)}=${a}\\times ${c}\\times 0,1 \\times 0,1=${a * c}\\times 0,01=${texNombre(Number(this.reponse), 2)}$ `,
-          bleuMathalea,
-        )
-        break
-
-      case 4: // Deux décimaux avec un chiffre et deux chiffres après la virgule
-        a = randint(2, 9)
-        b = new Decimal(a).div(10)
-        c = randint(2, 9)
-        d = new Decimal(c).div(100)
-        this.reponse = b.mul(d)
-        this.question = `Calculer $${texNombre(b, 1)}\\times ${texNombre(d, 2)}$.`
-        this.correction = `$${texNombre(b, 1)}\\times ${texNombre(d, 2)}=${miseEnEvidence(texNombre(Number(this.reponse), 3))}$<br>`
-
-        this.correction += texteEnCouleur(
-          `Mentalement : <br>
-   Comme $${texNombre(b, 1)}=${a}\\times 0,1$ et $${texNombre(d, 2)}=${c}\\times 0,01$,
-    alors $${texNombre(b, 1)}\\times ${texNombre(d, 2)}=${a}\\times ${c}\\times 0,01 \\times 0,1=${a * c}\\times 0,001=${texNombre(Number(this.reponse), 3)}$ `,
-          bleuMathalea,
-        )
-        break
-    }
+    const a = randint(2, 9)
+    const c = randint(2, 9)
+    // Un décimal avec un chiffre après la virgule, l'autre avec un (cas 1) ou deux (cas 2)
+    const nbDecimalesB = this.quotaChoice('typeDeQuestions', [1, 2])
+    const b = new Decimal(a).div(10 ** nbDecimalesB)
+    const d = new Decimal(c).div(10)
+    const uniteB = nbDecimalesB === 1 ? '0,1' : '0,01'
+    const nbDecimalesReponse = nbDecimalesB + 1
+    const unite = nbDecimalesB === 1 ? '0,01' : '0,001'
+    this.reponse = b.mul(d)
+    const bTex = texNombre(b, nbDecimalesB)
+    const dTex = texNombre(d, 1)
+    const produit = choice([true, false])
+      ? `${bTex}\\times ${dTex}`
+      : `${dTex}\\times ${bTex}`
+    const resultat = texNombre(Number(this.reponse), nbDecimalesReponse)
+    this.question = `Calculer $${produit}$.`
+    this.correction = `$${produit}=${miseEnEvidence(resultat)}$<br>`
+    this.correction += texteEnCouleur(
+      `Mentalement : <br>
+   Comme $${bTex}=${a}\\times ${uniteB}$ et $${dTex}=${c}\\times 0,1$,
+    alors $${produit}=${a}\\times ${c}\\times ${unite}=${a * c}\\times ${unite}=${resultat}$ `,
+      bleuMathalea,
+    )
   }
 }
