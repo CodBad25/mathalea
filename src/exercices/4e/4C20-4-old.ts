@@ -114,15 +114,15 @@ export default class ExerciceComparerDeuxFractionsDenominateursNonMultiplesOld e
           propositions: [
             {
               texte: `$${f1.texFraction} < ${f2.texFraction}$`,
-              statut: num1 / d1 < num2 / d2,
+              statut: f1.inferieurstrict(f2),
             },
             {
               texte: `$${f1.texFraction} > ${f2.texFraction}$`,
-              statut: num1 / d1 > num2 / d2,
+              statut: f2.inferieurstrict(f1),
             },
             {
               texte: `$${f1.texFraction} = ${f2.texFraction}$`,
-              statut: num1 / d1 === num2 / d2,
+              statut: f1.isEqual(f2),
             },
           ],
         }
