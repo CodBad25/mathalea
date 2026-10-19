@@ -18,7 +18,7 @@ import {
 import { pgcd } from '../../lib/outils/primalite'
 import type FractionEtendue from '../../modules/FractionEtendue'
 import { fraction } from '../../modules/fractions'
-import { egal, listeQuestionsToContenu } from '../../modules/outils'
+import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const interactifReady = true
@@ -37,6 +37,48 @@ export const refs = {
   'fr-fr': ['1AL21-40'],
   'fr-ch': [''], // OK?
 }
+/**
+ * Écritures de la racine (B + t√m)/D (D > 0, t ≠ 0, m sans facteur carré) :
+ * `racine` est la racine elle-même, `facteur` ce qui suit le x dans le
+ * facteur (x - racine).
+ */
+function racineTex(
+  B: number,
+  t: number,
+  m: number,
+  D: number,
+): { racine: string; facteur: string } {
+  const radical = (coef: number) => `${rienSi1(coef)}\\sqrt{${m}}`
+  if (D === 1) {
+    // pas de trait de fraction : le facteur est x - B - t√m
+    const terme = (n: number, debut: boolean) =>
+      `${n < 0 ? '-' : debut ? '' : '+'}${radical(Math.abs(n))}`
+    const racine =
+      B === 0
+        ? terme(t, true)
+        : B > 0 || t < 0
+          ? `${B}${terme(t, false)}`
+          : `${terme(t, true)}${B}`
+    const facteur = `${B === 0 ? '' : ecritureAlgebrique(-B)}${terme(-t, false)}`
+    return { racine, facteur }
+  }
+  // numérateur écrit sans signe en tête, le signe passe devant la fraction
+  const negatif = B <= 0 && t < 0
+  const numerateur =
+    B === 0
+      ? radical(Math.abs(t))
+      : negatif
+        ? `${-B}+${radical(-t)}`
+        : B > 0
+          ? `${B}${t < 0 ? '-' : '+'}${radical(Math.abs(t))}`
+          : `${radical(t)}-${-B}`
+  const fraction = `\\dfrac{${numerateur}}{${D}}`
+  return {
+    racine: `${negatif ? '-' : ''}${fraction}`,
+    facteur: `${negatif ? '+' : '-'}${fraction}`,
+  }
+}
+
 export default class Resolutionavecformecanonique extends Exercice {
   constructor() {
     super()
@@ -65,7 +107,6 @@ export default class Resolutionavecformecanonique extends Exercice {
         texteCorr,
         a,
         b,
-        p,
         b2,
         x1String,
         x2String,
@@ -105,14 +146,6 @@ export default class Resolutionavecformecanonique extends Exercice {
         texteCorr +=
           '<br>$x_1=\\dfrac{-b-\\sqrt{\\Delta}}{2a}$ et $x_2=\\dfrac{-b+\\sqrt{\\Delta}}{2a}$'
         texteCorr += `<br>$x_1=\\dfrac{-${ecritureParentheseSiNegatif(b)}-\\sqrt{${delta}}}{2\\times${ecritureParentheseSiNegatif(a)}}$ et $x_2=\\dfrac{-${ecritureParentheseSiNegatif(b)}+\\sqrt{${delta}}}{2\\times${ecritureParentheseSiNegatif(a)}}$.`
-        if (
-          pgcd(Math.abs(b), Math.abs(2 * a)) ===
-          pgcd(extraireRacineCarree(delta)[0], Math.abs(2 * a))
-        ) {
-          p = pgcd(Math.abs(b), Math.abs(2 * a))
-        } else {
-          p = 1
-        }
         if (b2.estParfaite) {
           // pas de radical, calcul rationnel
           const racine = (b2.racineCarree() as FractionEtendue).simplifie()
@@ -135,72 +168,17 @@ export default class Resolutionavecformecanonique extends Exercice {
               stringX2 = x2.oppose().texFractionSimplifiee
             } */
         } else {
-          // présence d'un radical x1String contient ce qui est après x dans le facteur 1 stringX1 contient son opposé (transposé dans l'autre membre) Idem pour x2String et stringX2
-          if (a < 0) {
-            if (b < 0) {
-              // a et b négatifs
-              if (!egal(Math.abs(2 * a) / p, 1)) {
-                // présence d'un dénominateur
-                x1String = `+\\dfrac{${Math.round(-b / p)}-${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}}{${Math.abs(Math.round((2 * a) / p))}}`
-                stringX1 = `\\dfrac{${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}-${Math.round(-b / p)}}{${Math.abs(Math.round((2 * a) / p))}}`
-                x2String = `+\\dfrac{${Math.round(-b / p)}+${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}}{${Math.abs(Math.round((2 * a) / p))}}`
-                stringX2 = `\\dfrac{${Math.round(b / p)}-${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}}{${Math.abs(Math.round((2 * a) / p))}}`
-              } else {
-                // absence de trait de fraction
-                x1String = `+${Math.round(-b / p)}-${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}`
-                stringX1 = `${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}-${Math.round(-b / p)}`
-                x2String = `+${Math.round(-b / p)}+${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}`
-                stringX2 = `${Math.round(b / p)}-${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}`
-              }
-            } else {
-              // a négatif, b positif
-              if (!egal(Math.abs(2 * a) / p, 1)) {
-                // présence d'un dénominateur
-                x2String = `-\\dfrac{${Math.round(b / p)}-${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}}{${Math.abs(Math.round((2 * a) / p))}}`
-                stringX2 = `\\dfrac{${Math.round(b / p)}-${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}}{${Math.abs(Math.round((2 * a) / p))}}`
-                x1String = `-\\dfrac{${Math.round(b / p)}+${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}}{${Math.abs(Math.round((2 * a) / p))}}`
-                stringX1 = `\\dfrac{${Math.round(b / p)}+${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}}{${Math.abs(Math.round((2 * a) / p))}}`
-              } else {
-                // absence de trait de fraction
-                x2String = `-${Math.round(b / p)}+${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}`
-                stringX2 = `${Math.round(b / p)}-${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}`
-                x1String = `-${Math.round(b / p)}-${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}`
-                stringX1 = `${Math.round(b / p)}+${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}`
-              }
-            }
-          } else {
-            if (b < 0) {
-              // a positif b négatif
-              if (!egal(Math.abs(2 * a) / p, 1)) {
-                // présence d'un dénominateur
-                x2String = `-\\dfrac{${Math.round(-b / p)}+${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}}{${Math.abs(Math.round((2 * a) / p))}}`
-                stringX2 = `\\dfrac{${Math.round(-b / p)}+${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}}{${Math.abs(Math.round((2 * a) / p))}}`
-                x1String = `-\\dfrac{${Math.round(-b / p)}-${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}}{${Math.abs(Math.round((2 * a) / p))}}`
-                stringX1 = `\\dfrac{${Math.round(-b / p)}-${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}}{${Math.abs(Math.round((2 * a) / p))}}`
-              } else {
-                // absence de trait de fraction
-                x2String = `-${Math.round(-b / p)}+${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}`
-                stringX2 = `${Math.round(-b / p)}-${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}`
-                x1String = `-${Math.round(-b / p)}-${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}`
-                stringX1 = `${Math.round(-b / p)}+${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}`
-              }
-            } else {
-              // a et b positifs
-              if (!egal(Math.abs(2 * a) / p, 1)) {
-                // présence d'un dénominateur
-                x2String = `-\\dfrac{${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}-${Math.round(b / p)}}{${Math.abs(Math.round((2 * a) / p))}}`
-                stringX2 = `\\dfrac{${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}-${Math.round(b / p)}}{${Math.abs(Math.round((2 * a) / p))}}`
-                x1String = `+\\dfrac{${Math.round(b / p)}+${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}}{${Math.abs(Math.round((2 * a) / p))}}`
-                stringX1 = `\\dfrac{${Math.round(-b / p)}-${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}}{${Math.abs(Math.round((2 * a) / p))}}`
-              } else {
-                // absence de trait de fraction
-                x1String = `+${Math.round(b / p)}-${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}`
-                stringX1 = `${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}-${Math.round(b / p)}`
-                x2String = `+${Math.round(b / p)}+${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}`
-                stringX2 = `${Math.round(-b / p)}-${rienSi1(extraireRacineCarree(delta)[0] / p)}\\sqrt{${extraireRacineCarree(delta)[1]}}`
-              }
-            }
-          }
+          // présence d'un radical : x1 et x2 s'écrivent (B ∓ K√m)/D avec D > 0,
+          // après simplification par le PGCD de b, de k (Δ = k²m) et de 2a
+          const [k, m] = extraireRacineCarree(delta)
+          const g = pgcd(pgcd(Math.abs(b), k), Math.abs(2 * a))
+          const signeA = a < 0 ? -1 : 1
+          const B = (-b * signeA) / g
+          const K = (k * signeA) / g
+          const D = Math.abs(2 * a) / g
+          const ecritures = [-K, K].map((t) => racineTex(B, t, m, D))
+          ;[stringX1, stringX2] = ecritures.map((e) => e.racine)
+          ;[x1String, x2String] = ecritures.map((e) => e.facteur)
         }
         texteCorr += `<br> Après simplification, on obtient : $x_1= ${stringX1}$ et  $x_2=${stringX2}$.` // Solution
         texteCorr +=
