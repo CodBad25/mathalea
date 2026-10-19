@@ -1,7 +1,11 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte'
   import { get } from 'svelte/store'
-  import { draggable } from '../../../lib/components/tbiPointer'
+  import {
+    clampToViewport,
+    draggable,
+    isGripReachable,
+  } from '../../../lib/components/tbiPointer'
   import { tbiState, zoomWidgetBy } from '../../../lib/stores/tbiStore'
 
   interface Props {
@@ -74,8 +78,13 @@
 
   function onDragMove(dx: number, dy: number) {
     if (!drag) return
-    drag.x = Math.max(0, drag.x + dx)
-    drag.y = Math.max(0, drag.y + dy)
+    const { width, height } = widgetEl.getBoundingClientRect()
+    ;({ x: drag.x, y: drag.y } = clampToViewport(
+      drag.x + dx,
+      drag.y + dy,
+      width,
+      height,
+    ))
     if (drag.raf === null) {
       drag.raf = requestAnimationFrame(() => {
         if (!drag) return
@@ -96,6 +105,31 @@
     tbiState.update((state) => {
       state.widget.x = x
       state.widget.y = y
+      return state
+    })
+    persistLayout()
+  }
+
+  /**
+   * Ramène dans la fenêtre un widget qui en est sorti. Au chargement (position
+   * enregistrée sur un écran plus grand), il reprend sa position par défaut.
+   * Quand la fenêtre est redimensionnée, il n'est ramené au bord que si sa
+   * barre de déplacement n'est plus atteignable : l'ouverture du clavier d'un
+   * téléphone, qui réduit la hauteur, ne le déplace pas.
+   */
+  function keepInViewport(atLoad = false) {
+    if (drag || !widgetEl) return
+    const { x, y } = get(tbiState).widget
+    const { width, height } = widgetEl.getBoundingClientRect()
+    if (!atLoad && isGripReachable(x, y, width)) return
+    let clamped = clampToViewport(x, y, width, height)
+    if (atLoad && (clamped.x !== x || clamped.y !== y)) {
+      clamped = clampToViewport(16, 16, width, height)
+    }
+    if (clamped.x === x && clamped.y === y) return
+    tbiState.update((state) => {
+      state.widget.x = clamped.x
+      state.widget.y = clamped.y
       return state
     })
     persistLayout()
@@ -152,6 +186,7 @@
       }
       return state
     })
+    keepInViewport(true)
   })
 
   onDestroy(() => {
@@ -164,6 +199,8 @@
     'bg-coopmaths-action hover:bg-coopmaths-action-darkest ' +
     'dark:bg-coopmathsdark-action dark:hover:bg-coopmathsdark-action-darkest'
 </script>
+
+<svelte:window onresize={() => keepInViewport()} />
 
 <div
   bind:this={widgetEl}
