@@ -1,7 +1,12 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte'
   import { get } from 'svelte/store'
-  import { draggable, resizable } from '../../../lib/components/tbiPointer'
+  import {
+    clampToViewport,
+    draggable,
+    isGripReachable,
+    resizable,
+  } from '../../../lib/components/tbiPointer'
   import {
     setTrafficLightActive,
     tbiState,
@@ -64,10 +69,35 @@
     diameter = Math.max(0, Math.floor(Math.min(slotsEl.clientWidth, cellHeight)) - 6)
   }
 
+  /**
+   * Ramène dans la fenêtre un widget qui en est sorti. Au chargement (position
+   * enregistrée sur un écran plus grand), il reprend sa position par défaut.
+   * Quand la fenêtre est redimensionnée, il n'est ramené au bord que si sa
+   * barre de déplacement n'est plus atteignable : l'ouverture du clavier d'un
+   * téléphone, qui réduit la hauteur, ne le déplace pas.
+   */
+  function keepInViewport(atLoad = false) {
+    if (gesture) return
+    const t = get(tbiState).trafficLight
+    if (!atLoad && isGripReachable(t.x, t.y, t.w)) return
+    let clamped = clampToViewport(t.x, t.y, t.w, t.h)
+    if (atLoad && (clamped.x !== t.x || clamped.y !== t.y)) {
+      clamped = clampToViewport(300, 16, t.w, t.h)
+    }
+    if (clamped.x === t.x && clamped.y === t.y) return
+    tbiState.update((state) => {
+      state.trafficLight.x = clamped.x
+      state.trafficLight.y = clamped.y
+      return state
+    })
+    persistLayout()
+  }
+
   onMount(() => {
     resizeObserver = new ResizeObserver(recomputeDiameter)
     resizeObserver.observe(slotsEl)
     recomputeDiameter()
+    keepInViewport(true)
   })
 
   onDestroy(() => {
@@ -135,8 +165,12 @@
 
   function onDragMove(dx: number, dy: number) {
     if (!gesture) return
-    gesture.x = Math.max(0, gesture.x + dx)
-    gesture.y = Math.max(0, gesture.y + dy)
+    ;({ x: gesture.x, y: gesture.y } = clampToViewport(
+      gesture.x + dx,
+      gesture.y + dy,
+      gesture.w,
+      gesture.h,
+    ))
     scheduleApply()
   }
 
@@ -213,6 +247,8 @@
   const markerClass =
     'absolute w-2.5 h-2.5 pointer-events-none border-white/80 drop-shadow-[0_0_2px_rgba(0,0,0,0.9)]'
 </script>
+
+<svelte:window onresize={() => keepInViewport()} />
 
 <div
   bind:this={widgetEl}
