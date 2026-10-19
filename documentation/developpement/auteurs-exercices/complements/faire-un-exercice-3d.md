@@ -18,7 +18,7 @@ Installer les dépendances du dépôt, puis lancer les contrôles avec l'option 
 
 ```bash
 pnpm install
-pnpm check
+pnpm check:changed
 pnpm prebuild-unit-tests
 ```
 
@@ -276,7 +276,7 @@ pnpm dev
 Avant de proposer une modification :
 
 ```bash
-pnpm check
+pnpm check:changed
 pnpm prebuild-unit-tests
 ```
 
@@ -340,4 +340,4 @@ Si une figure statique a des faces ou arêtes cachées inattendues :
 - L'`id` de chaque canvas est unique.
 - L'exercice reste résoluble sans manipulation du canvas.
 - Les dimensions, labels et couleurs restent lisibles en HTML et en export.
-- `pnpm check` et `pnpm prebuild-unit-tests` ont été lancés, ou leur non-exécution est documentée dans la réponse de fin.
+- `pnpm check:changed` et `pnpm prebuild-unit-tests` ont été lancés, ou leur non-exécution est documentée dans la réponse de fin.

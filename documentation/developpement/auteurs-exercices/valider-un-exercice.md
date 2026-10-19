@@ -46,11 +46,44 @@ liste des vues est définie dans `src/lib/components/relecture.ts`.
 
 ```sh
 pnpm format
-pnpm check
+pnpm check:changed
 ```
 
-`pnpm format` applique le formatage du dépôt. `pnpm check` vérifie les fichiers
-TypeScript et Svelte.
+`pnpm format` applique le formatage du dépôt. `pnpm check:changed` est la
+commande de typage par défaut : à lancer après chaque modification de fichier
+`.ts` ou `.svelte`, sans qu'il soit utile de la relancer avant le commit. Elle contrôle les fichiers `.ts` et `.svelte` de `src/` modifiés depuis
+`HEAD` (nouveaux fichiers et suppressions compris) **et leurs dépendants**, en
+quelques secondes :
+
+```sh
+pnpm check:changed                          # fichiers modifiés + dépendants
+pnpm check:changed src/exercices/6e/6N1E.ts # fichiers donnés explicitement
+pnpm check:changed --max 1000               # seuil de bascule (500 par défaut)
+pnpm check:changed --no-deps                # sans les dépendants
+pnpm check:changed --all                    # équivaut à pnpm check
+```
+
+Le script reconstruit le graphe des imports relatifs de `src/` et remonte
+transitivement vers les fichiers qui importent les fichiers modifiés (un parent
+d'exercice entraîne ainsi ses enfants). Seules les erreurs de ces fichiers sont
+affichées. Les chargements dynamiques par `import.meta.glob` ne sont pas suivis :
+ils ne portent pas de dépendance de types.
+
+### Quand lancer `pnpm check`
+
+`pnpm check` vérifie tous les fichiers TypeScript et Svelte (environ une minute
+et demie). Il est inutile après une modification limitée à un exercice. Il sert
+quand `pnpm check:changed` ne peut pas voir les conséquences du changement :
+
+- le script bascule de lui-même sur le contrôle complet quand plus de 500
+  fichiers sont concernés (un utilitaire de `src/lib` importé partout,
+  `ExerciceSimple`…) ou quand un `.d.ts` a changé : rien à décider dans ce cas ;
+- à lancer à la main si `tsconfig*.json`, `package.json`, le fichier de
+  verrouillage, ou la configuration Svelte ou Vite ont changé ;
+- à lancer à la main si un fichier `.json` importé par du TypeScript a changé
+  (le script ne suit que les `.ts` et `.svelte`) ;
+- à lancer à la main après une fusion ou un rebasage avec `main`, puisque le
+  code des autres contributeurs interagit avec le vôtre.
 
 ## Tests unitaires
 
@@ -103,7 +136,7 @@ fichier ciblé pendant le développement.
 - le HTML interactif fonctionne ;
 - le HTML non interactif reste compréhensible ;
 - le rendu LaTeX est exploitable ;
-- `pnpm check` et `pnpm prebuild-unit-tests` passent ;
+- `pnpm check:changed` (ou `pnpm check` dans les cas prévus ci-dessus) et `pnpm prebuild-unit-tests` passent ;
 - pour un exercice déjà publié, `pnpm stability:check` passe ou la dérive est
   assumée et documentée ;
 - les rapports ciblés utiles ne signalent pas de régression.

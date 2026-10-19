@@ -11,7 +11,15 @@
 ## Commands
 
 - Unit Tests: `pnpm prebuild-unit-tests` (runs vitest, must pass before commit)
-- TypeCheck: `pnpm check` (type checks .svelte and .ts files)
+- TypeCheck (default): `pnpm check:changed` (files changed since HEAD plus
+  everything that imports them, a few seconds). Run it after editing `.ts` or
+  `.svelte` files; no need to rerun it before committing. It switches by itself to the
+  full check when more than 500 files are concerned (e.g. a helper in
+  `src/lib`) or when a `.d.ts` changed.
+- Full TypeCheck: `pnpm check` (~90 s). Only when `check:changed` is blind:
+  `tsconfig*.json`, `package.json`/lockfile or Svelte/Vite config changed, a
+  `.json` file imported by TypeScript changed, or the branch was just
+  merged/rebased with `main`. Not after a change limited to an exercise.
 - Exercise draw stability: `pnpm stability:check` (see `documentation/tests/stabilite-exercices.md`)
 
 ## Testing
