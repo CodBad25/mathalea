@@ -187,8 +187,9 @@ export default class AntecedentSpline extends ExerciceSimple {
       ? `Voici la représentation graphique d'une fonction $f$ : <br><br>` +
         graphique +
         '<br>'
-      : `Déterminer les antécédents éventuels de $${y1}$ par la fonction $f$.<br>` +
-        graphique
+      : `Déterminer les antécédents éventuels de $${y1}$ par la fonction $f$.<br><br>` +
+        graphique +
+        '<br>'
 
     if (this.interactif && !this.versionQcm) {
       this.question +=
@@ -231,7 +232,10 @@ export default class AntecedentSpline extends ExerciceSimple {
     if (!solutions1 || solutions1.length === 0) {
       this.correction += `Il n'y en a pas. <br> $${miseEnEvidence(y1)}$ ${texteEnCouleurEtGras("n'a pas d'antécédent par $\\boldsymbol{f}$")}.`
     } else {
-      this.correction += `On en trouve $${solutions1.length}$ : $${miseEnEvidence(solutions1.join('\\,;\\,'))}$.`
+      this.correction += `On en trouve $${solutions1.length}$`
+      this.correction += this.versionQcm
+        ? `. L'ensemble des antécédents de $${y1}$ est $${miseEnEvidence(`\\{${solutions1.join('\\,;\\,')}\\}`)}$.`
+        : ` : $${miseEnEvidence(solutions1.join('\\,;\\,'))}$.`
     }
     if (!solutions1 || solutions1.length === 0) {
       // Cas : y1 n'a pas d'antécédent

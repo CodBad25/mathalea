@@ -39,6 +39,7 @@ export default class ImageSpline extends ExerciceSimple {
     this.versionQcmDisponible = true
     this.typeExercice = 'simple'
     this.nbQuestions = 1
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
   }
 
   nouvelleVersion() {
@@ -168,8 +169,10 @@ export default class ImageSpline extends ExerciceSimple {
         `L'image de $${theSpline.x[antecedent]}$ : `
     } else {
       this.question =
-        `Quelle est l'image de $${theSpline.x[antecedent]}$ ?
-    ` + mathalea2d(figureOptions, objetsEnonce, o)
+        `Quelle est l'image de $${theSpline.x[antecedent]}$ ?<br><br>
+    ` +
+        mathalea2d(figureOptions, objetsEnonce, o) +
+        '<br>'
     }
     const questionId = this.compteur++
     const correctionFigureId = `can3F01CorrectionEx${this.numeroExercice ?? 0}Q${questionId}`
