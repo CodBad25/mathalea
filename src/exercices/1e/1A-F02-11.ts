@@ -19,6 +19,18 @@ export const refs = {
   'fr-ch': [],
 }
 export default class Auto1AF2c extends ordonneePointDroite {
+  nouvelleVersion() {
+    super.nouvelleVersion()
+    if (this.interactif) {
+      this.question = (this.question ?? '').replace(
+        /Quelle est l\x27ordonnée du point \$B\$\s*\?/g,
+        'L’ordonnée du point $B$ est ',
+      )
+      if (!this.versionQcm)
+        this.optionsChampTexte = { texteAvant: '', texteApres: '.' }
+    }
+  }
+
   constructor() {
     super()
     this.versionQcm = false

@@ -18,6 +18,17 @@ export const refs = {
   'fr-ch': [],
 }
 export default class Auto1AF1 extends CalculImageSecondDegre {
+  nouvelleVersion() {
+    super.nouvelleVersion()
+    if (this.interactif) {
+      this.question = (this.question ?? '').replace(
+        /Calculer \$f\((.*?)\)\$\./g,
+        (_, x) => `L'image de $${x}$ par la fonction $f$ est `,
+      )
+      if (!this.versionQcm) this.optionsChampTexte = { texteApres: '.' }
+    }
+  }
+
   constructor() {
     super()
     this.versionQcm = false

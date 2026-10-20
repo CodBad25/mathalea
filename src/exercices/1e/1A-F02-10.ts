@@ -1,4 +1,8 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { context } from '../../modules/context'
 import { choice } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -27,6 +31,11 @@ export const refs = {
   'fr-ch': ['1mQCM-39', '11QCM-57'],
 }
 export default class AutoFO2j extends ExerciceQcmA {
+  private questionsOuvertes = new Map<
+    string,
+    { correction: string; reponse: string }
+  >()
+
   appliquerLesValeurs = (valeurs: {
     m: number
     xConnu: number
@@ -157,8 +166,59 @@ export default class AutoFO2j extends ExerciceQcmA {
     } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }
 
+  nouvelleVersion() {
+    this.questionsOuvertes.clear()
+    super.nouvelleVersion()
+    if (this.sup3 || context.isAmc) return
+    this.consigne = ''
+    for (let i = 0; i < this.listeQuestions.length; i++) {
+      const enonce = this.autoCorrection[i].enonce ?? ''
+      const donnees = this.questionsOuvertes.get(enonce)
+      if (!donnees) continue
+      this.listeQuestions[i] = this.interactif
+        ? enonce.replace(
+            /Déterminer l'ordonnée (du point de \$\\mathscr\{D\}\$ dont l'abscisse est \$.*?\$)\./,
+            (_, fin) =>
+              `L'ordonnée ${fin} est ${ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)}.`,
+          )
+        : enonce
+      this.listeCorrections[i] = donnees.correction
+      handleAnswers(
+        this,
+        i,
+        { reponse: { value: donnees.reponse } },
+        { formatInteractif: 'mathalea-mathfield' },
+      )
+    }
+  }
+
   constructor() {
     super()
+    this.sup3 = false
+    this.besoinFormulaire3CaseACocher = ['Version QCM', false]
+    this.besoinFormulaire2CaseACocher = false
+    this.besoinFormulaire4CaseACocher = false
+    const preparerQuestion = () => {
+      if (this.sup3 || context.isAmc) return
+      this.enonce = this.enonce.replace(
+        /L'ordonnée (du point de \$\\mathscr\{D\}\$ dont l'abscisse est \$.*?\$) est :/,
+        "Déterminer l'ordonnée $1.",
+      )
+      this.questionsOuvertes.set(this.enonce, {
+        correction: this.correction ?? '',
+        reponse: this.reponses[0].replace(/\$/g, '').trim(),
+      })
+    }
+    const aleatoire = this.versionAleatoire
+    this.versionAleatoire = () => {
+      aleatoire()
+      preparerQuestion()
+    }
+    const originale = this.versionOriginale
+    this.versionOriginale = () => {
+      originale()
+      preparerQuestion()
+    }
     this.versionAleatoire()
     this.spacing = 1.5
   }

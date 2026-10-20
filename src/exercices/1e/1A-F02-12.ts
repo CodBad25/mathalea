@@ -19,6 +19,18 @@ export const refs = {
   'fr-ch': [],
 }
 export default class Auto1AF2d extends LectureGraphiqueParaboleA {
+  nouvelleVersion() {
+    super.nouvelleVersion()
+    if (this.interactif) {
+      this.question = (this.question ?? '').replace(
+        /À partir de cette représentation graphique, déterminer la valeur de \$a\$\.<br>/g,
+        'À partir de cette représentation graphique, la valeur de $a$ est ',
+      )
+      if (!this.versionQcm)
+        this.optionsChampTexte = { texteAvant: '', texteApres: '.' }
+    }
+  }
+
   constructor() {
     super()
     this.versionQcm = false
