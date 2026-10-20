@@ -1,3 +1,6 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { vide2d } from '../../lib/2d/Vide2d'
@@ -37,6 +40,11 @@ export const titre =
 export const dateDePublication = '17/12/2025'
 
 export default class Auto1AF2p extends ExerciceQcmA {
+  private questionsOuvertes = new Map<
+    string,
+    { correction: string; reponses: string[] }
+  >()
+
   private appliquerLesValeurs(
     fracNum: number,
     fracDen: number,
@@ -121,7 +129,7 @@ export default class Auto1AF2p extends ExerciceQcmA {
 
     this.enonce = `${deuxColonnes(
       `Dans un repère du plan, on a représenté une droite $(D)$.<br><br>
-      L'ordonnée du point de $(D)$ dont l'abscisse est $${abs}$ est :`,
+      ${this.sup3 || context.isAmc ? `L'ordonnée du point de $(D)$ dont l'abscisse est $${abs}$ est :` : `Déterminer l'ordonnée du point de $(D)$ d'abscisse $${abs}$.`}`,
       `${objet}`,
     )}`
 
@@ -138,6 +146,10 @@ export default class Auto1AF2p extends ExerciceQcmA {
       `$${coeffDir.produitFraction(new FractionEtendue(-abs, 1)).ajouteEntier(ordOrigine).texFractionSimplifiee}$`, // Erreur de signe sur l'abscisse
       `$${new FractionEtendue(fracDen, fracNum).produitFraction(new FractionEtendue(abs, 1)).ajouteEntier(ordOrigine).texFractionSimplifiee}$`, // Coefficient directeur inversé
     ]
+    this.questionsOuvertes.set(this.enonce, {
+      correction: this.correction,
+      reponses: [this.reponses[0].replace(/\$/g, '').trim()],
+    })
   }
 
   versionOriginale: () => void = () => {
@@ -170,8 +182,39 @@ export default class Auto1AF2p extends ExerciceQcmA {
     } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }
 
+  nouvelleVersion() {
+    this.questionsOuvertes.clear()
+    // Conserver les tirages du générateur, puis remplacer l'affichage du QCM.
+    super.nouvelleVersion()
+    if (this.sup3 || context.isAmc) return
+    this.consigne = ''
+    for (let i = 0; i < this.listeQuestions.length; i++) {
+      const enonce = this.autoCorrection[i].enonce ?? ''
+      const donnees = this.questionsOuvertes.get(enonce)
+      if (!donnees) continue
+      this.listeQuestions[i] = this.interactif
+        ? enonce.replace(
+            /Déterminer l'ordonnée du point de \$\(D\)\$ d'abscisse \$(.*?)\$\./,
+            (_, x) =>
+              `L'ordonnée du point de $(D)$ d'abscisse $${x}$ est ${ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBaseAvecFraction)}.`,
+          )
+        : enonce
+      this.listeCorrections[i] = donnees.correction
+      handleAnswers(
+        this,
+        i,
+        { reponse: { value: donnees.reponses } },
+        { formatInteractif: 'mathalea-mathfield' },
+      )
+    }
+  }
+
   constructor() {
     super()
+    this.sup3 = false
+    this.besoinFormulaire3CaseACocher = ['Version QCM', false]
+    this.besoinFormulaire2CaseACocher = false
+    this.besoinFormulaire4CaseACocher = false
     this.versionAleatoire()
   }
 }

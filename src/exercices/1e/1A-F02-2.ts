@@ -18,6 +18,18 @@ export const refs = {
   'fr-ch': [],
 }
 export default class Auto1AF1a extends CalculImageParFonctionAffine {
+  nouvelleVersion() {
+    super.nouvelleVersion()
+    if (this.interactif) {
+      this.question = (this.question ?? '').replace(
+        /Quelle est l\x27image de \$(.*?)\$ par la fonction \$(.*?)\$\s*\?/g,
+        (_, x, f) => `L'image de $${x}$ par la fonction $${f}$ est `,
+      )
+      if (!this.versionQcm)
+        this.optionsChampTexte = { texteAvant: '', texteApres: '.' }
+    }
+  }
+
   constructor() {
     super()
     this.versionQcm = false

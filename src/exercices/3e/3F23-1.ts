@@ -56,6 +56,8 @@ function consigneQuestion(m: number, expr: string, versionQcm: boolean) {
 }
 
 export default class AntecedentParCalcul extends Exercice {
+  conclusionAntecedent?: (image: number, antecedent: FractionEtendue) => string
+
   constructor() {
     super()
 
@@ -227,6 +229,7 @@ export default class AntecedentParCalcul extends Exercice {
         texteCorr += `x &=${ante.texFraction}${ante.texSimplificationAvecEtapes('none', orangeMathalea)} \\\\` // c'est la couleur de miseEnEvidence
       else texteCorr += `x &=${miseEnEvidence(ante.texFSD)}`
       texteCorr += '\\end{aligned}$'
+      texteCorr += this.conclusionAntecedent?.(m, ante) ?? ''
 
       let propositions: {
         texte: string

@@ -1,3 +1,5 @@
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -9,6 +11,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 import FractionEtendue from '../../modules/FractionEtendue'
 import Trinome from '../../modules/Trinome'
 import { randint } from '../../modules/outils'
+import { context } from '../../modules/context'
 import ExerciceQcmA from '../ExerciceQcmA'
 /**
  * @author Gilles Mora
@@ -24,10 +27,12 @@ export const interactifReady = true
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre =
-  "Retrouver l'ordonnée d'un point à partir d'une représentation graphique"
+  "Déterminer la position d'un point par rapport à une courbe à partir de l'expression de la fonction"
 export const dateDePublication = '17/12/2025'
 
 export default class Auto1AF2r extends ExerciceQcmA {
+  private correctionsDetaillees = new Map<string, string>()
+
   private appliquerLesValeurs(
     typeFonction: 'affine' | 'trinome',
     numCoeff: number,
@@ -97,7 +102,7 @@ export default class Auto1AF2r extends ExerciceQcmA {
     this.enonce = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par ${fonctionTex}.<br>
     On note $(C)$ sa courbe représentative dans un repère du plan.<br>
     On considère le point $A$ de coordonnées $(${xPoint}\\,;\\,${yPoint})$.<br><br>
-    Quelle est la position du point $A$ par rapport à la courbe $(C)$ ?`
+    ${this.sup3 || context.isAmc ? (this.interactif ? 'La position du point $A$ par rapport à la courbe $(C)$ est donnée par l’affirmation suivante :' : 'Quelle est la position du point $A$ par rapport à la courbe $(C)$ ?') : 'Le point $A$ est-il sur la courbe $(C)$, en dessous ou au-dessus ?'}`
 
     // Correction détaillée
     this.correction = `On calcule l'image de $${xPoint}$ par la fonction $f$ :<br>
@@ -129,6 +134,7 @@ export default class Auto1AF2r extends ExerciceQcmA {
         `On ne peut pas déterminer la position de $A$ par rapport à la courbe $(C)$`,
       ]
     }
+    this.correctionsDetaillees.set(this.enonce, this.correction)
   }
 
   versionOriginale: () => void = () => {
@@ -189,8 +195,49 @@ export default class Auto1AF2r extends ExerciceQcmA {
     }
   }
 
+  nouvelleVersion() {
+    this.correctionsDetaillees.clear()
+    super.nouvelleVersion()
+    if (this.sup3 || context.isAmc) return
+    this.consigne = ''
+    for (let i = 0; i < this.listeQuestions.length; i++) {
+      const enonce = this.autoCorrection[i].enonce ?? ''
+      const bonneReponse =
+        this.autoCorrection[i].propositions?.find((p) => p.statut)?.texte ?? ''
+      const reponse = bonneReponse.includes('appartient')
+        ? 'sur'
+        : bonneReponse.includes('au-dessus')
+          ? 'au-dessus'
+          : 'en dessous'
+      this.listeCorrections[i] = this.correctionsDetaillees.get(enonce) ?? ''
+      this.listeQuestions[i] = this.interactif
+        ? enonce.replace(
+            'Le point $A$ est-il sur la courbe $(C)$, en dessous ou au-dessus ?',
+            `Le point $A$ ${choixDeroulant(this, i, {
+              choices: [
+                { label: 'Choisir', value: '' },
+                { label: 'appartient à', value: 'sur' },
+                { label: 'est au-dessus de', value: 'au-dessus' },
+                { label: 'est en dessous de', value: 'en dessous' },
+              ],
+            })} la courbe $(C)$.`,
+          )
+        : enonce
+      handleAnswers(
+        this,
+        i,
+        { reponse: { value: reponse, options: { texteSansCasse: true } } },
+        { formatInteractif: 'liste-deroulante' },
+      )
+    }
+  }
+
   constructor() {
     super()
+    this.sup3 = false
+    this.besoinFormulaire3CaseACocher = ['Version QCM', false]
+    this.besoinFormulaire2CaseACocher = false
+    this.besoinFormulaire4CaseACocher = false
     this.versionAleatoire()
   }
 }

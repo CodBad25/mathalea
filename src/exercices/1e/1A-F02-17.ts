@@ -122,7 +122,7 @@ export default class Auto1AF2q extends ExerciceQcmA {
     this.enonce = `${deuxColonnes(
       `Dans un repère du plan, on a représenté une droite $(D)$.<br><br>
       On considère le point $A$ de coordonnées $(${abs}\\,;\\,${ord})$.<br><br>
-      Quelle est la position du point $A$ par rapport à la droite $(D)$ ?`,
+      ${this.interactif ? 'La position du point $A$ par rapport à la droite $(D)$ est donnée par l’affirmation suivante :' : 'Quelle est la position du point $A$ par rapport à la droite $(D)$ ?'}`,
       `${objet}`,
     )}<br>`
 
