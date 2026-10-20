@@ -21,7 +21,7 @@ export const interactifReady = true
 export const uuid = '874e8'
 export const refs = {
   'fr-fr': [''],
-  'fr-ch': ['10FA4G-5'],
+  'fr-ch': ['11FA4C-7'],
 }
 export default class FactoriserIdentitesremarquables2 extends Exercice {
   declare sup: string
