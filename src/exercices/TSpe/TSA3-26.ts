@@ -18,6 +18,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Calculer la dérivée d'une fonction avec $\\mathrm{e}^u$"
 export const dateDePublication = '06/08/2025'
+export const dateDeModifImportante = '20/10/2026'
 export const interactifReady = true
 
 /**
@@ -112,7 +113,9 @@ export default class DeriveeExp1AN313 extends Exercice {
               KeyboardType.clavierFonctionsTerminales,
               { texteAvant: "<br>$f'(x)=$" },
             )
-            value = `${`${derivee}e^{${poly}}`}`
+            value = derivee.isMon()
+              ? `${derivee}e^{${poly}}`
+              : `(${derivee})e^{${poly}}`
           }
           handleAnswers(this, i, { reponse: { value } })
           break
