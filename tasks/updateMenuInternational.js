@@ -510,6 +510,7 @@ const createFiles = (
     for (const key in obj) {
       const subObj = obj[key]
       const subPath = path.concat(key)
+      categoryPaths.push(subPath.join('.'))
       if (Object.keys(subObj).length === 0) {
         themesPath.push(subPath.join('.'))
       } else {
@@ -518,6 +519,7 @@ const createFiles = (
     }
   }
   const themesPath = []
+  const categoryPaths = []
   findThemes(referentiel, [])
   let uuidToUrl = Array.from(uuidMap.entries())
     .sort((a, b) => a[1].localeCompare(b[1]))
@@ -544,10 +546,22 @@ const createFiles = (
     'src/json/refToUuid' + codePays + '.json',
     JSON.stringify(sortKeys(refToUuid), null, 2),
   )
-  for (const themePath of themesPath) {
+  const leafPaths = new Set(themesPath)
+  const categoryCodes = categoryPaths.map((p) => p.split('.').pop())
+  for (const themePath of categoryPaths) {
     const theme = themePath.split('.').pop()
     for (const key in exercices) {
-      if (key.startsWith(theme)) {
+      if (
+        leafPaths.has(themePath)
+          ? key.startsWith(theme)
+          : (key === theme || key.startsWith(`${theme}-`)) &&
+            !categoryCodes.some(
+              (code) =>
+                code.length > theme.length &&
+                code.startsWith(theme) &&
+                key.startsWith(code),
+            )
+      ) {
         const keys = themePath.split('.')
         let currentObj = referentiel
         for (let i = 0; i < keys.length; i++) {

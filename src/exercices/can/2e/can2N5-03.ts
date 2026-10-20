@@ -16,7 +16,7 @@ export const uuid = '2af85'
 
 export const refs = {
   'fr-fr': ['can2N5-03', '2N51-flash2'],
-  'fr-ch': ['11NO3A-7'],
+  'fr-ch': ['11NO3B-7'],
 }
 export default class CalculAvecRacineCarree2 extends ExerciceSimple {
   constructor() {
