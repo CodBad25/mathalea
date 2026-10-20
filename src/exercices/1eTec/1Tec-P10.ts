@@ -164,7 +164,13 @@ export default class CalculerPointMoyenNuage extends Exercice {
       })
       objetsFigure = [
         repere({ xMin, xMax, yMin, yMax }),
-        ...listePoints.map((M) => tracePoint(M, 'blue')),
+        ...listePoints.map((M) => {
+          const t = tracePoint(M, 'blue')
+          t.epaisseur = 2.5
+          t.taille = 5
+          t.tailleTikz = t.taille / 15
+          return t
+        }),
       ]
       figure = mathalea2d(
         {
@@ -179,7 +185,7 @@ export default class CalculerPointMoyenNuage extends Exercice {
         objetsFigure,
       )
 
-      texte = `Calculer les coordonnées du point moyen $G$ de ce nuage de points.<br>`
+      texte = `Calculer les coordonnées du point moyen $G$ de ce nuage de points.<br><br>`
       if (context.isHtml) {
         texte +=
           `<div style="display: flex; justify-content: center; width: 100%;">` +
@@ -220,7 +226,13 @@ export default class CalculerPointMoyenNuage extends Exercice {
       // Construire la figure de correction avec G en rouge
       const objetsFigureCorr = [
         repere({ xMin, xMax, yMin, yMax }),
-        ...listePoints.map((M) => tracePoint(M, 'blue')),
+        ...listePoints.map((M) => {
+          const t = tracePoint(M, 'blue')
+          t.epaisseur = 2.5
+          t.taille = 5
+          t.tailleTikz = t.taille / 15
+          return t
+        }),
         plot(xG, yG, { couleur: 'red', rayon: 0.15 }),
       ]
       const figureCorr = mathalea2d(
