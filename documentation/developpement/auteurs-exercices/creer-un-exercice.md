@@ -124,7 +124,7 @@ Une donnée JSON à valider entre avec le type `unknown`. Vérifiez sa structure
 avec `typeof`, `in` et `Array.isArray` avant de lire ses propriétés. Remplacer
 `any` par une assertion vers le type attendu ne valide pas la donnée.
 
-Après une modification de typage, lancez `pnpm check`. Pour un exercice publié,
+Après une modification de typage, lancez `pnpm check:changed`. Pour un exercice publié,
 vérifiez aussi la [stabilité des tirages](../../tests/stabilite-exercices.md),
 même si les valeurs tirées sont censées rester identiques.
 

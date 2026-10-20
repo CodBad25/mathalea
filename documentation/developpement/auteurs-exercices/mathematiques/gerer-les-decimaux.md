@@ -241,7 +241,7 @@ Lancer les validations adaptées avant commit :
 
 ```bash
 pnpm prebuild-unit-tests
-pnpm check
+pnpm check:changed
 ```
 
 Pour un doute sur le comparateur, les tests unitaires de `fonctionComparaison()` couvrent notamment `nombreDecimalSeulement`, les fractions et les options combinées.

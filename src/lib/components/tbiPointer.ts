@@ -112,6 +112,42 @@ export function draggable(node: HTMLElement, options: PointerGestureOptions) {
   }
 }
 
+/**
+ * Position (x, y) d'un widget de largeur w et de hauteur h ramenée dans la
+ * fenêtre : le widget reste entier à l'écran quand il y tient, sinon son coin
+ * supérieur gauche (où se trouve la barre de déplacement) reste visible.
+ * Sans cela, un widget lâché hors de l'écran ne pouvait plus être récupéré :
+ * sa position est enregistrée et relue au chargement suivant.
+ */
+export function clampToViewport(
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+): { x: number; y: number } {
+  const maxX = Math.max(0, window.innerWidth - w)
+  const maxY = Math.max(0, window.innerHeight - h)
+  return {
+    x: Math.min(Math.max(0, x), maxX),
+    y: Math.min(Math.max(0, y), maxY),
+  }
+}
+
+/**
+ * Vrai si la barre de déplacement d'un widget (bande de `GRIP_HEIGHT` px en
+ * haut du widget de largeur w) reste assez visible pour être saisie.
+ */
+const GRIP_HEIGHT = 32
+const GRIP_MIN_VISIBLE = 40
+export function isGripReachable(x: number, y: number, w: number): boolean {
+  return (
+    y >= 0 &&
+    y <= window.innerHeight - GRIP_HEIGHT &&
+    x <= window.innerWidth - GRIP_MIN_VISIBLE &&
+    x + w >= GRIP_MIN_VISIBLE
+  )
+}
+
 /** Poignée de redimensionnement : onMove reçoit les décalages (dw, dh) en px */
 export function resizable(node: HTMLElement, options: ResizableOptions) {
   let current = options

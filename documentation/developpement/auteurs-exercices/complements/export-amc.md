@@ -17,7 +17,7 @@ Avant d'ajouter AMC, l'environnement et l'exercice doivent déjà être opérati
 
 - les dépendances du dépôt sont installées ;
 - l'exercice est lançable dans l'interface ou par les tests habituels ;
-- la commande `pnpm check` est disponible et ne doit pas être remplacée par un contrôle partiel quand le changement touche du TypeScript ou du Svelte ;
+- la commande `pnpm check:changed` est disponible : elle contrôle les fichiers modifiés et leurs dépendants, et bascule d'elle-même sur `pnpm check` quand le changement touche du code très partagé (voir [Valider un exercice](../valider-un-exercice.md#quand-lancer-pnpm-check)) ;
 - `nouvelleVersion()` remplit les questions et corrections habituelles (`listeQuestions` / `listeCorrections`, ou `question` / `correction` pour un `ExerciceSimple`) ;
 - le rendu LaTeX est lisible sans composant navigateur ;
 - les réponses attendues sont connues au moment de la génération ;

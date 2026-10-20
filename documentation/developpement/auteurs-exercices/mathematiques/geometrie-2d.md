@@ -385,7 +385,7 @@ Avant de considérer un exercice terminé :
 2. Activer la correction si la figure n'apparaît que dans `texteCorr`.
 3. Tester une version LaTeX/PDF si l'exercice est exportable.
 4. Vérifier les cas extrêmes des tirages aléatoires : points proches, points alignés, valeurs négatives, grand repère.
-5. Exécuter les commandes demandées par le projet avant commit : `pnpm prebuild-unit-tests` et `pnpm check`.
+5. Exécuter les commandes demandées par le projet avant commit : `pnpm prebuild-unit-tests` et `pnpm check:changed`.
 
 Pour trouver des exemples existants :
 
