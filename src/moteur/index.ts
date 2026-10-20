@@ -50,6 +50,8 @@ export interface ParamsExercice {
   sup3?: string
   sup4?: string
   alea?: string
+  /** false : énoncés sans champs de réponse ni QCM cliquables (export, impression). Par défaut : true */
+  interactif?: boolean
 }
 
 export interface QuestionPreparee {
@@ -109,16 +111,17 @@ export async function preparerExercice(
   numero: number,
 ): Promise<ExercicePrepare> {
   const exercice = await mathaleaLoadExerciceFromUuid(params.uuid)
+  const interactif = params.interactif !== false
   const p: InterfaceParams = {
     ...params,
     alea: params.alea ?? mathaleaGenerateSeed(),
-    interactif: '1',
+    interactif: interactif ? '1' : '0',
   } as InterfaceParams
   mathaleaHandleParamOfOneExercice(exercice, p)
-  exercice.interactif = true
+  exercice.interactif = interactif
   exercice.numeroExercice = numero
   if (exercice.typeExercice === 'simple') {
-    mathaleaHandleExerciceSimple(exercice, true, numero)
+    mathaleaHandleExerciceSimple(exercice, interactif, numero)
   } else if (typeof exercice.nouvelleVersionWrapper === 'function') {
     seedrandom(String(exercice.seed), { global: true })
     exercice.nouvelleVersionWrapper(numero)
