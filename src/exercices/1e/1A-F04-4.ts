@@ -10,12 +10,16 @@ import { context } from '../../modules/context'
 
 import { courbe } from '../../lib/2d/Courbe'
 import { bleuMathalea } from '../../lib/colors'
+import { choixDeroulant } from '../../lib/customElements/ListeDeroulanteElement'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceQcmACourt from '../ExerciceQcmACourt'
 export const dateDePublication = '20/09/2025'
-export const uuid = '5586f'
+export const dateDeModifImportante = '20/10/2026'
+export const uuid = '28bee'
 /**
  *
  * @author Gilles Mora
@@ -31,8 +35,31 @@ export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre =
   "Déterminer le nombre de solutions de l'équation $f(x)=0$ avec un graphique"
-export default class auto1AF4c extends ExerciceQcmA {
+
+// Réponses de la liste déroulante, indexées par le cas tiré
+// (elles complètent la phrase « L'équation f(x)=0 … »)
+const reponsesCas: Record<number, string> = {
+  1: 'admet deux solutions négatives',
+  2: 'admet deux solutions de signes contraires',
+  3: 'admet une solution positive',
+  4: "n'admet aucune solution",
+}
+
+// Choix de la liste déroulante : tous les nombres et signes possibles,
+// pour ne pas restreindre la réponse aux seuls cas tirés
+const choixListe = [
+  "n'admet aucune solution",
+  'admet une solution négative',
+  'admet une solution positive',
+  'admet deux solutions négatives',
+  'admet deux solutions positives',
+  'admet deux solutions de signes contraires',
+]
+
+export default class auto1AF4c extends ExerciceQcmACourt {
+  cas = 1
   versionOriginale: () => void = () => {
+    this.cas = 1
     const figureId = `lectureAntecedentsEx${this.numeroExercice ?? 0}Q0`
     const o = latex2d('\\text{O}', -0.3, -0.3, { letterSize: 'scriptsize' })
 
@@ -111,6 +138,7 @@ export default class auto1AF4c extends ExerciceQcmA {
     const figureId = `lectureAntecedentsEx${this.numeroExercice ?? 0}Q0`
     let solutions: number[] = []
     const cas = choice([1, 2, 3, 4])
+    this.cas = cas
 
     switch (cas) {
       case 1: // cas 2 solutions négatives
@@ -320,6 +348,7 @@ export default class auto1AF4c extends ExerciceQcmA {
           )}`
 
           this.correction = `Il y a un point d'intersection entre la courbe et l'axe des abscisses.<br>
+    Son abscisse, solution de l'équation, est positive. <br>
     Par conséquent,   ${texteEnCouleurEtGras("l'équation ")}$${miseEnEvidence('f(x)=0')}$${texteEnCouleurEtGras(' admet exactement une solution')}.`
 
           this.reponses = [
@@ -412,8 +441,61 @@ export default class auto1AF4c extends ExerciceQcmA {
     }
   }
 
+  /**
+   * Version sans QCM : l'élève choisit le nombre et le signe des solutions
+   * dans une liste déroulante. La case « Version QCM » (`sup3`) réactive le QCM.
+   */
+  nouvelleVersion() {
+    if (this.sup3) {
+      super.nouvelleVersion()
+      return
+    }
+    if (context.isAmc) {
+      // L'export AMC reste un QCM : on court-circuite ExerciceQcmACourt
+      ExerciceQcmA.prototype.nouvelleVersion.call(this)
+      return
+    }
+
+    this.consigne = ''
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 30; cpt++) {
+      if (this.sup && this.versionOriginale != null) this.versionOriginale()
+      else this.versionAleatoire()
+
+      const bonneReponse = reponsesCas[this.cas]
+      if (this.questionJamaisPosee(i, this.enonce, bonneReponse)) {
+        const choices = [
+          { label: 'Choisir une réponse', value: '' },
+          ...choixListe.map((choix) => ({ label: choix, value: choix })),
+        ]
+        // En interactif, la liste déroulante complète la phrase sous la figure
+        this.listeQuestions[i] = this.interactif
+          ? this.enonce.replace(
+              '<br>Une seule de ces propositions est exacte :',
+              '',
+            ) +
+            `<br>L'équation $f(x)=0$ ${choixDeroulant(this, i, { choices })}.`
+          : this.enonce.replace(
+              'Une seule de ces propositions est exacte :',
+              'Déterminer le nombre de solutions de cette équation et leur signe.',
+            )
+        this.listeCorrections[i] = this.correction ?? ''
+
+        handleAnswers(
+          this,
+          i,
+          { reponse: { value: bonneReponse } },
+          { formatInteractif: 'liste-deroulante' },
+        )
+        i++
+      }
+      if (this.sup) break
+    }
+  }
+
   constructor() {
     super()
+    this.besoinFormulaire2CaseACocher = false // Consigne augmentée : QCM uniquement
+    this.besoinFormulaire4CaseACocher = false // « Je ne sais pas » : QCM uniquement
     this.versionAleatoire()
     this.options.vertical = true
   }
