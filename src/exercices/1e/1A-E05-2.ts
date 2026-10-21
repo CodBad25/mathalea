@@ -11,7 +11,6 @@ export const refs = {
 export const interactifReady = true
 
 export const amcReady = 'true'
-export const amcType = 'qcmMono'
 export const titre = 'Calculer un taux réciproque dans des cas particuliers'
 export const dateDePublication = '15/07/2025'
 export const dateDeModifImportante = '20/10/2026'
