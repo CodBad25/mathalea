@@ -26,7 +26,7 @@ export const uuid = '8b399'
 
 export const refs = {
   'fr-fr': ['4C32-4', 'BP2AutoE10'],
-  'fr-ch': ['10NO3D-23'],
+  'fr-ch': ['11NO3A-1'],
 }
 export default class CalculsPuissancesDe10 extends Exercice {
   constructor() {

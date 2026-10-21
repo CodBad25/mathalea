@@ -31,6 +31,12 @@
   import { isLocalStorageAvailable } from '../../../lib/stores/storage'
   import type { IExercice, InterfaceParams } from '../../../lib/types'
   import { decodeBase64, encodeBase64 } from '../latex/LatexConfig'
+  import {
+    buildRedirectHtml,
+    buildShareUrl,
+    readTypstParam,
+    typstParamForAddressBar,
+  } from './typstUrlParam'
   import { context } from '../../../modules/context'
   import { statsPdfCreatedTracker } from '../../../modules/statsUtils'
   import Settings from '../../shared/exercice/exerciceMathalea/exerciceMathaleaVueProf/presentationalComponents/Settings.svelte'
@@ -367,9 +373,15 @@
   // le nombre de sujets Typst corresponde au nombre de vues jouées. Depuis
   // que la vue Typst réécrit ce paramètre à chaque modification, il porte
   // aussi tous les réglages du document et de la mise en page (rechargeables).
-  const typstUrlParam = new URL(window.location.href).searchParams.get(
-    'typstParam',
-  )
+  // Valeur complète du paramètre : l'URL peut n'en porter qu'une référence
+  // (voir `typstUrlParam.ts`) quand les réglages sont trop volumineux.
+  const typstUrlParam = readTypstParam(new URL(window.location.href))
+  /**
+   * Dernière valeur complète de `typstParam`, base des liens à partager et du
+   * fichier de redirection (l'URL de la barre d'adresse peut ne contenir
+   * qu'une référence).
+   */
+  let fullTypstParam = typstUrlParam ?? ''
   /**
    * Un lien partagé fixe déjà ces réglages : la détection automatique de la
    * présentation « Course aux nombres » (voir `loadExercises`) ne doit
@@ -381,7 +393,22 @@
   let headerStyleSetFromUrl = false
   let titleSetFromUrl = false
   if (typstUrlParam != null) {
-    typstParamStore.set(typstUrlParam)
+    // forme compatible avec la barre d'adresse (lien à fragment ou volumineux)
+    const addressBarParam = typstParamForAddressBar(
+      typstUrlParam,
+      window.location.href,
+    )
+    typstParamStore.set(addressBarParam)
+    if (!get(freezeUrl)) {
+      try {
+        const url = new URL(window.location.href)
+        url.hash = ''
+        url.searchParams.set('typstParam', addressBarParam)
+        window.history.replaceState(null, '', url)
+      } catch {
+        // URL non modifiable (iframe sandboxée…) : sans conséquence
+      }
+    }
     const parsed = decodeBase64(typstUrlParam)
     if (parsed.options != null) {
       restoredDocumentOptions = {
@@ -2977,10 +3004,17 @@
         ? harvestCarryOver(currentCode())
         : (urlCarryOver ?? {})
     const encoded = encodeBase64({ options: documentOptions, carryOver })
+    fullTypstParam = encoded
+    // des réglages trop volumineux ne passent pas dans l'URL (le serveur
+    // refuserait de la recharger) : elle n'en garde alors qu'une référence
+    const addressBarParam = typstParamForAddressBar(
+      encoded,
+      window.location.href,
+    )
     // le store est la source de vérité ; on redéclenche ensuite l'écrivain
     // d'URL de l'app pour que sa prochaine écriture (débouncée) reparte de
     // cette valeur et ne réécrive pas l'URL sans typstParam
-    typstParamStore.set(encoded)
+    typstParamStore.set(addressBarParam)
     mathaleaUpdateUrlFromExercicesParams()
     if (encoded === lastTypstParam) return
     lastTypstParam = encoded
@@ -2988,7 +3022,7 @@
     if (get(freezeUrl)) return
     try {
       const url = new URL(window.location.href)
-      url.searchParams.set('typstParam', encoded)
+      url.searchParams.set('typstParam', addressBarParam)
       window.history.replaceState(null, '', url)
     } catch {
       // URL non modifiable (iframe sandboxée…) : sans conséquence
@@ -3644,7 +3678,7 @@
    * ou téléchargé.
    */
   function currentUrl(): string {
-    return window.location.href
+    return buildShareUrl(window.location.href, fullTypstParam)
   }
 
   /**
@@ -4392,6 +4426,20 @@
   }
 
   /**
+   * Télécharge une page HTML qui redirige vers cette fiche : un lien durable
+   * (dépôt sur un ENT, dossier de préparation…) sans limite de longueur, car
+   * les réglages volumineux voyagent dans le fragment de l'URL.
+   */
+  function downloadRedirect() {
+    downloadBlob(
+      new Blob([buildRedirectHtml(currentUrl(), documentOptions.title)], {
+        type: 'text/html;charset=utf-8',
+      }),
+      `${exportFilename()}_mathalea.html`,
+    )
+  }
+
+  /**
    * Télécharge le `.typ` : seul s'il ne référence aucune image, sinon dans
    * une archive ZIP avec les images nécessaires (mêmes chemins que ceux
    * référencés par le code, voir `requiredImageAssets`) — sans elles, le
@@ -4564,6 +4612,16 @@
         onclick={() => (isBugReportDisplayed = true)}
       >
         <i class="bx bx-bug text-xl"></i>
+      </button>
+
+      <button
+        type="button"
+        title="Télécharger un fichier de redirection : une page HTML qui rouvre cette fiche dans MathALÉA"
+        aria-label="Télécharger un fichier de redirection"
+        class="flex items-center justify-center rounded-lg border border-coopmaths-action py-1 px-2 text-coopmaths-action hover:bg-coopmaths-action hover:text-coopmaths-canvas dark:border-coopmathsdark-action dark:text-coopmathsdark-action dark:hover:bg-coopmathsdark-action dark:hover:text-coopmathsdark-canvas"
+        onclick={downloadRedirect}
+      >
+        <i class="bx bx-link-external text-xl"></i>
       </button>
 
       {#if displayMode === 'code' || displayMode === 'split'}

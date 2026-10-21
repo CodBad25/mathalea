@@ -24,6 +24,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Calculer la dérivée d'une fonction avec $\\mathrm{e}^x$"
 export const dateDePublication = '06/08/2025'
+export const dateDeModifImportante = '20/10/2026'
 export const interactifReady = true
 
 /**
@@ -118,7 +119,7 @@ export default class DeriveeExp1AN312 extends Exercice {
            & = \\mathrm{e}^x \\left(${reduireAxPlusB(a, b)}  ${ecritureAlgebriqueSauf0(a)}\\right) \\\\
           &=  ${miseEnEvidence(`(${reduireAxPlusB(a, a + b)})\\mathrm{e}^x`)}
           \\end{aligned}$.`
-            value = `${reduireAxPlusB(a, a + b)}\\mathrm{e}^x`
+            value = `(${reduireAxPlusB(a, a + b)})\\mathrm{e}^x`
             handleAnswers(this, i, { reponse: { value } })
           }
           break
@@ -265,7 +266,6 @@ export default class DeriveeExp1AN312 extends Exercice {
             const a = randint(-10, 10, 0)
             const b = randint(-10, 10)
             const c = randint(-10, 10, 0)
-            const k = randint(-5, 5, [0, 1, -1])
             texte =
               texteIntro +
               ` $f(x) = \\dfrac{${reduirePolynomeDegre3(0, a, b, c)}}{\\mathrm{e}^x}$. <br> Calculer $f'(x)$ .`

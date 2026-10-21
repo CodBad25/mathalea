@@ -20,16 +20,16 @@ SHA-256 de chaque fichier). Environ 70 Mo, 20 Mo compressé.
 
 ## API (`src/moteur/index.ts`)
 
-| Fonction                            | Rôle                                                                                                                                            |
-| ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `initialiser()`                     | charge MathLive ; `window.notify` remplacé par un simple journal (pas de Bugsnag)                                                               |
-| `preparerExercice(params, numero)`  | charge l'exercice par uuid, applique les paramètres (`n`, `s`…) et la graine, renvoie titre, graine et questions (contexte, énoncé, correction) |
-| `afficher(element)`                 | KaTeX, MathLive, figures réduites à la largeur de l'élément (`ajusterFigures`)                                                                  |
-| `verifier(exercice, i)`             | vérifie la question `i`, même logique que `QuestionParPage.svelte`                                                                              |
-| `ecrireReponses(reponses)`          | réinjecte des réponses (`mathaleaWriteStudentPreviousAnswers`)                                                                                  |
-| `monterClavier(cible)`              | monte `Keyboard.svelte` (clavier de MathALÉA)                                                                                                   |
-| `listerExercices('FR' \| 'CH')`     | exercices du référentiel du site, chargés à la demande                                                                                          |
-| `definirLangue('fr-FR' \| 'fr-CH')` | `referentielLocale` ; en `fr-CH`, notations et vocabulaire suisses                                                                              |
+| Fonction                            | Rôle                                                                                                                                                                                                                            |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `initialiser()`                     | charge MathLive ; `window.notify` remplacé par un simple journal (pas de Bugsnag)                                                                                                                                               |
+| `preparerExercice(params, numero)`  | charge l'exercice par uuid, applique les paramètres (`n`, `s`…) et la graine, renvoie titre, graine et questions (contexte, énoncé, correction) ; avec `interactif: false`, énoncés imprimables (sans champs ni QCM cliquables) |
+| `afficher(element)`                 | KaTeX, MathLive, figures réduites à la largeur de l'élément (`ajusterFigures`)                                                                                                                                                  |
+| `verifier(exercice, i)`             | vérifie la question `i`, même logique que `QuestionParPage.svelte`                                                                                                                                                              |
+| `ecrireReponses(reponses)`          | réinjecte des réponses (`mathaleaWriteStudentPreviousAnswers`)                                                                                                                                                                  |
+| `monterClavier(cible)`              | monte `Keyboard.svelte` (clavier de MathALÉA)                                                                                                                                                                                   |
+| `listerExercices('FR' \| 'CH')`     | exercices du référentiel du site, chargés à la demande                                                                                                                                                                          |
+| `definirLangue('fr-FR' \| 'fr-CH')` | `referentielLocale` ; en `fr-CH`, notations et vocabulaire suisses                                                                                                                                                              |
 
 `API_MOTEUR` est incrémenté à chaque changement incompatible de cette API ;
 l'application hôte refuse un moteur dont la version d'API ne correspond pas.

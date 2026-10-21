@@ -22,6 +22,11 @@ export default mergeConfig(
       workerThreads: {
         memoryLimit: '4096',
       },
+      // Les mocks (3D, apigeom…) doivent être enregistrés avant tout fichier de
+      // test : avec `isolate: false`, un module déjà chargé pour de vrai par un
+      // autre fichier resterait en cache et l'empreinte dépendrait de l'ordre
+      // d'exécution (donc de l'état du cache de vitest).
+      setupFiles: [resolve(__dirname, 'helpers/setupExerciseGeneration.ts')],
       include: ['./tests/stability/*.test.{js,ts}'],
       exclude: [],
       environment: 'jsdom',

@@ -1,4 +1,7 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   ecritureAlgebrique,
   reduireAxPlusB,
@@ -6,6 +9,7 @@ import {
 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
+import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
@@ -23,6 +27,11 @@ export const amcType = 'qcmMono'
 export const titre =
   "Déterminer le produit des coordonnées du point d'intersection de deux droites"
 export default class auto1AF2g extends ExerciceQcmA {
+  private questionsOuvertes = new Map<
+    string,
+    { correction: string; reponses: string[] }
+  >()
+
   private appliquerLesValeurs(
     a: number,
     b: number,
@@ -33,7 +42,7 @@ export default class auto1AF2g extends ExerciceQcmA {
     const ord = new FractionEtendue(a * d - b * c, a - c)
     this.enonce = `$(D)$ et $(D')$ sont deux droites dans un repère du plan.<br>
     L'équation réduite de $(D)$ est : $y=${reduireAxPlusB(a, b)}$ et celle de $(D')$ est : $y=${reduireAxPlusB(c, d)}$.<br>
-    Le produit des coordonnées du point d'intersection des deux droites $(D)$ et $(D')$ est égal à : `
+    ${this.sup3 || context.isAmc ? "Le produit des coordonnées du point d'intersection des deux droites $(D)$ et $(D')$ est égal à :" : "Déterminer le produit des coordonnées du point d'intersection des deux droites $(D)$ et $(D')$."}`
     this.correction = ` Les coefficients directeurs de $(D)$ et $(D')$ étant différents, les droites ne sont pas parallèles.  <br>
      Les deux droites $(D)$ et $(D')$ sont donc sécantes, et l'abscisse $x$ de leur point d'intersection est solution de l'équation : $${reduireAxPlusB(
        a,
@@ -86,6 +95,10 @@ export default class auto1AF2g extends ExerciceQcmA {
         new FractionEtendue(d - b + a * d - b * c, a - c).texFractionSimplifiee
       } $`,
     ]
+    this.questionsOuvertes.set(this.enonce, {
+      correction: this.correction,
+      reponses: [this.reponses[0].replace(/\$/g, '').trim()],
+    })
   }
 
   versionOriginale: () => void = () => {
@@ -114,8 +127,44 @@ export default class auto1AF2g extends ExerciceQcmA {
     } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true)) // Limiter le nombre de tentatives pour éviter une boucle infinie
   }
 
+  nouvelleVersion() {
+    this.questionsOuvertes.clear()
+    // Conserver les tirages du générateur, puis remplacer l'affichage du QCM.
+    super.nouvelleVersion()
+    if (this.sup3 || context.isAmc) return
+    this.consigne = ''
+    for (let i = 0; i < this.listeQuestions.length; i++) {
+      const enonce = this.autoCorrection[i].enonce ?? ''
+      const donnees = this.questionsOuvertes.get(enonce)
+      if (!donnees) continue
+      this.listeQuestions[i] = this.interactif
+        ? enonce.replace(
+            /Déterminer le produit des coordonnées du point d'intersection des deux droites \$\(D\)\$ et \$\(D'\)\$\./,
+            "Le produit des coordonnées du point d'intersection des deux droites $(D)$ et $(D')$ est ",
+          ) +
+          ajouteChampTexteMathLive(
+            this,
+            i,
+            KeyboardType.clavierDeBaseAvecFraction,
+          ) +
+          '.'
+        : enonce
+      this.listeCorrections[i] = donnees.correction
+      handleAnswers(
+        this,
+        i,
+        { reponse: { value: donnees.reponses } },
+        { formatInteractif: 'mathalea-mathfield' },
+      )
+    }
+  }
+
   constructor() {
     super()
+    this.sup3 = false
+    this.besoinFormulaire3CaseACocher = ['Version QCM', false]
+    this.besoinFormulaire2CaseACocher = false
+    this.besoinFormulaire4CaseACocher = false
     this.versionAleatoire()
     this.spacing = 2
   }

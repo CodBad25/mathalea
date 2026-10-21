@@ -6,11 +6,13 @@ import { context } from '../../modules/context'
 import { courbe } from '../../lib/2d/Courbe'
 import { bleuMathalea } from '../../lib/colors'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
+import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
 import { mathalea2d, type Mathalea2DOptions } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
-import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceQcmACourt from '../ExerciceQcmACourt'
 export const dateDePublication = '04/10/2025'
-export const uuid = '6d6ea'
+export const dateDeModifImportante = '20/10/2026'
+export const uuid = '03215'
 /**
  *
  * @author Gilles Mora factorisation du code par Claude
@@ -22,7 +24,6 @@ export const refs = {
 export const interactifReady = true
 
 export const amcReady = 'true'
-export const amcType = 'qcmMono'
 export const titre =
   'Résoudre graphiquement une inéquation du type $f(x)<g(x)$ (1)'
 type CasConfig = {
@@ -248,7 +249,19 @@ const symbolesMap: Record<number, string> = {
   4: '\\geqslant',
 }
 
-export default class auto1AF4d extends ExerciceQcmA {
+export default class auto1AF4d extends ExerciceQcmACourt {
+  // En interactif, le champ « S = » complète la phrase de l'énoncé
+  enonceCourt = () =>
+    this.enonce.replace(
+      /L'ensemble des solutions de l'inéquation (\$[^$]*\$) est : $/,
+      this.interactif
+        ? "L'ensemble des solutions de l'inéquation $1 est "
+        : "Déterminer l'ensemble des solutions de l'inéquation $1.",
+    )
+
+  optionsChampReponseCourte = { texteAvant: '$S=$', texteApres: '.' }
+  champReponseCourteEnLigne = true
+
   versionOriginale = () => {
     const o = latex2d('\\text{O}', -0.3, -0.3, { letterSize: 'scriptsize' })
     const config = casConfigs[1]
@@ -394,6 +407,11 @@ export default class auto1AF4d extends ExerciceQcmA {
 
   constructor() {
     super()
+    this.besoinFormulaire2CaseACocher = false // Consigne augmentée : QCM uniquement
+    this.besoinFormulaire4CaseACocher = false // « Je ne sais pas » : QCM uniquement
+    this.clavierReponseCourte = 'clavierEnsemble'
+    this.compareReponseCourte = (saisie, reponse) =>
+      fonctionComparaison(saisie, reponse, { intervalle: true })
     this.versionAleatoire()
   }
 }

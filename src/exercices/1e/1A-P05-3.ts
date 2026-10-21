@@ -5,9 +5,12 @@ import { Arbre } from '../../modules/arbres'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
-import ExerciceQcmA from '../ExerciceQcmA'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
+import ExerciceQcmACourt from '../ExerciceQcmACourt'
 export const dateDePublication = '10/08/2025'
-export const uuid = '24438'
+export const dateDeModifImportante = '21/10/2026'
+export const uuid = '35d5f'
 // @Author Stéphane Guyon
 export const refs = {
   'fr-fr': ['1A-P05-3'],
@@ -16,9 +19,8 @@ export const refs = {
 export const interactifReady = true
 
 export const amcReady = 'true'
-export const amcType = 'qcmMono'
 export const titre = 'Déterminer une probabilité conditionnelle'
-export default class auto1AP3c extends ExerciceQcmA {
+export default class auto1AP3c extends ExerciceQcmACourt {
   versionOriginale: () => void = () => {
     let objets = []
     const rationnel = true
@@ -82,10 +84,10 @@ export default class auto1AP3c extends ExerciceQcmA {
       Object.assign({ display: 'inline' } as const, fixeBordures(objets)),
       objets,
     )
-    this.enonce += '<br>$p_C(A)$ est égal à :'
+    this.enonce += '<br>$P_C(A)$ est égal à :'
     this.correction = `On sait que $ P_C(A)=\\dfrac{P(A \\cap C)}{P(C)}$<br>
         D'après la formule des probabilités totales :<br>
-         $\\begin{aligned}P(C)&=p(A\\cap C)+p(\\bar A \\cap C)\\\\
+         $\\begin{aligned}P(C)&=P(A\\cap C)+P(\\bar A \\cap C)\\\\
          &=P(A)\\times P_A(C)+P(\\bar A)\\times P_{\\bar A}(C)\\\\
          &=${texNombre(0.3)}\\times ${texNombre(0.6)}+${texNombre(0.7)}\\times ${texNombre(0.4)}\\\\
          &=${texNombre(0.18)}+${texNombre(0.28)}\\\\
@@ -173,7 +175,7 @@ export default class auto1AP3c extends ExerciceQcmA {
     objets = omega.represente(0, 6, 0, 3, true, 1, 8)
     const pC1 = pA.produitFraction(pAC)
     const pC2 = pA.entierMoinsFraction(1).produitFraction(pBC)
-    const pC = pC1.sommeFraction(pC2) // On a calculé p(C)
+    const pC = pC1.sommeFraction(pC2) // On a calculé P(C)
     const Reponse = pC1.diviseFraction(pC)
     // Génère distracteur2 différent de distracteur1 et de la bonne réponse
 
@@ -186,7 +188,7 @@ export default class auto1AP3c extends ExerciceQcmA {
 
     this.correction = `On sait que $ P_C(A)=\\dfrac{P(A \\cap C)}{P(C)}$<br>
         D'après la formule des probabilités totales :<br>
-         $\\begin{aligned}P(C)&=p(A\\cap C)+p(\\bar A \\cap C)\\\\
+         $\\begin{aligned}P(C)&=P(A\\cap C)+P(\\bar A \\cap C)\\\\
          &=P(A)\\times P_A(C)+P(\\bar A)\\times P_{\\bar A}(C)\\\\
          &=${pA.texFractionSimplifiee}\\times ${pAC.texFractionSimplifiee}+${pA.entierMoinsFraction(1).texFractionSimplifiee}\\times ${pBC.texFractionSimplifiee}\\\\
          &=${pC1.texFractionSimplifiee}+${pC2.texFractionSimplifiee}\\\\
@@ -248,6 +250,17 @@ export default class auto1AP3c extends ExerciceQcmA {
 
   constructor() {
     super()
+    // Saisie libre (version QCM désactivée) : la dernière phrase devient une question
+    this.enonceCourt = () =>
+      this.enonce.replace(/\$([^$]+)\$ est égal à :\s*$/, (_, p: string) =>
+        this.interactif ? `$${p}=$` : `Calculer $${p}$.`,
+      )
+
+    this.clavierReponseCourte = KeyboardType.clavierDeBaseAvecFraction
+    this.champReponseCourteEnLigne = true
+    this.compareReponseCourte = (saisie, reponse) =>
+      fonctionComparaison(saisie, reponse, { fractionEgale: true })
+
     this.versionAleatoire()
   }
 }

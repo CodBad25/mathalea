@@ -466,3 +466,13 @@ rg -n "amcReady|amcType|autoCorrectionAMC|questionsAMC|handleAnswers|proposition
 ```
 
 Puis comparez avec un exercice court du même type, par exemple un `AMCNum` simple dans `src/exercices/can/6e/can6C2-01.ts`, un QCM dans `src/exercices/can/6e/can6M1-01.ts`, ou un `AMCHybride` dans `src/exercices/can/6e/can6C51-01.ts`.
+
+## Type AMC et saisie libre
+
+`amcType` ne se déclare que pour un QCM (`qcmMono`, `qcmMult`) ou lorsqu'un
+type précis doit être imposé. Un exercice en saisie libre, dont la réponse est
+un nombre, une fraction ou un texte, n'a pas de ligne `amcType` : le type est
+détecté à partir de la réponse (`detectAmcType()` dans
+`src/lib/amc/amcBuilders.ts`). Garder `amcReady` et supprimer la ligne
+`export const amcType = …` lorsqu'un exercice passe en saisie libre par défaut
+(voir [Conserver un QCM en option](interactivite-simple.md#conserver-un-qcm-en-option)).

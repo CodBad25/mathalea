@@ -2,10 +2,11 @@ import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import FractionEtendue from '../../modules/FractionEtendue'
-// import ExerciceQcmA from '../../ExerciceQcmA'
-import ExerciceQcmA from '../ExerciceQcmA'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
+import ExerciceQcmACourt from '../ExerciceQcmACourt'
 
-export const uuid = 'f6113'
+export const uuid = '01da7'
 export const refs = {
   'fr-fr': ['1A-E05-4'],
   'fr-ch': ['11QCM-51', '10QCM-49'],
@@ -13,17 +14,20 @@ export const refs = {
 export const interactifReady = true
 
 export const amcReady = 'true'
-export const amcType = 'qcmMono'
 export const titre =
   'Calculer le coefficient multiplicateur réciproque (avec des fractions)'
 export const dateDePublication = '28/12/2025'
+export const dateDeModifImportante = '21/10/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
  *
  * @author Gilles Mora
  *
  */
-export default class TauxReciproqued extends ExerciceQcmA {
+export default class TauxReciproqued extends ExerciceQcmACourt {
+  // Fraction irréductible saisie lorsque la version QCM est désactivée
+  private reponseSaisie = ''
+
   private appliquerLesValeurs(augmentation: boolean, taux: number): void {
     const signe = augmentation ? '+' : '-'
     const signeMot = augmentation ? 'augmenté' : 'diminué'
@@ -63,6 +67,7 @@ export default class TauxReciproqued extends ExerciceQcmA {
       mauvaiseReponse2,
       mauvaiseReponse3,
     ]
+    this.reponseSaisie = inverse.texFractionSimplifiee
     // Correction unifiée avec coefficient décimal puis simplification
     this.correction = `${augmentation ? 'Augmenter' : 'Diminuer'} de $${texNombre(taux, 0)}~\\%$ revient à multiplier par $1${signe}\\dfrac{${texNombre(taux, 2)}}{100}=${texNombre(coeff, 3)}$.<br>
     Pour retrouver le prix initial, il faut diviser par ce coefficient, c'est-à-dire multiplier par le coefficient multiplicateur réciproque $\\dfrac{1}{${texNombre(coeffDecimal, 2)}}$.<br>
@@ -84,6 +89,23 @@ export default class TauxReciproqued extends ExerciceQcmA {
 
   constructor() {
     super()
+    this.enonceCourt = () =>
+      this.enonce.replace(
+        /Pour retrouver son prix avant (.*), il faut multiplier son prix actuel par :\s*$/,
+        'Quel coefficient multiplicateur faut-il appliquer à son prix actuel pour retrouver son prix avant $1 ?',
+      )
+    this.reponseCourte = () => this.reponseSaisie
+
+    this.clavierReponseCourte = KeyboardType.clavierDeBaseAvecFraction
+    this.compareReponseCourte = (saisie, reponse) =>
+      fonctionComparaison(
+        saisie,
+        reponse,
+        /\\d?frac/.test(reponse)
+          ? { fractionEgale: true }
+          : { nombreDecimalSeulement: true },
+      )
+
     this.versionAleatoire()
     this.spacingCorr = 2
   }

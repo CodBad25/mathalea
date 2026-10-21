@@ -22,7 +22,7 @@ export const uuid = '99b29'
 
 export const refs = {
   'fr-fr': ['2N51-1'],
-  'fr-ch': ['11NO3A-2', '1mCN-7'],
+  'fr-ch': ['11NO3B-2', '1mCN-7'],
 }
 export default class Proprietesracinecarree extends Exercice {
   constructor() {

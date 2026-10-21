@@ -1,4 +1,7 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -6,6 +9,7 @@ import {
   rienSi1,
 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
@@ -28,8 +32,13 @@ export const amcType = 'qcmMono'
 export const titre =
   "Déterminer l'image d'une fraction par une fonction polynôme du second degré"
 export default class AutoF1f extends ExerciceQcmA {
+  private questionsOuvertes = new Map<
+    string,
+    { correction: string; reponse: string }
+  >()
+
   versionOriginale: () => void = () => {
-    this.enonce = `On considère la fonction  $f$ définie sur $\\mathbb{R}$ par $f(x)=2x^2+5x+8$<br>
+    this.enonce = `On considère la fonction  $f$ définie sur $\\mathbb{R}$ par $f(x)=2x^2+5x+8$.<br>
     L'image de $-\\dfrac{5}{4}$ par cette fonction est : `
     this.correction = `On remplace $x$ par $-\\dfrac{5}{4}$ dans l'expression de $f$ :<br>
      
@@ -167,8 +176,59 @@ export default class AutoF1f extends ExerciceQcmA {
     } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }
 
+  nouvelleVersion() {
+    this.questionsOuvertes.clear()
+    super.nouvelleVersion()
+    if (this.sup3 || context.isAmc) return
+    this.consigne = ''
+    for (let i = 0; i < this.listeQuestions.length; i++) {
+      const enonce = this.autoCorrection[i].enonce ?? ''
+      const donnees = this.questionsOuvertes.get(enonce)
+      if (!donnees) continue
+      this.listeQuestions[i] = this.interactif
+        ? enonce.replace(
+            /Calculer l'image de \$(.*?)\$ par cette fonction\./,
+            (_, valeur) =>
+              `L'image de $${valeur}$ par la fonction $f$ est ${ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBaseAvecFraction)}.`,
+          )
+        : enonce
+      this.listeCorrections[i] = donnees.correction
+      handleAnswers(
+        this,
+        i,
+        { reponse: { value: donnees.reponse } },
+        { formatInteractif: 'mathalea-mathfield' },
+      )
+    }
+  }
+
   constructor() {
     super()
+    this.sup3 = false
+    this.besoinFormulaire3CaseACocher = ['Version QCM', false]
+    this.besoinFormulaire2CaseACocher = false
+    this.besoinFormulaire4CaseACocher = false
+    const preparerQuestion = () => {
+      if (this.sup3 || context.isAmc) return
+      this.enonce = this.enonce.replace(
+        /L'image de \$(.*?)\$ par cette fonction est :\s*/,
+        "Calculer l'image de $$$1$ par cette fonction.",
+      )
+      this.questionsOuvertes.set(this.enonce, {
+        correction: this.correction ?? '',
+        reponse: this.reponses[0].replace(/\$/g, '').trim(),
+      })
+    }
+    const aleatoire = this.versionAleatoire
+    this.versionAleatoire = () => {
+      aleatoire()
+      preparerQuestion()
+    }
+    const originale = this.versionOriginale
+    this.versionOriginale = () => {
+      originale()
+      preparerQuestion()
+    }
     this.versionAleatoire()
   }
 }

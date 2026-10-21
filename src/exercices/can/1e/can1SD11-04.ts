@@ -32,7 +32,8 @@ export default class LectureGraphiqueParaboleA extends ExerciceSimple {
     this.versionQcmDisponible = true
     this.nbQuestions = 1
     this.optionsChampTexte = { texteAvant: '$a=$' }
-    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
   }
 
   nouvelleVersion() {
@@ -52,18 +53,20 @@ export default class LectureGraphiqueParaboleA extends ExerciceSimple {
           return a * x ** 2 + b
         }
         if (b > 0) {
+          // Le point d'abscisse 1, qui sert à lire $a$, doit rester visible.
+          const yMax = Math.max(6, Math.ceil(a + b) + 1)
           r = new Repere({
             yUnite: 2,
             xUnite: 2,
             xMin: -3,
             yMin: -1,
-            yMax: 6,
+            yMax,
             xMax: 3,
             thickHauteur: 0.2,
             xThickMin: -4,
             xLabelMin: -2,
             xLabelMax: 2,
-            yLabelMax: 5,
+            yLabelMax: yMax - 1,
             yLabelMin: -2,
             grilleSecondaire: true,
             grilleSecondaireOpacite: 1,
@@ -72,7 +75,7 @@ export default class LectureGraphiqueParaboleA extends ExerciceSimple {
             grilleSecondaireCouleur: 'black',
             axesEpaisseur: 1.5,
             grilleSecondaireYMin: -2.1,
-            grilleSecondaireYMax: 12.1,
+            grilleSecondaireYMax: 2 * yMax + 0.1,
             grilleSecondaireXMin: -3.1,
             grilleSecondaireXMax: 3.1,
             xLabelEcart: 0.8,
@@ -80,13 +83,13 @@ export default class LectureGraphiqueParaboleA extends ExerciceSimple {
           })
           f = (x) => a * x ** 2 + b
 
-          this.question = `Voici la représentation graphique d'une fonction $f$  définie sur $\\mathbb{R}$ par ${this.versionQcm ? '$f(x)=ax^2+b$' : `$f(x)=ax^2${ecritureAlgebrique(b)}$`}.<br>`
+          this.question = `Voici la représentation graphique d'une fonction $f$  définie sur $\\mathbb{R}$ par ${this.versionQcm ? '$f(x)=ax^2+b$' : `$f(x)=ax^2${ecritureAlgebrique(b)}$`}.<br><br>`
           this.question += mathalea2d(
             {
               xmin: -6,
               xmax: 6,
               ymin: -3,
-              ymax: 12,
+              ymax: 2 * yMax,
               pixelsParCm: 20,
               scale: 0.5,
               center: !context.isHtml,
@@ -95,21 +98,22 @@ export default class LectureGraphiqueParaboleA extends ExerciceSimple {
             o,
             courbe(f, { repere: r, color: bleuMathalea, epaisseur: 2 }),
           )
-          this.question += `${this.versionQcm ? 'À partir de cette représentation graphique, on a : ' : 'À partir de cette représentation graphique, déterminer la valeur de $a$.<br>'}`
+          this.question += `<br>${this.versionQcm ? 'À partir de cette représentation graphique, on a : ' : 'À partir de cette représentation graphique, déterminer la valeur de $a$.<br>'}`
         } else {
+          const yMax = Math.max(3, Math.ceil(a + b) + 1)
           r = new Repere({
             yUnite: 2,
             xUnite: 2,
             xMin: -3,
             yMin: -3,
-            yMax: 3,
+            yMax,
             xMax: 3,
             thickHauteur: 0.2,
             xThickMin: -6,
             yThickMin: -6,
             xLabelMin: -2,
             xLabelMax: 2,
-            yLabelMax: 2,
+            yLabelMax: yMax - 1,
             yLabelMin: -2,
             grilleSecondaireOpacite: 1,
             axesEpaisseur: 1.5,
@@ -118,7 +122,7 @@ export default class LectureGraphiqueParaboleA extends ExerciceSimple {
             grilleSecondaireYDistance: 1,
             grilleSecondaireXDistance: 1,
             grilleSecondaireYMin: -3.1,
-            grilleSecondaireYMax: 3.1,
+            grilleSecondaireYMax: yMax + 0.1,
             grilleSecondaireXMin: -3.1,
             grilleSecondaireXMax: 3.1,
             xLabelEcart: 0.8,
@@ -127,13 +131,13 @@ export default class LectureGraphiqueParaboleA extends ExerciceSimple {
 
           f = (x) => a * x ** 2 + b
 
-          this.question = `Voici la représentation graphique d'une fonction $f$  définie sur $\\mathbb{R}$ par ${this.versionQcm ? '$f(x)=ax^2+b$' : `$f(x)=ax^2${ecritureAlgebrique(b)}$`}.<br> `
+          this.question = `Voici la représentation graphique d'une fonction $f$  définie sur $\\mathbb{R}$ par ${this.versionQcm ? '$f(x)=ax^2+b$' : `$f(x)=ax^2${ecritureAlgebrique(b)}$`}.<br><br>`
           this.question += mathalea2d(
             {
               xmin: -6,
               xmax: 6,
               ymin: -7,
-              ymax: 6,
+              ymax: 2 * yMax,
               pixelsParCm: 20,
               scale: 0.5,
               center: !context.isHtml,
@@ -142,7 +146,7 @@ export default class LectureGraphiqueParaboleA extends ExerciceSimple {
             o,
             courbe(f, { repere: r, color: bleuMathalea, epaisseur: 2 }),
           )
-          this.question += `${this.versionQcm ? 'À partir de cette représentation graphique, on a : ' : 'À partir de cette représentation graphique, déterminer la valeur de $a$.<br>'}`
+          this.question += `<br>${this.versionQcm ? 'À partir de cette représentation graphique, on a : ' : 'À partir de cette représentation graphique, déterminer la valeur de $a$.<br>'}`
         }
 
         break
@@ -188,7 +192,7 @@ export default class LectureGraphiqueParaboleA extends ExerciceSimple {
           f = (x) => a * x ** 2 + b
 
           this.question =
-            `Voici la représentation graphique d'une fonction $f$  définie sur $\\mathbb{R}$ par ${this.versionQcm ? '$f(x)=ax^2+b$' : `$f(x)=ax^2${ecritureAlgebrique(b)}$`}.<br> ` +
+            `Voici la représentation graphique d'une fonction $f$  définie sur $\\mathbb{R}$ par ${this.versionQcm ? '$f(x)=ax^2+b$' : `$f(x)=ax^2${ecritureAlgebrique(b)}$`}.<br><br>` +
             mathalea2d(
               {
                 xmin: -6,
@@ -203,29 +207,30 @@ export default class LectureGraphiqueParaboleA extends ExerciceSimple {
               o,
               courbe(f, { repere: r, color: bleuMathalea, epaisseur: 2 }),
             )
-          this.question += `${this.versionQcm ? 'À partir de cette représentation graphique, on a : ' : 'À partir de cette représentation graphique, déterminer la valeur de $a$.<br>'}`
+          this.question += `<br>${this.versionQcm ? 'À partir de cette représentation graphique, on a : ' : 'À partir de cette représentation graphique, déterminer la valeur de $a$.<br>'}`
         } else {
+          const yMin = Math.min(-5, Math.floor(a + b) - 1)
           r = new Repere({
             yUnite: 2,
             xUnite: 2,
             xMin: -3,
-            yMin: -5,
+            yMin,
             yMax: 1,
             xMax: 3,
             thickHauteur: 0.2,
             xThickMin: -6,
-            yThickMin: -10,
+            yThickMin: 2 * yMin,
             xLabelMin: -2,
             xLabelMax: 2,
             yLabelMax: 0,
-            yLabelMin: -4,
+            yLabelMin: yMin + 1,
             grilleSecondaireOpacite: 1,
             axesEpaisseur: 1.5,
             grilleOpacite: 1,
             grilleSecondaire: true,
             grilleSecondaireYDistance: 1,
             grilleSecondaireXDistance: 1,
-            grilleSecondaireYMin: -5.1,
+            grilleSecondaireYMin: yMin - 0.1,
             grilleSecondaireYMax: 1.1,
             grilleSecondaireXMin: -3.1,
             grilleSecondaireXMax: 3.1,
@@ -241,7 +246,7 @@ export default class LectureGraphiqueParaboleA extends ExerciceSimple {
               {
                 xmin: -6,
                 xmax: 6,
-                ymin: -11.1,
+                ymin: 2 * yMin - 1.1,
                 ymax: 2.1,
                 pixelsParCm: 20,
                 scale: 0.5,

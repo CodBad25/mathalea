@@ -24,10 +24,18 @@
       dispatch('change', undefined)
     } else {
       let numValue = Number(rawValue)
-      // Clamp to min/max
-      if (numValue < min) numValue = min
+      // Le minimum n'est appliqué qu'à la sortie du champ (voir handleBlur) :
+      // sinon impossible de saisir 12 avec min=5, le « 1 » étant remplacé par 5.
       if (numValue > max) numValue = max
       value = numValue
+      dispatch('change', value)
+    }
+  }
+
+  function handleBlur(e: Event) {
+    if (value !== undefined && value !== null && value < min) {
+      value = min
+      ;(e.target as HTMLInputElement).value = String(min)
       dispatch('change', value)
     }
   }
@@ -63,6 +71,7 @@
     aria-label={ariaLabel === '' ? undefined : ariaLabel}
     value={displayValue}
     on:input={handleInput}
+    on:blur={handleBlur}
     class="{$$props.class} w-full h-10 pr-0
       {darkBackground
       ? 'bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark'

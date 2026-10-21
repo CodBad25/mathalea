@@ -80,6 +80,9 @@ sortie.enonce.valeurs = [triangle.a1, '...', triangle.a3]
   `\text{cm}`, à l'intérieur d'une zone mathématique (`$...$`).
 - On met une virgule avant « soit » et avant « alors ».
 - On met une virgule après « or ».
+- Les guillemets « » sont suivis et précédés d'une espace insécable : `sp()`
+  après « et avant », soit `«${sp()}texte${sp()}»` dans une chaîne en
+  template literal.
 
 ```ts
 // Oui
@@ -99,6 +102,15 @@ const texte2 = 'Or les deux droites sont parallèles.'
 - Si l'exercice est interactif, la valeur passée à `miseEnEvidence()` doit
   être **exactement** la réponse que l'élève doit saisir : ne pas y inclure
   d'unité, de mise en forme ou de texte que le champ de saisie n'attend pas.
+- Si un exercice existe en QCM **et** en champ libre (voir
+  [Conserver un QCM en option](interactivite-simple.md#conserver-un-qcm-en-option)),
+  la mise en évidence dépend du mode. En QCM, `miseEnEvidence()` contient la
+  bonne proposition complète, unité comprise. En champ libre, il ne contient
+  que ce que le champ attend : par exemple, dans 1A-E05-2, le « % » placé après
+  le champ (`texteApres`) reste hors de `miseEnEvidence()`. Une seule
+  `correction` ne peut pas servir aux deux modes : fournir `correctionCourte`
+  pour la saisie libre, dont la valeur mise en évidence est calculée avec la
+  même réponse que `reponseCourte`.
 - Quand le résultat à mettre en valeur est une phrase mêlant texte et
   mathématiques (par exemple la réponse d'un QCM), on mélange les deux
   fonctions : `texteEnCouleurEtGras()` pour les portions de texte (en
@@ -201,3 +213,15 @@ Le détail de la règle et des trois issues possibles est dans
 - [ ] les explications de correction utilisent `bleuMathalea` explicitement ;
 - [ ] `uuid` et `refs` sont neufs, pas copiés ;
 - [ ] `pnpm stability:check` passe si un exercice publié a été modifié.
+- [ ] `dateDeModifImportante` est créée ou mise à jour à la date du jour dès
+      que la modification est importante (nouvelle option, nouvelle saisie,
+      correction changée) ; voir [Stabilité des tirages](../../tests/stabilite-exercices.md#date-de-modification-importante).
+- [ ] En QCM et champ libre, `miseEnEvidence()` ne contient que la valeur que
+      le mode attendu demande (voir « Couleur du résultat final »).
+- [ ] En champ libre, la dernière phrase de la consigne est une question (« Quel
+      est… ? »), et non une phrase à trous qui se termine par « : ».
+- [ ] En champ libre, le clavier (`clavierReponseCourte`) correspond à la réponse :
+      fraction → `clavierDeBaseAvecFraction`, entiers relatifs → `clavierDeBase`,
+      entiers naturels ou décimaux positifs → `clavierNumbers`.
+- [ ] En champ libre, un mode de comparaison est imposé (`compareReponseCourte`
+      ou `optionsDeComparaison`) : la réponse attendue est un nombre ou une fraction.

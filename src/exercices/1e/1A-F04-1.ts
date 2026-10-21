@@ -16,9 +16,10 @@ import {
   miseEnEvidence,
   texteEnCouleurEtGras,
 } from '../../lib/outils/embellissements'
-import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceQcmACourt from '../ExerciceQcmACourt'
 export const dateDePublication = '30/07/2025'
-export const uuid = '3d696'
+export const dateDeModifImportante = '20/10/2026'
+export const uuid = 'baece'
 
 export const refs = {
   'fr-fr': ['1A-F04-1'],
@@ -27,7 +28,6 @@ export const refs = {
 export const interactifReady = true
 
 export const amcReady = 'true'
-export const amcType = 'qcmMono'
 export const titre = 'Résoudre une équation par lecture graphique'
 
 interface ReponseQcm {
@@ -37,9 +37,65 @@ interface ReponseQcm {
   texteCorrection?: string
 }
 
-export default class AutoF4 extends ExerciceQcmA {
+interface QuestionCourte {
+  enonce: string
+  /** Phrase que le champ de saisie complète, en interactif */
+  phrase: string
+  reponse: string
+  correction: string
+}
+
+/**
+ * Question sans QCM : somme ou produit des solutions (entières) de f(x)=k.
+ */
+function questionSommeOuProduit(
+  operation: 'somme' | 'produit',
+  k: number,
+  solutions: number[],
+): QuestionCourte {
+  const valeur =
+    operation === 'somme'
+      ? solutions.reduce((s, x) => s + x, 0)
+      : solutions.reduce((p, x) => p * x, 1)
+  const calcul = solutions
+    .map((x, i) => (i === 0 ? `${x}` : ecritureParentheseSiNegatif(x)))
+    .join(operation === 'somme' ? '+' : '\\times ')
+  const listeSolutions = solutions.map((x) => `$${x}$`)
+  const texteSolutions = `${listeSolutions.slice(0, -1).join(', ')} et ${listeSolutions[listeSolutions.length - 1]}`
+  const article = operation === 'somme' ? 'la' : 'le'
+  const Article = operation === 'somme' ? 'La' : 'Le'
+  return {
+    enonce: `Déterminer ${article} ${operation} des solutions de l'équation $f(x)=${k}$.`,
+    phrase: `${Article} ${operation} des solutions de l'équation $f(x)=${k}$ est `,
+    reponse: String(valeur),
+    correction: `Les solutions de l'équation $f(x)=${k}$ sont les abscisses des points d'intersection de la courbe avec la droite d'équation $y=${k}$.<br>
+    L'équation a ${solutions.length === 2 ? 'deux' : 'trois'} solutions : ${texteSolutions}.<br>
+    ${Article} ${operation} de ces solutions est $${calcul}=${miseEnEvidence(valeur)}$.`,
+  }
+}
+
+export default class AutoF4 extends ExerciceQcmACourt {
   compteur = 0
   spline?: Spline
+  questionCourte: QuestionCourte = {
+    enonce: '',
+    phrase: '',
+    reponse: '',
+    correction: '',
+  }
+
+  // En interactif, le champ complète la phrase de l'énoncé
+  enonceCourt = () =>
+    this.enonce.replace(
+      'Une seule affirmation est correcte :',
+      this.interactif ? this.questionCourte.phrase : this.questionCourte.enonce,
+    )
+
+  reponseCourte = () => this.questionCourte.reponse
+  correctionCourte = () => this.questionCourte.correction
+  optionsChampReponseCourte = { texteApres: '.' }
+  champReponseCourteEnLigne = true
+
   versionOriginale: () => void = () => {
     // Définition des noeuds fixes pour la courbe originale
     const noeudsFixes: NoeudSpline[] = [
@@ -135,6 +191,7 @@ export default class AutoF4 extends ExerciceQcmA {
     $\\bullet$ Le produit des solutions de l'équation $f(x) = 1$ est égal à $-20$.<br>
     Cette affirmation est fausse : il y a $0$ parmi les solutions, donc le produit est nul.
     `
+    this.questionCourte = questionSommeOuProduit('produit', 0, [-4, -1, 5])
   }
 
   versionAleatoire = () => {
@@ -259,7 +316,7 @@ export default class AutoF4 extends ExerciceQcmA {
         return
       }
 
-      this.nouvelleVersion()
+      this.versionAleatoire()
       return
     }
 
@@ -300,7 +357,7 @@ export default class AutoF4 extends ExerciceQcmA {
       },
       {
         texte: `La somme des solutions de l'équation $f(x)=${y2}$ est égal à $${solutions2[0] + solutions2[1]}$.`,
-        texteCorrection: `${texteEnCouleurEtGras("La somme des solutions de l'équation ")}$${miseEnEvidence(`f(x)=${y2}`)}$${texteEnCouleurEtGras(' est égale à ')}$${miseEnEvidence(`${solutions2[0] * solutions2[1]}.`)}$`,
+        texteCorrection: `${texteEnCouleurEtGras("La somme des solutions de l'équation ")}$${miseEnEvidence(`f(x)=${y2}`)}$${texteEnCouleurEtGras(' est égale à ')}$${miseEnEvidence(`${solutions2[0] + solutions2[1]}.`)}$`,
         correction:
           AFC +
           `L'équation $f(x)=${y2}$ a deux solutions : $${solutions2[0]}$ et $${solutions2[1]}$.<br>
@@ -309,7 +366,7 @@ export default class AutoF4 extends ExerciceQcmA {
       },
       {
         texte: `La somme des solutions de l'équation $f(x)=${y3}$ est égal à $${solutions3[0] + solutions3[1] + solutions3[2]}$.`,
-        texteCorrection: `${texteEnCouleurEtGras("La somme des solutions de l'équation ")}$${miseEnEvidence(`f(x)=${y3}`)}$${texteEnCouleurEtGras(' est égale à ')}$${miseEnEvidence(`${solutions3[1] * solutions3[2]}.`)}$`,
+        texteCorrection: `${texteEnCouleurEtGras("La somme des solutions de l'équation ")}$${miseEnEvidence(`f(x)=${y3}`)}$${texteEnCouleurEtGras(' est égale à ')}$${miseEnEvidence(`${solutions3[0] + solutions3[1] + solutions3[2]}.`)}$`,
         correction:
           AFC +
           `L'équation $f(x)=${y3}$ a trois solutions : $${solutions3[0]}$, $${solutions3[1]}$ et $${solutions3[2]}$.<br>
@@ -318,7 +375,7 @@ export default class AutoF4 extends ExerciceQcmA {
       },
       {
         texte: `Le produit des solutions de l'équation $f(x)=${y3}$ est égal à $${solutions3[0] * solutions3[1] * solutions3[2]}$.`,
-        texteCorrection: `${texteEnCouleurEtGras("Le produit des solutions de l'équation ")}$${miseEnEvidence(`f(x)=${y3}`)}$${texteEnCouleurEtGras(' est égal à ')}$${miseEnEvidence(`${solutions3[1] * solutions3[2]}.`)}$`,
+        texteCorrection: `${texteEnCouleurEtGras("Le produit des solutions de l'équation ")}$${miseEnEvidence(`f(x)=${y3}`)}$${texteEnCouleurEtGras(' est égal à ')}$${miseEnEvidence(`${solutions3[0] * solutions3[1] * solutions3[2]}.`)}$`,
         correction:
           AFC +
           `L'équation $f(x)=${y3}$ a trois solutions : $${solutions3[0]}$, $${solutions3[1]}$ et $${solutions3[2]}$.<br>
@@ -501,10 +558,20 @@ export default class AutoF4 extends ExerciceQcmA {
       this.correction += `$\\bullet$ ${texteAffiche}<br>`
       this.correction += `  ${reponse.correction}<br>`
     })
+
+    // Version sans QCM : tirée après le QCM pour ne pas modifier ses tirages
+    this.questionCourte = choice([
+      questionSommeOuProduit('produit', y2, solutions2),
+      questionSommeOuProduit('somme', y2, solutions2),
+      questionSommeOuProduit('somme', y3, solutions3),
+      questionSommeOuProduit('produit', y3, solutions3),
+    ])
   }
 
   constructor() {
     super()
+    this.besoinFormulaire2CaseACocher = false // Consigne augmentée : QCM uniquement
+    this.besoinFormulaire4CaseACocher = false // « Je ne sais pas » : QCM uniquement
     this.versionAleatoire()
     this.options.vertical = true
   }

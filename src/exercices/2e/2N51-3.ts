@@ -20,7 +20,7 @@ export const uuid = '12b72'
 
 export const refs = {
   'fr-fr': ['2N51-3'],
-  'fr-ch': ['11NO3A-4', '1mCN-9'],
+  'fr-ch': ['11NO3B-4', '1mCN-9'],
 }
 export default class SimplifierUneSommeDeRacinesCarrees extends Exercice {
   constructor() {

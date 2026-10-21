@@ -1,5 +1,8 @@
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
@@ -37,6 +40,12 @@ export const titre =
   "Trouver les abscisses solutions d'une inéquation avec un graphique"
 export default class auto1AF2 extends ExerciceQcmA {
   spline!: ReturnType<typeof spline>
+  private solutions: string[] = []
+  private inequation = ''
+  private questionsOuvertes = new Map<
+    string,
+    { correction: string; reponses: string[] }
+  >()
   versionOriginale: () => void = () => {
     const o = latex2d('\\text{O}', -0.3, -0.3, { letterSize: 'scriptsize' })
 
@@ -111,7 +120,7 @@ export default class auto1AF2 extends ExerciceQcmA {
     this.enonce = `${deuxColonnes(
       `On a représenté une courbe $\\mathscr{C}$ d'une fonction $f$.<br><br>
     Les points $A$, $B$, $R$ et $S$ appartiennent à $\\mathscr{C}$.<br><br>
-    Leurs abscisses sont notées respectivement $x_A$, $x_B$, $x_C$ et $x_D$.
+    Leurs abscisses sont notées respectivement $x_A$, $x_B$, $x_R$ et $x_S$.
  `,
       mathalea2d(
         Object.assign(
@@ -150,6 +159,8 @@ export default class auto1AF2 extends ExerciceQcmA {
       '$x_A$, $x_R$ et $x_S$',
       '$x_R$ et $x_S$',
     ]
+    this.solutions = ['A', 'R']
+    this.inequation = 'x\\times f(x) > 0'
   }
 
   versionAleatoire = () => {
@@ -341,12 +352,12 @@ export default class auto1AF2 extends ExerciceQcmA {
     }
 
     // Créer la liste des noms pour l'énoncé
-    const listeNomsPoints = formaterListe(nomsPoints)
+    const listeNomsPoints = formaterListe(nomsPoints.map((nom) => `\\,${nom}`))
 
     this.enonce = `${deuxColonnes(
       `On a représenté une courbe $\\mathscr{C}$ d'une fonction $f$.<br><br>
-Les points $${listeNomsPoints}$ appartiennent à $\\mathscr{C}$.<br><br>
-Leurs abscisses sont notées respectivement $${formaterListe(nomsPoints.map((nom) => `x_${nom}`))}$.<br><br>
+Les points$${listeNomsPoints}$ appartiennent à $\\mathscr{C}$.<br><br>
+Leurs abscisses sont notées respectivement$${formaterListe(nomsPoints.map((nom) => `\\,x_${nom}`))}$.<br><br>
  `,
       mathalea2d(
         Object.assign(
@@ -394,10 +405,70 @@ L'inéquation est donc vérifiée pour $${miseEnEvidence(bonneReponse)}$.`
       `$${reponsesAlternatives[1]}$`,
       `$${reponsesAlternatives[2]}$`,
     ]
+    this.solutions = pointsSolution.map((p) => p.nom)
+    this.inequation = `x\\times f(x) ${typeInequation} 0`
+  }
+
+  nouvelleVersion() {
+    this.questionsOuvertes.clear()
+    super.nouvelleVersion()
+    if (this.sup3 || context.isAmc) return
+    this.consigne = ''
+    for (let i = 0; i < this.listeQuestions.length; i++) {
+      const enonce = this.autoCorrection[i].enonce ?? ''
+      const donnees = this.questionsOuvertes.get(enonce)
+      if (!donnees) continue
+      this.listeQuestions[i] = this.interactif
+        ? enonce.replace(
+            /Déterminer le ou (les points de \$\\mathscr\{C\}\$ dont l'abscisse vérifie l'inéquation \$.*?\$)\./,
+            (_, fin) =>
+              `Le ou ${fin} sont ${ajouteChampTexteMathLive(this, i, KeyboardType.alphanumeric, { texteApres: '.' })}<br>S'il y a plusieurs points, séparer leurs noms par un point-virgule.`,
+          )
+        : enonce
+      this.listeCorrections[i] = donnees.correction
+      handleAnswers(
+        this,
+        i,
+        { reponse: { value: donnees.reponses } },
+        { formatInteractif: 'mathalea-mathfield' },
+      )
+    }
   }
 
   constructor() {
     super()
+    this.sup3 = false
+    this.besoinFormulaire3CaseACocher = ['Version QCM', false]
+    this.besoinFormulaire2CaseACocher = false
+    this.besoinFormulaire4CaseACocher = false
+    const preparerQuestion = () => {
+      if (this.sup3 || context.isAmc) return
+      this.enonce = this.enonce.replace(
+        /L'inéquation \$x\\times f\(x\) [<>] 0\$ est vérifiée par :/,
+        `Déterminer le ou les points de $\\mathscr{C}$ dont l'abscisse vérifie l'inéquation $${this.inequation}$.`,
+      )
+      const [p1, p2] = this.solutions
+      const correction = (this.correction ?? '').replace(
+        /L'inéquation est donc vérifiée pour \$.*\$\.$/,
+        this.interactif
+          ? `Les points dont l'abscisse vérifie l'inéquation sont donc $${miseEnEvidence(`${p1}\\,;\\,${p2}`)}$.`
+          : `Les points dont l'abscisse vérifie l'inéquation sont donc $${miseEnEvidence(p1)}$ et $${miseEnEvidence(p2)}$.`,
+      )
+      this.questionsOuvertes.set(this.enonce, {
+        correction,
+        reponses: [`${p1};${p2}`, `${p2};${p1}`],
+      })
+    }
+    const aleatoire = this.versionAleatoire
+    this.versionAleatoire = () => {
+      aleatoire()
+      preparerQuestion()
+    }
+    const originale = this.versionOriginale
+    this.versionOriginale = () => {
+      originale()
+      preparerQuestion()
+    }
     this.versionAleatoire()
   }
 }

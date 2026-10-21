@@ -10,7 +10,7 @@ export const interactifReady = true
  * @author Gilles Mora
  */
 
-export const dateDeModifImportante = '29/09/2026'
+export const dateDeModifImportante = '20/10/2026'
 
 export const uuid = 'cc322'
 
@@ -22,5 +22,19 @@ export default class Auto1AF4a extends EquationsGSplineNombre {
   constructor() {
     super()
     this.versionQcm = false
+  }
+
+  nouvelleVersion() {
+    super.nouvelleVersion()
+    // En interactif, le champ complète la phrase de l'énoncé
+    if (this.interactif && !this.versionQcm) {
+      this.question = (this.question ?? '').replace(
+        /Donner le nombre de solutions de l'équation (\$[^$]*\$)\.$/,
+        "Le nombre de solutions de l'équation $1 est ",
+      )
+      this.optionsChampTexte = { texteApres: '.' }
+    } else {
+      this.optionsChampTexte = { texteAvant: '<br>' }
+    }
   }
 }

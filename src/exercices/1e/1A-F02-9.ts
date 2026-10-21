@@ -1,3 +1,6 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { toutPourUnPoint } from '../../lib/interactif/fonctionsBaremes'
+import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import CoordonneesPointIntersectionAxeAbscissesDroite from '../can/2e/can2G30-08'
 export const titre =
   'Calculer les coordonnées du point d’intersection entre l’axe des abscisses et une droite'
@@ -19,6 +22,31 @@ export const refs = {
   'fr-ch': [],
 }
 export default class Auto1AF2a extends CoordonneesPointIntersectionAxeAbscissesDroite {
+  nouvelleVersion() {
+    this.formatInteractif = undefined
+    super.nouvelleVersion()
+    if (this.interactif && !this.versionQcm) {
+      const [abscisse, ordonnee] = String(this.reponse).split(';')
+      this.question =
+        (this.question ?? '')
+          .replace('Déterminer les coordonnées', 'Les coordonnées')
+          .replace(/\.\s*$/, ' sont ') +
+        remplisLesBlancs(
+          this,
+          0,
+          '(%{champ1}\\,;\\,%{champ2})',
+          KeyboardType.clavierDeBaseAvecFraction,
+        ) +
+        '.'
+      this.formatInteractif = 'fill-in-the-blank'
+      this.reponse = {
+        bareme: toutPourUnPoint,
+        champ1: { value: abscisse, options: { nombreDecimalSeulement: true } },
+        champ2: { value: ordonnee, options: { nombreDecimalSeulement: true } },
+      }
+    }
+  }
+
   constructor() {
     super()
     this.versionQcm = false

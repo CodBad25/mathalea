@@ -204,27 +204,13 @@ export default class AutoF01c extends ExerciceQcmA {
       `$${texNombre(theSpline.y[abs1])}$ a pour antécédent $${texNombre(theSpline.x[abs1])}$`,
     ]
 
-    const numeroChoisi = bonneReponseChoisie.numero
-    const phrasesAvecCouleur = phrases.map((phrase, index) => {
-      if (index + 1 === numeroChoisi) {
-        return texteEnCouleurEtGras(phrase)
-      }
-      return phrase
-    })
-
     const questionId = this.compteur++
     const correctionFigureId = `figureCorrection-1A-F01-3Ex${this.numeroExercice ?? 0}Q${questionId}`
     const optionsFigureCorrection = Object.assign(optionsFigure, {
       id: correctionFigureId,
     })
     this.correction = `Les images se lisent sur l'axe des ordonnées et les antécédents sur l'axe des abscisses.<br>
-          Ainsi, on peut dire que :<br>
-          $\\bullet$ ${phrasesAvecCouleur[0]},<br>
-          $\\bullet$ ${phrasesAvecCouleur[1]}, <br>
-          $\\bullet$ ${phrasesAvecCouleur[2]},<br>
-          $\\bullet$ ${phrasesAvecCouleur[3]},<br>
-          $\\bullet$ ${phrasesAvecCouleur[4]}, <br>
-          $\\bullet$ ${phrasesAvecCouleur[5]}.`
+          Ainsi, on peut dire que  ${texteEnCouleurEtGras(phrases[bonneReponseChoisie.numero - 1])}.`
     let correctionFigure = ''
     if (bonneReponseChoisie.texte.includes('image')) {
       const objetsCorrection = [

@@ -42,7 +42,7 @@ export default class Auto1AF2t extends ExerciceQcmA {
   ): void {
     // Énoncé
     this.enonce = `On considère la courbe d'équation $y=\\dfrac{${k}}{x}$. <br>
-    Déterminer le point qui n'appartient pas à cette courbe :`
+    ${this.interactif ? 'Le point qui n’appartient pas à cette courbe est :' : "Déterminer le point qui n'appartient pas à cette courbe :"}`
 
     // Choisir 1 bonne réponse et 3 mauvaises réponses
     const bonneReponseObj = choice(bonnesReponses)
@@ -95,7 +95,7 @@ export default class Auto1AF2t extends ExerciceQcmA {
 
     // Énoncé
     this.enonce = `On considère la courbe d'équation $y=\\dfrac{${k}}{x}$. <br>
-    Déterminer le point qui n'appartient pas à cette courbe :`
+    ${this.interactif ? 'Le point qui n’appartient pas à cette courbe est :' : "Déterminer le point qui n'appartient pas à cette courbe :"}`
 
     // Les 4 points fixes pour la version originale
     const pointsAffiches = [
