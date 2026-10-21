@@ -139,11 +139,43 @@ Pour un automatisme construit avec `ExerciceQcmA`, la classe
 QCM, mais affiche une saisie courte par défaut. La case « Version QCM » (`sup3`)
 réactive le QCM. La réponse attendue est normalement la première proposition,
 sans délimiteurs mathématiques ni unité ; les propriétés `reponseCourte`,
-`enonceCourt`, `correctionCourte` et `clavierReponseCourte` permettent de traiter
-les cas qui exigent une autre saisie ou une consigne adaptée. Le champ est placé
+`enonceCourt`, `correctionCourte`, `compareReponseCourte` et `clavierReponseCourte`
+permettent de traiter les cas qui exigent une autre saisie, une consigne adaptée ou
+une autre comparaison. Le champ est placé
 sous l'énoncé ; `champReponseCourteEnLigne = true` le place à la suite de
 l'énoncé (par exemple après « $P\times$ »). Le score de la
 saisie courte est toujours d’un point par question.
+
+En saisie libre, le mode de comparaison doit toujours être imposé, et non laissé
+à la comparaison par défaut (qui accepte toute écriture de même valeur). Il se
+règle avec `compareReponseCourte`, qui reçoit la saisie et la réponse attendue
+et appelle `fonctionComparaison()` avec l'option voulue :
+
+```ts
+import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
+
+this.compareReponseCourte = (saisie, reponse) =>
+  fonctionComparaison(saisie, reponse, { fractionEgale: true })
+```
+
+Une réponse attendue en fraction se compare avec `fractionEgale` ; une réponse en
+nombre avec `nombreDecimalSeulement`, qui n'accepte que l'écriture décimale ou
+entière. Une probabilité ou une valeur doit donc être demandée comme telle
+(« Quelle est la valeur de… ? »), et non comme une notation (`P_{A_3}(S)`) que la
+comparaison ne saurait pas vérifier. Les exercices 1A-E05-1 à 4 et 1A-P05-1 à 6
+donnent des exemples.
+
+Le clavier virtuel de la saisie libre se règle avec `clavierReponseCourte`
+(`KeyboardType`), choisi d'après le type de la réponse attendue : une fraction
+demande `clavierDeBaseAvecFraction` ; des entiers relatifs, `clavierDeBase` ;
+des entiers naturels ou des décimaux positifs, `clavierNumbers` (chiffres et
+virgule). Les autres cas (unités, lettres, puissances…) sont listés dans
+[Claviers virtuels](../maintenance-moteur/interactivite/claviers.md). Sans
+réglage, le clavier est `clavierDeBase`.
+
+Pour les probabilités (notation `P(B)`, consigne « Calculer $P(B)$. » ou « $P(B)=$ »,
+clavier et comparaison), voir [Probabilités](mathematiques/probabilites.md). Un exercice
+en saisie libre n'a pas de ligne `amcType` (voir [Export AMC](complements/export-amc.md#type-amc-et-saisie-libre)).
 
 La saisie libre est la valeur par défaut : la case « Version QCM » est décochée
 (réglage hérité de `ExerciceQcmACourt`, sans rien à écrire dans le
@@ -151,7 +183,7 @@ constructeur). Pour un exercice déjà publié en QCM, ce changement de défaut
 modifie les liens partagés sans paramètre `s3`. Il faut donc archiver la
 version publiée avec `pnpm archive <code>` avant de changer le défaut : les
 anciens liens gardent alors le QCM, et le fichier de travail reçoit un nouvel
-`uuid`. Les exercices 1A-E05-1 à 1A-E05-4 suivent ce modèle.
+`uuid`. Les exercices 1A-E05-1 à 1A-E05-4 et 1A-P05-1 à 1A-P05-6 suivent ce modèle.
 
 La correction de la saisie libre se règle avec `correctionCourte` : elle peut
 différer de `correction` (la mise en évidence ne doit contenir que ce que le

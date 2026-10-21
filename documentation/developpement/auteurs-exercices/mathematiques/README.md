@@ -16,6 +16,7 @@ pour les contrats des classes, modules et points d'entrée.
 | Dessiner une figure, régler une fenêtre `mathalea2d()`, styliser des objets 2D, aligner le rendu TikZ ou construire un repère | [Géométrie 2D](geometrie-2d.md) | Rappelle les choix pratiques pour des figures lisibles en HTML et en export LaTeX. |
 | Étudier une fonction, tracer une courbe par noeuds, construire un tableau de signes ou de variations | [Fonctions, splines et tableaux](fonctions-et-tableaux.md) | Oriente vers `Spline` et les helpers de `src/lib/mathFonctions/etudeFonction.ts`. |
 | Calculer des indicateurs statistiques, tracer une boîte à moustaches ou un diagramme | [Statistiques](statistiques.md) | Présente la classe `Stat` et sa définition des quartiles. |
+| Écrire une probabilité, rédiger la consigne d'un calcul de probabilité en saisie libre | [Probabilités](probabilites.md) | Fixe la notation `P(B)`, les consignes « Calculer $P(B)$. » ou « $P(B)=$ », et les claviers et comparaisons associés. |
 
 ## Ordre recommandé
 
