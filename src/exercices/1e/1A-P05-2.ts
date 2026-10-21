@@ -4,9 +4,12 @@ import { Arbre } from '../../modules/arbres'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
-import ExerciceQcmA from '../ExerciceQcmA'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
+import ExerciceQcmACourt from '../ExerciceQcmACourt'
 export const dateDePublication = '10/08/2025'
-export const uuid = '93b62'
+export const dateDeModifImportante = '21/10/2026'
+export const uuid = '4c49f'
 // @Author Stéphane Guyon
 export const refs = {
   'fr-fr': ['1A-P05-2'],
@@ -15,10 +18,9 @@ export const refs = {
 export const interactifReady = true
 
 export const amcReady = 'true'
-export const amcType = 'qcmMono'
 export const titre =
   'Utiliser un arbre pour calculer une probabilité (conditionnelle)'
-export default class auto1AP3b extends ExerciceQcmA {
+export default class auto1AP3b extends ExerciceQcmACourt {
   versionOriginale: () => void = () => {
     let objets = []
     const rationnel = true
@@ -217,6 +219,17 @@ export default class auto1AP3b extends ExerciceQcmA {
 
   constructor() {
     super()
+    // Saisie libre (version QCM désactivée) : la dernière phrase devient une question
+    this.enonceCourt = () =>
+      this.enonce.replace(/\$([^$]+)\$ est égal à :\s*$/, (_, p: string) =>
+        this.interactif ? `$${p}=$` : `Calculer $${p}$.`,
+      )
+
+    this.clavierReponseCourte = KeyboardType.clavierDeBaseAvecFraction
+    this.champReponseCourteEnLigne = true
+    this.compareReponseCourte = (saisie, reponse) =>
+      fonctionComparaison(saisie, reponse, { fractionEgale: true })
+
     this.versionAleatoire()
   }
 }

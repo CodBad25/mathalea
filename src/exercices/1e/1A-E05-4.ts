@@ -2,6 +2,8 @@ import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import FractionEtendue from '../../modules/FractionEtendue'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
 import ExerciceQcmACourt from '../ExerciceQcmACourt'
 
 export const uuid = '01da7'
@@ -15,7 +17,7 @@ export const amcReady = 'true'
 export const titre =
   'Calculer le coefficient multiplicateur réciproque (avec des fractions)'
 export const dateDePublication = '28/12/2025'
-export const dateDeModifImportante = '20/10/2026'
+export const dateDeModifImportante = '21/10/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
  *
@@ -93,6 +95,16 @@ export default class TauxReciproqued extends ExerciceQcmACourt {
         'Quel coefficient multiplicateur faut-il appliquer à son prix actuel pour retrouver son prix avant $1 ?',
       )
     this.reponseCourte = () => this.reponseSaisie
+
+    this.clavierReponseCourte = KeyboardType.clavierDeBaseAvecFraction
+    this.compareReponseCourte = (saisie, reponse) =>
+      fonctionComparaison(
+        saisie,
+        reponse,
+        /\\d?frac/.test(reponse)
+          ? { fractionEgale: true }
+          : { nombreDecimalSeulement: true },
+      )
 
     this.versionAleatoire()
     this.spacingCorr = 2

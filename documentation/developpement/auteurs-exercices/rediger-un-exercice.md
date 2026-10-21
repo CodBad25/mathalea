@@ -80,6 +80,9 @@ sortie.enonce.valeurs = [triangle.a1, '...', triangle.a3]
   `\text{cm}`, à l'intérieur d'une zone mathématique (`$...$`).
 - On met une virgule avant « soit » et avant « alors ».
 - On met une virgule après « or ».
+- Les guillemets « » sont suivis et précédés d'une espace insécable : `sp()`
+  après « et avant », soit `«${sp()}texte${sp()}»` dans une chaîne en
+  template literal.
 
 ```ts
 // Oui
@@ -217,3 +220,8 @@ Le détail de la règle et des trois issues possibles est dans
       le mode attendu demande (voir « Couleur du résultat final »).
 - [ ] En champ libre, la dernière phrase de la consigne est une question (« Quel
       est… ? »), et non une phrase à trous qui se termine par « : ».
+- [ ] En champ libre, le clavier (`clavierReponseCourte`) correspond à la réponse :
+      fraction → `clavierDeBaseAvecFraction`, entiers relatifs → `clavierDeBase`,
+      entiers naturels ou décimaux positifs → `clavierNumbers`.
+- [ ] En champ libre, un mode de comparaison est imposé (`compareReponseCourte`
+      ou `optionsDeComparaison`) : la réponse attendue est un nombre ou une fraction.

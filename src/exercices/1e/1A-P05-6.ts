@@ -1,6 +1,7 @@
 import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { sp } from '../../lib/outils/outilString'
 import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '30/01/2026'
 export const uuid = '8f0e3'
@@ -27,9 +28,9 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
         '\\text{Total}',
       ],
       [
-        '\\text{Moins de 25 ans}',
-        '\\text{Entre 25 et 45 ans}',
-        '\\text{Plus de 45 ans}',
+        '\\text{Moins de }25\\text{ ans}',
+        '\\text{Entre }25\\text{ et }45\\text{ ans}',
+        '\\text{Plus de }45\\text{ ans}',
         '\\text{Total}',
       ],
       valeurs,
@@ -37,10 +38,10 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
 
     const enonceCommunFin =
       '<br><br>On choisit une personne de ce groupe au hasard et on définit les événements suivants : ' +
-      '$S$ « la personne pratique un sport », ' +
-      '$A_1$ « la personne a moins de 25 ans », ' +
-      '$A_2$ « la personne a entre 25 et 45 ans » et ' +
-      '$A_3$ « la personne a plus de 45 ans ».<br><br>'
+      `$S$ «${sp()}la personne pratique un sport${sp()}», ` +
+      `$A_1$ «${sp()}la personne a moins de $25$ ans${sp()}», ` +
+      `$A_2$ «${sp()}la personne a entre $25$ et $45$ ans${sp()}» et ` +
+      `$A_3$ «${sp()}la personne a plus de $45$ ans${sp()}».<br><br>`
 
     return enonceCommunDebut + tableau + enonceCommunFin
   }
@@ -67,7 +68,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
     this.enonce += '$\\dfrac{7}{17}$ est :'
     this.correction =
       `On cherche quelle probabilité vaut $\\dfrac{7}{17}$.<br>` +
-      `La probabilité conditionnelle $P_{A_3}(S)$ se calcule parmi les personnes de la catégorie « Plus de 45 ans ».<br>` +
+      `La probabilité conditionnelle $P_{A_3}(S)$ se calcule parmi les personnes de la catégorie «${sp()}Plus de $45$ ans${sp()}».<br>` +
       `Il y a $70$ personnes répondant aux deux critères sur $170$ personnes dans cette catégorie.<br>` +
       `Donc : $P_{A_3}(S)=\\dfrac{70}{170}=\\dfrac{7}{17}$<br>` +
       `La bonne réponse est donc ${miseEnEvidence('P_{A_3}(S)')}.`
@@ -108,7 +109,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
           this.enonce += '$\\dfrac{7}{17}$ est :'
           this.correction =
             `On cherche quelle probabilité vaut $\\dfrac{7}{17}$.<br>` +
-            `La probabilité conditionnelle $P_{A_3}(S)$ se calcule parmi les personnes de la catégorie « Plus de 45 ans ».<br>` +
+            `La probabilité conditionnelle $P_{A_3}(S)$ se calcule parmi les personnes de la catégorie «${sp()}Plus de $45$ ans${sp()}».<br>` +
             `Il y a $70$ personnes répondant aux deux critères sur $170$ personnes dans cette catégorie.<br>` +
             `Donc : $${miseEnEvidence('P_{A_3}(S)')}=\\dfrac{70}{170}=\\dfrac{7}{17}$.`
           this.reponses = [
@@ -124,7 +125,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
           this.enonce += '$\\dfrac{3}{8}$ est :'
           this.correction =
             `On cherche quelle probabilité vaut $\\dfrac{3}{8}$.<br>` +
-            `L'événement $A_2$ correspond à la ligne « Entre 25 et 45 ans ».<br>` +
+            `L'événement $A_2$ correspond à la ligne «${sp()}Entre $25$ et $45$ ans${sp()}».<br>` +
             `Il y a $150$ personnes dans cette catégorie sur un total de $400$ personnes.<br>` +
             `Donc : $${miseEnEvidence('P(A_2)')}=\\dfrac{150}{400}=\\dfrac{3}{8}$.`
 
@@ -141,7 +142,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
           this.enonce += '$\\dfrac{17}{40}$ est :'
           this.correction =
             `On cherche quelle probabilité vaut $\\dfrac{17}{40}$.<br>` +
-            `L'événement $A_3$ correspond à la ligne « Plus de 45 ans ».<br>` +
+            `L'événement $A_3$ correspond à la ligne «${sp()}Plus de $45$ ans${sp()}».<br>` +
             `Il y a $170$ personnes dans cette catégorie sur un total de $400$ personnes.<br>` +
             `Donc : $${miseEnEvidence('P(A_3)')}=\\dfrac{170}{400}=\\dfrac{17}{40}$.`
 
@@ -158,7 +159,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
           this.enonce += '$\\dfrac{1}{8}$ est :'
           this.correction =
             `On cherche quelle probabilité vaut $\\dfrac{1}{8}$.<br>` +
-            `L'événement $S \\cap A_1$ correspond à l'intersection de la colonne « Pratique un sport » et de la ligne « Moins de 25 ans ».<br>` +
+            `L'événement $S \\cap A_1$ correspond à l'intersection de la colonne «${sp()}Pratique un sport${sp()}» et de la ligne «${sp()}Moins de $25$ ans${sp()}».<br>` +
             `Il y a $50$ personnes dans cette catégorie sur un total de $400$ personnes.<br>` +
             `Donc : $${miseEnEvidence('P(S \\cap A_1)')}=\\dfrac{50}{400}=\\dfrac{1}{8}$.`
           this.reponses = [
@@ -174,7 +175,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
           this.enonce += '$\\dfrac{9}{40}$ est :'
           this.correction =
             `On cherche quelle probabilité vaut $\\dfrac{9}{40}$.<br>` +
-            `L'événement $S \\cap A_2$ correspond à l'intersection de la colonne « Pratique un sport » et de la ligne « Entre 25 et 45 ans ».<br>` +
+            `L'événement $S \\cap A_2$ correspond à l'intersection de la colonne «${sp()}Pratique un sport${sp()}» et de la ligne «${sp()}Entre $25$ et $45$ ans${sp()}».<br>` +
             `Il y a $90$ personnes dans cette catégorie sur un total de $400$ personnes.<br>` +
             `Donc : $${miseEnEvidence('P(S \\cap A_2)')}=\\dfrac{90}{400}=\\dfrac{9}{40}$.`
           this.reponses = [
@@ -190,7 +191,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
           this.enonce += '$\\dfrac{5}{8}$ est :'
           this.correction =
             `On cherche quelle probabilité vaut $\\dfrac{5}{8}$.<br>` +
-            `La probabilité conditionnelle $P_{A_1}(S)$ se calcule parmi les personnes de la catégorie « Moins de 25 ans ».<br>` +
+            `La probabilité conditionnelle $P_{A_1}(S)$ se calcule parmi les personnes de la catégorie «${sp()}Moins de $25$ ans${sp()}».<br>` +
             `Il y a $50$ personnes répondant aux deux critères sur $80$ personnes dans cette catégorie.<br>` +
             `Donc : $${miseEnEvidence('P_{A_1}(S)')}=\\dfrac{50}{80}=\\dfrac{5}{8}$.`
           this.reponses = [
@@ -206,7 +207,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
           this.enonce += '$\\dfrac{3}{5}$ est :'
           this.correction =
             `On cherche quelle probabilité vaut $\\dfrac{3}{5}$.<br>` +
-            `La probabilité conditionnelle $P_{A_2}(S)$ se calcule parmi les personnes de la catégorie « Entre 25 et 45 ans ».<br>` +
+            `La probabilité conditionnelle $P_{A_2}(S)$ se calcule parmi les personnes de la catégorie «${sp()}Entre $25$ et $45$ ans${sp()}».<br>` +
             `Il y a $90$ personnes répondant aux deux critères sur $150$ personnes dans cette catégorie.<br>` +
             `Donc : $${miseEnEvidence('P_{A_2}(S)')}=\\dfrac{90}{150}=\\dfrac{3}{5}$.`
           this.reponses = [
@@ -222,7 +223,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
           this.enonce += '$\\dfrac{2}{5}$ est :'
           this.correction =
             `On cherche quelle probabilité vaut $\\dfrac{2}{5}$.<br>` +
-            `La probabilité conditionnelle $P_{A_2}(\\overline{S})$ se calcule parmi les personnes de la catégorie « Entre 25 et 45 ans ».<br>` +
+            `La probabilité conditionnelle $P_{A_2}(\\overline{S})$ se calcule parmi les personnes de la catégorie «${sp()}Entre $25$ et $45$ ans${sp()}».<br>` +
             `Il y a $60$ personnes ne pratiquant pas de sport sur $150$ personnes dans cette catégorie.<br>` +
             `Donc : $${miseEnEvidence('P_{A_2}(\\overline{S})')}=\\dfrac{60}{150}=\\dfrac{2}{5}$.`
           this.reponses = [
@@ -259,7 +260,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
           this.enonce += '$\\dfrac{5}{11}$ est :'
           this.correction =
             `On cherche quelle probabilité vaut $\\dfrac{5}{11}$.<br>` +
-            `La probabilité conditionnelle $P_{A_3}(S)$ se calcule parmi les personnes de la catégorie « Plus de 45 ans ».<br>` +
+            `La probabilité conditionnelle $P_{A_3}(S)$ se calcule parmi les personnes de la catégorie «${sp()}Plus de $45$ ans${sp()}».<br>` +
             `Il y a $100$ personnes répondant aux deux critères sur $220$ personnes dans cette catégorie.<br>` +
             `Donc : $${miseEnEvidence('P_{A_3}(S)')}=\\dfrac{100}{220}=\\dfrac{5}{11}$.`
           this.reponses = [
@@ -275,7 +276,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
           this.enonce += '$\\dfrac{6}{25}$ est :'
           this.correction =
             `On cherche quelle probabilité vaut $\\dfrac{6}{25}$.<br>` +
-            `L'événement $A_1$ correspond à la ligne « Moins de 25 ans ».<br>` +
+            `L'événement $A_1$ correspond à la ligne «${sp()}Moins de $25$ ans${sp()}».<br>` +
             `Il y a $120$ personnes dans cette catégorie sur un total de $500$ personnes.<br>` +
             `Donc : $${miseEnEvidence('P(A_1)')}=\\dfrac{120}{500}=\\dfrac{6}{25}$.`
 
@@ -292,7 +293,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
           this.enonce += '$\\dfrac{11}{25}$ est :'
           this.correction =
             `On cherche quelle probabilité vaut $\\dfrac{11}{25}$.<br>` +
-            `L'événement $A_3$ correspond à la ligne « Plus de 45 ans ».<br>` +
+            `L'événement $A_3$ correspond à la ligne «${sp()}Plus de $45$ ans${sp()}».<br>` +
             `Il y a $220$ personnes dans cette catégorie sur un total de $500$ personnes.<br>` +
             `Donc : $${miseEnEvidence('P(A_3)')}=\\dfrac{220}{500}=\\dfrac{11}{25}$.`
 
@@ -309,7 +310,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
           this.enonce += '$\\dfrac{4}{25}$ est :'
           this.correction =
             `On cherche quelle probabilité vaut $\\dfrac{4}{25}$.<br>` +
-            `L'événement $S \\cap A_1$ correspond à l'intersection de la colonne « Pratique un sport » et de la ligne « Moins de 25 ans ».<br>` +
+            `L'événement $S \\cap A_1$ correspond à l'intersection de la colonne «${sp()}Pratique un sport${sp()}» et de la ligne «${sp()}Moins de $25$ ans${sp()}».<br>` +
             `Il y a $80$ personnes dans cette catégorie sur un total de $500$ personnes.<br>` +
             `Donc : $${miseEnEvidence('P(S \\cap A_1)')}=\\dfrac{80}{500}=\\dfrac{4}{25}$.`
 
@@ -326,7 +327,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
           this.enonce += '$\\dfrac{9}{50}$ est :'
           this.correction =
             `On cherche quelle probabilité vaut $\\dfrac{9}{50}$.<br>` +
-            `L'événement $S \\cap A_2$ correspond à l'intersection de la colonne « Pratique un sport » et de la ligne « Entre 25 et 45 ans ».<br>` +
+            `L'événement $S \\cap A_2$ correspond à l'intersection de la colonne «${sp()}Pratique un sport${sp()}» et de la ligne «${sp()}Entre $25$ et $45$ ans${sp()}».<br>` +
             `Il y a $90$ personnes dans cette catégorie sur un total de $500$ personnes.<br>` +
             `Donc : $${miseEnEvidence('P(S \\cap A_2)')}=\\dfrac{90}{500}=\\dfrac{9}{50}$.`
           this.reponses = [
@@ -342,7 +343,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
           this.enonce += '$\\dfrac{2}{3}$ est :'
           this.correction =
             `On cherche quelle probabilité vaut $\\dfrac{2}{3}$.<br>` +
-            `La probabilité conditionnelle $P_{A_1}(S)$ se calcule parmi les personnes de la catégorie « Moins de 25 ans ».<br>` +
+            `La probabilité conditionnelle $P_{A_1}(S)$ se calcule parmi les personnes de la catégorie «${sp()}Moins de $25$ ans${sp()}».<br>` +
             `Il y a $80$ personnes répondant aux deux critères sur $120$ personnes dans cette catégorie.<br>` +
             `Donc : $${miseEnEvidence('P_{A_1}(S)')}=\\dfrac{80}{120}=\\dfrac{2}{3}$.`
 
@@ -359,7 +360,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
           this.enonce += '$\\dfrac{9}{16}$ est :'
           this.correction =
             `On cherche quelle probabilité vaut $\\dfrac{9}{16}$.<br>` +
-            `La probabilité conditionnelle $P_{A_2}(S)$ se calcule parmi les personnes de la catégorie « Entre 25 et 45 ans ».<br>` +
+            `La probabilité conditionnelle $P_{A_2}(S)$ se calcule parmi les personnes de la catégorie «${sp()}Entre $25$ et $45$ ans${sp()}».<br>` +
             `Il y a $90$ personnes répondant aux deux critères sur $160$ personnes dans cette catégorie.<br>` +
             `Donc : $${miseEnEvidence('P_{A_2}(S)')}=\\dfrac{90}{160}=\\dfrac{9}{16}$.`
 
@@ -376,7 +377,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
           this.enonce += '$\\dfrac{7}{16}$ est :'
           this.correction =
             `On cherche quelle probabilité vaut $\\dfrac{7}{16}$.<br>` +
-            `La probabilité conditionnelle $P_{A_2}(\\overline{S})$ se calcule parmi les personnes de la catégorie « Entre 25 et 45 ans ».<br>` +
+            `La probabilité conditionnelle $P_{A_2}(\\overline{S})$ se calcule parmi les personnes de la catégorie «${sp()}Entre $25$ et $45$ ans${sp()}».<br>` +
             `Il y a $70$ personnes ne pratiquant pas de sport sur $160$ personnes dans cette catégorie.<br>` +
             `Donc : $${miseEnEvidence('P_{A_2}(\\overline{S})')}=\\dfrac{70}{160}=\\dfrac{7}{16}$.`
 
