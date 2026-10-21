@@ -1,3 +1,6 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import IdentiteRemarquable from '../../lib/mathFonctions/IdentiteRemarquable'
 import MonomePlusieursVariables from '../../lib/mathFonctions/MonomePlusieursVariables'
 import PolynomePlusieursVariables from '../../lib/mathFonctions/PolynomePlusieursVariables'
@@ -14,6 +17,7 @@ import {
 import Exercice from '../Exercice'
 export const titre =
   "Factoriser à l'aide de la mise en évidence ou des identités remarquables"
+export const interactifReady = true
 export const dateDePublication = '10/09/2024'
 
 /**
@@ -83,6 +87,7 @@ export default class nomExercice extends Exercice {
       let texte, texteCorr: string
       texte = ''
       texteCorr = ''
+      let reponse = ''
       const degreMaxMonomeRestant = this.sup3
       const degreMaxMonomeEvid = Math.min(this.sup3 - 1, this.sup2)
       const variables = ['x', 'y', 'z', 'r', 's', 't']
@@ -146,6 +151,9 @@ export default class nomExercice extends Exercice {
           const facteurCommunOppose = facteurCommun.oppose()
           const polynomeRestant = produitReduit.diviserParMonome(facteurCommun)
           texteCorr = `On met en évidence le plus grand facteur possible, ici $${facteurCommun.toString()}$ ou $${facteurCommunOppose.toString()}$.<br>`
+          reponse = testAllNeg
+            ? `${facteurCommunOppose.toString()}(${polynomeRestant.oppose().toString()})`
+            : `${facteurCommun.toString()}(${polynomeRestant.toString()})`
           if (testAllNeg) {
             texteCorr += `$${lettreDepuisChiffre(i + 1)}=${miseEnEvidence(`${facteurCommunOppose.toString()}(${polynomeRestant.oppose().toString()})`)}$`
           } else if (testSomeNeg) {
@@ -273,7 +281,10 @@ export default class nomExercice extends Exercice {
           }
           if (listeDeQuestions[i] === 2 || listeDeQuestions[i] === 3) {
             const j = choice([1, 1, 2, 2, 3])
+            const facteurExterieur =
+              listeDeQuestions[i] === 3 ? `${pSP3.toString()}\\times ` : ''
             if (j === 1) {
+              reponse = `${facteurExterieur}(${p1.toString()}+${p2.toString()})^2`
               texte = `$${lettreDepuisChiffre(i + 1)}=${IdentiteRemarquable.carreDuneSomme(p1, p2).produit(pSP3).melangerTermes(this.sup5).toString()}$`
               if (listeDeQuestions[i] === 3) {
                 texteCorr = `$\\begin{aligned}${lettreDepuisChiffre(i + 1)}&=${miseEnEvidence(pSP3.toString())}\\mathopen{}\\left(${IdentiteRemarquable.carreDuneSomme(p1, p2).melangerTermes(this.sup5).toString()}\\right)\\mathclose{}\\text{ ${this.sup5 ? 'on ordonne les termes puis' : ''} on met en évidence}\\\\&=${miseEnEvidence(`${pSP3.toString()}\\mathopen{}\\left(${p1.toString()}+${p2.toString()}\\right)\\mathclose{}^2`)}\\quad \\text{ on factorise avec la première identité}\\end{aligned}$`
@@ -281,6 +292,7 @@ export default class nomExercice extends Exercice {
                 texteCorr = `$${lettreDepuisChiffre(i + 1)}=${miseEnEvidence(`\\left(${p1.toString()}+${p2.toString()}\\right)^2`)}\\quad \\text{ on factorise avec la première identité}$`
               }
             } else if (j === 2) {
+              reponse = `${facteurExterieur}(${p1.toString()}-${p2.toString()})^2`
               texte = `$${lettreDepuisChiffre(i + 1)}=${IdentiteRemarquable.carreDuneDifference(p1, p2).produit(pSP3).melangerTermes(this.sup5).toString()}$`
               if (listeDeQuestions[i] === 3) {
                 texteCorr = `$\\begin{aligned}${lettreDepuisChiffre(i + 1)}&=${miseEnEvidence(pSP3.toString())}\\mathopen{}\\left(${IdentiteRemarquable.carreDuneDifference(p1, p2).melangerTermes(this.sup5).toString()}\\right)\\mathclose{}\\text{ ${this.sup5 ? 'on ordonne les termes puis' : ''} on met en évidence}\\\\&=${miseEnEvidence(`${pSP3.toString()}\\mathopen{}\\left(${p1.toString()}-${p2.toString()}\\right)\\mathclose{}^2`)}\\quad \\text{ on factorise avec la deuxième identité}\\end{aligned}$`
@@ -290,6 +302,7 @@ export default class nomExercice extends Exercice {
             } else if (j === 3) {
               const signe = ['+', '-']
               const choixSigne = randint(0, 1)
+              reponse = `${facteurExterieur}(${p1.toString()}+${p2.toString()})(${p1.toString()}-${p2.toString()})`
               texte = `$${lettreDepuisChiffre(i + 1)}=${IdentiteRemarquable.differenceDeDeuxCarres(p1, p2).produit(pSP3).melangerTermes(this.sup5).toString()}$`
               if (listeDeQuestions[i] === 3) {
                 texteCorr = `$\\begin{aligned}${lettreDepuisChiffre(i + 1)}&=${miseEnEvidence(pSP3.toString())}\\mathopen{}\\left(${IdentiteRemarquable.differenceDeDeuxCarres(p1, p2).melangerTermes(this.sup5).toString()}\\right)\\mathclose{}\\quad \\text{ ${this.sup5 ? 'on ordonne les termes puis' : ''} on met en évidence}\\\\&=${miseEnEvidence(`${pSP3.toString()}\\mathopen{}\\left(${p1.toString()}${signe[choixSigne]} ${p2.toString()}\\right)\\mathclose{}\\mathopen{}\\left(${p1.toString()}${signe[(choixSigne + 1) % 2]}${p2.toString()}\\right)\\mathclose{}`)}\\quad \\text{ on factorise avec la troisième identité}\\end{aligned}$`
@@ -306,6 +319,11 @@ export default class nomExercice extends Exercice {
           ) {
             const signeT1 = pSP1.coefficient.signe < 0 ? '' : '+'
             const signeT2 = pSP2.coefficient.signe < 0 ? '' : '+'
+            const facteurExterieur =
+              listeDeQuestions[i] === 5 || listeDeQuestions[i] === 7
+                ? `${pSP3.toString()}\\times `
+                : ''
+            reponse = `${facteurExterieur}(${p1.toString()}${signeT1}${pSP1.toString()})(${p1.toString()}${signeT2}${pSP2.toString()})`
             texte = `$${lettreDepuisChiffre(i + 1)}=${IdentiteRemarquable.sommeProduit(p1, pSP1, pSP2).produit(pSP3).melangerTermes(this.sup5).toString()}$`
             if (listeDeQuestions[i] === 5 || listeDeQuestions[i] === 7) {
               texteCorr = `$\\begin{aligned}${lettreDepuisChiffre(i + 1)}&=${miseEnEvidence(pSP3.toString())}\\mathopen{}\\left(${IdentiteRemarquable.sommeProduit(p1, pSP1, pSP2).melangerTermes(this.sup5).toString()}\\right)\\mathclose{}\\quad \\text{ ${this.sup5 ? 'on ordonne les termes puis' : ''} on met en évidence}\\\\&=${miseEnEvidence(`${pSP3.toString()}\\mathopen{}\\left(${p1.toString()}${signeT1}${pSP1.toString()}\\right)\\mathclose{}\\mathopen{}\\left(${p1.toString()}${signeT2}${pSP2.toString()}\\right)\\mathclose{}`)}\\quad \\text{ on factorise avec la quatrième identité}\\end{aligned}$`
@@ -323,6 +341,20 @@ export default class nomExercice extends Exercice {
             p2.monomes[0].coefficient.num.toString(),
         )
       ) {
+        handleAnswers(this, i, {
+          reponse: {
+            value: reponse,
+            options: { exclusifFactorisation: true },
+          },
+        })
+        if (this.interactif) {
+          texte += ajouteChampTexteMathLive(
+            this,
+            i,
+            KeyboardType.clavierDeBaseAvecVariable,
+            { texteAvant: ' $=$' },
+          )
+        }
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++
