@@ -207,6 +207,9 @@
 
   /** Regénère le code à partir des réglages (colonnes, taille du texte...) */
   function applyDocumentOptions() {
+    documentOptions.startNumber = Number.isFinite(documentOptions.startNumber)
+      ? Math.max(1, Math.trunc(documentOptions.startNumber))
+      : 1
     persistPreferences()
     if (!confirmOverwrite()) return
     code = buildCode()
@@ -873,6 +876,20 @@
             />
             Numéroter les cartes (pour réapparier recto et verso)
           </label>
+
+          <div class="flex items-center justify-between gap-4 text-sm">
+            <label for="flashcards-start-number-input">Premier numéro</label>
+            <input
+              id="flashcards-start-number-input"
+              type="number"
+              min="1"
+              step="1"
+              class="w-20 rounded border-coopmaths-action bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark py-0.5 text-sm"
+              bind:value={documentOptions.startNumber}
+              disabled={!documentOptions.showNumbers}
+              on:change={applyDocumentOptions}
+            />
+          </div>
 
           <label class="flex items-center gap-2 text-sm cursor-pointer">
             <input

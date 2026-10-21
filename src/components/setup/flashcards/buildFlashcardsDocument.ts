@@ -60,6 +60,8 @@ export interface FlashcardsDocumentOptions {
   separatorThickness: number
   /** Numérote les cartes (coin) : pour réapparier recto et verso après découpe */
   showNumbers: boolean
+  /** Premier numéro affiché sur les deux faces des cartes */
+  startNumber: number
   pageFormat: 'a4' | 'a5'
   orientation: 'portrait' | 'landscape'
   /** Texte affiché en bas de chaque recto (ex. titre du thème) */
@@ -93,6 +95,7 @@ export const defaultFlashcardsDocumentOptions: FlashcardsDocumentOptions = {
   rows: 4,
   separatorThickness: 1,
   showNumbers: true,
+  startNumber: 1,
   pageFormat: 'a4',
   orientation: 'portrait',
   frontTitle: '',
@@ -260,6 +263,10 @@ export function buildFlashcardsDocument(
   lines.push(
     `#let numeroter = ${options.showNumbers} // numéro au coin de chaque carte`,
   )
+  const startNumber = Number.isFinite(options.startNumber)
+    ? Math.max(1, Math.trunc(options.startNumber))
+    : 1
+  lines.push(`#let premier-numero = ${startNumber}`)
   lines.push(`#let police-texte = ${typstString(options.font)}`)
   lines.push(`#let police-maths = ${typstString(options.mathFont)}`)
   lines.push(`#let taille-questions = ${options.questionFontSize}pt`)
@@ -343,7 +350,7 @@ export function buildFlashcardsDocument(
   lines.push('  }')
   lines.push('  #if numeroter and num != none {')
   lines.push('    place(if verso { top + right } else { top + left },')
-  lines.push('      text(size: 0.55em, fill: gray, str(num)))')
+  lines.push('      text(size: 0.55em, fill: gray, str(num + premier-numero - 1)))')
   lines.push('  }')
   lines.push(
     '  #set text(size: (if verso { taille-reponses } else { taille-questions }) * taille)',

@@ -94,16 +94,42 @@ async function openAssetCache(): Promise<Cache | null> {
  * Les URL du WASM sont hashées par Vite : changer de version invalide
  * naturellement l'entrée de cache.
  *
- * La réponse est renvoyée **sans être lue** : c'est ce qui permet de la passer
+ * La réponse reconstruite peut être passée
  * telle quelle à `WebAssembly.instantiateStreaming` (voir `ensureInitialized`),
- * qui compile le module au fil du téléchargement et alimente le cache de code
+ * qui alimente le cache de code
  * compilé du navigateur — un module de 28 Mo n'est alors plus recompilé de
  * zéro à chaque chargement de page.
  */
 export async function cachedResponse(url: string): Promise<Response> {
   const cache = await openAssetCache()
   const hit = await cache?.match(url)
-  if (hit != null) return hit
+  const isWasm = new URL(url, 'https://mathalea.local').pathname.endsWith(
+    '.wasm',
+  )
+  const validateWasm = (buffer: ArrayBuffer) => {
+    const bytes = new Uint8Array(buffer)
+    if (
+      bytes.length < 8 ||
+      bytes[0] !== 0 ||
+      bytes[1] !== 0x61 ||
+      bytes[2] !== 0x73 ||
+      bytes[3] !== 0x6d
+    ) {
+      throw new Error(
+        `Le téléchargement de ${url} ne contient pas un module WebAssembly valide. Réessayer la compilation.`,
+      )
+    }
+  }
+  if (hit != null) {
+    if (!isWasm) return hit
+    try {
+      validateWasm(await hit.clone().arrayBuffer())
+      return hit
+    } catch {
+      // Une page HTML servie avec HTTP 200 ne doit pas empoisonner le cache.
+      await cache?.delete(url).catch(() => false)
+    }
+  }
   // un statut d'erreur (404, 429 de limitation de débit, etc.) n'est jamais
   // mis en cache ni renvoyé comme si c'était le fichier : le corps de la
   // réponse d'erreur (souvent du texte/JSON) serait sinon pris pour les
@@ -114,7 +140,7 @@ export async function cachedResponse(url: string): Promise<Response> {
     try {
       const response = await fetch(
         url,
-        tentative === 0 ? undefined : { cache: 'reload' },
+        tentative === 0 && hit == null ? undefined : { cache: 'reload' },
       )
       if (!response.ok) {
         throw new Error(
@@ -122,13 +148,14 @@ export async function cachedResponse(url: string): Promise<Response> {
         )
       }
       const buffer = await response.arrayBuffer()
+      if (isWasm) validateWasm(buffer)
       // On reconstruit la réponse à partir des octets effectivement reçus :
       // un Content-Length erroné du serveur ne contamine ainsi pas le cache.
       // Le type MIME est conservé (et rétabli pour le WASM, faute de quoi
       // `instantiateStreaming` refuse la réponse et retombe sur le chemin lent).
-      const contentType =
-        response.headers.get('content-type') ??
-        (url.endsWith('.wasm') ? 'application/wasm' : null)
+      const contentType = isWasm
+        ? 'application/wasm'
+        : response.headers.get('content-type')
       const headers =
         contentType == null ? undefined : { 'content-type': contentType }
       const stored = new Response(buffer.slice(0), { headers })

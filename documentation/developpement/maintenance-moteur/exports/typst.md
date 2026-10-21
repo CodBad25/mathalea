@@ -1397,6 +1397,11 @@ des énoncés pour les présentations sans banque.
 
 Les gros fichiers passent par un cache persistant du navigateur (Cache API,
 `ASSET_CACHE`), donc téléchargés une seule fois par poste et non par session.
+`cachedResponse` vérifie la signature des fichiers `.wasm` avant leur mise en
+cache et à leur relecture. Une entrée invalide (par exemple une page HTML servie
+avec HTTP 200) est supprimée puis retéléchargée en contournant le cache HTTP.
+Une réponse réseau invalide est réessayée une fois et n'est jamais enregistrée.
+
 Deux points demandent une attention particulière :
 
 - **le WASM est fourni sous forme de `Response`** (`cachedResponse`) et non
