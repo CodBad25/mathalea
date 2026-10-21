@@ -145,6 +145,23 @@ sous l'énoncé ; `champReponseCourteEnLigne = true` le place à la suite de
 l'énoncé (par exemple après « $P\times$ »). Le score de la
 saisie courte est toujours d’un point par question.
 
+La saisie libre est la valeur par défaut : la case « Version QCM » est décochée
+(réglage hérité de `ExerciceQcmACourt`, sans rien à écrire dans le
+constructeur). Pour un exercice déjà publié en QCM, ce changement de défaut
+modifie les liens partagés sans paramètre `s3`. Il faut donc archiver la
+version publiée avec `pnpm archive <code>` avant de changer le défaut : les
+anciens liens gardent alors le QCM, et le fichier de travail reçoit un nouvel
+`uuid`. Les exercices 1A-E05-1 à 1A-E05-4 suivent ce modèle.
+
+La correction de la saisie libre se règle avec `correctionCourte` : elle peut
+différer de `correction` (la mise en évidence ne doit contenir que ce que le
+champ attend, voir [Couleur du résultat final](rediger-un-exercice.md#couleur-du-résultat-final)).
+Si la correction QCM est construite par une fonction (`corrige(mise, unite)`),
+l'appeler deux fois, avec la bonne réponse QCM puis avec la réponse de la saisie
+libre, évite de dupliquer le texte. Cette construction ne doit faire aucun
+tirage aléatoire supplémentaire, sans quoi les tirages du QCM publié se
+décalent.
+
 Le livre de recettes [Formats interactifs spécialisés](complements/formats-interactifs.md)
 couvre notamment :
 

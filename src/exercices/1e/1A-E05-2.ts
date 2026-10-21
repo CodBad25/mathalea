@@ -1,10 +1,9 @@
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
-// import ExerciceQcmA from '../../ExerciceQcmA'
-import ExerciceQcmA from '../ExerciceQcmA'
+import ExerciceQcmACourt from '../ExerciceQcmACourt'
 
-export const uuid = '34543'
+export const uuid = '57e52'
 export const refs = {
   'fr-fr': ['1A-E05-2', 'BP1CF05'],
   'fr-ch': ['11QCM-1'],
@@ -15,23 +14,35 @@ export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Calculer un taux réciproque dans des cas particuliers'
 export const dateDePublication = '15/07/2025'
+export const dateDeModifImportante = '20/10/2026'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
  *
  * @author Gilles Mora
  *
  */
-export default class TauxReciproqueP extends ExerciceQcmA {
+export default class TauxReciproqueP extends ExerciceQcmACourt {
+  // Pourcentage saisi lorsque la version QCM est désactivée
+  private reponseSaisie = 0
+  // Correction de la saisie : seul le nombre est mis en évidence, l'unité est écrite à côté du champ
+  private correctionSaisie = ''
+
   // S'occupe de passser les données originales à la fonction appliquerLesValeurs
 
   versionOriginale: () => void = () => {
     this.enonce = `Un prix diminue de $50\\,\\%$. <br>
     Pour retrouver le prix initial, il faut une augmentation de :`
-    this.correction = `Le coefficient multiplicateur associé à une diminution de $50\\,\\%$ est $1-0,5=0,5$.<br>
+    const corrige = (
+      mise: string,
+      unite: string,
+    ) => `Le coefficient multiplicateur associé à une diminution de $50\\,\\%$ est $1-0,5=0,5$.<br>
     Comme  $2\\times 0,5=1$, il faut donc multiplier par $2$ (coefficient multiplicateur réciproque) pour revenir au prix initial.<br>
       Un coefficient multiplicateur de $2$ correspond à un taux d'évolution de $100\\,\\%$.<br>
       En effet, $T=2-1=1=100\\,\\%$.<br>
-      On en déduit qu'il faut une augmentation de  $${miseEnEvidence('100\\,\\%')}$.`
+      On en déduit qu'il faut une augmentation de  $${miseEnEvidence(mise)}${unite}$.`
+    this.correction = corrige('100\\,\\%', '')
+    this.reponseSaisie = 100
+    this.correctionSaisie = corrige('100', '\\,\\%')
 
     this.reponses = ['$100\\,\\%$', '$50\\,\\%$', '$150\\,\\%$', '$200\\,\\%$']
   }
@@ -54,11 +65,17 @@ export default class TauxReciproqueP extends ExerciceQcmA {
 
           this.enonce = `Un prix augmente de $${texNombre(a)}\\,\\%$. <br>
     Pour retrouver le prix initial, il faut une baisse de :`
-          this.correction = `Le coefficient multiplicateur associé à une augmentation de $${a}\\,\\%$ est $1+${texNombre(a / 100, 2)}=${texNombre(1 + a / 100, 4)}$.<br>
+          const corrige = (
+            mise: string,
+            unite: string,
+          ) => `Le coefficient multiplicateur associé à une augmentation de $${a}\\,\\%$ est $1+${texNombre(a / 100, 2)}=${texNombre(1 + a / 100, 4)}$.<br>
     Comme $${b}\\times ${texNombre(c, 2)}=1$, il faut donc multiplier par $${texNombre(c, 2)}$ (coefficient multiplicateur réciproque) pour revenir au prix initial.<br>
       Un coefficient multiplicateur de $${texNombre(c, 2)}$ correspond à un taux d'évolution de $-${d}\\,\\%$.<br>
       En effet, $T=${texNombre(c, 2)}-1=${texNombre(c - 1, 2)}=-${d}\\,\\%$.<br>
-      On en déduit qu'il faut une baisse de $${miseEnEvidence(`${d}\\,\\%`)}$.`
+      On en déduit qu'il faut une baisse de $${miseEnEvidence(mise)}${unite}$.`
+          this.correction = corrige(`${d}\\,\\%`, '')
+          this.reponseSaisie = d
+          this.correctionSaisie = corrige(`${d}`, '\\,\\%')
           this.reponses =
             a === 100
               ? [
@@ -92,11 +109,17 @@ export default class TauxReciproqueP extends ExerciceQcmA {
 
           this.enonce = `Un prix diminue de $${texNombre(a)}\\,\\%$. <br>
     Pour retrouver le prix initial, il faut une augmentation de :`
-          this.correction = `Le coefficient multiplicateur associé à une baisse de $${a}\\,\\%$ est $1-${texNombre(a / 100, 2)}=${texNombre(1 - a / 100, 4)}$.<br>
+          const corrige = (
+            mise: string,
+            unite: string,
+          ) => `Le coefficient multiplicateur associé à une baisse de $${a}\\,\\%$ est $1-${texNombre(a / 100, 2)}=${texNombre(1 - a / 100, 4)}$.<br>
     Comme $${texNombre(b, 2)}\\times ${texNombre(c, 2)}=1$, il faut donc multiplier par $${texNombre(c, 2)}$ (coefficient multiplicateur réciproque) pour revenir au prix initial.<br>
       Un coefficient multiplicateur de $${texNombre(c, 2)}$ correspond à un taux d'évolution de $${d}\\,\\%$.<br>
       En effet, $T=${texNombre(c, 2)}-1=${texNombre(c - 1, 2)}=${d}\\,\\%$.<br>
-      On en déduit qu'il faut une augmentation de $${miseEnEvidence(`${d}\\,\\%`)}$.`
+      On en déduit qu'il faut une augmentation de $${miseEnEvidence(mise)}${unite}$.`
+          this.correction = corrige(`${d}\\,\\%`, '')
+          this.reponseSaisie = d
+          this.correctionSaisie = corrige(`${d}`, '\\,\\%')
           this.reponses = [
             `$${d}\\,\\%$`,
             `$${texNombre(100 + d)}\\,\\%$`,
@@ -110,6 +133,14 @@ export default class TauxReciproqueP extends ExerciceQcmA {
 
   constructor() {
     super()
+    this.enonceCourt = () =>
+      this.enonce.replace(
+        /Pour retrouver le prix initial, il faut une (augmentation|baisse) de :\s*$/,
+        'Quelle $1 faut-il appliquer pour retrouver le prix initial ?',
+      )
+    this.reponseCourte = () => String(this.reponseSaisie)
+    this.optionsChampReponseCourte = { texteApres: '$\\,\\%$' }
+    this.correctionCourte = () => this.correctionSaisie
 
     this.versionAleatoire()
   }
