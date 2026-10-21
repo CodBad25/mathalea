@@ -266,7 +266,6 @@ export default class DeriveeExp1AN312 extends Exercice {
             const a = randint(-10, 10, 0)
             const b = randint(-10, 10)
             const c = randint(-10, 10, 0)
-            const k = randint(-5, 5, [0, 1, -1])
             texte =
               texteIntro +
               ` $f(x) = \\dfrac{${reduirePolynomeDegre3(0, a, b, c)}}{\\mathrm{e}^x}$. <br> Calculer $f'(x)$ .`
