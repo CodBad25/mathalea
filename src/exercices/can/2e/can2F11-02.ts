@@ -18,11 +18,8 @@ export const titre = 'Calculer une image avec le second degré'
 export const interactifReady = true
 
 /**
- * Modèle d'exercice très simple pour la course aux nombres
  * @author Gilles Mora
-
- * Date de publication
-*/
+ */
 export const uuid = 'b2c31'
 
 export const refs = {
@@ -54,9 +51,6 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
 
           expression = `${rienSi1(a)}x^2+${rienSi1(b)}x+${c}`
           this.question = `On considère ${context.isDiaporama ? '<br>' : ''} la  fonction  $f$ définie par ${context.isDiaporama ? '<br>' : ''} $f(x)= ${expression}$. <br>`
-          this.question += this.versionQcm
-            ? `L'image de $${x}$ par la fonction $f$ est égale à :`
-            : `Calculer $f(${x})$.`
 
           if (a === 1 && b !== 1) {
             this.correction = `On a : <br>
@@ -148,9 +142,7 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
 
           expression = `(${rienSi1(a)}x${ecritureAlgebrique(b)})(${rienSi1(c)}x${ecritureAlgebrique(d)})`
           this.question = `On considère ${context.isDiaporama ? '<br>' : ''} la fonction $f$ définie par ${context.isDiaporama ? '<br>' : ''} $f(x)= ${expression}$. <br>`
-          this.question += this.versionQcm
-            ? `L'image de $${x}$ par la fonction $f$ est égale à :`
-            : `Calculer $f(${x})$.`
+
           if (a === 1 && c === 1) {
             this.correction = `On a :<br>
           $\\begin{aligned}
@@ -236,9 +228,6 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
 
           expression = `${a}-${rienSi1(b)}x^2`
           this.question = `On considère ${context.isDiaporama ? '<br>' : ''} la fonction $f$ définie par ${context.isDiaporama ? '<br>' : ''} $f(x)= ${expression}$. <br>`
-          this.question += this.versionQcm
-            ? `L'image de $${x}$ par la fonction $f$ est égale à :`
-            : `Calculer $f(${x})$.`
 
           this.correction = `On a :<br>
           $\\begin{aligned}
@@ -286,9 +275,6 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
 
           expression = `(${a}x${ecritureAlgebrique(b)})^2`
           this.question = `On considère ${context.isDiaporama ? '<br>' : ''} la fonction $f$ définie par ${context.isDiaporama ? '<br>' : ''} $f(x)= ${expression}$. <br>`
-          this.question += this.versionQcm
-            ? `L'image de $${x}$ par la fonction $f$ est égale à :`
-            : `Calculer $f(${x})$.`
 
           this.correction = `On a :<br>
           $\\begin{aligned}
@@ -314,6 +300,10 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
           ]
           break
       }
+      this.question += this.versionQcm
+        ? `L'image de $${x}$ par la fonction $f$ est égale à :`
+        : `Calculer $f(${x})$.`
+
       nombreSouhaites = this.distracteurs.length + 1
       compteur++
     } while (

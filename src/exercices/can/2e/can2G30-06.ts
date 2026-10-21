@@ -32,6 +32,7 @@ export default class ordonneePointDroite extends ExerciceSimple {
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.spacingCorr = 1.5
     this.optionsChampTexte = { texteAvant: '<br>' }
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
   }
 
   nouvelleVersion() {

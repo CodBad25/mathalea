@@ -1,5 +1,8 @@
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
@@ -352,12 +355,12 @@ export default class auto1AF2 extends ExerciceQcmA {
     }
 
     // Créer la liste des noms pour l'énoncé
-    const listeNomsPoints = formaterListe(nomsPoints)
+    const listeNomsPoints = formaterListe(nomsPoints.map((nom) => `\\,${nom}`))
 
     this.enonce = `${deuxColonnes(
       `On a représenté une courbe $\\mathscr{C}$ d'une fonction $f$.<br><br>
-Les points $${listeNomsPoints}$ appartiennent à $\\mathscr{C}$.<br><br>
-Leurs abscisses sont notées respectivement $${formaterListe(nomsPoints.map((nom) => `x_${nom}`))}$.<br><br>
+Les points$${listeNomsPoints}$ appartiennent à $\\mathscr{C}$.<br><br>
+Leurs abscisses sont notées respectivement$${formaterListe(nomsPoints.map((nom) => `\\,x_${nom}`))}$.<br><br>
  `,
       mathalea2d(
         Object.assign(
