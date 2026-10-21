@@ -18,7 +18,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-function normaliseComparateur(saisie: string): '<' | '>' | '' {
+export function normaliseComparateur(saisie: string): '<' | '>' | '' {
   const saisieNormalisee = saisie
     .replace(/\s/g, '')
     .replace(/[$]/g, '')
@@ -51,11 +51,19 @@ export default class ComparerDeuxNombresAvecPuissances extends Exercice {
     this.nbQuestions = 1
     this.spacing = 2
     this.spacingCorr = 2
+    this.besoinFormulaireNumerique = [
+      'Consigne',
+      2,
+      '1 : Sans indication de méthode\n2 : En indiquant la méthode attendue',
+    ]
+    this.sup = 1
   }
 
   nouvelleVersion() {
     this.consigne =
-      'Comparer les deux nombres suivants en justifiant la réponse.'
+      this.sup === 2
+        ? 'En comparant le quotient $\\dfrac{a}{b}$ à $1$, comparer les nombres $a$ et $b$.'
+        : 'Comparer les deux nombres suivants en justifiant la réponse.'
 
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
       const [base1, base2] = choice([
