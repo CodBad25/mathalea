@@ -12,7 +12,6 @@ export const refs = {
 export const interactifReady = true
 
 export const amcReady = 'true'
-export const amcType = 'qcmMono'
 export const titre =
   'Calculer le coefficient multiplicateur réciproque (avec des fractions)'
 export const dateDePublication = '28/12/2025'
