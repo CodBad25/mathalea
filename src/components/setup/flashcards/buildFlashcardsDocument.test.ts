@@ -31,6 +31,30 @@ describe('buildFlashcardsDocument', () => {
     )
   })
 
+  it('décale les numéros affichés en conservant les repères des cartes', () => {
+    const code = buildFlashcardsDocument(
+      [{ front: 'Question', back: 'Réponse' }],
+      { ...defaultFlashcardsDocumentOptions, startNumber: 21 },
+      { cardScales: { '1-recto': 1.2 } },
+    )
+    expect(code).toContain('#let premier-numero = 21')
+    expect(code).toContain('str(num + premier-numero - 1)')
+    expect(code).toContain('#let carte-1-recto-taille = 1.2')
+    expect(code).toContain('carte(1, carte-1-recto,')
+    expect(code).toContain('carte(1, carte-1-verso,')
+  })
+
+  it.each([undefined, NaN, Infinity, 0, -3])(
+    'utilise 1 pour un premier numéro invalide (%s)',
+    (startNumber) => {
+      const code = buildFlashcardsDocument([], {
+        ...defaultFlashcardsDocumentOptions,
+        startNumber: startNumber as number,
+      })
+      expect(code).toContain('#let premier-numero = 1')
+    },
+  )
+
   it('répartit les cartes sur plusieurs planches quand la page est pleine', () => {
     const cards = Array.from({ length: 5 }, (_, i) => ({
       front: `Question ${i + 1}`,
