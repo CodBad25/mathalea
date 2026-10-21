@@ -954,6 +954,18 @@ La liste des exercices, leurs graines et leurs réglages restent portés par les
 
 `persistToUrl` (dans `Typst.svelte`) est appelée après chaque modification (réglage du document ou édition de la palette, via le `updateListener` de CodeMirror). Elle écrit dans `typstParamStore` (source de vérité), redéclenche l'écrivain d'URL de l'app (`mathaleaUpdateUrlFromExercicesParams`, sinon sa prochaine écriture débouncée réécrirait l'URL sans `typstParam`) puis pose immédiatement le paramètre avec `history.replaceState`. Au chargement, `parsed.carryOver` est réinjecté dans la première génération du code (`buildCode` part de `urlCarryOver` tant que l'éditeur n'existe pas). `typstParam` est aussi le canal par lequel le diaporama transmet son nombre de vues (`goToTypstWithSeries`).
 
+### Longueur de l'URL et fichier de redirection
+
+`typstParam` n'a pas de taille bornée (le code saisi à la main dans la palette, les textes insérés…) alors que les serveurs refusent les URL trop longues (HTTP 414/431, souvent au-delà de 8 000 caractères) : la page ne se rechargerait plus. `typstUrlParam.ts` fixe donc le transport selon la taille (`TYPST_URL_BUDGET`, 6 000 caractères pour l'URL complète) :
+
+- **cas courant** : `?typstParam=<base64>` ;
+- **trop volumineux** : la barre d'adresse ne garde que `?typstParam=local` ; la valeur complète est mise de côté dans le `sessionStorage` de l'onglet (le rechargement fonctionne). Dans un autre onglet ou navigateur, la référence est ignorée : la fiche s'ouvre avec les réglages par défaut au lieu de planter ;
+- **lien à partager** (`buildShareUrl`, aussi inscrit en commentaire dans le `.typ`) : la valeur complète passe dans le **fragment** `#typstParam=<base64>` quand l'URL dépasserait le budget. Un fragment n'est jamais envoyé au serveur, il n'est donc pas limité.
+
+`Typst.svelte` garde la valeur complète (`fullTypstParam`) ; seul `typstParamStore` (donc l'URL de la barre d'adresse) reçoit la forme compatible avec le budget (`typstParamForAddressBar`). Au chargement, `readTypstParam` accepte les trois formes et le fragment est retiré de l'URL.
+
+Le bouton en haut de la vue (icône lien externe) télécharge `<titre>_mathalea.html`, une page HTML qui redirige (`<meta http-equiv="refresh">`, sans JavaScript) vers `buildShareUrl` : un lien durable à déposer sur un ENT ou dans un dossier, sans limite de longueur.
+
 ## Visite guidée
 
 `src/lib/onboarding/typstTour.ts` (driver.js) présente la vue : modes d'affichage, aperçu, palette de mise en page, ajout d'un exercice (démontré par de vrais clics dans la modale), réglages du document — dont les liens vers les trois autres exports —, versions et export. Elle se déclenche au premier passage (hors mobile, hors `localhost`, hors lien partagé) et se relance depuis le bouton « Aide ».
