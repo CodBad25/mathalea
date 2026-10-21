@@ -61,15 +61,10 @@ export default class CalculProduitSommeImageParFonctionAffine extends ExerciceSi
 
     // Base de la question
     this.question = `Soit $${nomF}$ la fonction définie par : $${nomF}(x)=${rienSi1(a)}x${ecritureAlgebrique(b)}$.<br>`
-
+    let signe = ''
     switch (typeOperation) {
       case 1: // Produit
-        if (this.versionQcm) {
-          this.question += `$${nomF}(${x1})\\times ${nomF}(${x2})$ est égal à :`
-        } else {
-          this.question += `$${nomF}(${x1})\\times ${nomF}(${x2})=$`
-        }
-
+        signe = '\\times'
         // Construction de la correction
         this.correction = `On a : $${nomF}(${x1})=${a === 1 ? '' : `${a}\\times`} ${ecritureParentheseSiNegatif(x1)}${ecritureAlgebrique(b)}=${fx1}$ et $${nomF}(${x2})=${a === 1 ? '' : `${a}\\times`} ${ecritureParentheseSiNegatif(x2)}${ecritureAlgebrique(b)}=${fx2}$.<br>
     On en déduit que $${nomF}(${x1})\\times ${nomF}(${x2})=${fx1}\\times ${ecritureParentheseSiNegatif(fx2)}=${miseEnEvidence(fx1 * fx2)}$.`
@@ -87,11 +82,7 @@ export default class CalculProduitSommeImageParFonctionAffine extends ExerciceSi
         break
 
       case 2: // Somme
-        if (this.versionQcm) {
-          this.question += `$${nomF}(${x1})+${nomF}(${x2})$ est égal à :`
-        } else {
-          this.question += `$${nomF}(${x1})+${nomF}(${x2})=$`
-        }
+        signe = '+'
         // Construction de la correction
         this.correction = `On a : $${nomF}(${x1})=${a === 1 ? '' : `${a}\\times`} ${ecritureParentheseSiNegatif(x1)}${ecritureAlgebrique(b)}=${fx1}$ et $${nomF}(${x2})=${a === 1 ? '' : `${a}\\times`} ${ecritureParentheseSiNegatif(x2)}${ecritureAlgebrique(b)}=${fx2}$.<br>
     On en déduit que $${nomF}(${x1})+${nomF}(${x2})=${fx1}${ecritureAlgebrique(fx2)}=${miseEnEvidence(fx1 + fx2)}$.`
@@ -109,11 +100,7 @@ export default class CalculProduitSommeImageParFonctionAffine extends ExerciceSi
 
       case 3: // difference
       default:
-        if (this.versionQcm) {
-          this.question += `$${nomF}(${x1})-${nomF}(${x2})$ est égal à :`
-        } else {
-          this.question += `$${nomF}(${x1})-${nomF}(${x2})=$`
-        }
+        signe = '-'
         // Construction de la correction
         this.correction = `On a : $${nomF}(${x1})=${a === 1 ? '' : `${a}\\times`} ${ecritureParentheseSiNegatif(x1)}${ecritureAlgebrique(b)}=${fx1}$ et $${nomF}(${x2})=${a === 1 ? '' : `${a}\\times`} ${ecritureParentheseSiNegatif(x2)}${ecritureAlgebrique(b)}=${fx2}$.<br>
     On en déduit que $${nomF}(${x1})-${nomF}(${x2})=${fx1}${ecritureAlgebrique(-fx2)}=${miseEnEvidence(fx1 - fx2)}$.`
@@ -129,8 +116,12 @@ export default class CalculProduitSommeImageParFonctionAffine extends ExerciceSi
         this.canReponseACompleter = `$${nomF}(${x1})-${nomF}(${x2})=\\ldots$`
         break
     }
-    if (!this.interactif && !this.versionQcm) {
-      this.question += ' $\\ldots$'
+    if (this.versionQcm) {
+      this.question += `$${nomF}(${x1})${signe} ${nomF}(${x2})$ est égal à :`
+    } else if (!this.interactif && !this.versionQcm) {
+      this.question += `Calculer $${nomF}(${x1})${signe} ${nomF}(${x2})$.`
+    } else {
+      this.question += `$${nomF}(${x1})${signe} ${nomF}(${x2})=$`
     }
   }
 }

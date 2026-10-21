@@ -6,12 +6,15 @@ import {
   ecritureParentheseSiNegatif,
   reduireAxPlusB,
 } from '../../lib/outils/ecritures'
-import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import FractionEtendue from '../../modules/FractionEtendue'
 import Trinome from '../../modules/Trinome'
-import { randint } from '../../modules/outils'
 import { context } from '../../modules/context'
+import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 /**
  * @author Gilles Mora
@@ -110,7 +113,7 @@ export default class Auto1AF2r extends ExerciceQcmA {
     L'ordonnée du point de $(C)$ d'abscisse $${xPoint}$ est $${texNombre(imageCalcul)}$.<br>`
 
     if (position === 0) {
-      this.correction += `L'ordonnée du point de $(C)$ d'abscisse $${xPoint}$ est égale à l'ordonnée de $A$, donc ${texteEnCouleurEtGras('le point $A$ appartient à la courbe $(C)$')}.`
+      this.correction += `L'ordonnée du point de $(C)$ d'abscisse $${xPoint}$ est égale à l'ordonnée de $A$, donc ${texteEnCouleurEtGras(`le point $${miseEnEvidence('A')}$ appartient à la courbe $${miseEnEvidence('(C)')}$`)}.`
       this.reponses = [
         `Le point $A$ appartient à la courbe $(C)$`,
         `Le point $A$ est situé au-dessus de la courbe $(C)$`,
@@ -118,7 +121,7 @@ export default class Auto1AF2r extends ExerciceQcmA {
         `On ne peut pas déterminer la position de $A$ par rapport à la courbe $(C)$`,
       ]
     } else if (position === 1) {
-      this.correction += `On a $${yPoint}>${texNombre(imageCalcul)}$, donc ${texteEnCouleurEtGras('le point $A$ est situé au-dessus de la courbe $(C)$')}.`
+      this.correction += `On a $${yPoint}>${texNombre(imageCalcul)}$, donc ${texteEnCouleurEtGras(`le point $${miseEnEvidence('A')}$ est situé au-dessus de la courbe $${miseEnEvidence('(C)')}$`)}.`
       this.reponses = [
         `Le point $A$ est situé au-dessus de la courbe $(C)$`,
         `Le point $A$ appartient à la courbe $(C)$`,
@@ -126,7 +129,7 @@ export default class Auto1AF2r extends ExerciceQcmA {
         `On ne peut pas déterminer la position de $A$ par rapport à la courbe $(C)$`,
       ]
     } else {
-      this.correction += `On a $${yPoint}<${texNombre(imageCalcul)}$, donc ${texteEnCouleurEtGras('le point $A$ est situé en dessous de la courbe $(C)$')}.`
+      this.correction += `On a $${yPoint}<${texNombre(imageCalcul)}$, donc ${texteEnCouleurEtGras(`le point $${miseEnEvidence('A')}$ est situé en dessous de la courbe $${miseEnEvidence('(C)')}$`)}.`
       this.reponses = [
         `Le point $A$ est situé en dessous de la courbe $(C)$`,
         `Le point $A$ appartient à la courbe $(C)$`,

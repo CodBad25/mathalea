@@ -41,8 +41,8 @@ export default class Auto1AF2a extends CoordonneesPointIntersectionAxeAbscissesD
       this.formatInteractif = 'fill-in-the-blank'
       this.reponse = {
         bareme: toutPourUnPoint,
-        champ1: { value: abscisse },
-        champ2: { value: ordonnee },
+        champ1: { value: abscisse, options: { nombreDecimalSeulement: true } },
+        champ2: { value: ordonnee, options: { nombreDecimalSeulement: true } },
       }
     }
   }

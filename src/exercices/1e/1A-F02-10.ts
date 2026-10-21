@@ -2,7 +2,6 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { context } from '../../modules/context'
 import { choice } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -10,6 +9,7 @@ import {
   rienSi1,
 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 export const titre =
@@ -198,6 +198,7 @@ export default class AutoFO2j extends ExerciceQcmA {
     this.besoinFormulaire3CaseACocher = ['Version QCM', false]
     this.besoinFormulaire2CaseACocher = false
     this.besoinFormulaire4CaseACocher = false
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
     const preparerQuestion = () => {
       if (this.sup3 || context.isAmc) return
       this.enonce = this.enonce.replace(

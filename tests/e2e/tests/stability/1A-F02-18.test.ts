@@ -14,12 +14,12 @@ it.each([true, false])(
       const correction = exercice.listeCorrections[i]
       expect(correction).toContain('On calcule')
       expect(correction).toContain('donc')
-      expect(correction).toContain('le point $A$')
+      expect(correction).toContain('le point ')
       expect(correction).not.toContain('La bonne réponse est')
       expect(exercice.listeQuestions[i]).not.toContain(
         'On ne peut pas déterminer',
       )
-      expect(correction).toContain('courbe $(C)$')
+      expect(correction).toContain('la courbe ')
     }
   },
 )

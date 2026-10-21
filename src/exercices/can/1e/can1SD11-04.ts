@@ -32,7 +32,8 @@ export default class LectureGraphiqueParaboleA extends ExerciceSimple {
     this.versionQcmDisponible = true
     this.nbQuestions = 1
     this.optionsChampTexte = { texteAvant: '$a=$' }
-    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
   }
 
   nouvelleVersion() {
@@ -82,7 +83,7 @@ export default class LectureGraphiqueParaboleA extends ExerciceSimple {
           })
           f = (x) => a * x ** 2 + b
 
-          this.question = `Voici la représentation graphique d'une fonction $f$  définie sur $\\mathbb{R}$ par ${this.versionQcm ? '$f(x)=ax^2+b$' : `$f(x)=ax^2${ecritureAlgebrique(b)}$`}.<br>`
+          this.question = `Voici la représentation graphique d'une fonction $f$  définie sur $\\mathbb{R}$ par ${this.versionQcm ? '$f(x)=ax^2+b$' : `$f(x)=ax^2${ecritureAlgebrique(b)}$`}.<br><br>`
           this.question += mathalea2d(
             {
               xmin: -6,
@@ -97,7 +98,7 @@ export default class LectureGraphiqueParaboleA extends ExerciceSimple {
             o,
             courbe(f, { repere: r, color: bleuMathalea, epaisseur: 2 }),
           )
-          this.question += `${this.versionQcm ? 'À partir de cette représentation graphique, on a : ' : 'À partir de cette représentation graphique, déterminer la valeur de $a$.<br>'}`
+          this.question += `<br>${this.versionQcm ? 'À partir de cette représentation graphique, on a : ' : 'À partir de cette représentation graphique, déterminer la valeur de $a$.<br>'}`
         } else {
           const yMax = Math.max(3, Math.ceil(a + b) + 1)
           r = new Repere({
@@ -130,7 +131,7 @@ export default class LectureGraphiqueParaboleA extends ExerciceSimple {
 
           f = (x) => a * x ** 2 + b
 
-          this.question = `Voici la représentation graphique d'une fonction $f$  définie sur $\\mathbb{R}$ par ${this.versionQcm ? '$f(x)=ax^2+b$' : `$f(x)=ax^2${ecritureAlgebrique(b)}$`}.<br> `
+          this.question = `Voici la représentation graphique d'une fonction $f$  définie sur $\\mathbb{R}$ par ${this.versionQcm ? '$f(x)=ax^2+b$' : `$f(x)=ax^2${ecritureAlgebrique(b)}$`}.<br><br>`
           this.question += mathalea2d(
             {
               xmin: -6,
@@ -145,7 +146,7 @@ export default class LectureGraphiqueParaboleA extends ExerciceSimple {
             o,
             courbe(f, { repere: r, color: bleuMathalea, epaisseur: 2 }),
           )
-          this.question += `${this.versionQcm ? 'À partir de cette représentation graphique, on a : ' : 'À partir de cette représentation graphique, déterminer la valeur de $a$.<br>'}`
+          this.question += `<br>${this.versionQcm ? 'À partir de cette représentation graphique, on a : ' : 'À partir de cette représentation graphique, déterminer la valeur de $a$.<br>'}`
         }
 
         break
@@ -191,7 +192,7 @@ export default class LectureGraphiqueParaboleA extends ExerciceSimple {
           f = (x) => a * x ** 2 + b
 
           this.question =
-            `Voici la représentation graphique d'une fonction $f$  définie sur $\\mathbb{R}$ par ${this.versionQcm ? '$f(x)=ax^2+b$' : `$f(x)=ax^2${ecritureAlgebrique(b)}$`}.<br> ` +
+            `Voici la représentation graphique d'une fonction $f$  définie sur $\\mathbb{R}$ par ${this.versionQcm ? '$f(x)=ax^2+b$' : `$f(x)=ax^2${ecritureAlgebrique(b)}$`}.<br><br>` +
             mathalea2d(
               {
                 xmin: -6,
@@ -206,7 +207,7 @@ export default class LectureGraphiqueParaboleA extends ExerciceSimple {
               o,
               courbe(f, { repere: r, color: bleuMathalea, epaisseur: 2 }),
             )
-          this.question += `${this.versionQcm ? 'À partir de cette représentation graphique, on a : ' : 'À partir de cette représentation graphique, déterminer la valeur de $a$.<br>'}`
+          this.question += `<br>${this.versionQcm ? 'À partir de cette représentation graphique, on a : ' : 'À partir de cette représentation graphique, déterminer la valeur de $a$.<br>'}`
         } else {
           const yMin = Math.min(-5, Math.floor(a + b) - 1)
           r = new Repere({

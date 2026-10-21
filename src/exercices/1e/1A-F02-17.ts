@@ -8,7 +8,10 @@ import { context } from '../../modules/context'
 import { bleuMathalea } from '../../lib/colors'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
 import { choice } from '../../lib/outils/arrayOutils'
-import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -135,7 +138,7 @@ export default class Auto1AF2q extends ExerciceQcmA {
     L'ordonnée du point de $(D)$ d'abscisse $${abs}$ est $${ordSurDroite}$.<br>`
 
     if (position === 0) {
-      this.correction += `L'ordonnée du point de $(D)$ d'abscisse $${abs}$ est égale à l'ordonnée de $A$, donc ${texteEnCouleurEtGras('le point $A$ appartient à la droite $(D)$')}.`
+      this.correction += `L'ordonnée du point de $(D)$ d'abscisse $${abs}$ est égale à l'ordonnée de $A$, donc ${texteEnCouleurEtGras(`le point $${miseEnEvidence('A')}$ appartient à la droite $${miseEnEvidence('(D)')}$`)}.`
       this.reponses = [
         `Le point $A$ appartient à la droite $(D)$`,
         `Le point $A$ est situé au-dessus de la droite $(D)$`,
@@ -143,7 +146,7 @@ export default class Auto1AF2q extends ExerciceQcmA {
         `On ne peut pas déterminer la position de $A$ par rapport à la droite $(D)$`,
       ]
     } else if (position === 1) {
-      this.correction += `On a $${ord}>${ordSurDroite}$, donc ${texteEnCouleurEtGras('le point $A$ est situé au-dessus de la droite $(D)$')}.`
+      this.correction += `On a $${ord}>${ordSurDroite}$, donc ${texteEnCouleurEtGras(`le point $${miseEnEvidence('A')}$ est situé au-dessus de la droite $${miseEnEvidence('(D)')}$`)}.`
       this.reponses = [
         `Le point $A$ est situé au-dessus de la droite $(D)$`,
         `Le point $A$ appartient à la droite $(D)$`,
@@ -151,7 +154,7 @@ export default class Auto1AF2q extends ExerciceQcmA {
         `On ne peut pas déterminer la position de $A$ par rapport à la droite $(D)$`,
       ]
     } else {
-      this.correction += `On a $${ord}<${ordSurDroite}$, donc ${texteEnCouleurEtGras('le point $A$ est situé en dessous de la droite $(D)$')}.`
+      this.correction += `On a $${ord}<${ordSurDroite}$, donc ${texteEnCouleurEtGras(`le point $${miseEnEvidence('A')}$ est situé en dessous de la droite $${miseEnEvidence('(D)')}$`)}.`
       this.reponses = [
         `Le point $A$ est situé en dessous de la droite $(D)$`,
         `Le point $A$ appartient à la droite $(D)$`,
