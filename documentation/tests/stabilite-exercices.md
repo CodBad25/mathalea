@@ -69,6 +69,15 @@ de paramètres, en extrait l'empreinte des nombres de l'énoncé, et la compare 
 celle enregistrée dans
 `tests/e2e/tests/stability/empreintes-exercices.json`.
 
+## Date de modification importante
+
+`dateDeModifImportante` (au format `jj/mm/aaaa`) indique la date d'une
+modification importante d'un exercice déjà publié : nouvelle option, nouvelle
+saisie, correction changée, archivage. Elle se crée ou se met à jour à la date
+du jour à chaque fois qu'une telle modification est faite, même si les tirages
+ne changent pas. `pnpm archive` et `pnpm archive:retro` la posent pour le
+fichier de travail ; pour une modification sans archivage, l'écrire à la main.
+
 ## Ce qui est contrôlé
 
 ### Les combinaisons de paramètres

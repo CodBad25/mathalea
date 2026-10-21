@@ -36,7 +36,7 @@ export default class ExerciceComparerDeuxFractionsDenominateursNonMultiples exte
     this.sup = false
     this.besoinFormulaire2Texte = [
       'Types de dénominateurs',
-      '0: Mélange des deux cas suivants\n1: dénominateurs premiers entre eux\n2: dénominateurs non premiers entre eux',
+      '0: Mélange des deux cas suivants\n1: Dénominateurs premiers entre eux\n2: Dénominateurs non premiers entre eux',
     ]
     this.sup2 = '0'
   }
